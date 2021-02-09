@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanweb.service;
 
 import com.nhn.rookie8.movieswanweb.dto.MovieDTO;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Service
 public class MovieServiceImpl implements MovieService{
     @Override
     public List<MovieDTO> getReleaseMovieList() {

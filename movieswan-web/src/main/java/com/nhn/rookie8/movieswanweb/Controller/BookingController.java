@@ -2,7 +2,6 @@ package com.nhn.rookie8.movieswanweb.controller;
 
 import com.nhn.rookie8.movieswanweb.dto.MovieDTO;
 import com.nhn.rookie8.movieswanweb.service.MovieService;
-import jdk.vm.ci.meta.Local;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
