@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예매 페이지</title>
+    <link th:href="@{/css/page/booking.css}" rel="stylesheet" />
+</head>
+<body>
+<th:block th:replace="~{/layout/common_page:: setContents(~{this:: #main-container} )}">
+    <main id="main-container">
+        <section class="booking-header">
+            <section>
+                <h1 id="booking-page-title" th:text="${'영화 예매'}"></h1>
+            </section>
+            <section>
+                <span class="current">영화, 극장, 시간 선택</span>
+                <span>&gt;&gt;</span>
+                <span>좌석 선택</span>
+                <span>&gt;&gt;</span>
+                <span>결제</span>
+                <span>&gt;&gt;</span>
+                <span>예매 완료</span>
+            </section>
+        </section>
+        <section class="booking-container">
+            <section class="booking-section">
+                <h1>영화</h1>
+                <ul>
+                    <li>saddummy1</li>
+                    <li>saddummy2</li>
+                    <li>saddummy3</li>
+                    <li>saddummy4</li>
+                    <li>saddummy5</li>
+                </ul>
+            </section>
+            <section class="booking-section">
+                <h1>극장</h1>
+                <ul>
+                    <li>saddummy1</li>
+                    <li>saddummy2</li>
+                    <li>saddummy3</li>
+                    <li>saddummy4</li>
+                    <li>saddummy5</li>
+                </ul>
+            </section>
+            <section class="booking-section">
+                <h1>날짜</h1>
+                <ul>
+                    <li>saddummy1</li>
+                    <li>saddummy2</li>
+                    <li>saddummy3</li>
+                    <li>saddummy4</li>
+                    <li>saddummy5</li>
+                </ul>
+            </section>
+            <section class="booking-section">
+                <h1>시간</h1>
+                <ul>
+                    <li>saddummy1</li>
+                    <li>saddummy2</li>
+                    <li>saddummy3</li>
+                    <li>saddummy4</li>
+                    <li>saddummy5</li>
+                </ul>
+            </section>
+        </section>
+    </main>
+</th:block>
+</body>
+</html>
