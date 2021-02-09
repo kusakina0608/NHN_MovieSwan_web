@@ -26,11 +26,9 @@
             <section class="booking-section">
                 <h1>영화</h1>
                 <ul>
-                    <li>saddummy1</li>
-                    <li>saddummy2</li>
-                    <li>saddummy3</li>
-                    <li>saddummy4</li>
-                    <li>saddummy5</li>
+                    <li th:each="movie : ${movieList}">
+                        <a th:href="@{/booking}">[[${movie.name}]]</a>
+                    </li>
                 </ul>
             </section>
             <section class="booking-section">
