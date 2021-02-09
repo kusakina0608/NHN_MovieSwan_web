@@ -1,0 +1,44 @@
+body main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+
+.currentMovie {
+    display: flex;
+    width: 70%;
+}
+
+.currentMovie a {
+    border: 2px solid black;
+    padding: 5px 30px 5px;
+    list-style: none;
+    font-size: 200%;
+    flex: 1;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+}
+
+.movieSearch {
+    width: 90%;
+    margin-top: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.movieSearch input {
+    margin-right: 5px;
+}
+
+.movieList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
