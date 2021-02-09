@@ -1,0 +1,31 @@
+#scroll_to_top {
+    display: none;
+    position: fixed;
+    right: 75px;
+    bottom: 75px;
+}
+
+#scroll_to_top_btn {
+    display: flex;
+    padding: 10px;
+
+    background-color: red;
+    border: 1px solid red;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+
+    box-shadow: 0px 0px 5px 2px black;
+}
+
+#scroll_to_top_btn .material-icons {
+    font-size: 40px;
+    color: white;
+
+    transform: rotate(-90deg);
+    transition: 1s;
+}
+
+#scroll_to_top_btn .material-icons:hover {
+    transform: rotate(270deg);
+}
