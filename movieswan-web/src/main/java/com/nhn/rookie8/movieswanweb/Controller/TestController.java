@@ -12,4 +12,8 @@ public class TestController {
     @GetMapping("/common_page")
     public void commonPage() {
     }
+
+    @GetMapping("/main_page")
+    public void mainPage() {
+    }
 }
