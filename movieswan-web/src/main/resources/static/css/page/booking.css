@@ -24,6 +24,8 @@
     display: flex;
 }
 .booking-section {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     border: 3px solid black;
     background-color: gray;
@@ -38,17 +40,72 @@
     padding: 10px 0;
 }
 .booking-section > ul {
+    flex: 1;
     min-height: 50vh;
     margin: 3px;
     border: 3px solid black;
     background-color: white;
     color: black;
 }
-.booking-section > ul > li {
+.booking-section > * > ul {
+    flex: 1;
+    min-height: 50vh;
+    margin: 3px;
+    border: 3px solid black;
+    background-color: white;
+    color: black;
+}
+.list-element-link {
+    text-decoration: none;
+}
+.list-element {
     list-style: none;
     padding: 3px 5px;
-}
-.booking-section > ul > li:nth-child(2n) {
-    background-color: lightblue;
     color: black;
+}
+.list-element-link:nth-child(2n) > li {
+    background-color: #EEEEEE;
+}
+.selected {
+    background-color: #9ebcff !important;
+}
+.theater-container {
+    display: flex;
+    flex: 1;
+    border: 3px solid black;
+    background-color: gray;
+    font-size: 25px;
+    color: white;
+}
+.booking-footer {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+}
+.next-button {
+	box-shadow:inset 0px 0px 0px 0px #a4e271;
+	background:linear-gradient(to bottom, #89c403 5%, #77a809 100%);
+	background-color:#89c403;
+	border-radius:15px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:28px;
+	font-weight:bold;
+	padding:20px 50px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528009;
+}
+.next-button:hover {
+	background:linear-gradient(to bottom, #77a809 5%, #89c403 100%);
+	background-color:#77a809;
+}
+.next-button:active {
+	position:relative;
+	top:1px;
+}
+.movie-code {
+    display: none;
 }
