@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/page")
+@RequestMapping("/movie")
 public class PageController {
-    @GetMapping("/movie_list")
-    public void movieList() {
+    @GetMapping("/list")
+    public String movieList() {
+        return "/page/movie_list";
     }
 }
