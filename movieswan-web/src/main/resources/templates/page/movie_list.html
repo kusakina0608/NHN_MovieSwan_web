@@ -19,12 +19,8 @@
     <main>
         <!---상영 중 / 상영 예정 탭--->
         <ul class="currentMovie">
-            <a href="#">
-                <li>상영 중</li>
-            </a>
-            <a href="#">
-                <li>상영 예정</li>
-            </a>
+            <li id="current" class="selected">상영 중</li>
+            <li id="expected">상영 예정</li>
         </ul>
 
         <!---영화 검색창--->
@@ -53,6 +49,8 @@
         <!---pagination--->
 
     </main>
+
+    <script th:src="@{/script/page/movie_list.js}"></script>
 
 </th:block>
 </th:block>
