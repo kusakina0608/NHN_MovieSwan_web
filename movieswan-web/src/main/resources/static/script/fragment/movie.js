@@ -13,4 +13,21 @@
                 favBtn.className = "favorite";
         }); 
     });
+
+    //영화 이미지에 마우스 호버 동작 관련
+    var movies = document.querySelectorAll(".movieLink");
+
+    movies.forEach(movie => {
+        movie.addEventListener('mouseover',function(ev) {
+            ev.stopPropagation();
+            movie.querySelector(".story").style.visibility = "visible";
+
+        });
+
+        movie.addEventListener('mouseout',function(ev) {
+            ev.stopPropagation();
+            movie.querySelector(".story").style.visibility = "hidden";
+
+        });
+    })
 }) ();
