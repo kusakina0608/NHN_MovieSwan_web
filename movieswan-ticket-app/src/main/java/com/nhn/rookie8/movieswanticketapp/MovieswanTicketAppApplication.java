@@ -1,13 +1,13 @@
-package com.nhn.rookie8.movieswanweb;
+package com.nhn.rookie8.movieswanticketapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MovieswanWebApplication {
+public class MovieswanTicketAppApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MovieswanWebApplication.class, args);
+		SpringApplication.run(MovieswanTicketAppApplication.class, args);
 	}
 
 }
