@@ -1,0 +1,111 @@
+/* body {
+    background-color:beige;
+} */
+
+#main-container {
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+}
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+}
+.current {
+    color: red;
+}
+#booking-page-title {
+    font-size: 50px;
+}
+
+.booking-container {
+    display: flex;
+}
+.booking-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    border: 3px solid black;
+    background-color: gray;
+    font-size: 25px;
+    color: white;
+}
+.booking-section > h1 {
+    border-bottom: 3px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+.booking-section > ul {
+    flex: 1;
+    min-height: 50vh;
+    margin: 3px;
+    border: 3px solid black;
+    background-color: white;
+    color: black;
+}
+.booking-section > * > ul {
+    flex: 1;
+    min-height: 50vh;
+    margin: 3px;
+    border: 3px solid black;
+    background-color: white;
+    color: black;
+}
+.list-element-link {
+    text-decoration: none;
+}
+.list-element {
+    list-style: none;
+    padding: 3px 5px;
+    color: black;
+}
+.list-element-link:nth-child(2n) > li {
+    background-color: #EEEEEE;
+}
+.selected {
+    background-color: #9ebcff !important;
+}
+.theater-container {
+    display: flex;
+    flex: 1;
+    border: 3px solid black;
+    background-color: gray;
+    font-size: 25px;
+    color: white;
+}
+.booking-footer {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+}
+.next-button {
+	box-shadow:inset 0px 0px 0px 0px #a4e271;
+	background:linear-gradient(to bottom, #89c403 5%, #77a809 100%);
+	background-color:#89c403;
+	border-radius:15px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:28px;
+	font-weight:bold;
+	padding:20px 50px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528009;
+}
+.next-button:hover {
+	background:linear-gradient(to bottom, #77a809 5%, #89c403 100%);
+	background-color:#77a809;
+}
+.next-button:active {
+	position:relative;
+	top:1px;
+}
+.movie-code {
+    display: none;
+}
