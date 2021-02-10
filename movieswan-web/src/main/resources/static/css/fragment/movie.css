@@ -43,6 +43,11 @@
     right: 15px;
 }
 
+.movie .clicked {
+    background: red;
+    color: white;
+}
+
 .movie .movieDescription {
     width: 80%;
     display: flex;
@@ -70,6 +75,7 @@
 }
 
 .movie .movieDescription div button {
+    min-width: 58px;
     display: flex;
     align-items: center;
     flex: 1;
