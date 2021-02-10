@@ -1,5 +1,6 @@
 body main {
     display: flex;
+    padding: 10px 100px 40px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -27,8 +28,8 @@ body main {
 
 .movieSearch {
     width: 90%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 40px;
+    margin-bottom: 20px;
 
     display: flex;
     flex-direction: row;
@@ -49,6 +50,7 @@ body main {
 .movieList .dummy,
 .movieList .dummy:hover {
     list-style: none;
+    margin: 20px 20px 20px;
     background: transparent;
     box-shadow: none;
     height: 0;
