@@ -1,0 +1,39 @@
+#footer {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100vw;
+    padding: 20px;
+    height: var(--footer-height);
+    top: var(--padding-default);
+    right : var(--padding-default);
+    
+    background-color: rgba(0, 0, 0, 0.5);
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+#footer span, #footer p {
+    color: white;
+}
+.footer_teamname {
+    font-size: 40px;
+    margin-left: 20px;
+    margin-right: 30px;
+}
+.footer_team {
+    font-size: 15px;
+    margin-right: 30px;
+}
+.footer_copyright {
+    font-size: 15px;
+}
+#footer_aboutus {
+    display: flex;
+    align-items: center;
+}
+#footer_logo {
+    width: 300px;
+}
