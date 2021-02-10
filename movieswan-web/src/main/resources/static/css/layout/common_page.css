@@ -31,7 +31,6 @@
     justify-content: center;
 
     width: 100%;
-    height: 200vh;
     min-height: calc(100vh - var(--footer-height) - var(--padding-default) * 2);
     padding: 20px 15px;
 

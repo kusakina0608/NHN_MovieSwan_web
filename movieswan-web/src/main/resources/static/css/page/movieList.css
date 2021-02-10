@@ -9,6 +9,7 @@ body main {
 .currentMovie {
     display: flex;
     width: 70%;
+    margin: 20px 0 10px;
 }
 
 .currentMovie a {
@@ -25,6 +26,7 @@ body main {
 .movieSearch {
     width: 90%;
     margin-top: 10px;
+    margin-bottom: 10px;
 
     display: flex;
     flex-direction: row;
@@ -40,5 +42,14 @@ body main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.movieList .dummy,
+.movieList .dummy:hover {
+    list-style: none;
+    background: transparent;
+    box-shadow: none;
+    height: 0;
+    flex: 1;
 }
 
