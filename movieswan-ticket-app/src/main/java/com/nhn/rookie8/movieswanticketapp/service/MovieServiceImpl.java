@@ -28,7 +28,7 @@ public class MovieServiceImpl implements MovieService{
             String saltStr = salt.toString();
             MovieDTO dto = MovieDTO.builder()
                     .mid(salt + "-" + String.format("%04d", i))
-                    .name("ツユ" + String.format("%4d", i))
+                    .name("서새봄의 게임채널" + String.format("%4d", i))
                     .poster("/asset/image/sample_movie.png")
                     .director("Daejin-Lee")
                     .actor("Hyerin-Yoo")
