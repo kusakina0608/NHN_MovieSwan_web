@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ public class Schedule extends BaseEntity {
     @Column(length = 15, nullable = false)
     private String tid;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime time;
 
     @Column(length = 10, nullable = false)
