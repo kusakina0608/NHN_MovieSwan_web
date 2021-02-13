@@ -17,8 +17,8 @@ public class ScheduleServiceTests {
     @Test
     public void regTest() {
         ScheduleDTO scheduleDTO = ScheduleDTO.builder()
-                .tid("00001")
-                .mid("movie001")
+                .tid("0000002")
+                .mid("movie00001")
                 .time(LocalDateTime.now())
                 .build();
 
