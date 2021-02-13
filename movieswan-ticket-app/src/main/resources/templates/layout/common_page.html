@@ -24,7 +24,9 @@
                 <th:block th:replace="~{/fragment/header}"></th:block>
 
                 <!-- Contents -->
-                <th:block th:replace="${contents}"></th:block>
+                <contents id="contents">
+                    <th:block th:replace="${contents}"></th:block>
+                </contents>
             </commonpage>
 
             <th:block th:replace="~{/fragment/footer}"></th:block>
