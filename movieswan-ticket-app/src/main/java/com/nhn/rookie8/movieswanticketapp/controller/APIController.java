@@ -26,6 +26,4 @@ public class APIController {
         redirectAttributes.addFlashAttribute("msg", tid);
         return "redirect:/admin";
     }
-
-    @GetMapping("/")
 }
