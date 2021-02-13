@@ -37,3 +37,8 @@
     border: 3px solid #000;
     background-color: white;
 }
+
+#contents {
+    display: block;
+    padding: 25px;
+}
