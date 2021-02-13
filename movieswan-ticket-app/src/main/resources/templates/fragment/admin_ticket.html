@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<link th:href="@{/css/fragment/admin_ticket.css}" rel="stylesheet">
 
 <ticketadmin id="admin_ticket">
     <h1>예매 관리자 페이지</h1>
@@ -31,7 +32,7 @@
         <button type="submit" class="form_ticket">영화 등록</button>
     </form>
 
-    <form th:action="@{/schedule/cancel}" th:method="delete">
+    <form th:action="@{/schedule/delete}" th:method="delete">
         <h3>영화 시간표 삭제</h3>
         <div class="form_ticket">
             <label class="label_ticket">
@@ -62,51 +63,3 @@
 </ticketadmin>
 
 </html>
-
-<style>
-    #admin_ticket {
-        display: block;
-        justify-content: center;
-    }
-
-    #admin_ticket h1 {
-        margin-bottom: 30px;
-    }
-
-    .form_ticket {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        margin: 10px 20px;
-    }
-
-    .label_ticket {
-        margin-right: 20px;
-    }
-
-    .input_ticket {
-        flex: 1;
-        font-size: 20px;
-
-        height: 40px;
-        padding: 0 10px;
-        margin-right: 40px;
-    }
-
-    button {
-        width: 200px;
-        height: 45px;
-
-        font-size: 25px;
-        color: white;
-        background-color: rgb(0, 132, 255);
-        border: none;
-        border-radius: 10px;
-    }
-
-    form {
-        margin-bottom: 50px;
-    }
-
-</style>
