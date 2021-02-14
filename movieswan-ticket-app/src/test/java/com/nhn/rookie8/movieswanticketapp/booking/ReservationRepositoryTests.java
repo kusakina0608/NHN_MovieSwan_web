@@ -53,4 +53,31 @@ public class ReservationRepositoryTests {
             System.out.println(reservation);
         }
     }
+
+    @Test
+    public void testUpdate(){
+        String rid = "SAMPLE-RID-100";
+
+        Optional<Reservation> result = reservationRepository.findById(rid);
+        if(result.isPresent()){
+            Reservation reservation = result.get();
+            Reservation newReservation = Reservation.builder()
+                    .uid(reservation.getUid())
+                    .tid(reservation.getTid())
+                    .rid(rid)
+                    .adultNum(1)
+                    .childNum(2)
+                    .oldNum(1)
+                    .totalNum(4)
+                    .price(35000)
+                    .build();
+            System.out.println(reservationRepository.save(newReservation));
+        }
+    }
+
+    @Test
+    public void testDelete() {
+        String rid = "SAMPLE-RID-099";
+        reservationRepository.deleteById(rid);
+    }
 }
