@@ -1,4 +1,4 @@
-package com.nhn.rookie8.movieswanticketapp.booking;
+package com.nhn.rookie8.movieswanticketapp.booking.repository;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
