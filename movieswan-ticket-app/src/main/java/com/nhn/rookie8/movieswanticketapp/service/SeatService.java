@@ -5,7 +5,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Seat;
 import com.nhn.rookie8.movieswanticketapp.entity.SeatId;
 
 public interface SeatService {
-    SeatId register(SeatDTO dto);
+    String register(SeatDTO dto);
 
     default Seat dtoToEntity(SeatDTO dto){
         Seat entity = Seat.builder()
