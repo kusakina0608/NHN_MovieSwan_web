@@ -42,4 +42,10 @@ public class SeatRepositoryTests {
             System.out.println(seat);
         }
     }
+
+    @Test
+    public void testDelete(){
+        SeatId seatId = new SeatId("SAMPLE-RID-100", "A100");
+        seatRepository.deleteById(seatId);
+    }
 }
