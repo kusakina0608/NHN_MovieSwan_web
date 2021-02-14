@@ -1,47 +1,32 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.Movie;
+import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService{
+    private final MovieRepository repository;
+
     @Override
-    public List<MovieDTO> getReleaseMovieList() {
-        // TODO: Request to API to get data
-        // List<MovieDTO> movieList = ......
+    public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO) {
+        Pageable pageable = requestDTO.getPageable(Sort.by("mid").descending());
 
-        /**************************** for generating sample data ****************************/
-        List<MovieDTO> movieList = IntStream.rangeClosed(1, 20).asLongStream().mapToObj(i -> {
-            String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            StringBuilder salt = new StringBuilder();
-            Random rnd = new Random();
-            while (salt.length() < 4) {
-                int index = (int) (rnd.nextFloat() * alphabet.length());
-                salt.append(alphabet.charAt(index));
-            }
-            String saltStr = salt.toString();
-            MovieDTO dto = MovieDTO.builder()
-                    .mid(salt + "-" + String.format("%04d", i))
-                    .name("서새봄의 게임채널" + String.format("%4d", i))
-                    .poster("/asset/image/sample_movie.png")
-                    .director("Daejin-Lee")
-                    .actor("Hyerin-Yoo")
-                    .runtime(200)
-                    .genre("Romance")
-                    .story("하하호호 샘플 영화 스토리입니다~~~\n행복하게 살았읍니다~~")
-                    .startdate(LocalDate.now())
-                    .enddate(LocalDate.now().plusDays(14))
-                    .build();
-            return dto;
-        }).collect(Collectors.toList());
-        /**************************** for generating sample data ****************************/
+        Page<Movie> result = repository.findAll(pageable);
 
-        return movieList;
+        Function<Movie, MovieDTO> fn = (entity -> entityToDTO(entity));
+
+        return new PageResultDTO<>(result, fn);
     }
+
 }
