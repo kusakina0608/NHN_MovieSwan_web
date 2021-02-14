@@ -65,3 +65,25 @@ body main {
     display: none;
 }
 
+.pagination {
+    list-style: none;
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination .page-link {
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+}
+
+.pagination .active .page-link{
+    background: skyblue;
+}
+
+.pagination .page-item:not(.active) .page-link:hover {
+    background: lightgray;
+}
