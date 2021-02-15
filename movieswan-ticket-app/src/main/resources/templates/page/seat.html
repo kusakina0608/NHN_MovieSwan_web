@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>좌석 선택 페이지</title>
+    <link th:href="@{/css/page/seat.css}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<th:block th:replace="~{/layout/common_page:: setContents(~{this:: #main-container} )}">
+    <main id="main-container">
+        <section id="seat-header">
+            <section class="inner-container">
+                <section class="info-container">
+                    <section class="movie-info">
+                        <img class="movie-poster" th:src="@{/asset/image/poster1.jpg}" alt="영화 포스터">
+                        <section class="movie-text">
+                            <h3>[[${title}]]</h3>
+                            <h2>[[${theater}]]</h2>
+                            <div>[[${date}]] [[${time}]]</div>
+                        </section>
+                    </section>
+                    <section class="people-info">
+                        <h2>관람 인원</h2>
+                        <div>
+                            <div class="people-type">성인: </div>
+                            <div class="number">
+                                <span class="minus">-</span>
+                                <input id="adultCount" name="adultCount" type="text" value="0"/>
+                                <span class="plus">+</span>
+                            </div>
+                            <div class="price-label">× 16000</div>
+                        </div>
+                        <div>
+                            <div class="people-type">청소년: </div>
+                            <div class="number">
+                                <span class="minus">-</span>
+                                <input id="childCount" name="childCount" type="text" value="0"/>
+                                <span class="plus">+</span>
+                            </div>
+                            <div class="price-label">× 12000</div>
+                        </div>
+                        <div>
+                            <div class="people-type">우대: </div>
+                            <div class="number">
+                                <span class="minus">-</span>
+                                <input id="otherCount" name="otherCount" type="text" value="0"/>
+                                <span class="plus">+</span>
+                            </div>
+                            <div class="price-label">× 8000</div>
+                        </div>
+                    </section>
+                    <section class="discount-info">
+                        <h2>할인</h2>
+                        <div>[[${discount}]]</div>
+                    </section>
+                    <section class="price-info">
+                        <h2>총 결제 금액</h2>
+                        <div class="price-container">
+                            <div> = </div>
+                            <div id="total-price"> 0 </div>
+                            <div> 원 </div>
+                        </div>
+                    </section>
+                </section>
+                <section class="right-container">
+                    <section class="upper-right-container">
+                        <div> 좌 석 표 </div>
+                        <section class="seat-container">
+                            <div class="line">
+                                <button><input type="hidden" value="A01"/></button>
+                                <button><input type="hidden" value="A02"/></button>
+                                <button><input type="hidden" value="A03"/></button>
+                                <button><input type="hidden" value="A04"/></button>
+                                <button><input type="hidden" value="A05"/></button>
+                                <button><input type="hidden" value="A06"/></button>
+                                <button><input type="hidden" value="A07"/></button>
+                                <button><input type="hidden" value="A08"/></button>
+                                <button><input type="hidden" value="A09"/></button>
+                                <button><input type="hidden" value="A10"/></button>
+                                <button><input type="hidden" value="A11"/></button>
+                                <button><input type="hidden" value="A12"/></button>
+                                <button><input type="hidden" value="A13"/></button>
+                                <button><input type="hidden" value="A14"/></button>
+                                <button><input type="hidden" value="A15"/></button>
+                                <button><input type="hidden" value="A16"/></button>
+                                <button><input type="hidden" value="A17"/></button>
+                                <button><input type="hidden" value="A18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="B01"/></button>
+                                <button><input type="hidden" value="B02"/></button>
+                                <button><input type="hidden" value="B03"/></button>
+                                <button><input type="hidden" value="B04"/></button>
+                                <button><input type="hidden" value="B05"/></button>
+                                <button><input type="hidden" value="B06"/></button>
+                                <button><input type="hidden" value="B07"/></button>
+                                <button><input type="hidden" value="B08"/></button>
+                                <button><input type="hidden" value="B09"/></button>
+                                <button><input type="hidden" value="B10"/></button>
+                                <button><input type="hidden" value="B11"/></button>
+                                <button><input type="hidden" value="B12"/></button>
+                                <button><input type="hidden" value="B13"/></button>
+                                <button><input type="hidden" value="B14"/></button>
+                                <button><input type="hidden" value="B15"/></button>
+                                <button><input type="hidden" value="B16"/></button>
+                                <button><input type="hidden" value="B17"/></button>
+                                <button><input type="hidden" value="B18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="C01"/></button>
+                                <button><input type="hidden" value="C02"/></button>
+                                <button><input type="hidden" value="C03"/></button>
+                                <button><input type="hidden" value="C04"/></button>
+                                <button><input type="hidden" value="C05"/></button>
+                                <button><input type="hidden" value="C06"/></button>
+                                <button><input type="hidden" value="C07"/></button>
+                                <button><input type="hidden" value="C08"/></button>
+                                <button><input type="hidden" value="C09"/></button>
+                                <button><input type="hidden" value="C10"/></button>
+                                <button><input type="hidden" value="C11"/></button>
+                                <button><input type="hidden" value="C12"/></button>
+                                <button><input type="hidden" value="C13"/></button>
+                                <button><input type="hidden" value="C14"/></button>
+                                <button><input type="hidden" value="C15"/></button>
+                                <button><input type="hidden" value="C16"/></button>
+                                <button><input type="hidden" value="C17"/></button>
+                                <button><input type="hidden" value="C18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="D01"/></button>
+                                <button><input type="hidden" value="D02"/></button>
+                                <button><input type="hidden" value="D03"/></button>
+                                <button><input type="hidden" value="D04"/></button>
+                                <button><input type="hidden" value="D05"/></button>
+                                <button><input type="hidden" value="D06"/></button>
+                                <button><input type="hidden" value="D07"/></button>
+                                <button><input type="hidden" value="D08"/></button>
+                                <button><input type="hidden" value="D09"/></button>
+                                <button><input type="hidden" value="D10"/></button>
+                                <button><input type="hidden" value="D11"/></button>
+                                <button><input type="hidden" value="D12"/></button>
+                                <button><input type="hidden" value="D13"/></button>
+                                <button><input type="hidden" value="D14"/></button>
+                                <button><input type="hidden" value="D15"/></button>
+                                <button><input type="hidden" value="D16"/></button>
+                                <button><input type="hidden" value="D17"/></button>
+                                <button><input type="hidden" value="D18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="E01"/></button>
+                                <button><input type="hidden" value="E02"/></button>
+                                <button><input type="hidden" value="E03"/></button>
+                                <button><input type="hidden" value="E04"/></button>
+                                <button><input type="hidden" value="E05"/></button>
+                                <button><input type="hidden" value="E06"/></button>
+                                <button><input type="hidden" value="E07"/></button>
+                                <button><input type="hidden" value="E08"/></button>
+                                <button><input type="hidden" value="E09"/></button>
+                                <button><input type="hidden" value="E10"/></button>
+                                <button><input type="hidden" value="E11"/></button>
+                                <button><input type="hidden" value="E12"/></button>
+                                <button><input type="hidden" value="E13"/></button>
+                                <button><input type="hidden" value="E14"/></button>
+                                <button><input type="hidden" value="E15"/></button>
+                                <button><input type="hidden" value="E16"/></button>
+                                <button><input type="hidden" value="E17"/></button>
+                                <button><input type="hidden" value="E18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="F01"/></button>
+                                <button><input type="hidden" value="F02"/></button>
+                                <button><input type="hidden" value="F03"/></button>
+                                <button><input type="hidden" value="F04"/></button>
+                                <button><input type="hidden" value="F05"/></button>
+                                <button><input type="hidden" value="F06"/></button>
+                                <button><input type="hidden" value="F07"/></button>
+                                <button><input type="hidden" value="F08"/></button>
+                                <button><input type="hidden" value="F09"/></button>
+                                <button><input type="hidden" value="F10"/></button>
+                                <button><input type="hidden" value="F11"/></button>
+                                <button><input type="hidden" value="F12"/></button>
+                                <button><input type="hidden" value="F13"/></button>
+                                <button><input type="hidden" value="F14"/></button>
+                                <button><input type="hidden" value="F15"/></button>
+                                <button><input type="hidden" value="F16"/></button>
+                                <button><input type="hidden" value="F17"/></button>
+                                <button><input type="hidden" value="F18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="G01"/></button>
+                                <button><input type="hidden" value="G02"/></button>
+                                <button><input type="hidden" value="G03"/></button>
+                                <button><input type="hidden" value="G04"/></button>
+                                <button><input type="hidden" value="G05"/></button>
+                                <button><input type="hidden" value="G06"/></button>
+                                <button><input type="hidden" value="G07"/></button>
+                                <button><input type="hidden" value="G08"/></button>
+                                <button><input type="hidden" value="G09"/></button>
+                                <button><input type="hidden" value="G10"/></button>
+                                <button><input type="hidden" value="G11"/></button>
+                                <button><input type="hidden" value="G12"/></button>
+                                <button><input type="hidden" value="G13"/></button>
+                                <button><input type="hidden" value="G14"/></button>
+                                <button><input type="hidden" value="G15"/></button>
+                                <button><input type="hidden" value="G16"/></button>
+                                <button><input type="hidden" value="G17"/></button>
+                                <button><input type="hidden" value="G18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="H01"/></button>
+                                <button><input type="hidden" value="H02"/></button>
+                                <button><input type="hidden" value="H03"/></button>
+                                <button><input type="hidden" value="H04"/></button>
+                                <button><input type="hidden" value="H05"/></button>
+                                <button><input type="hidden" value="H06"/></button>
+                                <button><input type="hidden" value="H07"/></button>
+                                <button><input type="hidden" value="H08"/></button>
+                                <button><input type="hidden" value="H09"/></button>
+                                <button><input type="hidden" value="H10"/></button>
+                                <button><input type="hidden" value="H11"/></button>
+                                <button><input type="hidden" value="H12"/></button>
+                                <button><input type="hidden" value="H13"/></button>
+                                <button><input type="hidden" value="H14"/></button>
+                                <button><input type="hidden" value="H15"/></button>
+                                <button><input type="hidden" value="H16"/></button>
+                                <button><input type="hidden" value="H17"/></button>
+                                <button><input type="hidden" value="H18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="I01"/></button>
+                                <button><input type="hidden" value="I02"/></button>
+                                <button><input type="hidden" value="I03"/></button>
+                                <button><input type="hidden" value="I04"/></button>
+                                <button><input type="hidden" value="I05"/></button>
+                                <button><input type="hidden" value="I06"/></button>
+                                <button><input type="hidden" value="I07"/></button>
+                                <button><input type="hidden" value="I08"/></button>
+                                <button><input type="hidden" value="I09"/></button>
+                                <button><input type="hidden" value="I10"/></button>
+                                <button><input type="hidden" value="I11"/></button>
+                                <button><input type="hidden" value="I12"/></button>
+                                <button><input type="hidden" value="I13"/></button>
+                                <button><input type="hidden" value="I14"/></button>
+                                <button><input type="hidden" value="I15"/></button>
+                                <button><input type="hidden" value="I16"/></button>
+                                <button><input type="hidden" value="I17"/></button>
+                                <button><input type="hidden" value="I18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="J01"/></button>
+                                <button><input type="hidden" value="J02"/></button>
+                                <button><input type="hidden" value="J03"/></button>
+                                <button><input type="hidden" value="J04"/></button>
+                                <button><input type="hidden" value="J05"/></button>
+                                <button><input type="hidden" value="J06"/></button>
+                                <button><input type="hidden" value="J07"/></button>
+                                <button><input type="hidden" value="J08"/></button>
+                                <button><input type="hidden" value="J09"/></button>
+                                <button><input type="hidden" value="J10"/></button>
+                                <button><input type="hidden" value="J11"/></button>
+                                <button><input type="hidden" value="J12"/></button>
+                                <button><input type="hidden" value="J13"/></button>
+                                <button><input type="hidden" value="J14"/></button>
+                                <button><input type="hidden" value="J15"/></button>
+                                <button><input type="hidden" value="J16"/></button>
+                                <button><input type="hidden" value="J17"/></button>
+                                <button><input type="hidden" value="J18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="K01"/></button>
+                                <button><input type="hidden" value="K02"/></button>
+                                <button><input type="hidden" value="K03"/></button>
+                                <button><input type="hidden" value="K04"/></button>
+                                <button><input type="hidden" value="K05"/></button>
+                                <button><input type="hidden" value="K06"/></button>
+                                <button><input type="hidden" value="K07"/></button>
+                                <button><input type="hidden" value="K08"/></button>
+                                <button><input type="hidden" value="K09"/></button>
+                                <button><input type="hidden" value="K10"/></button>
+                                <button><input type="hidden" value="K11"/></button>
+                                <button><input type="hidden" value="K12"/></button>
+                                <button><input type="hidden" value="K13"/></button>
+                                <button><input type="hidden" value="K14"/></button>
+                                <button><input type="hidden" value="K15"/></button>
+                                <button><input type="hidden" value="K16"/></button>
+                                <button><input type="hidden" value="K17"/></button>
+                                <button><input type="hidden" value="K18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="L01"/></button>
+                                <button><input type="hidden" value="L02"/></button>
+                                <button><input type="hidden" value="L03"/></button>
+                                <button><input type="hidden" value="L04"/></button>
+                                <button><input type="hidden" value="L05"/></button>
+                                <button><input type="hidden" value="L06"/></button>
+                                <button><input type="hidden" value="L07"/></button>
+                                <button><input type="hidden" value="L08"/></button>
+                                <button><input type="hidden" value="L09"/></button>
+                                <button><input type="hidden" value="L10"/></button>
+                                <button><input type="hidden" value="L11"/></button>
+                                <button><input type="hidden" value="L12"/></button>
+                                <button><input type="hidden" value="L13"/></button>
+                                <button><input type="hidden" value="L14"/></button>
+                                <button><input type="hidden" value="L15"/></button>
+                                <button><input type="hidden" value="L16"/></button>
+                                <button><input type="hidden" value="L17"/></button>
+                                <button><input type="hidden" value="L18"/></button>
+                            </div>
+                            <div class="line">
+                                <button><input type="hidden" value="M01"/></button>
+                                <button><input type="hidden" value="M02"/></button>
+                                <button><input type="hidden" value="M03"/></button>
+                                <button><input type="hidden" value="M04"/></button>
+                                <button><input type="hidden" value="M05"/></button>
+                                <button><input type="hidden" value="M06"/></button>
+                                <button><input type="hidden" value="M07"/></button>
+                                <button><input type="hidden" value="M08"/></button>
+                                <button><input type="hidden" value="M09"/></button>
+                                <button><input type="hidden" value="M10"/></button>
+                                <button><input type="hidden" value="M11"/></button>
+                                <button><input type="hidden" value="M12"/></button>
+                                <button><input type="hidden" value="M13"/></button>
+                                <button><input type="hidden" value="M14"/></button>
+                                <button><input type="hidden" value="M15"/></button>
+                                <button><input type="hidden" value="M16"/></button>
+                                <button><input type="hidden" value="M17"/></button>
+                                <button><input type="hidden" value="M18"/></button>
+                            </div>
+                        </section>
+                    </section>
+                    <section class="lower-right-container">
+                        <h2>선택한 좌석</h2>
+                        <div id="selected-seat"></div>
+                    </section>
+                </section>
+            </section>
+        </section>
+        <section class="seat-footer">
+            <a href="#" class="next-button">&gt;&gt; NEXT</a>
+        </section>
+    </main>
+</th:block>
+<script th:src="@{/script/page/seat.js}"></script>
+</body>
+</html>
