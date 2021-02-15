@@ -8,6 +8,7 @@
 
     <!---CSS 파일--->
     <link th:href="@{/css/page/movie_list.css}" rel="stylesheet" />
+    <link th:href="@{/css/fragment/movie.css}" rel="stylesheet" />
 
     <!---ICON--->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -32,18 +33,31 @@
         <!---영화 목록--->
         <ul class="movieList">
             <!---영화(fragment로 가져오기)--->
-            <th:block th:replace="~{/fragment/movie}"></th:block>
-            <th:block th:replace="~{/fragment/movie}"></th:block>
-            <th:block th:replace="~{/fragment/movie}"></th:block>
-            <th:block th:replace="~{/fragment/movie}"></th:block>
-            <th:block th:replace="~{/fragment/movie}"></th:block>
-            <th:block th:replace="~{/fragment/movie}"></th:block>
-            <li class="dummy"></li>
-            <li class="dummy"></li>
+            <th:block th:each="dto : ${result.dtoList}">
+                <th:block th:replace="~{/fragment/movie}"></th:block>
+            </th:block>
+            <!---<li class="dummy"></li>
+            <li class="dummy"></li>--->
         </ul>
 
 
         <!---pagination--->
+        <ul class="pagination">
+            <li class="page-item" th:if="${result.prev}">
+                <a class="page-link" th:href="@{movie_list(page=${result.start - 1})}" tabindex="-1">Prev</a>
+            </li>
+
+            <li th:class=" 'page-item ' + ${result.page == page?'active':''}"
+                th:each="page: ${result.pageList}">
+                <a class="page-link" th:href="@{movie_list(page=${page})}">
+                    [[${page}]]
+                </a>
+            </li>
+
+            <li class="page-item" th:if="${result.next}">
+                <a class="page-link" th:href="@{movie_list(page=${result.end + 1})}">Next</a>
+            </li>
+        </ul>
 
     </main>
 
