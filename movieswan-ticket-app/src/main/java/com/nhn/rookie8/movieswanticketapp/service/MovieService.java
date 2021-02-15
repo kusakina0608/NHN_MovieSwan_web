@@ -5,10 +5,14 @@ import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 
+import java.util.List;
+
 public interface MovieService {
     //String register(MovieDTO movieDTO);
 
     PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO);
+
+    List<MovieDTO> getReleaseList();
 
     //MovieDTO read(String mid);
 

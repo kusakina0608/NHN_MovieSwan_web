@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 public class MovieServiceTest {
     @Autowired
@@ -20,6 +22,14 @@ public class MovieServiceTest {
 
         PageResultDTO<MovieDTO, Movie> pageResultDTO = service.getList(pageRequestDTO);
         for(MovieDTO movieDTO : pageResultDTO.getDtoList()) {
+            System.out.println(movieDTO);
+        }
+    }
+
+    @Test
+    public void testReleaseList() {
+        List<MovieDTO> movieDTOList = service.getReleaseList();
+        for(MovieDTO movieDTO : movieDTOList) {
             System.out.println(movieDTO);
         }
     }
