@@ -20,8 +20,17 @@
     <main>
         <!---상영 중 / 상영 예정 탭--->
         <ul class="currentMovie">
-            <li id="current" class="selected">상영 중</li>
-            <li id="expected">상영 예정</li>
+            <a th:href="@{/movie/current/list}" th:class=" ${current ? 'selected' : ''} ">
+                <li id="current">
+                    상영 중
+                </li>
+            </a>
+
+            <a th:href="@{/movie/expected/list}" th:class=" ${!current ? 'selected' : ''} ">
+                <li id="expected">
+                    상영 예정
+                </li>
+            </a>
         </ul>
 
         <!---영화 검색창--->
@@ -31,7 +40,7 @@
         </div>
 
         <!---영화 목록--->
-        <ul class="movieList">
+        <ul class="movieList currentMovieList">
             <!---영화(fragment로 가져오기)--->
             <th:block th:each="dto : ${result.dtoList}">
                 <th:block th:replace="~{/fragment/movie}"></th:block>
@@ -44,24 +53,24 @@
         <!---pagination--->
         <ul class="pagination">
             <li class="page-item" th:if="${result.prev}">
-                <a class="page-link" th:href="@{movie_list(page=${result.start - 1})}" tabindex="-1">Prev</a>
+                <a class="page-link" th:href="@{list(page=${result.start - 1})}" tabindex="-1">Prev</a>
             </li>
 
             <li th:class=" 'page-item ' + ${result.page == page?'active':''}"
                 th:each="page: ${result.pageList}">
-                <a class="page-link" th:href="@{movie_list(page=${page})}">
+                <a class="page-link" th:href="@{list(page=${page})}">
                     [[${page}]]
                 </a>
             </li>
 
             <li class="page-item" th:if="${result.next}">
-                <a class="page-link" th:href="@{movie_list(page=${result.end + 1})}">Next</a>
+                <a class="page-link" th:href="@{list(page=${result.end + 1})}">Next</a>
             </li>
         </ul>
 
     </main>
 
-    <script th:src="@{/script/page/movie_list.js}"></script>
+    <!---<script th:src="@{/script/page/movie_list.js}"></script>--->
     <script th:src="@{/script/fragment/movie.js}"></script>
 
 </th:block>

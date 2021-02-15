@@ -20,7 +20,7 @@ public class MovieServiceTest {
     public void testList() {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(12).build();
 
-        PageResultDTO<MovieDTO, Movie> pageResultDTO = service.getList(pageRequestDTO);
+        PageResultDTO<MovieDTO, Movie> pageResultDTO = service.getList(pageRequestDTO, true);
         for(MovieDTO movieDTO : pageResultDTO.getDtoList()) {
             System.out.println(movieDTO);
         }

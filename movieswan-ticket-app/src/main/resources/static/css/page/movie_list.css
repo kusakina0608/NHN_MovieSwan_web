@@ -1,6 +1,6 @@
 body main {
     display: flex;
-    padding: 10px 100px 40px;
+    padding: 10px 80px 40px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -13,13 +13,18 @@ body main {
     margin: 20px 0 10px;
 }
 
-.currentMovie li {
+.currentMovie a {
     border: 2px solid black;
     padding: 5px 30px 5px;
-    list-style: none;
     font-size: 200%;
     flex: 1;
     text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.currentMovie a li {
+    list-style: none;
 }
 
 .currentMovie .selected {
@@ -57,14 +62,6 @@ body main {
     box-shadow: none;
     height: 0;
     flex: 1;
-}
-
-.currentMovieList .expected {
-    display: none;
-}
-
-.expectedMovieList .current {
-    display: none;
 }
 
 .pagination {

@@ -30,9 +30,18 @@ public class PageController {
         return "page/admin_page";
     }
 
-    @GetMapping("/movie/list")
-    public void movieList(PageRequestDTO pageRequestDTO, Model model) {
-        model.addAttribute("result", movieService.getList(pageRequestDTO));
+    @GetMapping("/movie/current/list")
+    public String currentMovieList(PageRequestDTO pageRequestDTO, Model model) {
+        model.addAttribute("result", movieService.getList(pageRequestDTO, true));
+        model.addAttribute("current", true);
+        return "/page/movie_list";
+    }
+
+    @GetMapping("/movie/expected/list")
+    public String expectedMovieList(PageRequestDTO pageRequestDTO, Model model) {
+        model.addAttribute("result", movieService.getList(pageRequestDTO, false));
+        model.addAttribute("current", false);
+        return "/page/movie_list";
     }
 
     @GetMapping("/booking")
