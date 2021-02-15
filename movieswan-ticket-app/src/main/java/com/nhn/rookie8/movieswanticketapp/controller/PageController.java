@@ -8,20 +8,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDate;
+
 @Controller
-@RequestMapping("/page")
+@RequestMapping("/movie")
 @RequiredArgsConstructor
 public class PageController {
-    private final MovieService service;
+    private final MovieService movieService;
 
     @GetMapping("/main")
     public String mainPage() {
         return "/layout/main_page";
     }
 
-    @GetMapping("/movie_list")
-    public void movieList(PageRequestDTO pageRequestDTO, Model model) {
-        model.addAttribute("result", service.getList(pageRequestDTO));
+    @GetMapping("/list")
+    public String movieList(PageRequestDTO pageRequestDTO, Model model) {
+        model.addAttribute("result", movieService.getList(pageRequestDTO));
+        model.addAttribute("localDate", LocalDate.now());
+        return "/page/movie_list";
     }
 
     @GetMapping("/booking")
