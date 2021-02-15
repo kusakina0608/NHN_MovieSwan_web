@@ -43,6 +43,8 @@ body main {
 
 .movieList {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
 }
@@ -71,6 +73,7 @@ body main {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 40px 0 20px;
 }
 
 .pagination .page-link {
