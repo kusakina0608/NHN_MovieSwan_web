@@ -34,11 +34,11 @@ public class Review {
     private String content;
 
     @CreatedDate
-    @Column(name = "regdate", nullable = false)
+    @Column(name = "regdate", updatable = false)
     private LocalDateTime regdate;
 
     @LastModifiedDate
-    @Column(name = "moddate", nullable = false)
+    @Column(name = "moddate")
     private LocalDateTime moddate;
 
 }
