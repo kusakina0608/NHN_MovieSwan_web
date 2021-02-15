@@ -28,7 +28,7 @@ public class PageController {
     }
 
     @GetMapping("/movie/list")
-    public void movieList(PageRequestDTO pageRequestDTO, Model model) {
+    public String movieList(PageRequestDTO pageRequestDTO, Model model) {
         model.addAttribute("result", movieService.getList(pageRequestDTO));
         return "/page/movie_list";
     }
