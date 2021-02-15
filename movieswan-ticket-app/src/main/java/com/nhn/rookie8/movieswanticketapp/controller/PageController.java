@@ -19,10 +19,15 @@ public class PageController {
 
     @GetMapping("/main")
     public String mainPage() {
-        return "/layout/main_page";
+        return "page/main_page";
+    }
+  
+    @GetMapping("/admin")
+    public String admin_page() {
+        return "page/admin_page";
     }
 
-    @GetMapping("/movie_list")
+    @GetMapping("/movie/list")
     public void movieList(PageRequestDTO pageRequestDTO, Model model) {
         model.addAttribute("result", movieService.getList(pageRequestDTO));
     }
