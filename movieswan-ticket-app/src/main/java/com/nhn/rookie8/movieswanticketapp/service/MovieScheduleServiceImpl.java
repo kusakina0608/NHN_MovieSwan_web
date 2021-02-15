@@ -14,7 +14,7 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     private final MovieScheduleRepository repository;
 
    @Override
-   public String registerSchedule(MovieScheduleInpDTO dto) {
+   public String registerMovieSchedule(MovieScheduleInpDTO dto) {
        MovieSchedule entity = dtoToEntity(dto);
        repository.save(entity);
        return entity.getTid();
