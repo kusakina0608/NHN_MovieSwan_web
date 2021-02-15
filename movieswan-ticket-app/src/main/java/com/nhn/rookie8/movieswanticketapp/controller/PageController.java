@@ -1,29 +1,31 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-
 @Controller
-@RequestMapping("/")
-@Log4j2
+@RequestMapping("/page")
 @RequiredArgsConstructor
 public class PageController {
-    private final MovieService movieService;
+    private final MovieService service;
 
-    @GetMapping("/booking")
-    public String booking(Model model){
-        log.info("booking");
-        List<MovieDTO> movieList = movieService.getReleaseMovieList();
-        model.addAttribute("movieList", movieList);
-        return "page/booking";
+    @GetMapping("/main")
+    public String mainPage() {
+        return "/layout/main_page";
     }
 
+    @GetMapping("/movie_list")
+    public void movieList(PageRequestDTO pageRequestDTO, Model model) {
+        model.addAttribute("result", service.getList(pageRequestDTO));
+    }
+
+    @GetMapping("/booking")
+    public String booking() {
+        return "/page/booking";
+    }
 }

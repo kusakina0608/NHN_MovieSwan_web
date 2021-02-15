@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 @Service
@@ -29,4 +31,14 @@ public class MovieServiceImpl implements MovieService{
         return new PageResultDTO<>(result, fn);
     }
 
+    @Override
+    public List<MovieDTO> getReleaseList() {
+        List<Movie> movieList = repository.findAll();
+        List<MovieDTO> movieDTOList = new ArrayList<MovieDTO>();
+
+        for (Movie movie: movieList)
+            movieDTOList.add(entityToDTO(movie));
+
+        return movieDTOList;
+    }
 }

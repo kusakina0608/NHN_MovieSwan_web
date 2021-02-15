@@ -7,6 +7,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    max-width: 200px;
 }
 
 .movie .movieLink {
@@ -15,7 +16,7 @@
     justify-content: center;
     align-items: center;
     text-decoration: none;
-    font-size: 300%;
+    font-size: 200%;
     color: black;
     position: relative;
 }
@@ -26,8 +27,9 @@
 }
 
 .movie .title {
-    width: 100%;
+    width: 80%;
     overflow: hidden;
+    text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
