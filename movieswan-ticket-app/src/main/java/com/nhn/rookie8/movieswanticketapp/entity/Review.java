@@ -1,6 +1,8 @@
 package com.nhn.rookie8.movieswanticketapp.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,9 +33,11 @@ public class Review {
     @Column(name = "content", length = 500, nullable = false)
     private String content;
 
+    @CreatedDate
     @Column(name = "regdate", nullable = false)
     private LocalDateTime regdate;
 
+    @LastModifiedDate
     @Column(name = "moddate", nullable = false)
     private LocalDateTime moddate;
 

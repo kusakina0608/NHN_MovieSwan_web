@@ -26,8 +26,6 @@ public interface ReviewService {
                 .uid(reviewDTO.getUid())
                 .grade(reviewDTO.getGrade())
                 .content(reviewDTO.getContent())
-                .regdate(reviewDTO.getRegdate())
-                .moddate(reviewDTO.getModdate())
                 .build();
         return review;
     }
