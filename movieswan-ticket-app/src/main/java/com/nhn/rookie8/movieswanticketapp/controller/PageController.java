@@ -21,7 +21,7 @@ public class PageController {
     public String mainPage() {
         return "page/main_page";
     }
-  
+
     @GetMapping("/admin")
     public String admin_page(Model model) {
         List<MovieDTO> movieList = movieService.getReleaseList();

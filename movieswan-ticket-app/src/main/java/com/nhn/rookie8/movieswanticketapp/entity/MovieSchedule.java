@@ -19,10 +19,11 @@ public class MovieSchedule {
     @Column(length = 15, nullable = false)
     private String tid;
 
-    private LocalDateTime time;
-
     @Column(length = 10, nullable = false)
     private String mid;
+
+    @Column
+    private LocalDateTime time;
 
     public void changeTime(LocalDateTime changed) {
         this.time = changed;
