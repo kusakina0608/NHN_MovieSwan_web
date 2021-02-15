@@ -27,10 +27,11 @@ public class MovieServiceImpl implements MovieService{
     private final MovieRepository repository;
 
     @Override
-    public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO) {
+    public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO, boolean current) {
         Pageable pageable = requestDTO.getPageable(Sort.by("mid").descending());
+        BooleanBuilder booleanBuilder = current ? getReleaseMovies() : getExpectedMovies();
 
-        Page<Movie> result = repository.findAll(pageable);
+        Page<Movie> result = repository.findAll(booleanBuilder, pageable);
 
         Function<Movie, MovieDTO> fn = (entity -> entityToDTO(entity));
 
@@ -67,6 +68,14 @@ public class MovieServiceImpl implements MovieService{
         booleanBuilder.and(expression1);
         BooleanExpression expression2 = qMovie.enddate.after(LocalDate.now());
         booleanBuilder.and(expression2);
+        return booleanBuilder;
+    }
+
+    private BooleanBuilder getExpectedMovies() {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QMovie qMovie = QMovie.movie;
+        BooleanExpression expression = qMovie.startdate.after(LocalDate.now());
+        booleanBuilder.and(expression);
         return booleanBuilder;
     }
 }

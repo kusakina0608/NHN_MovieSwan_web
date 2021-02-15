@@ -20,8 +20,17 @@
     <main>
         <!---상영 중 / 상영 예정 탭--->
         <ul class="currentMovie">
-            <li id="current" class="selected">상영 중</li>
-            <li id="expected">상영 예정</li>
+            <a th:href="@{/movie/current/list}" th:class=" ${current ? 'selected' : ''} ">
+                <li id="current">
+                    상영 중
+                </li>
+            </a>
+
+            <a th:href="@{/movie/expected/list}" th:class=" ${!current ? 'selected' : ''} ">
+                <li id="expected">
+                    상영 예정
+                </li>
+            </a>
         </ul>
 
         <!---영화 검색창--->
@@ -61,7 +70,7 @@
 
     </main>
 
-    <script th:src="@{/script/page/movie_list.js}"></script>
+    <!---<script th:src="@{/script/page/movie_list.js}"></script>--->
     <script th:src="@{/script/fragment/movie.js}"></script>
 
 </th:block>

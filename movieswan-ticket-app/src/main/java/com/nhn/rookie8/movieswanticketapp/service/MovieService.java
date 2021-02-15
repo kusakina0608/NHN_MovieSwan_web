@@ -10,7 +10,7 @@ import java.util.List;
 public interface MovieService {
     //String register(MovieDTO movieDTO);
 
-    PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO);
+    PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO, boolean current);
 
     List<MovieDTO> getAllList();
 
