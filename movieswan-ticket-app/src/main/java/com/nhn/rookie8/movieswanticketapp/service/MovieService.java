@@ -12,6 +12,8 @@ public interface MovieService {
 
     PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO);
 
+    List<MovieDTO> getAllList();
+
     List<MovieDTO> getReleaseList();
 
     //MovieDTO read(String mid);
