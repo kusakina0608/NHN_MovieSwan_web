@@ -1,6 +1,9 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
+import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInpDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.MovieSchedule;
 import com.nhn.rookie8.movieswanticketapp.response.MovieScheduleResponse;
 import com.nhn.rookie8.movieswanticketapp.service.MovieScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -23,39 +26,45 @@ public class MovieScheduleController {
     private final MovieScheduleService service;
 
     @PostMapping("/register")
-    public String register(MovieScheduleInpDTO inpdto) {
-        service.registerMovieSchedule(inpdto);
-        return "redirect:/admin";
+    public void registerSchd(MovieScheduleInpDTO inpDTO) {
+        service.registerMovieSchedule(inpDTO);
     }
 
-    @GetMapping("/test")
-    public MovieScheduleResponse getSchedule() {
-        String[] localDateTime = {LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                LocalDateTime.now().plusHours(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                LocalDateTime.now().plusHours(2).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))};
+    @DeleteMapping("/delete")
+    public void deleteSchd(String tid) {
+        service.deleteMovieSchedule(tid);
+    }
 
-        log.info(localDateTime);
-        List<Map<String, List<String>>> list = new ArrayList<>();
+    @GetMapping("/timetable")
+    public MovieScheduleResponse findSchd(@RequestParam String mid) {
+        List<MovieScheduleDTO> scheduleDTOList = service.getMovieSchedule(mid);
+        List<Map<String, List<String>>> scheduleList = new ArrayList<>();
         Map<String, List<String>> map = new HashMap<>();
 
-        for (int i = 0; i < localDateTime.length; i++) {
-            String[] datetime = localDateTime[i].split(" ");
+        scheduleDTOList.forEach(e -> {
+            String[] datetime = e.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).split(" ");
             String date = datetime[0];
             String time = datetime[1];
 
             if (!map.containsKey(date)) {
-                List<String> timelist =  new ArrayList<String>();
-                map.put(date, timelist);
+                List<String> list = new ArrayList<String>();
+                map.put(date, list);
             }
             map.get(date).add(time);
-        }
-        list.add(map);
+        });
+        scheduleList.add(map);
 
         MovieScheduleResponse movieScheduleResponse = MovieScheduleResponse.builder()
                 .errorOccured(false)
-                .data(list)
+                .data(scheduleList)
                 .build();
 
         return movieScheduleResponse;
+    }
+
+    @GetMapping("/get")
+    public List<MovieScheduleDTO> getSchd(@RequestParam String mid) {
+        List<MovieScheduleDTO> scheduleDTOList = service.getMovieSchedule(mid);
+        return service.getMovieSchedule(mid);
     }
 }
