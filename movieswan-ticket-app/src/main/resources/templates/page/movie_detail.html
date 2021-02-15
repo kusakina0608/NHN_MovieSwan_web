@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie SWan - 영화 상세 정보</title>
 
+    <!---CSS 파일--->
+    <link th:href="@{/css/page/movie_detail.css}" rel="stylesheet" />
+
     <!---ICON--->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
@@ -14,25 +17,34 @@
 <th:block th:fragment="contents">
     <main>
         <div class="info">
-            <img th:src="@{${'/asset/image/' + dto.poster}}">
+            <img class="poster" th:src="@{${'/asset/image/' + dto.poster}}">
             
-            <h3>[[${dto.name}]]</h3>
-            <p>감독 : [[${dto.director}]] / 배우 : [[${dto.actor}]]</p>
-            <p>장르 : [[${dto.genre}]] / 상영 시간 : [[${dto.runtime}]]분</p>
-            <p>개봉 : [[${dto.startdate}]]</p>
-            
-            <button class="favorite">
-                <span class="material-icons">favorite_border</span>
-                <span>3.3k</span>
-            </button>
+            <div>
+                <h1 class="title">[[${dto.name}]]</h1>
 
-            <button>
-                <span class="material-icons booking">local_activity</span>
-                <span>예매</span>
-            </button>
+                <div class="detail"> 
+                    <p>감독 : [[${dto.director}]] / 배우 : [[${dto.actor}]]</p>
+                    <p>장르 : [[${dto.genre}]] / 상영 시간 : [[${dto.runtime}]]분</p>
+                    <p>개봉 : [[${dto.startdate}]]</p>
+                </div>
+
+                <div class="buttons">
+                    <button class="favorite">
+                        <span class="material-icons">favorite_border</span>
+                        <span>3.3k</span>
+                    </button>
+        
+                    <button>
+                        <span class="material-icons booking">local_activity</span>
+                        <span>예매</span>
+                    </button>
+                </div>
+            </div>
+            
+            
         </div>
 
-        <ul>
+        <ul class="navigation">
             <li>스토리</li>
             <li>예고편</li>
             <li>스틸컷</li>
@@ -40,20 +52,20 @@
         </ul>
 
         <div class="story">
-            <h3>스토리</h3>
+            <h1>스토리</h1>
             <p>[[${dto.story}]]</p>
         </div>
 
         <div class="trailer">
-            <h3>예고편</h3>
+            <h1>예고편</h1>
         </div>
 
-        <div>
-            <h3>스틸컷</h3>
+        <div class="stillcut">
+            <h1>스틸컷</h1>
         </div>
 
-        <div>
-            <h3>리뷰</h3>
+        <div class="review">
+            <h1>리뷰</h1>
         </div>
     </main>
 

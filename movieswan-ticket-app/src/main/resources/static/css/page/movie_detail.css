@@ -1,0 +1,64 @@
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 80px 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+.info {
+    display: flex;
+}
+
+.info .poster {
+    flex: 1;
+
+    margin-right: 50px;
+    max-width: 300px;
+    max-height: 500px;
+}
+
+.info div {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.info div .title {
+    flex: 3;
+
+    font-size: 40px;
+}
+
+.info div .detail {
+    margin: 0;
+    flex: 3;
+
+    font-size: 20px;
+}
+
+.info div .buttons {
+    margin: 0;
+    display: flex;
+    flex: 1;
+    
+}
+
+
+.navigation {
+    width: 70%;
+    margin: 20px 0 20px;
+    background-color: bisque;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+.navigation li {
+    padding: 10px 40px 10px;
+}
+
+div {
+    margin: 20px 50px 20px;
+    width: 100%;
+}
