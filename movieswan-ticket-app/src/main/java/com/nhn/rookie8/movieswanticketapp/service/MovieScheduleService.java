@@ -1,13 +1,17 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
+import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInpDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.MovieSchedule;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public interface MovieScheduleService {
-    String registerMovieSchedule(MovieScheduleInpDTO dto);
+    void registerMovieSchedule(MovieScheduleInpDTO dto);
+    void deleteMovieSchedule(String tid);
+    List<MovieScheduleDTO> getMovieSchedule(String mid);
 
     default MovieSchedule dtoToEntity(MovieScheduleInpDTO dto) {
         String datetime = dto.getDate() + ' ' + dto.getTime();
@@ -34,5 +38,14 @@ public interface MovieScheduleService {
                 .time(time)
                 .build();
         return entity;
+    }
+
+    default MovieScheduleDTO entityToDTO(MovieSchedule entity) {
+        MovieScheduleDTO movieScheduleDTO = MovieScheduleDTO.builder()
+                .tid(entity.getTid())
+                .mid(entity.getMid())
+                .time(entity.getTime())
+                .build();
+        return movieScheduleDTO;
     }
 }
