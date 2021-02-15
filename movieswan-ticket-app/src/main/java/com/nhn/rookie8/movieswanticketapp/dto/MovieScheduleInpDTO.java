@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleDTO {
+public class MovieScheduleInpDTO {
     private String mid;
-    private LocalDateTime time;
-    private String tid;
-
-    private LocalDateTime regDate, modDate;
+    private String date;
+    private String time;
 }

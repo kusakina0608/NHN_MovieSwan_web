@@ -14,12 +14,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Schedule extends BaseEntity {
+public class MovieSchedule {
     @Id
     @Column(length = 15, nullable = false)
     private String tid;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime time;
 
     @Column(length = 10, nullable = false)
