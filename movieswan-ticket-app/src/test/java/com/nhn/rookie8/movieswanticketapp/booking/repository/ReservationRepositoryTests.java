@@ -27,15 +27,15 @@ public class ReservationRepositoryTests {
 
     @Test
     public void testInsertDummies(){
-        IntStream.rangeClosed(1, 100).forEach(i -> {
+        IntStream.rangeClosed(1, 28).forEach(i -> {
             Reservation reservation = Reservation.builder()
-                    .tid("SAMPLE-TID-" + String.format("%03d", i))
-                    .uid("SAMPLE-UID-" + String.format("%03d", i))
-                    .rid("SAMPLE-RID-" + String.format("%03d", i))
-                    .totalNum(2)
-                    .price(26000)
-                    .adultNum(2)
-                    .childNum(0)
+                    .tid("AAA2102" + String.format("%02d", i) + "1800")
+                    .uid("hyerin9177")
+                    .rid("SEBM-B000-B" + String.format("%03d", i))
+                    .totalNum(1)
+                    .price(7000)
+                    .adultNum(0)
+                    .childNum(1)
                     .oldNum(0)
                     .build();
             reservationRepository.save(reservation);
