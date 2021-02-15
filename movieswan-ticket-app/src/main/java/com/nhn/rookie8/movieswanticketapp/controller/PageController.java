@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -39,6 +40,13 @@ public class PageController {
         model.addAttribute("result", movieService.getList(pageRequestDTO, false));
         model.addAttribute("current", false);
         return "/page/movie_list";
+    }
+
+    @GetMapping("/movie/detail")
+    public String movieDetail(String mid, @ModelAttribute("requestDTO")PageRequestDTO requestDTO, Model model) {
+        MovieDTO movieDTO = movieService.read(mid);
+        model.addAttribute("dto", movieDTO);
+        return "/page/movie_detail";
     }
 
     @GetMapping("/booking")
