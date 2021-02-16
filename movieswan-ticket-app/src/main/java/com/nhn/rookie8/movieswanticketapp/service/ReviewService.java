@@ -10,6 +10,8 @@ public interface ReviewService {
 
     PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO);
 
+    void modify(ReviewDTO reviewDTO);
+
     default ReviewDTO entityToDTO(Review review) {
         ReviewDTO reviewDTO = ReviewDTO.builder()
                 .rid(review.getRid())

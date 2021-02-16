@@ -43,4 +43,11 @@ public class Review {
     @Column(name = "moddate")
     private LocalDateTime moddate;
 
+    public void changeGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -36,5 +37,19 @@ public class ReviewServiceImpl implements ReviewService{
         Function<Review, ReviewDTO> fn = (entity -> entityToDTO(entity));
 
         return new PageResultDTO<>(result, fn);
+    }
+
+    @Override
+    public void modify(ReviewDTO reviewDTO) {
+        Optional<Review> result = repository.findById(reviewDTO.getRid());
+
+        if(result.isPresent()) {
+            Review review = result.get();
+
+            review.changeGrade(reviewDTO.getGrade());
+            review.changeContent(reviewDTO.getContent());
+
+            repository.save(review);
+        }
     }
 }
