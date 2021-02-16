@@ -27,7 +27,7 @@
             </label>
             <input class="input_ticket" type="time" name="time" min="06:00" max="23:59" required>
         </div>
-        <button type="submit" class="form_ticket">영화 등록</button>
+        <button type="submit" class="form_ticket_btn">영화 등록</button>
     </form>
 
     <form th:action="@{/api/schedule/delete}" th:method="delete">
@@ -42,7 +42,7 @@
                 </option>
             </select>
         </div>
-        <div class="form_ticket"></div>
+        <div class="form_ticket">
             <label class="label_ticket">
                 시간 선택
             </label>
@@ -54,7 +54,7 @@
                 <option value="5" selected>-</option>
             </select>
         </div>
-        <button type="submit" class="form_ticket">영화 삭제</button>
+        <button type="submit" class="form_ticket_btn">영화 삭제</button>
     </form>
 </ticketadmin>
 <script th:src="@{/script/fragment/admin_ticket.js}"></script>
