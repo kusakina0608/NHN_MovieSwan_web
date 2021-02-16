@@ -4,6 +4,7 @@ import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
+import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
 
 import java.util.List;
 
@@ -35,21 +36,5 @@ public interface MovieService {
                 .build();
 
         return movieDTO;
-    }
-    default Movie dtoToEntity(MovieDTO movieDTO) {
-        Movie movie = Movie.builder()
-                .mid(movieDTO.getMid())
-                .name(movieDTO.getName())
-                .poster(movieDTO.getPoster())
-                .director(movieDTO.getDirector())
-                .actor(movieDTO.getActor())
-                .genre(movieDTO.getGenre())
-                .runtime(movieDTO.getRuntime())
-                .story(movieDTO.getStory())
-                .startdate(movieDTO.getStartdate())
-                .enddate(movieDTO.getEnddate())
-                .build();
-
-        return movie;
     }
 }

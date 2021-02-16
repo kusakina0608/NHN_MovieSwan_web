@@ -17,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -86,5 +88,34 @@ public class MovieServiceImpl implements MovieService{
         BooleanExpression expression = qMovie.startdate.after(LocalDate.now());
         booleanBuilder.and(expression);
         return booleanBuilder;
+    }
+
+    private Movie dtoToEntity(MovieDTO movieDTO) {
+        String mid = movieDTO.getMid();
+
+        Pageable pageable = PageRequest.of(0, (int)repository.count());
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        QMovie qMovie = QMovie.movie;
+        BooleanExpression expression = qMovie.mid.startsWith(mid);
+        booleanBuilder.and(expression);
+
+        long moviesWithSameCode = repository.findAll(booleanBuilder, pageable).stream().count() + 1;
+        mid += String.format("%03d", moviesWithSameCode);
+
+        Movie movie = Movie.builder()
+                .mid(mid)
+                .name(movieDTO.getName())
+                .poster(movieDTO.getPoster())
+                .director(movieDTO.getDirector())
+                .actor(movieDTO.getActor())
+                .genre(movieDTO.getGenre())
+                .runtime(movieDTO.getRuntime())
+                .story(movieDTO.getStory())
+                .startdate(movieDTO.getStartdate())
+                .enddate(movieDTO.getEnddate())
+                .build();
+
+        return movie;
     }
 }
