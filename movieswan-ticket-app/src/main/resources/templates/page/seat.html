@@ -15,8 +15,23 @@
             <input type="hidden" name="theater" th:value="${theater}">
             <input type="hidden" name="date" th:value="${date}">
             <input type="hidden" name="time" th:value="${time}">
+            <input type="hidden" name="discount" th:value="${discount}">
         </form>
         <section class="seat-header">
+            <section>
+                <h1 id="seat-page-title" th:text="${'좌석 선택'}"></h1>
+            </section>
+            <section>
+                <span>영화, 극장, 시간 선택</span>
+                <span>&gt;&gt;</span>
+                <span class="current">좌석 선택</span>
+                <span>&gt;&gt;</span>
+                <span>결제</span>
+                <span>&gt;&gt;</span>
+                <span>예매 완료</span>
+            </section>
+        </section>
+        <section class="outer-container">
             <section class="inner-container">
                 <section class="inner-left-container">
                     <section class="movie-info">
