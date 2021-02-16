@@ -5,6 +5,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Question;
 
 public interface QuestionService {
     void registerQuestion(QuestionDTO dto);
+    QuestionDTO readQuestion(Integer qno);
 
     default Question dtoToEntity(QuestionDTO dto) {
         Question entity = Question.builder()

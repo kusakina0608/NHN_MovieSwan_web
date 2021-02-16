@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Log4j2
 @RequiredArgsConstructor
@@ -17,6 +19,11 @@ public class QuestionServiceImpl implements QuestionService {
     public void registerQuestion(QuestionDTO dto) {
         Question entity = dtoToEntity(dto);
         repository.save(entity);
+    }
 
+    @Override
+    public QuestionDTO readQuestion(Integer qno) {
+        Optional<Question> result = repository.findById(qno);
+        return result.isPresent() ? entityToDTO(result.get()) : null;
     }
 }
