@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionDTO {
+    private Integer qid;
     private String uid;
     private String title;
     private String content;
