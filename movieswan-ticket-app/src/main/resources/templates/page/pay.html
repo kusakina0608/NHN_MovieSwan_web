@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 페이지</title>
+    <link th:href="@{/css/page/pay.css}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<th:block th:replace="~{/layout/common_page:: setContents(~{this:: #main-container} )}">
+    <main id="main-container">
+        <section class="pay-header">
+            <section>
+                <h1 id="pay-page-title" th:text="${'결제'}"></h1>
+            </section>
+            <section>
+                <span>영화, 극장, 시간 선택</span>
+                <span>&gt;&gt;</span>
+                <span>좌석 선택</span>
+                <span>&gt;&gt;</span>
+                <span class="current">결제</span>
+                <span>&gt;&gt;</span>
+                <span>예매 완료</span>
+            </section>
+        </section>
+        <section class="pay-container">
+            <form>
+                <input type="hidden" name="title" th:value="${title}">
+                <input type="hidden" name="poster" th:value="${poster}">
+                <input type="hidden" name="theater" th:value="${theater}">
+                <input type="hidden" name="date" th:value="${date}">
+                <input type="hidden" name="time" th:value="${time}">
+
+                <input type="hidden" name="seats" th:value="${seats}">
+                <input type="hidden" name="childnum" th:value="${childnum}">
+                <input type="hidden" name="adultnum" th:value="${adultnum}">
+                <input type="hidden" name="oldnum" th:value="${oldnum}">
+                <input type="hidden" name="totalnum" th:value="${totalnum}">
+                <input type="hidden" name="price" th:value="${price}">
+            </form>
+            <section class="inner-container">
+                <section class="inner-left-container">
+                    <img>
+                </section>
+                <section class="inner-right-container">
+
+                </section>
+            </section>
+        </section>
+        <section class="pay-footer">
+            <a href="#" class="prev-button">&lt;&lt; PREV</a>
+            <a href="#" class="next-button">&gt;&gt; NEXT</a>
+        </section>
+    </main>
+</th:block>
+<script th:src="@{/script/page/pay.js}"></script>
+</body>
+</html>
