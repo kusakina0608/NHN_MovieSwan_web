@@ -1,11 +1,14 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
+import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Question;
 
 public interface QuestionService {
     void registerQuestion(QuestionDTO dto);
     QuestionDTO readQuestion(Integer qno);
+    PageResultDTO<QuestionDTO, Question> getQuestionList(PageRequestDTO requestDTO);
 
     default Question dtoToEntity(QuestionDTO dto) {
         Question entity = Question.builder()
