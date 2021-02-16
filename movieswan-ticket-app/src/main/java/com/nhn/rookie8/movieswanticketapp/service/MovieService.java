@@ -8,7 +8,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import java.util.List;
 
 public interface MovieService {
-    //String register(MovieDTO movieDTO);
+    String register(MovieDTO movieDTO);
 
     PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO, boolean current);
 

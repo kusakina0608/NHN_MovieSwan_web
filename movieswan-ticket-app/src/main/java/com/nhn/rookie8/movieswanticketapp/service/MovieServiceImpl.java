@@ -27,6 +27,15 @@ public class MovieServiceImpl implements MovieService{
     private final MovieRepository repository;
 
     @Override
+    public String register(MovieDTO movieDTO) {
+        Movie movie = dtoToEntity(movieDTO);
+
+        repository.save(movie);
+
+        return movie.getMid();
+    }
+
+    @Override
     public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO, boolean current) {
         Pageable pageable = requestDTO.getPageable(Sort.by("mid").descending());
         BooleanBuilder booleanBuilder = current ? getReleaseMovies() : getExpectedMovies();
