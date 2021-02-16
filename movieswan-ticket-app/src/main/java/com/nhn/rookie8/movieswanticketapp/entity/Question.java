@@ -2,6 +2,7 @@ package com.nhn.rookie8.movieswanticketapp.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Question {
     @Id
     @Column(nullable = false)
