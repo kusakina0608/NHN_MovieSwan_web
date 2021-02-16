@@ -28,13 +28,22 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDTO readQuestion(Integer qno) {
-        Optional<Question> result = repository.findById(qno);
+    public QuestionDTO readQuestion(Integer qid) {
+        Optional<Question> result = repository.findById(qid);
         return result.isPresent() ? entityToDTO(result.get()) : null;
     }
 
     @Override
     public PageResultDTO<QuestionDTO, Question> getQuestionList(PageRequestDTO requestDTO) {
+        Pageable pageable = requestDTO.getPageable(Sort.by("qid").descending());
+
+        Page<Question> result = repository.findAll(pageable);
+        Function<Question, QuestionDTO> fn = (entity) -> entityToDTO(entity);
+        return new PageResultDTO<>(result, fn);
+    }
+
+    @Override
+    public PageResultDTO<QuestionDTO, Question> getQuestionListAdmin(PageRequestDTO requestDTO) {
         Pageable pageable = requestDTO.getPageable(Sort.by("qid").descending());
         Page<Question> result = repository.findAll(pageable);
         Function<Question, QuestionDTO> fn = (entity) -> entityToDTO(entity);
