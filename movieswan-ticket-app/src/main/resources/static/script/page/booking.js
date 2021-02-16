@@ -6,10 +6,13 @@
     const dayList = document.querySelector("#day-list");
     const timeList = document.querySelector("#time-list");
 
-    const movieLinkList = movieList.querySelectorAll(".list-element-link");
-    const theaterLinkList = theaterList.querySelectorAll(".list-element-link");
-    const dayLinkList = dayList.querySelectorAll(".list-element-link");
-    const timeLinkList = timeList.querySelectorAll(".list-element-link");
+    var movieLinkList = movieList.querySelectorAll(".list-element-link");
+    var theaterLinkList = theaterList.querySelectorAll(".list-element-link");
+    var dayLinkList = dayList.querySelectorAll(".list-element-link");
+    var timeLinkList = timeList.querySelectorAll(".list-element-link");
+
+    // 선택한 영화의 상영시간표를 저장하고 있는 변수
+    var movieSchedule;
 
     const nextButton = document.querySelector(".next-button");
     console.log(nextButton);
@@ -19,27 +22,100 @@
         baseURL: "http://127.0.0.1:8080"
     });
 
+    // 상영시간표 API에 요청
     const scheduleAPI = {
-        getSchedules: (movie) => {
-            return requestTicketAPI.get(`/api/schedule/${movie.mid}`);
+        getSchedules: (mid) => {
+            return requestTicketAPI.get(`/api/schedule/timetable?mid=${mid}`);
         }
     }
 
+    // links 요소들의 selected 속성을 제거해주는 함수
     const clearSelectedElement = function (links){
         links.forEach(lell => {
             lell.querySelector("li").classList.remove("selected");
         })
     }
 
-    const selectElement = function (links, handler){
-        links.forEach(lell => {
-            lell.addEventListener("click", e => {
+    // 시간 클릭 이벤트의 콜백 함수를 지정해주는 함수
+    const onTimeClicked = function(links) {
+        links.forEach(el => {
+            el.addEventListener("click", e => {
                 e.preventDefault();
-                if(handler !== undefined){
-                    console.log(e.target.querySelector("div").innerHTML);
-                    handler(e.target.querySelector("div").innerHTML);
-                }
                 clearSelectedElement(links);
+                e.target.classList.add("selected");
+            });
+        });
+    }
+
+    // 일자 클릭 이벤트의 콜백 함수를 지정해주는 함수
+    const onDateClicked = function(links) {
+        links.forEach(el => {
+            el.addEventListener("click", e => {
+                e.preventDefault();
+
+                // 일자가 선택되었으므로, 시간을 초기화
+                timeList.innerHTML = '';
+                movieSchedule[e.target.innerHTML].forEach(item => {
+                    let newListElement = document.createElement("li");
+                    newListElement.classList.add("list-element");
+                    newListElement.innerHTML = item;
+                    let newLink = document.createElement("a");
+                    newLink.appendChild(newListElement);
+                    newLink.classList.add("list-element-link");
+                    newLink.href = "/booking/";
+                    timeList.appendChild(newLink);
+                })
+                // 추가된 시간 요소들을 갱신
+                timeLinkList = timeList.querySelectorAll(".list-element-link");
+                // 추가된 시간 요소들의 콜백 함수를 지정
+                onTimeClicked(timeLinkList);
+                // 일자 선택이 변경되었으므로, 기존 선택을 취소
+                clearSelectedElement(links);
+                // 새롭게 선택된 요소에 selected 클래스 추가
+                e.target.classList.add("selected");
+            });
+        });
+    }
+
+    const onTheaterClicked = function(links) {
+        links.forEach(el => {
+            el.addEventListener("click", e => {
+                e.preventDefault();
+            })
+        })
+    }
+
+    // 영화 클릭 이벤트의 콜백 함수를 지정해주는 함수
+    const onMovieClicked = function (links, handler){
+        links.forEach(el => {
+            el.addEventListener("click", async (e) => {
+                e.preventDefault();
+                let res = await handler(e.target.querySelector("div").innerHTML);
+
+                // 영화가 선택되었으므로 일자, 시간을 초기화
+                dayList.innerHTML = '';
+                timeList.innerHTML = '';
+                
+                // API로부터 전달받은 영화의 상영시간표를 저장
+                movieSchedule = res.data.data[0];
+                // 일자를 추가
+                for(var key in movieSchedule){
+                    let newListElement = document.createElement("li");
+                    newListElement.classList.add("list-element");
+                    newListElement.innerHTML = key;
+                    let newLink = document.createElement("a");
+                    newLink.appendChild(newListElement);
+                    newLink.classList.add("list-element-link");
+                    newLink.href = "/booking/";
+                    dayList.appendChild(newLink);
+                }
+                // 추가된 일자 요소들을 갱신
+                dayLinkList = dayList.querySelectorAll(".list-element-link");
+                // 추가된 일자 요소들의 콜백 함수를 지정
+                onDateClicked(dayLinkList);
+                // 영화 선택이 변경되었으므로, 기존 선택을 취소
+                clearSelectedElement(links);
+                // 새롭게 선택된 요소에 selected 클래스 추가
                 e.target.classList.add("selected");
             })
         })
@@ -59,7 +135,6 @@
         let selectedTime = timeList.querySelector(".selected");
 
         if(selectedMovie && selectedDay && selectedTime){
-            console.log("OK");
             let movieInput = document.createElement("input");
             movieInput.setAttribute("type", "hidden");
             movieInput.setAttribute("name", "mid");
@@ -78,16 +153,16 @@
             timeInput.setAttribute("value", selectedTime.innerHTML);
             form.appendChild(timeInput);
             document.body.appendChild(form);
-            console.log(form);
             form.submit();
         }
         else {
+            alert("영화, 극장, 시간, 날짜를 모두 선택해 주세요.");
             console.log("NO");
         }
     })
 
-    selectElement(movieLinkList, scheduleAPI.getSchedules);
-    selectElement(theaterLinkList);
-    selectElement(dayLinkList);
-    selectElement(timeLinkList);
+    onMovieClicked(movieLinkList, scheduleAPI.getSchedules);
+    onTheaterClicked(theaterLinkList);
+    onDateClicked(dayLinkList);
+    onTimeClicked(timeLinkList);
 }());
