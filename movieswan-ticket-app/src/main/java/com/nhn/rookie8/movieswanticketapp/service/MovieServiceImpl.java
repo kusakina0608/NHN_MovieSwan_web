@@ -63,8 +63,9 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public MovieDTO read(String mid) {
+    public MovieDTO findByID(String mid) {
         Optional<Movie> result = repository.findById(mid);
+
         return result.isPresent() ? entityToDTO(result.get()) : null;
     }
 
