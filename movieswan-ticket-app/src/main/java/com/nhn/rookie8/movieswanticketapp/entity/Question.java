@@ -3,9 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.entity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,6 +15,7 @@ import java.time.LocalDateTime;
 public class Question {
     @Id
     @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer qid;
 
     @Column(length = 21, nullable = false)
