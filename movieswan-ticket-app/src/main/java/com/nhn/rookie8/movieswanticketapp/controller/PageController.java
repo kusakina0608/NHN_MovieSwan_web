@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -77,56 +78,18 @@ public class PageController {
     }
 
     @PostMapping("/booking/pay")
-    public String pay(@RequestParam("title") String title,
-                      @RequestParam("poster") String poster,
-                      @RequestParam("theater") String theater,
-                      @RequestParam("date") String date,
-                      @RequestParam("time") String time,
-                      @RequestParam("seats") String seats,
-                      @RequestParam("childnum") String childnum,
-                      @RequestParam("adultnum") String adultnum,
-                      @RequestParam("oldnum") String oldnum,
-                      @RequestParam("totalnum") String totalnum,
-                      @RequestParam("price") String price,
-                      Model model) {
-        System.out.println(title);
-        System.out.println(poster);
-        System.out.println(theater);
-        System.out.println(date);
-        System.out.println(time);
-        System.out.println(seats);
-        System.out.println(childnum);
-        System.out.println(adultnum);
-        System.out.println(oldnum);
-        System.out.println(totalnum);
-        System.out.println(price);
-        model.addAttribute("title", title);
-        model.addAttribute("poster", poster);
-        model.addAttribute("theater", theater);
-        model.addAttribute("date", date);
-        model.addAttribute("time", time);
-        model.addAttribute("seats", seats);
-        model.addAttribute("childnum", childnum);
-        model.addAttribute("adultnum", adultnum);
-        model.addAttribute("oldnum", oldnum);
-        model.addAttribute("totalnum", totalnum);
-        model.addAttribute("price", price);
+    public String pay(@RequestParam HashMap<String,String> params, Model model) {
+        params.keySet().forEach(key -> {
+            model.addAttribute(key, params.get(key));
+        });
         return "page/pay";
     }
 
     @PostMapping("/booking/result")
-    public String bookingResult(@RequestParam("title") String title,
-                                @RequestParam("poster") String poster,
-                                @RequestParam("theater") String theater,
-                                @RequestParam("date") String date,
-                                @RequestParam("time") String time,
-                                @RequestParam("seats") String seats,
-                                @RequestParam("childnum") String childnum,
-                                @RequestParam("adultnum") String adultnum,
-                                @RequestParam("oldnum") String oldnum,
-                                @RequestParam("totalnum") String totalnum,
-                                @RequestParam("price") String price,
-                                Model model) {
+    public String bookingResult(@RequestParam HashMap<String,String> params, Model model) {
+        params.keySet().forEach(key -> {
+            model.addAttribute(key, params.get(key));
+        });
         return "page/booking_result";
     }
 }
