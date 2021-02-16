@@ -31,7 +31,7 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
 
     @Override
     public List<MovieScheduleDTO> getMovieSchedule(String mid) {
-        List<MovieSchedule> result = repository.findByMidOrderByTimeDesc(mid);
+        List<MovieSchedule> result = repository.findByMidOrderByTimeAsc(mid);
         List<MovieScheduleDTO> scheduleList = new ArrayList<MovieScheduleDTO> ();
 
         result.forEach(e -> {
