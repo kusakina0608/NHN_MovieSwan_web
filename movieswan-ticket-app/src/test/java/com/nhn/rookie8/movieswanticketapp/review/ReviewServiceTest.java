@@ -50,7 +50,11 @@ public class ReviewServiceTest {
                 .build();
 
         service.modify(reviewDTO);
+    }
 
+    @Test
+    public void reviewRemoveTest() {
+        service.remove("AABB001-001");
     }
 
 }

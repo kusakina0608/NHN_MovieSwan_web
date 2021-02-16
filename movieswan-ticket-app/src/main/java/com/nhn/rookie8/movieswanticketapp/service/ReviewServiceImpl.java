@@ -52,4 +52,9 @@ public class ReviewServiceImpl implements ReviewService{
             repository.save(review);
         }
     }
+
+    @Override
+    public void remove(String rid) {
+        repository.deleteById(rid);
+    }
 }
