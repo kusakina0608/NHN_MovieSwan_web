@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<link th:href="@{/css/fragment/admin_ticket.css}" rel="stylesheet">
+
+    <form th:action="@{/api/movie/register}" th:method="post">
+        <h3>영화 등록</h3>
+            <div class="form_ticket">
+                <label class="label_ticket">영화 제목</label>
+                <input class="input_ticket" type="text" name="name" required>
+            </div>
+
+            <div class="form_ticket">
+                <label class="label_ticket">포스터</label>
+                <input class="input_ticket" type="file" name="poster" required>
+            </div>
+
+            <div class="form_ticket">
+                <label class="label_ticket">감독</label>
+                <input class="input_ticket" type="text" name="director" required>
+    
+                <label class="label_ticket">배우</label>
+                <input class="input_ticket" type="text" name="actor" required>
+            </div>
+
+            <div class="form_ticket">
+                <label class="label_ticket">장르</label>
+                <input class="input_ticket" type="text" name="genre" required>
+
+                <label class="label_ticket">상영 시간</label>
+                <input class="input_ticket" type="number" name="runtime" required>
+            </div>
+
+            <div class="form_ticket">
+                <label class="label_ticket">스토리</label>
+                <input class="input_ticket" type="text" name="story" required>
+            </div>
+
+            <div class="form_ticket">
+                <label class="label_ticket">개봉일</label>
+                <input class="input_ticket" type="date" name="startdate" required>
+
+                <label class="label_ticket">종영일</label>
+                <input class="input_ticket" type="date" name="enddate" required>
+            </div>
+
+        <button type="submit" class="form_ticket_btn">영화 등록</button>
+    </form>
+
+<script th:src="@{/script/fragment/admin_ticket.js}"></script>
+</html>
