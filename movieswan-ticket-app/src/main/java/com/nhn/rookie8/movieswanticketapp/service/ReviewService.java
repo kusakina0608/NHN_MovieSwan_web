@@ -1,10 +1,14 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
+import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReviewDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
 
 public interface ReviewService {
     String register(ReviewDTO reviewDTO);
+
+    PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO);
 
     default ReviewDTO entityToDTO(Review review) {
         ReviewDTO reviewDTO = ReviewDTO.builder()
