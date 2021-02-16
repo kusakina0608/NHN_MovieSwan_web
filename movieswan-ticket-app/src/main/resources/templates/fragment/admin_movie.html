@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <link th:href="@{/css/fragment/admin_ticket.css}" rel="stylesheet">
 
-    <form th:action="@{/api/movie/register}" th:method="post">
+    <form th:action="@{/api/movie/register}" th:method="post" enctype="multipart/form-data">
         <h3>영화 등록</h3>
             <div class="form_ticket">
                 <label class="label_ticket">영화 제목</label>
@@ -14,7 +14,7 @@
 
             <div class="form_ticket">
                 <label class="label_ticket">포스터</label>
-                <input class="input_ticket" type="file" name="poster" required>
+                <input class="input_ticket" type="file" name="uploadFile" required>
             </div>
 
             <div class="form_ticket">
