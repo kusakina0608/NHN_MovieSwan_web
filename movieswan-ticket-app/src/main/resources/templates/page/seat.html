@@ -9,11 +9,18 @@
 <body>
 <th:block th:replace="~{/layout/common_page:: setContents(~{this:: #main-container} )}">
     <main id="main-container">
-        <section id="seat-header">
+        <form>
+            <input type="hidden" name="title" th:value="${title}">
+            <input type="hidden" name="poster" th:value="${poster}">
+            <input type="hidden" name="theater" th:value="${theater}">
+            <input type="hidden" name="date" th:value="${date}">
+            <input type="hidden" name="time" th:value="${time}">
+        </form>
+        <section class="seat-header">
             <section class="inner-container">
-                <section class="info-container">
+                <section class="inner-left-container">
                     <section class="movie-info">
-                        <img class="movie-poster" th:src="@{/asset/image/poster1.jpg}" alt="영화 포스터">
+                        <img class="movie-poster" th:src="@{/asset/image/poster99.jpg}" alt="영화 포스터">
                         <section class="movie-text">
                             <h3>[[${title}]]</h3>
                             <h2>[[${theater}]]</h2>
@@ -63,10 +70,10 @@
                         </div>
                     </section>
                 </section>
-                <section class="right-container">
+                <section class="inner-right-container">
                     <section class="upper-right-container">
                         <div> 좌 석 표 </div>
-                        <section class="seat-container">
+                        <section class="seat-table">
                             <div class="line">
                                 <button><input type="hidden" value="A01"/></button>
                                 <button><input type="hidden" value="A02"/></button>

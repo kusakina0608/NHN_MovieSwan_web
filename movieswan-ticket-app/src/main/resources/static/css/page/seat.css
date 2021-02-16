@@ -1,11 +1,13 @@
 * {
   box-sizing: border-box;
 }
-#seat-header {
+/* 헤더 */
+.seat-header {
   background-color: gray;
   border: 3px solid black;
   padding: 10px;
 }
+/* 내부 컨테이너(점선) */
 .inner-container {
   display: flex;
   justify-content: center;
@@ -14,12 +16,14 @@
   border: 3px dashed black;
   border-radius: 20px;
 }
-.info-container {
+/* 내부 왼쪽 컨테이너 */
+.inner-left-container {
   flex:1;
   min-height: 600px;
   min-width: 300px;
   border-right: 3px solid gray;
 }
+/* 영화 정보 */
 .movie-info {
   display: flex;
   justify-content: center;
@@ -27,10 +31,11 @@
   min-height: 200px;
   margin: 10px;
 }
-.movie-poster {
+.movie-info > .movie-poster {
   height: 140px;
   width: 100px;
 }
+/* 인원 정보 */
 .people-info {
   display: flex;
   flex-direction: column;
@@ -42,47 +47,11 @@
   display: flex;
   margin: 5px;
 }
-.people-type {
+.people-info > .people-type {
   min-width: 50px;
   flex:1;
 }
-.discount-info {
-  margin: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.price-info {
-  margin: 10px;
-}
-.right-container {
-  flex:3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.seat-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.line {
-  display: flex;
-}
-button {
-  margin: 0;
-  padding: 0;
-  outline: 0;
-  border: 1px solid #333;
-  width: 20px;
-  height: 20px;
-  background: #ccc;
-  margin: 5px;
-}
-button:hover {
-  background: rgb(181, 253, 205);
-}
-/* input Counter */
+/* 인원 카운터 */
 span {cursor:pointer; }
 .number{
   flex: 3;
@@ -110,23 +79,39 @@ span {cursor:pointer; }
   display: inline-block;
   vertical-align: middle;
 }
+/* 인원 카운터의 끝 */
 .price-label {
   flex:2;
 }
+/* 할인 정보 */
+.discount-info {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .discount-info > * {
   margin: 5px 0;
+}
+/* 요금 정보 */
+.price-info {
+  margin: 10px;
 }
 .price-container {
   justify-content: flex-end;
   display: flex;
   font-size: 24px;
 }
-.selected {
-  background-color: rgb(116, 116, 255);
+/* 내부 왼쪽 컨테이너의 끝 */
+
+/* 내부 오른쪽 컨테이너 */
+.inner-right-container {
+  flex:3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.selected:hover {
-  background-color: pink;
-}
+/* 우측 상단(좌석표) */
 .upper-right-container {
   width: 100%;
   display: flex;
@@ -135,6 +120,34 @@ span {cursor:pointer; }
   flex-direction: column;
   padding: 30px;
 }
+.seat-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.seat-table > .line {
+  display: flex;
+}
+.seat-table > .line > button {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  border: 1px solid #333;
+  width: 20px;
+  height: 20px;
+  background: #ccc;
+  margin: 5px;
+}
+.seat-table > .line > button:hover {
+  background: rgb(181, 253, 205);
+}
+.seat-table > .line > .selected {
+  background-color: rgb(116, 116, 255);
+}
+.seat-table > .line > .selected:hover {
+  background-color: pink;
+}
+/* 우측 하단(선택한 좌석) */
 .lower-right-container {
   border-top: 3px solid gray;
   width: 100%;
@@ -151,18 +164,21 @@ span {cursor:pointer; }
 .seat-label {
   margin:10px;
 }
-/* seat-footer */
+/* 헤더의 끝 */
+
+/* 푸터 */
 .seat-footer {
   position: relative;
   display: flex;
   justify-content: flex-end;
   margin: 10px;
 }
-/* next button */
+/* 푸터 - 다음 버튼 */
 .next-button {
 	box-shadow:inset 0px 0px 0px 0px #a4e271;
 	background:linear-gradient(to bottom, #89c403 5%, #77a809 100%);
 	background-color:#89c403;
+  border: 3px solid black;
 	border-radius:15px;
 	display:inline-block;
 	cursor:pointer;
@@ -182,3 +198,4 @@ span {cursor:pointer; }
 	position:relative;
 	top:1px;
 }
+/* 푸터의 끝 */

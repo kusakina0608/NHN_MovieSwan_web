@@ -58,18 +58,75 @@ public class PageController {
         System.out.println(mid);
         System.out.println(date);
         System.out.println(time);
-        // TODO: mid로 영화 조회해서 attribute로 넘겨주기
+        // TODO: mid로 영화 조회
+//        MovieDTO movieDTO = movieService.getMovie(mid);
         model.addAttribute("title", "[15]극장판귀멸의칼날-무한열차편");
+//        model.addAttribute("title", movieDTO.getName());
+        model.addAttribute("poster", "/asset/image/poster99.jpg");
+//        model.addAttribute("poster", movieDTO.getPoster());
         model.addAttribute("theater", "무비스완 판교점");
         model.addAttribute("date", date);
         model.addAttribute("time", time);
-        model.addAttribute("discount", "없음");
+        if(Integer.parseInt(time.split(":")[0]) < 9){
+            model.addAttribute("discount", "조조 할인(오전 09:00 이전)");
+        }
+        else{
+            model.addAttribute("discount", "없음");
+        }
         return "page/seat";
     }
 
     @PostMapping("/booking/pay")
-    public String pay(@RequestParam("seats") String seats) {
+    public String pay(@RequestParam("title") String title,
+                      @RequestParam("poster") String poster,
+                      @RequestParam("theater") String theater,
+                      @RequestParam("date") String date,
+                      @RequestParam("time") String time,
+                      @RequestParam("seats") String seats,
+                      @RequestParam("childnum") String childnum,
+                      @RequestParam("adultnum") String adultnum,
+                      @RequestParam("oldnum") String oldnum,
+                      @RequestParam("totalnum") String totalnum,
+                      @RequestParam("price") String price,
+                      Model model) {
+        System.out.println(title);
+        System.out.println(poster);
+        System.out.println(theater);
+        System.out.println(date);
+        System.out.println(time);
         System.out.println(seats);
-        return "page/seat";
+        System.out.println(childnum);
+        System.out.println(adultnum);
+        System.out.println(oldnum);
+        System.out.println(totalnum);
+        System.out.println(price);
+        model.addAttribute("title", title);
+        model.addAttribute("poster", poster);
+        model.addAttribute("theater", theater);
+        model.addAttribute("date", date);
+        model.addAttribute("time", time);
+        model.addAttribute("seats", seats);
+        model.addAttribute("childnum", childnum);
+        model.addAttribute("adultnum", adultnum);
+        model.addAttribute("oldnum", oldnum);
+        model.addAttribute("totalnum", totalnum);
+        model.addAttribute("price", price);
+        return "page/pay";
+    }
+
+    @PostMapping("/booking/result")
+    public String bookingResult(@RequestParam("title") String title,
+                                @RequestParam("poster") String poster,
+                                @RequestParam("theater") String theater,
+                                @RequestParam("date") String date,
+                                @RequestParam("time") String time,
+                                @RequestParam("seats") String seats,
+                                @RequestParam("childnum") String childnum,
+                                @RequestParam("adultnum") String adultnum,
+                                @RequestParam("oldnum") String oldnum,
+                                @RequestParam("totalnum") String totalnum,
+                                @RequestParam("price") String price,
+                                Model model) {
+        return "page/booking_result";
     }
 }
