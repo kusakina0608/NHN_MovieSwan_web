@@ -37,7 +37,19 @@ public class ReviewServiceTest {
         for(ReviewDTO review : resultDTO.getDtoList()) {
             System.out.println(review);
         }
+    }
 
+    @Test
+    public void reviewModifyTest() {
+        ReviewDTO reviewDTO = ReviewDTO.builder()
+                .rid("AAAA001-001")
+                .mid("AAAA001")
+                .uid("test01")
+                .grade(5)
+                .content("review1 - Modified")
+                .build();
+
+        service.modify(reviewDTO);
 
     }
 
