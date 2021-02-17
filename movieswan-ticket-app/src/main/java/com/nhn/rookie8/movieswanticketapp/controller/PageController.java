@@ -36,6 +36,11 @@ public class PageController {
         return "page/admin_page";
     }
 
+    @GetMapping("/movie")
+    public String movie_page() {
+        return "redirect:/movie/current/list";
+    }
+
     @GetMapping("/movie/current/list")
     public String currentMovieList(PageRequestDTO pageRequestDTO, Model model) {
         model.addAttribute("result", movieService.getList(pageRequestDTO, true));
