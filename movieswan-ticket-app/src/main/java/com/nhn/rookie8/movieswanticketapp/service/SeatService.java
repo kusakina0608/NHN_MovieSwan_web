@@ -13,6 +13,7 @@ public interface SeatService {
     String register(SeatDTO dto);
     List<String> getReservedSeatList(String tid);
     Boolean preempt(SeatDTO dto);
+    Boolean cancel(SeatDTO dto);
 
     default Seat dtoToEntity(SeatDTO dto){
         Seat entity = Seat.builder()
