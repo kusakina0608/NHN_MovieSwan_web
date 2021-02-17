@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.stream.IntStream;
+
 @SpringBootTest
 public class ReviewServiceTest {
     @Autowired
@@ -16,16 +18,16 @@ public class ReviewServiceTest {
 
     @Test
     public void reviewRegisterTest() {
-        ReviewDTO reviewDTO = ReviewDTO.builder()
-                .rid("AAAA001-001")
-                .mid("AAAA001")
-                .uid("test01")
-                .grade(3)
-                .content("review1")
-                .build();
+        IntStream.rangeClosed(1, 50).forEach(i -> {
+            ReviewDTO reviewDTO = ReviewDTO.builder()
+                    .mid("POKE001")
+                    .uid("test" + i)
+                    .grade(3)
+                    .content("review" + i)
+                    .build();
 
-        String rid = service.register(reviewDTO);
-        System.out.println(rid);
+            service.register(reviewDTO);
+        });
     }
 
     @Test
