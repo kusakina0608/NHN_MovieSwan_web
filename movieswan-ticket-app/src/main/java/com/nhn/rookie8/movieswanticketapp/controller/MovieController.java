@@ -12,6 +12,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,11 +31,22 @@ import java.time.format.DateTimeFormatter;
 public class MovieController {
     private final MovieService service;
 
-    @Value("${com.nhn.rookie8.upload.path}")
-    private String uploadPath;
+    private String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/asset/image";
+
+    final static char[] digits = {
+            '0', '1', '2', '3', '4', '5', '6', '7',
+            '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
+            'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+            'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+            'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
+            'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+            'U', 'V', 'W', 'X', 'Y', 'Z', '_', '*' // '.', '-'
+    };
 
     @PostMapping("/register")
-    public void registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile, HttpServletResponse response) throws IOException  {
+    public void registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile,
+                              HttpServletRequest request, HttpServletResponse response) throws IOException  {
         log.info(movieDTO.getName());
         log.info(uploadFile.getName());
 
@@ -42,9 +55,13 @@ public class MovieController {
             return;
         }
 
+        log.info(uploadPath);
+        UUID uuid = UUID.randomUUID();
+        String uuidStr = toUnsignedString(uuid.getMostSignificantBits(), 6) + toUnsignedString(uuid.getLeastSignificantBits(), 6);
         String originalName = uploadFile.getOriginalFilename();
-        String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
-        String posterPath = makeFolder() + File.separator + fileName;
+        String extensionName = originalName.substring(originalName.lastIndexOf("."));
+        String posterPath = makeFolder() + File.separator + uuidStr + extensionName;
+        log.info(posterPath);
         String saveName = uploadPath + File.separator + posterPath;
         Path savePath = Paths.get(saveName);
 
@@ -96,4 +113,19 @@ public class MovieController {
 
         return folderPath;
     }
+
+    private static String toUnsignedString(long i, int shift) {
+        char[] buf = new char[64];
+        int charPos = 64;
+        int radix = 1 << shift;
+        long mask = radix - 1;
+        long number = i;
+        do {
+            buf[--charPos] = digits[(int) (number & mask)];
+            number >>>= shift;
+        } while (number != 0);
+        return new String(buf, charPos, (64 - charPos));
+    }
+
+
 }
