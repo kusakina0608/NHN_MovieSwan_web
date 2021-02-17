@@ -50,7 +50,7 @@ public class MovieScheduleController {
                 List<String> list = new ArrayList<String>();
                 map.put(date, list);
             }
-            map.get(date).add(time);
+            map.get(date).add(time + " " + e.getTid());
         });
         scheduleList.add(map);
 
