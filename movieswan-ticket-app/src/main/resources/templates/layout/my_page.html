@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지</title>
+</head>
+<th:block th:fragment="setContents(mycontents)">
+    <link th:href="@{/css/layout/my_page.css}" type="text/css" rel="stylesheet" />
+
+    <body>
+        <th:block th:replace="~{/layout/common_page::setContents(~{this::my_page})}">
+            <mypage id="my_page" th:fragment="my_page">
+                <subject id="my_subject">마이페이지</subject>
+                <hr id="hr1" class="rounded">
+                <div id="my_page_div">
+                    <mypagenav id="my_page_nav">
+                        <a href="#" class="active">
+                            <span class="material-icons">person</span>
+                            회원 정보
+                        </a>
+                        <a href="#">
+                            <span class="material-icons">confirmation_number</span>
+                            예매 내역
+                        </a>
+                        <a href="#">
+                            <span class="material-icons">theaters</span>
+                            My Movie
+                        </a>
+                        <a href="#">
+                            <span class="material-icons">chat</span>
+                            My Review
+                        </a>
+                        <a href="/mypage/question">
+                            <span class="material-icons">help_outline</span>
+                            내 문의내역
+                        </a>
+                    </mypagenav>
+                    <mycontents id="my_contents">
+                        <th:block th:replace="${mycontents}"></th:block>
+                    </mycontents>
+                </div>
+            </mypage>
+        </th:block>
+    </body>
+</th:block>
+
+</html>
