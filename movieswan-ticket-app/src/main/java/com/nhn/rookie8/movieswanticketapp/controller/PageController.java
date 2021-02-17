@@ -97,4 +97,9 @@ public class PageController {
     public String question_page() {
         return "page/question_page";
     }
-}
+
+    // 여기부터 전부 마이페이지 입니다...
+    @GetMapping("/mypage")
+    public String my_page() {
+        return "redirect:/mypage/userinfo";
+    }
