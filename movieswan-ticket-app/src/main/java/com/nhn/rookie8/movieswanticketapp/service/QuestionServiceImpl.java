@@ -3,6 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.service;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Question;
 import com.nhn.rookie8.movieswanticketapp.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -22,9 +24,17 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository repository;
 
     @Override
-    public void registerQuestion(QuestionDTO dto) {
+    public ApiResultDTO registerQuestion(QuestionDTO dto) {
         Question entity = dtoToEntity(dto);
         repository.save(entity);
+
+        ApiResultDTO apiResultDTO = ApiResultDTO.builder()
+                .httpStatus("200")
+                .isError(Boolean.FALSE)
+                .build();
+
+        log.info(apiResultDTO);
+        return apiResultDTO;
     }
 
     @Override
