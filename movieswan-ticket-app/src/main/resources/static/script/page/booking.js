@@ -56,9 +56,13 @@
                 // 일자가 선택되었으므로, 시간을 초기화
                 timeList.innerHTML = '';
                 movieSchedule[e.target.innerHTML].forEach(item => {
+                    let tidElement = document.createElement("div");
+                    tidElement.style.display = "none";
+                    tidElement.innerHTML = item.split(" ")[1];
                     let newListElement = document.createElement("li");
                     newListElement.classList.add("list-element");
-                    newListElement.innerHTML = item;
+                    newListElement.innerHTML = item.split(" ")[0];
+                    newListElement.appendChild(tidElement);
                     let newLink = document.createElement("a");
                     newLink.appendChild(newListElement);
                     newLink.classList.add("list-element-link");
@@ -150,8 +154,15 @@
             let timeInput = document.createElement("input");
             timeInput.setAttribute("type", "hidden");
             timeInput.setAttribute("name", "time");
-            timeInput.setAttribute("value", selectedTime.innerHTML);
+            timeInput.setAttribute("value", selectedTime.innerText);
             form.appendChild(timeInput);
+
+            let tidInput = document.createElement("tid");
+            tidInput.setAttribute("type", "hidden");
+            tidInput.setAttribute("name", "time");
+            tidInput.setAttribute("value", selectedTime.children[0].innerText);
+            form.appendChild(tidInput);
+
             document.body.appendChild(form);
             form.submit();
         }
