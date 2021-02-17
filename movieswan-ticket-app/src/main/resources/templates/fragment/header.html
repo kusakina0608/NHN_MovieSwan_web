@@ -2,7 +2,7 @@
 <script src="/script/fragment/header.js"></script>
 
 <header id="header">
-    <img id="header_logo" src="/asset/image/logo2.png" />
+    <img id="header_logo" src="/asset/image/logo2.png" onclick="location.href='/'" />
     <headernav id="header_menu">
         <userlogin id="userlogin">
             <notloggedin id="notloggedin">
@@ -12,7 +12,7 @@
             </notloggedin>
             <loggedin id="loggedin">
                 <span>
-                    <a href="#">루키백조TF</a>
+                    <a href="/mypage">루키백조TF</a>
                     <span>님, 환영합니다.</span>
                     <a onclick="questionOnClick()">1:1 문의하기</a>
                     <input id="logout_button" type="button" value="로그아웃" />
@@ -22,19 +22,19 @@
 
         <navbar id="header_navbar">
             <ul id="header_mainnav">
-                <li><a href="#">영화</a></li>
-                <li><a href="#">예매</a></li>
+                <li><a href="/movie">영화</a></li>
+                <li><a href="/booking">예매</a></li>
                 <li><a href="#">극장</a></li>
             </ul>
             <ul id="header_subnav">
                 <li>
-                    <a href="#">
+                    <a href="/mypage/ticket">
                         <span class="material-icons">schedule</span>
                         <span class="button_name">예매 내역</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/mypage">
                         <span class="material-icons">person</span>
                         <span class="button_name">마이페이지</span>
                     </a>
