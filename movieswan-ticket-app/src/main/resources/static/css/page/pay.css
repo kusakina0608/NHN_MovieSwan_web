@@ -1,0 +1,107 @@
+
+/* 헤더 */
+.pay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+}
+#pay-page-title {
+    font-size: 50px;
+}
+.current {
+    color: red;
+}
+/* 헤더의 끝 */
+/* 페이 컨테이너(중간 부분) */
+.pay-container {
+    background-color: gray;
+    border: 3px solid black;
+    padding: 10px;
+}
+/* 내부 컨테이너(점선) */
+.inner-container {
+    /* 임시 */
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 3px dashed black;
+    border-radius: 20px;
+}
+/* 내부 왼쪽 컨테이너 */
+.inner-left-container {
+    flex:2;
+    min-height: 600px;
+    background-color: pink;
+    border-right: 3px solid gray;
+}
+/* 내부 오른쪽 컨테이너 */
+.inner-right-container {
+    flex:3;
+    min-height: 600px;
+    background-color: aliceblue;
+    border-right: 3px solid gray;
+}
+/* 페이 컨테이너의 끝 */
+/* 푸터 */
+.pay-footer {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+  }
+  /* 푸터 - 이전 버튼 */
+  .prev-button {
+      margin-right:20px;
+      box-shadow:inset 0px 0px 0px 0px #a4e271;
+      background:linear-gradient(to bottom, #CCCCCC 5%, #AAAAAA 100%);
+      background-color:#CCCCCC;
+      border: 3px solid black;
+      border-radius:15px;
+      display:inline-block;
+      cursor:pointer;
+      color:#ffffff;
+      font-family:Arial;
+      font-size:28px;
+      font-weight:bold;
+      padding:20px 50px;
+      text-decoration:none;
+      text-shadow:0px 1px 0px #888888;
+  }
+  .prev-button:hover {
+      background:linear-gradient(to bottom, #AAAAAA 5%, #CCCCCC 100%);
+      background-color:#AAAAAA;
+  }
+  .prev-button:active {
+      position:relative;
+      top:1px;
+  }
+  /* 푸터 - 다음 버튼 */
+  .next-button {
+      box-shadow:inset 0px 0px 0px 0px #a4e271;
+      background:linear-gradient(to bottom, #89c403 5%, #77a809 100%);
+      background-color:#89c403;
+      border: 3px solid black;
+      border-radius:15px;
+      display:inline-block;
+      cursor:pointer;
+      color:#ffffff;
+      font-family:Arial;
+      font-size:28px;
+      font-weight:bold;
+      text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+      padding:20px 50px;
+      text-decoration:none;
+      text-shadow:0px 1px 0px #528009;
+  }
+  .next-button:hover {
+      background:linear-gradient(to bottom, #77a809 5%, #89c403 100%);
+      background-color:#77a809;
+  }
+  .next-button:active {
+      position:relative;
+      top:1px;
+  }
+  /* 푸터의 끝 */

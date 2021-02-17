@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 페이지</title>
+    <link th:href="@{/css/page/booking_result.css}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<th:block th:replace="~{/layout/common_page:: setContents(~{this:: #main-container} )}">
+    <main id="main-container">
+        <section class="result-header">
+            결과창 헤더 ㅎㅎ
+        </section>
+        <section class="result-container">
+            <form>
+                <input type="hidden" name="title" th:value="${title}">
+                <input type="hidden" name="poster" th:value="${poster}">
+                <input type="hidden" name="theater" th:value="${theater}">
+                <input type="hidden" name="date" th:value="${date}">
+                <input type="hidden" name="time" th:value="${time}">
+
+                <input type="hidden" name="seats" th:value="${seats}">
+                <input type="hidden" name="childnum" th:value="${childnum}">
+                <input type="hidden" name="adultnum" th:value="${adultnum}">
+                <input type="hidden" name="oldnum" th:value="${oldnum}">
+                <input type="hidden" name="totalnum" th:value="${totalnum}">
+                <input type="hidden" name="price" th:value="${price}">
+            </form>
+            결과창 중간 ㅎㅎ
+        </section>
+    </main>
+</th:block>
+<script th:src="@{/script/page/booking_result.js}"></script>
+</body>
+</html>
