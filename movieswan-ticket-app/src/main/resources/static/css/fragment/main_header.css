@@ -34,6 +34,8 @@
     color: khaki;
     text-decoration: none;
 
+    cursor: pointer;
+
     transition: 0.5s;
     opacity: 0.8;
 }
