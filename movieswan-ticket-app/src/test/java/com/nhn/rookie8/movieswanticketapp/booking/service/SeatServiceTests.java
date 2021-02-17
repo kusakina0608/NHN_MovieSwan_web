@@ -14,11 +14,53 @@ public class SeatServiceTests {
 
     @Test
     public void testRegister() {
-        SeatDTO seatDTO = SeatDTO.builder()
-                .rid("SAMPLE-RID-777")
-                .sid("A924")
+        SeatDTO seatDTO1 = SeatDTO.builder()
+                .tid("AAA2102251230")
+                .sid("F08")
+                .uid("kusakina0608")
+                .rid("A924-A000-A025")
+                .build();
+        SeatDTO seatDTO2 = SeatDTO.builder()
+                .tid("AAA2102251230")
+                .sid("F09")
+                .uid("hyerin9177")
+                .rid(null)
                 .build();
 
-        System.out.println(service.register(seatDTO));
+        System.out.println(service.register(seatDTO1));
+        System.out.println(service.register(seatDTO2));
+    }
+
+    @Test
+    public void testPreempt1() { // 빈 좌석 선택시
+        SeatDTO seatDTO = SeatDTO.builder()
+                .tid("AAA2102251230")
+                .sid("A07")
+                .uid("kusakina0608")
+                .rid(null)
+                .build();
+        System.out.println(service.preempt(seatDTO));
+    }
+
+    @Test
+    public void testPreempt2() { // 내가 선점한 좌석 선택시
+        SeatDTO seatDTO = SeatDTO.builder()
+                .tid("AAA2102251230")
+                .sid("F08")
+                .uid("kusakina0608")
+                .rid(null)
+                .build();
+        System.out.println(service.preempt(seatDTO));
+    }
+
+    @Test
+    public void testPreempt3() { // 남이 선점한 좌석 선택시
+        SeatDTO seatDTO = SeatDTO.builder()
+                .tid("AAA2102251230")
+                .sid("F09")
+                .uid("kusakina0608")
+                .rid(null)
+                .build();
+        System.out.println(service.preempt(seatDTO));
     }
 }
