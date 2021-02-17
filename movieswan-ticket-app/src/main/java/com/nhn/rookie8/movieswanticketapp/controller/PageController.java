@@ -108,6 +108,11 @@ public class PageController {
     }
 
 
+    @GetMapping("/mypage/ticket")
+    public String my_page_ticket() {
+        return "page/my_page_ticket";
+    }
+
     @GetMapping("/mypage/movie")
     public String my_page_mymovie() {
         return "page/my_page_mymovie";
