@@ -59,16 +59,7 @@ public class SeatController {
                 .rid(null)
                 .build();
         boolean result = false;
-        try{
-            result = service.preempt(seatDTO);
-        }
-        catch(DataIntegrityViolationException e){
-            System.out.println("찰나의 순간 자리를 뺏겼습니다. 유감ㅎ");
-            result = false;
-        }
-        finally{
-            System.out.println("그럼 이만...");
-            return result;
-        }
+        result = service.remove(seatDTO);
+        return result;
     }
 }
