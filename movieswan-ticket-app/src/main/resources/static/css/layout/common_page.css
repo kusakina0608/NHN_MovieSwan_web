@@ -10,6 +10,8 @@
     box-sizing: border-box;
     scroll-behavior: smooth;
     font-family: 'Gugi', cursive;
+
+    overflow-x: hidden;
 }
 
 #default_bg {
