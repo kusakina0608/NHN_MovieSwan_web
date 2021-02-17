@@ -21,6 +21,23 @@ public interface MovieService {
 
     //void modify(MovieDTO movieDTO);
 
+    default Movie dtoToEntity(MovieDTO movieDTO) {
+        Movie movie = Movie.builder()
+                .mid(movieDTO.getMid())
+                .name(movieDTO.getName())
+                .poster(movieDTO.getPoster())
+                .director(movieDTO.getDirector())
+                .actor(movieDTO.getActor())
+                .genre(movieDTO.getGenre())
+                .runtime(movieDTO.getRuntime())
+                .story(movieDTO.getStory())
+                .startdate(movieDTO.getStartdate())
+                .enddate(movieDTO.getEnddate())
+                .build();
+
+        return movie;
+    }
+
     default MovieDTO entityToDTO(Movie movie) {
         MovieDTO movieDTO = MovieDTO.builder()
                 .mid(movie.getMid())
