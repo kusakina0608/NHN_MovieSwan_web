@@ -1,7 +1,7 @@
 main {
     display: flex;
     flex-direction: column;
-    padding: 10px 80px 40px;
+    padding: 10px 0 40px;
     justify-content: center;
     align-items: center;
 }
@@ -18,7 +18,7 @@ main {
     max-height: 500px;
 }
 
-.info div {
+.info > div {
     flex: 3;
     display: flex;
     flex-direction: column;
@@ -31,22 +31,19 @@ main {
 }
 
 .info div .detail {
-    margin: 0;
     flex: 3;
 
     font-size: 20px;
 }
 
 .info div .buttons {
-    margin: 0;
     display: flex;
     flex: 1;
-    
 }
 
 
 .navigation {
-    width: 70%;
+    width: 60%;
     margin: 20px 0 20px;
     background-color: bisque;
     display: flex;
@@ -58,7 +55,36 @@ main {
     padding: 10px 40px 10px;
 }
 
-div {
-    margin: 20px 50px 20px;
-    width: 100%;
+main > div {
+    margin: 20px 0 20px;
+    width: 80%;
+}
+
+.reviews {
+    display: flex;
+    flex-direction: column;
+}
+
+.pagination {
+    list-style: none;
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0 20px;
+}
+
+.pagination .page-link {
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+}
+
+.pagination .active .page-link{
+    background: skyblue;
+}
+
+.pagination .page-item:not(.active) .page-link:hover {
+    background: lightgray;
 }

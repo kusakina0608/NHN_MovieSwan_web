@@ -1,5 +1,7 @@
+<link th:href="@{/css/fragment/review.css}" rel="stylesheet" />
+
 <li class="review">
-    <div>
+    <div class="user">
         <span class="material-icons">person</span>
         <span>[[${review.uid}]]</span>
     </div>
@@ -11,5 +13,7 @@
         </th:block>
     </div>
 
-    <div>[[${review.content}]]</div>
+    <div class="content">
+        [[${review.content}]]
+    </div>
 </li>
