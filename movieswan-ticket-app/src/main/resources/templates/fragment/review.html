@@ -1,0 +1,15 @@
+<li class="review">
+    <div>
+        <span class="material-icons">person</span>
+        <span>[[${review.uid}]]</span>
+    </div>
+
+    <div class="grade">
+        <th:block th:each="num : ${#numbers.sequence(1,5)}">
+            <span th:if="${num <= review.grade}" class="material-icons">star</span>
+            <span th:unless="${num <= review.grade}" class="material-icons">star_outline</span>
+        </th:block>
+    </div>
+
+    <div>[[${review.content}]]</div>
+</li>

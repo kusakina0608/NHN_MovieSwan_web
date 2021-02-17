@@ -3,6 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
+import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PageController {
     private final MovieService movieService;
+    private final ReviewService reviewService;
 
     @GetMapping("/main")
     public String mainPage() {
@@ -49,9 +51,10 @@ public class PageController {
     }
 
     @GetMapping("/movie/detail")
-    public String movieDetail(String mid, @ModelAttribute("requestDTO")PageRequestDTO requestDTO, Model model) {
+    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, Model model) {
         MovieDTO movieDTO = movieService.read(mid);
         model.addAttribute("dto", movieDTO);
+        model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
         return "/page/movie_detail";
     }
 

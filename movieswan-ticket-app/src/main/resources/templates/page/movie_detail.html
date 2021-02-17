@@ -66,6 +66,27 @@
 
         <div class="review">
             <h1>리뷰</h1>
+            <ul>
+                <th:block th:each="review : ${reviews.dtoList}">
+                    <th:block th:replace="~{/fragment/review}"></th:block>
+                </th:block>
+            </ul>
+
+            <!---pagination--->
+            <ul class="pagination">
+                <li class="page-item" th:if="${reviews.prev}">
+                    <a class="page-link" th:href="@{detail(mid=${dto.mid}, page=${reviews.start - 1})}" tabindex="-1">Prev</a>
+                </li>
+
+                <li th:class=" 'page-item ' + ${reviews.page == page?'active':''}"
+                    th:each="page: ${reviews.pageList}">
+                    <a class="page-link" th:href="@{detail(mid=${dto.mid}, page=${page})}">[[${page}]]</a>
+                </li>
+
+                <li class="page-item" th:if="${reviews.next}">
+                    <a class="page-link" th:href="@{detail(mid=${dto.mid}, page=${reviews.end + 1})}">Next</a>
+                </li>
+            </ul>
         </div>
     </main>
 
