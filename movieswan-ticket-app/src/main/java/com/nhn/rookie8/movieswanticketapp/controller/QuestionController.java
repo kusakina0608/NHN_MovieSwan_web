@@ -2,6 +2,7 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
 import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,9 +17,9 @@ public class QuestionController {
     private final QuestionService service;
 
     @PostMapping("/register")
-    public String registerQuestion(QuestionDTO questionDTO) {
-        service.registerQuestion(questionDTO);
-        return "redirect:/question/list";
+    public ApiResultDTO registerQuestion(QuestionDTO questionDTO) {
+        log.info(questionDTO);
+        return service.registerQuestion(questionDTO);
     }
 
     @GetMapping("/post")
