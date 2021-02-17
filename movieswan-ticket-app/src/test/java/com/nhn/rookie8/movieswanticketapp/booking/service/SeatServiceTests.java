@@ -32,10 +32,10 @@ public class SeatServiceTests {
     }
 
     @Test
-    public void testPreempt1() { // 빈 좌석 선택시
+    public void testPreempt1() throws InterruptedException { // 빈 좌석 선택시
         SeatDTO seatDTO = SeatDTO.builder()
                 .tid("AAA2102251230")
-                .sid("A07")
+                .sid("A66")
                 .uid("kusakina0608")
                 .rid(null)
                 .build();
@@ -43,7 +43,7 @@ public class SeatServiceTests {
     }
 
     @Test
-    public void testPreempt2() { // 내가 선점한 좌석 선택시
+    public void testPreempt2() throws InterruptedException { // 내가 선점한 좌석 선택시
         SeatDTO seatDTO = SeatDTO.builder()
                 .tid("AAA2102251230")
                 .sid("F08")
@@ -54,7 +54,7 @@ public class SeatServiceTests {
     }
 
     @Test
-    public void testPreempt3() { // 남이 선점한 좌석 선택시
+    public void testPreempt3() throws InterruptedException { // 남이 선점한 좌석 선택시
         SeatDTO seatDTO = SeatDTO.builder()
                 .tid("AAA2102251230")
                 .sid("F09")

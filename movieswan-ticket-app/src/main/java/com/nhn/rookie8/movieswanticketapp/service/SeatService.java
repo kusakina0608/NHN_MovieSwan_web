@@ -9,7 +9,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.SeatId;
 public interface SeatService {
     String register(SeatDTO dto);
 
-    Boolean preempt(SeatDTO dto);
+    Boolean preempt(SeatDTO dto) throws InterruptedException;
 
     default Seat dtoToEntity(SeatDTO dto){
         Seat entity = Seat.builder()

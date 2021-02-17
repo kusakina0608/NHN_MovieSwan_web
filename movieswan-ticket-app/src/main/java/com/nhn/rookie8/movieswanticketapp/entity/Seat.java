@@ -44,11 +44,10 @@ public class Seat implements Persistable<SeatId> {
     @Transient
     @Override
     public boolean isNew() {
-        return isNew;
+        return true;
     }
 
     @PrePersist
-    @PostLoad
     void markNotNew() {
         isNew = false;
     }
