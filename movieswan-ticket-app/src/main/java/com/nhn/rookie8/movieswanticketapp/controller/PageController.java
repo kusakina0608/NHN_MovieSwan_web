@@ -107,6 +107,10 @@ public class PageController {
         return "redirect:/mypage/userinfo";
     }
 
+    @GetMapping("/mypage/userinfo")
+    public String my_page_userinfo() {
+        return "page/my_page_userinfo";
+    }
 
     @GetMapping("/mypage/ticket")
     public String my_page_ticket() {
@@ -135,3 +139,4 @@ public class PageController {
         model.addAttribute("dto", dto);
         return "page/my_page_read_question";
     }
+}
