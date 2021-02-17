@@ -69,13 +69,12 @@ public class SeatServiceImpl implements SeatService{
         Seat entity = dtoToEntity(dto);
 
         Optional<Seat> result = repository.findById(new SeatId(dto.getTid(), dto.getSid()));
-        // TODO: 전달받은 ID와 비교하는 코드 작성
-        if(result.isPresent() && !(result.get().getUid().equals("kusakina0608"))){
+        if(result.isPresent() && !(result.get().getUid().equals(dto.getUid()))){
             System.out.println("다른 사람이 이미 선점했어");
             return false;
         }
         // TODO: 전달받은 ID와 비교하는 코드 작성
-        else if(result.isPresent() && result.get().getUid().equals("kusakina0608")){
+        else if(result.isPresent() && result.get().getUid().equals(dto.getUid())){
             System.out.println("여긴 이미 내 자리야");
             return true;
         }
@@ -91,8 +90,7 @@ public class SeatServiceImpl implements SeatService{
         Seat entity = dtoToEntity(dto);
 
         Optional<Seat> result = repository.findById(new SeatId(dto.getTid(), dto.getSid()));
-        // TODO: 전달받은 ID와 비교하는 코드 작성
-        if(result.isPresent() && result.get().getUid().equals("kusakina0608")){
+        if(result.isPresent() && result.get().getUid().equals(dto.getUid())){
             repository.delete(entity);
             System.out.println("삭제도 성공했어");
             return true;
