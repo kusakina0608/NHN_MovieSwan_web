@@ -28,11 +28,7 @@ public class ReviewServiceImpl implements ReviewService{
         String mid = reviewDTO.getMid();
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("rid").descending());
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-
-        QReview qReview = QReview.review;
-        BooleanExpression expression = qReview.mid.eq(mid);
-        booleanBuilder.and(expression);
+        BooleanBuilder booleanBuilder = getReviewsByMid(mid);
 
         Optional<Review> lastReview = repository.findAll(booleanBuilder, pageable).stream().findFirst();
         String rid;
@@ -53,10 +49,11 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO) {
-        Pageable pageable = pageRequestDTO.getPageable(Sort.by("mid").descending());
+    public PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String mid) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("rid").descending());
+        BooleanBuilder booleanBuilder = getReviewsByMid(mid);
 
-        Page<Review> result = repository.findAll(pageable);
+        Page<Review> result = repository.findAll(booleanBuilder, pageable);
 
         Function<Review, ReviewDTO> fn = (entity -> entityToDTO(entity));
 
@@ -80,5 +77,14 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public void remove(String rid) {
         repository.deleteById(rid);
+    }
+
+    private BooleanBuilder getReviewsByMid(String mid) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReview qReview = QReview.review;
+        BooleanExpression expression = qReview.mid.eq(mid);
+        booleanBuilder.and(expression);
+
+        return booleanBuilder;
     }
 }

@@ -8,7 +8,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Review;
 public interface ReviewService {
     String register(ReviewDTO reviewDTO);
 
-    PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO);
+    PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String mid);
 
     void modify(ReviewDTO reviewDTO);
 

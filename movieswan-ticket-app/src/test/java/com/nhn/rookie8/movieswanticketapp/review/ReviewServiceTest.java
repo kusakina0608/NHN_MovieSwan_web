@@ -34,7 +34,7 @@ public class ReviewServiceTest {
     public void reviewListTest() {
         PageRequestDTO requestDTO = PageRequestDTO.builder().page(1).size(10).build();
 
-        PageResultDTO<ReviewDTO, Review> resultDTO = service.getList(requestDTO);
+        PageResultDTO<ReviewDTO, Review> resultDTO = service.getList(requestDTO, "POKE001");
 
         for(ReviewDTO review : resultDTO.getDtoList()) {
             System.out.println(review);
