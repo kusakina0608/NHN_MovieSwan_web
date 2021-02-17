@@ -2,7 +2,9 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
+import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PageController {
     private final MovieService movieService;
+    private final QuestionService questionService;
 
     @GetMapping({"/", "/main"})
     public String main_page() {
@@ -102,4 +105,17 @@ public class PageController {
     @GetMapping("/mypage")
     public String my_page() {
         return "redirect:/mypage/userinfo";
+    }
+
+    @GetMapping("/mypage/question")
+    public String my_page_question(PageRequestDTO pageRequestDTO, Model model) {
+        model.addAttribute("result", questionService.getQuestionList(pageRequestDTO));
+        return "page/my_page_question";
+    }
+
+    @GetMapping("/mypage/question/post")
+    public String my_page_read_question(@RequestParam("qid") Integer qid, Model model) {
+        QuestionDTO dto = questionService.readQuestion(qid);
+        model.addAttribute("dto", dto);
+        return "page/my_page_read_question";
     }
