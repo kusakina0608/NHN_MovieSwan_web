@@ -1,12 +1,13 @@
 package com.nhn.rookie8.movieswanticketapp.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -16,11 +17,39 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @IdClass(SeatId.class)
-public class Seat {
+@EntityListeners(value = {AuditingEntityListener.class})
+public class Seat implements Persistable<SeatId> {
     @Id
-    @Column(name="rid", length = 20, nullable = false)
-    private String rid;
+    @Column(name="tid", length = 15, nullable = false)
+    private String tid;
     @Id
     @Column(name="sid", length = 4, nullable = false)
     private String sid;
+    @Column(name="uid", length = 20, nullable = false)
+    private String uid;
+    @Column(name="rid", length = 20, nullable = true)
+    private String rid;
+    @CreatedDate
+    @Column(name="regdate", updatable = false)
+    private LocalDateTime regDate;
+
+    @Transient
+    @Override
+    public SeatId getId() {
+        return SeatId.builder().tid(tid).sid(sid).build();
+    }
+
+    private @Transient boolean isNew = true;
+
+    @Transient
+    @Override
+    public boolean isNew() {
+        return isNew;
+    }
+
+    @PrePersist
+    @PostLoad
+    void markNotNew() {
+        isNew = false;
+    }
 }
