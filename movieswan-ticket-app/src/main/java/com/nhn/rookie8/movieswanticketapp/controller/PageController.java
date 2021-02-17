@@ -21,8 +21,8 @@ import java.util.List;
 public class PageController {
     private final MovieService movieService;
 
-    @GetMapping("/main")
-    public String mainPage() {
+    @GetMapping({"/", "/main"})
+    public String main_page() {
         return "page/main_page";
     }
 
@@ -91,5 +91,10 @@ public class PageController {
             model.addAttribute(key, params.get(key));
         });
         return "page/booking_result";
+    }
+
+    @GetMapping("/question")
+    public String question_page() {
+        return "page/question_page";
     }
 }
