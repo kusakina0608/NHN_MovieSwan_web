@@ -157,9 +157,9 @@
             timeInput.setAttribute("value", selectedTime.innerText);
             form.appendChild(timeInput);
 
-            let tidInput = document.createElement("tid");
+            let tidInput = document.createElement("input");
             tidInput.setAttribute("type", "hidden");
-            tidInput.setAttribute("name", "time");
+            tidInput.setAttribute("name", "tid");
             tidInput.setAttribute("value", selectedTime.children[0].innerText);
             form.appendChild(tidInput);
 

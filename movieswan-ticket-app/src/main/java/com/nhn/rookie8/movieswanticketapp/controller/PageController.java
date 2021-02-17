@@ -55,17 +55,19 @@ public class PageController {
     }
 
     @PostMapping("/booking/seat")
-    public String seat(@RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, Model model) {
+    public String seat(@RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("tid") String tid, Model model) {
         System.out.println(mid);
         System.out.println(date);
         System.out.println(time);
+        System.out.println(tid);
         // TODO: mid로 영화 조회
 //        MovieDTO movieDTO = movieService.getMovie(mid);
-        model.addAttribute("title", "[15]극장판귀멸의칼날-무한열차편");
+        model.addAttribute("title", "아이돌마스터 극장판");
 //        model.addAttribute("title", movieDTO.getName());
         model.addAttribute("poster", "/asset/image/poster99.jpg");
 //        model.addAttribute("poster", movieDTO.getPoster());
         model.addAttribute("theater", "무비스완 판교점");
+        model.addAttribute("tid", tid);
         model.addAttribute("date", date);
         model.addAttribute("time", time);
         if(Integer.parseInt(time.split(":")[0]) < 9){
