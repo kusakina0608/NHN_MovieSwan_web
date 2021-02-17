@@ -112,6 +112,12 @@ public class PageController {
     public String my_page_mymovie() {
         return "page/my_page_mymovie";
     }
+
+    @GetMapping("/mypage/review")
+    public String my_page_myreview() {
+        return "page/my_page_myreview";
+    }
+
     @GetMapping("/mypage/question")
     public String my_page_question(PageRequestDTO pageRequestDTO, Model model) {
         model.addAttribute("result", questionService.getQuestionList(pageRequestDTO));
