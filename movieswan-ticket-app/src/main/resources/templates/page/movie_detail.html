@@ -66,6 +66,34 @@
 
         <div class="reviews">
             <h1>리뷰</h1>
+            <!---내 리뷰 / 리뷰 등록--->
+            <form th:action="@{/api/review/register}" th:method="post">
+                <div class="myreview">
+                    <div class="grade">
+                        <input type="radio" id="star5" name="rating" value="5" />
+                        <label for="star5" class="material-icons">star_outline</label>
+                        <label for="star5" class="material-icons selected">star</label>
+                        <input type="radio" id="star4" name="rating" value="4" />
+                        <label for="star4" class="material-icons">star_outline</label>
+                        <label for="star4" class="material-icons selected">star</label>
+                        <input type="radio" id="star3" name="rating" value="3" />
+                        <label for="star3" class="material-icons">star_outline</label>
+                        <label for="star3" class="material-icons selected">star</label>
+                        <input type="radio" id="star2" name="rating" value="2" />
+                        <label for="star2" class="material-icons">star_outline</label>
+                        <label for="star2" class="material-icons selected">star</label>
+                        <input type="radio" id="star1" name="rating" value="1" />
+                        <label for="star1" class="material-icons">star_outline</label>
+                        <label for="star1" class="material-icons selected">star</label>
+                    </div>
+                
+                    <textarea class="content" placeholder="리뷰를 입력하세요."></textarea>
+
+                    <button type="submit" class="form_ticket_btn">등록</button>
+              </div>
+            </form>
+
+            <!---리뷰 목록--->
             <ul>
                 <th:block th:each="review : ${reviews.dtoList}">
                     <th:block th:replace="~{/fragment/review}"></th:block>
