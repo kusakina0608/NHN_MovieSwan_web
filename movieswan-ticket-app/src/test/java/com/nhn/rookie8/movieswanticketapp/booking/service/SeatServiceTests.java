@@ -5,6 +5,7 @@ import com.nhn.rookie8.movieswanticketapp.service.SeatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @SpringBootTest
 public class SeatServiceTests {
@@ -32,18 +33,26 @@ public class SeatServiceTests {
     }
 
     @Test
-    public void testPreempt1() throws InterruptedException { // 빈 좌석 선택시
+    public void testPreempt1() { // 빈 좌석 선택시
         SeatDTO seatDTO = SeatDTO.builder()
                 .tid("AAA2102251230")
-                .sid("A66")
+                .sid("A60")
                 .uid("kusakina0608")
                 .rid(null)
                 .build();
-        System.out.println(service.preempt(seatDTO));
+        try{
+            System.out.println(service.preempt(seatDTO));
+        }
+        catch(DataIntegrityViolationException e){
+            System.out.println("여기서 에러가 잡혔다...");
+        }
+        finally{
+            System.out.println("끝...");
+        }
     }
 
     @Test
-    public void testPreempt2() throws InterruptedException { // 내가 선점한 좌석 선택시
+    public void testPreempt2() { // 내가 선점한 좌석 선택시
         SeatDTO seatDTO = SeatDTO.builder()
                 .tid("AAA2102251230")
                 .sid("F08")
@@ -54,7 +63,7 @@ public class SeatServiceTests {
     }
 
     @Test
-    public void testPreempt3() throws InterruptedException { // 남이 선점한 좌석 선택시
+    public void testPreempt3() { // 남이 선점한 좌석 선택시
         SeatDTO seatDTO = SeatDTO.builder()
                 .tid("AAA2102251230")
                 .sid("F09")
