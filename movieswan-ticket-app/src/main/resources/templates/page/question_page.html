@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MovieSwan 1:1 문</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+
+    <!-- Icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/page/question_page.css}" />
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <background id="default_bg">
+        <!-- Page -->
+        <commonpage id="common_page">
+            <!-- Contents -->
+            <header id="question_header">
+                <img id="question_logo" src="/asset/image/logo2.png" />
+                <subject id="subject">1:1 문의하기</subject>
+            </header>
+            <form id="question_contents" th:action="@{/api/question/register}" th:method="post">
+                <formgroup class="form_group">
+                    <formlabel class="form_label">작성자 :</formlabel>
+                    <input type="text" class="form_control" id="uid" name="uid">
+                </formgroup>
+                <formgroup class="form_group">
+                    <formlabel class="form_label">제목 :</formlabel>
+                    <input type="text" class="form_control" id="title" name="title">
+                </formgroup>
+                <formgroup class="form_group">
+                    <formlabel class="form_label">문의 내용 :</formlabel>
+                    <textarea class="form_control" id="content" name="content"></textarea>
+                </formgroup>
+                <buttoncontrol id="button_control">
+                    <button id="cancle_button" onclick="window.close()">
+                        <span class="material-icons">close</span>
+                        창 닫기
+                    </button>
+                    <button type="submit" id="question_button" onsubmit="window.close()">
+                        <span class="material-icons">send</span>
+                        제출하기
+                    </button>
+                </buttoncontrol>
+            </form>
+        </commonpage>
+
+        <th:block th:replace="~{/fragment/scroll_to_top_button}"></th:block>
+    </background>
+</body>
+
+<script th:src="@{/script/fragment/scroll_to_top_button.js}"></script>
+<script th:src="@{/script/page/question_page.js}"></script>
+
+</th:block>
+
+</html>

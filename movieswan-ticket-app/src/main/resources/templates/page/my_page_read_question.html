@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: 내 문의 내역</title>
+    <link th:href="@{/css/page/my_page_read_question.css}" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+    <th:block th:replace="~{/layout/my_page::setContents(~{this::read_question})}">
+    <readquestion id="read_question" th:fragment="read_question">
+        <p id="question_subject">상세 문의내역</p>
+        <questionform id="question_contents">
+            <formgroup class="form_group">
+                <formlabel class="form_label">작성자 :</formlabel>
+                <input type="text" class="form_control" name="uid" th:value="${dto.uid}" disabled>
+            </formgroup>
+            <formgroup class="form_group">
+                <formlabel class="form_label">제목 :</formlabel>
+                <input type="text" class="form_control" name="title" th:value="${dto.title}" disabled>
+            </formgroup>
+            <formgroup class="form_group">
+                <formlabel class="form_label">문의 내용 :</formlabel>
+                <textarea class="form_control" name="content" disabled>[[${dto.content}]]</textarea>
+            </formgroup>
+            <buttoncontrol id="button_control">
+                <button id="cancle_button" onclick="window.history.back()">
+                    <span class="material-icons">reply</span>
+                    뒤로 가기
+                </button>
+            </buttoncontrol>
+        </questionform>
+    </readquestion>
+    </th:block>
+</body>
+
+</html>
