@@ -37,10 +37,13 @@ public class PageController {
     private final ReviewService reviewService;
     private final QuestionService questionService;
 
-
-
     @GetMapping({"/", "/main"})
-    public String main_page() {
+    public String main_page(HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (!(session == null || session.getAttribute("uid") == null)) {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            model.addAttribute("name", session.getAttribute("name"));
+        }
         return "page/main_page";
     }
 
