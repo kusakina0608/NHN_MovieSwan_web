@@ -36,6 +36,13 @@ public class SeatServiceTests {
     }
 
     @Test
+    public void testGetReservedSeatList(){
+        service.getReservedSeatList("AAA2102251900").forEach(seat -> {
+            System.out.println(seat);
+        });
+    }
+
+    @Test
     public void testPreempt1() { // 빈 좌석 선택시
         SeatDTO seatDTO = SeatDTO.builder()
                 .tid("AAA2102251230")

@@ -52,17 +52,6 @@ public class SeatServiceImpl implements SeatService{
         dtoList.forEach(dto -> {
             repository.updateRid(rid, dto.getTid(), dto.getSid(), dto.getUid());
         });
-
-//        List<SeatId> idList = new ArrayList<SeatId>();
-//        dtoList.forEach(dto -> {
-//            idList.add(SeatId.builder().tid(dto.getTid()).sid(dto.getSid()).build());
-//        });
-//        List<Seat> resultList = repository.findAllById(idList);
-//        resultList.forEach(seat -> {
-//            seat.changeRid(rid);
-//            System.out.println("이렇게 변경될거에요: " + seat.toString());
-//        });
-//        repository.deleteInBatch(resultList);
     }
 
     @Override
@@ -81,6 +70,7 @@ public class SeatServiceImpl implements SeatService{
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QSeat qSeat = QSeat.seat;
         BooleanExpression expression = qSeat.tid.eq(tid);
+        booleanBuilder.and(expression);
         return booleanBuilder;
     }
 
