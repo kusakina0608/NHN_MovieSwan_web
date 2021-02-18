@@ -30,7 +30,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         ApiResultDTO apiResultDTO = ApiResultDTO.builder()
                 .httpStatus("200")
-                .isError(Boolean.FALSE)
+                .error(Boolean.FALSE)
                 .build();
 
         log.info(apiResultDTO);

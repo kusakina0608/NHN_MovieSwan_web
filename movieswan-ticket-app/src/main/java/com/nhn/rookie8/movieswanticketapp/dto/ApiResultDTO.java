@@ -13,6 +13,6 @@ import java.util.HashMap;
 @NoArgsConstructor
 public class ApiResultDTO {
     private String httpStatus;
-    private Boolean isError;
+    private Boolean error;
     private HashMap<Object, Object> data;
 }
