@@ -135,3 +135,7 @@
     background-color: green;
     border: none;
 }
+
+#status {
+    display: none;
+}
