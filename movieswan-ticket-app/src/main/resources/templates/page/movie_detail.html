@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie SWan - 영화 상세 정보</title>
+
+    <!---CSS 파일--->
+    <link th:href="@{/css/page/movie_detail.css}" rel="stylesheet" />
+
+    <!---ICON--->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+
+<th:block th:replace="~{/layout/common_page :: setContents(~{this::contents})}">
+
+<th:block th:fragment="contents">
+    <main>
+        <div class="info">
+            <img class="poster" th:src="@{${'/asset/image/' + dto.poster}}">
+            
+            <div>
+                <h1 class="title">[[${dto.name}]]</h1>
+
+                <div class="detail"> 
+                    <p>감독 : [[${dto.director}]] / 배우 : [[${dto.actor}]]</p>
+                    <p>장르 : [[${dto.genre}]] / 상영 시간 : [[${dto.runtime}]]분</p>
+                    <p>개봉 : [[${dto.startdate}]]</p>
+                </div>
+
+                <div class="buttons">
+                    <button class="favorite">
+                        <span class="material-icons">favorite_border</span>
+                        <span>3.3k</span>
+                    </button>
+        
+                    <button>
+                        <span class="material-icons booking">local_activity</span>
+                        <span>예매</span>
+                    </button>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <ul class="navigation">
+            <li>
+                <a href="#story">스토리</a>
+            </li>
+            <li>
+                <a href="#trailer">예고편</a>
+            </li>
+            <li>
+                <a href="#stillcut">스틸컷</a>
+            </li>
+            <li>
+                <a href="#reviews">리뷰</a>
+            </li>
+        </ul>
+
+        <div id="story">
+            <h1>스토리</h1>
+            <p>[[${dto.story}]]</p>
+        </div>
+
+        <div id="trailer">
+            <h1>예고편</h1>
+        </div>
+
+        <div id="stillcut">
+            <h1>스틸컷</h1>
+        </div>
+
+        <div id="reviews">
+            <h1>리뷰</h1>
+            <h3>내 리뷰</h3>
+            <!---내 리뷰 / 리뷰 등록--->
+            <div th:if="${!my_review.isPresent()}" class="myreview">
+                <div class="grade">
+                    <input type="radio" id="star5" name="grade" value="5" required/>
+                    <label for="star5" class="material-icons">star_outline</label>
+                    <label for="star5" class="material-icons selected">star</label>
+                    <input type="radio" id="star4" name="grade" value="4" />
+                    <label for="star4" class="material-icons">star_outline</label>
+                    <label for="star4" class="material-icons selected">star</label>
+                    <input type="radio" id="star3" name="grade" value="3" />
+                    <label for="star3" class="material-icons">star_outline</label>
+                    <label for="star3" class="material-icons selected">star</label>
+                    <input type="radio" id="star2" name="grade" value="2" />
+                    <label for="star2" class="material-icons">star_outline</label>
+                    <label for="star2" class="material-icons selected">star</label>
+                    <input type="radio" id="star1" name="grade" value="1" />
+                    <label for="star1" class="material-icons">star_outline</label>
+                    <label for="star1" class="material-icons selected">star</label>
+                </div>
+            
+                <textarea class="content" name="content" placeholder="리뷰를 입력하세요." required></textarea>
+
+                <button class="review_register">등록</button>
+            </div>
+            <div th:unless="${!my_review.isPresent()}" class="myreview-view">
+                <div class="grade">
+                    <th:block th:each="num : ${#numbers.sequence(1,5)}">
+                        <span th:if="${num <= my_review.get().grade}" class="material-icons">star</span>
+                        <span th:unless="${num <= my_review.get().grade}" class="material-icons">star_outline</span>
+                    </th:block>
+                </div>
+            
+                <div class="content">
+                    [[${my_review.get().content}]]
+                </div>
+
+                <div class="links">
+                    <button class="review-modify">수정</button>
+
+                    <form th:action="@{/api/review/delete}" th:method="delete">
+                        <input type="hidden" name="rid" th:value="${my_review.get().rid}">
+                        <input type="hidden" name="mid" th:value="${dto.mid}">
+                        <button type="submit" class="review-delete">삭제</button>
+                    </form>
+                </div>
+            </div>
+
+            <!---리뷰 목록--->
+            <ul class="review-list">
+                <th:block th:each="review : ${reviews.dtoList}">
+                    <th:block th:replace="~{/fragment/review}"></th:block>
+                </th:block>
+            </ul>
+
+            <!---pagination--->
+            <ul class="pagination">
+                <li class="page-item" th:if="${reviews.prev}">
+                    <a class="page-link" th:href="@{detail(mid=${dto.mid}, page=${reviews.start - 1})}" tabindex="-1">Prev</a>
+                </li>
+
+                <li th:class=" 'page-item ' + ${reviews.page == page?'active':''}"
+                    th:each="page: ${reviews.pageList}">
+                    <a class="page-link" th:href="@{detail(mid=${dto.mid}, page=${page})}">[[${page}]]</a>
+                </li>
+
+                <li class="page-item" th:if="${reviews.next}">
+                    <a class="page-link" th:href="@{detail(mid=${dto.mid}, page=${reviews.end + 1})}">Next</a>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        var midInput = "[[${dto.mid}]]";
+    </script>
+    <script th:src="@{/script/page/movie_detail.js}"></script>
+
+</th:block>
+</th:block>
+</html>

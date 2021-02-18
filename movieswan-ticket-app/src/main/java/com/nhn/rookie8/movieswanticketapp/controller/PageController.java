@@ -9,12 +9,14 @@ import com.nhn.rookie8.movieswanticketapp.service.ReservationService;
 import com.nhn.rookie8.movieswanticketapp.service.SeatService;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
+import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,6 +32,7 @@ public class PageController {
     private final MovieService movieService;
     private final ReservationService reservationService;
     private final SeatService seatService;
+    private final ReviewService reviewService;
     private final QuestionService questionService;
 
     @GetMapping({"/", "/main"})
@@ -61,6 +64,17 @@ public class PageController {
         model.addAttribute("result", movieService.getList(pageRequestDTO, false));
         model.addAttribute("current", false);
         return "/page/movie_list";
+    }
+
+    @GetMapping("/movie/detail")
+    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, Model model) {
+        MovieDTO movieDTO = movieService.read(mid);
+        String uid = "testuser";
+
+        model.addAttribute("dto", movieDTO);
+        model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
+        model.addAttribute("my_review", reviewService.findMyReview(mid, uid));
+        return "/page/movie_detail";
     }
 
     @GetMapping("/booking")

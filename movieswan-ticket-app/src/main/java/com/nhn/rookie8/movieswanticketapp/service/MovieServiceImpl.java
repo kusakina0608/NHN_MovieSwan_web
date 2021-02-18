@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -84,6 +85,13 @@ public class MovieServiceImpl implements MovieService{
             movieDTOList.add(entityToDTO(movie));
 
         return movieDTOList;
+    }
+
+    @Override
+    public MovieDTO read(String mid) {
+        Optional<Movie> result = repository.findById(mid);
+
+        return result.isPresent() ? entityToDTO(result.get()) : null;
     }
 
     private BooleanBuilder getReleaseMovies() {
