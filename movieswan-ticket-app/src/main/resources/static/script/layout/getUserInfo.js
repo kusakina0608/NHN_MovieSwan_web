@@ -18,14 +18,14 @@ const logoutOnClick = function () {
     localStorage.setItem("uid", "null");
     localStorage.setItem("name", "null");
 
-    (function (name) {
-        name = new RegExp(name + '=([^;]*)');
-        return name.test(document.cookie) ? unescape(RegExp.$1) : '';
-    });
+//    (function (name) {
+//        name = new RegExp(name + '=([^;]*)');
+//        return name.test(document.cookie) ? unescape(RegExp.$1) : '';
+//    });
 
-    const setCookie = function (name, value) {
-        document.cookie = name + '=' + escape(value);
-    }
-
-    setCookie("JSESSIONID", '');
+//    const setCookie = function (name, value) {
+//        document.cookie = name + '=' + escape(value);
+//    }
+//
+//    setCookie("JSESSIONID", '');
 }   
