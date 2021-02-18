@@ -28,7 +28,6 @@
                 <img id="question_logo" src="/asset/image/logo2.png" />
                 <subject id="subject">1:1 문의하기</subject>
             </header>
-            <status id="status" th:value="${status}"></status>
             <form id="question_contents" th:action="@{/api/question/register}" th:method="post">
                 <formgroup class="form_group">
                     <formlabel class="form_label">작성자 :</formlabel>
