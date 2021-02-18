@@ -2,7 +2,11 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
+import com.nhn.rookie8.movieswanticketapp.service.ReservationService;
+import com.nhn.rookie8.movieswanticketapp.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PageController {
     private final MovieService movieService;
+    private final ReservationService reservationService;
+    private final SeatService seatService;
 
     @GetMapping("/main")
     public String mainPage() {
@@ -76,6 +83,7 @@ public class PageController {
         else{
             model.addAttribute("discount", "없음");
         }
+        model.addAttribute("seatlist", seatService.getReservedSeatList(tid));
         return "page/seat";
     }
 
@@ -91,7 +99,37 @@ public class PageController {
     public String bookingResult(@RequestParam HashMap<String,String> params, Model model) {
         params.keySet().forEach(key -> {
             model.addAttribute(key, params.get(key));
+            System.out.println(key + ": " +  params.get(key));
         });
+
+
+        String randomId = reservationService.createReservationId();
+        System.out.println(randomId);
+        ReservationDTO reservationDTO = ReservationDTO.builder()
+                .rid(randomId)
+                .tid(params.get("tid"))
+                .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
+                .childNum(Integer.parseInt(params.get("childnum")))
+                .adultNum(Integer.parseInt(params.get("adultnum")))
+                .oldNum(Integer.parseInt(params.get("oldnum")))
+                .totalNum(Integer.parseInt(params.get("totalnum")))
+                .price(Integer.parseInt(params.get("price")))
+                .build();
+
+        reservationService.register(reservationDTO);
+
+        List<SeatDTO> dtoList= new ArrayList<SeatDTO>();
+        String[] seatList = params.get("seats").split(",");
+        for (String seat : seatList) {
+            dtoList.add(SeatDTO.builder()
+                    .tid(params.get("tid"))
+                    .sid(seat)
+                    .rid(randomId)
+                    .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
+                    .build());
+        }
+        seatService.modify(dtoList, "TEST-RID");
+
         return "page/booking_result";
     }
 }
