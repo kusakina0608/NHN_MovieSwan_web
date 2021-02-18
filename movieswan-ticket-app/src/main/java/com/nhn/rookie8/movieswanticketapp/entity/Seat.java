@@ -51,4 +51,8 @@ public class Seat implements Persistable<SeatId> {
     void markNotNew() {
         isNew = false;
     }
+
+    public void changeRid(String rid){
+        this.rid = rid;
+    }
 }
