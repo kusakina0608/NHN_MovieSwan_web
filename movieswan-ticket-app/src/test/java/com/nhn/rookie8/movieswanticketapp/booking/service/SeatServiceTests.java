@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest
 public class SeatServiceTests {
 
@@ -71,5 +74,26 @@ public class SeatServiceTests {
                 .rid(null)
                 .build();
         System.out.println(service.preempt(seatDTO));
+    }
+
+    @Test
+    public void testModify(){
+        List<SeatDTO> dtoList= new ArrayList<SeatDTO>();
+        dtoList.add(SeatDTO.builder()
+                .tid("AAA2102251230")
+                .sid("A01")
+                .rid("TESTTEST")
+                .uid("kusakina0608")
+                .build());
+        dtoList.add(SeatDTO.builder()
+                .tid("AAA2102251230")
+                .sid("A02")
+                .rid("TESTTEST")
+                .uid("kusakina0608")
+                .build());
+        service.modify(dtoList, "TEST-RID");
+        dtoList.forEach(dto -> {
+            service.register(dto);
+        });
     }
 }
