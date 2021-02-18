@@ -17,7 +17,7 @@ public interface MovieService {
 
     List<MovieDTO> getReleaseList();
 
-    //MovieDTO read(String mid);
+    MovieDTO read(String mid);
 
     //void modify(MovieDTO movieDTO);
 

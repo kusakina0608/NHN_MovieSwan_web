@@ -1,4 +1,4 @@
-package com.nhn.rookie8.movieswanticketapp;
+package com.nhn.rookie8.movieswanticketapp.movie;
 
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;

@@ -1,0 +1,206 @@
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+.info {
+    display: flex;
+}
+
+.info .poster {
+    flex: 1;
+
+    margin-right: 50px;
+    max-width: 300px;
+    max-height: 500px;
+}
+
+.info > div {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.info div .title {
+    flex: 3;
+
+    font-size: 40px;
+}
+
+.info div .detail {
+    flex: 3;
+
+    font-size: 20px;
+}
+
+.info div .buttons {
+    display: flex;
+    flex: 1;
+}
+
+.buttons button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 20px 10px 0;
+    padding: 0 5px 0;
+}
+
+.navigation {
+    width: 60%;
+    margin: 20px 0 20px;
+    background-color: bisque;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+.navigation li {
+    padding: 10px 40px 10px;
+}
+
+.navigation li a {
+    text-decoration: none;
+    color: black;
+}
+
+main > div {
+    margin: 20px 0 20px;
+    width: 80%;
+}
+
+#reviews {
+    display: flex;
+    flex-direction: column;
+}
+
+#reviews h3 {
+    margin-top: 20px;
+}
+
+.myreview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 10px 0 10px;
+    padding: 10px 0 10px;
+    border: 2px solid black;
+}
+
+.myreview .grade {
+    flex: none;
+    float: right;
+    
+    padding: 20px 20px 20px;
+}
+
+.myreview .grade:not(:checked) > input {
+    display: none;
+    clip:rect(0,0,0,0);
+}
+
+.myreview .grade:not(:checked) > label {
+    float:right;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    color: black;
+}
+
+.myreview .grade:not(:checked) > .selected {
+    display: none;
+}
+
+.myreview .grade > input:checked ~ label:not(.selected) {
+    display: none;
+}
+
+.myreview .grade > input:checked ~ .selected {
+    display: inline;
+}
+
+.myreview .grade > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}
+
+.myreview .content {
+    flex: 10;
+    width: 100%;
+    height: 60px;
+    resize: none;
+
+    margin: 0 20px 0;
+}
+
+.myreview button {
+    flex: 1;
+    height: 60px;
+    font-size: 18px;
+
+    margin: 0 20px 0;
+}
+
+.myreview-view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 10px 0 10px;
+    padding: 10px 0 10px;
+    border: 2px solid black;
+}
+
+.myreview-view > div {
+    border-left: 1px solid gray;
+    padding: 20px 15px 20px;
+}
+
+.myreview-view > div:first-child {
+    border-left: hidden;
+    padding: 0 15px 0;
+}
+
+.myreview-view .grade {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.myreview-view .content {
+    flex: 5;
+}
+
+.review-list {
+    border-top: 3px double gray;
+}
+
+.pagination {
+    list-style: none;
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0 20px;
+}
+
+.pagination .page-link {
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+}
+
+.pagination .active .page-link{
+    background: skyblue;
+}
+
+.pagination .page-item:not(.active) .page-link:hover {
+    background: lightgray;
+}
