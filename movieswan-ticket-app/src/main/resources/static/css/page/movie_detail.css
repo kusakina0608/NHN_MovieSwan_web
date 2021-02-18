@@ -138,6 +138,37 @@ main > div {
     margin: 0 20px 0;
 }
 
+.myreview-view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 10px 0 10px;
+    padding: 10px 0 10px;
+    border: 2px solid black;
+}
+
+.myreview-view > div {
+    border-left: 1px solid gray;
+    padding: 20px 15px 20px;
+}
+
+.myreview-view > div:first-child {
+    border-left: hidden;
+    padding: 0 15px 0;
+}
+
+.myreview-view .grade {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.myreview-view .content {
+    flex: 5;
+}
+
 .pagination {
     list-style: none;
     display: inline-block;

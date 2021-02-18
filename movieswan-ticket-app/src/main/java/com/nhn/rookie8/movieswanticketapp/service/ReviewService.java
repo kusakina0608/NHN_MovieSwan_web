@@ -5,10 +5,14 @@ import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReviewDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
 
+import java.util.Optional;
+
 public interface ReviewService {
     String register(ReviewDTO reviewDTO);
 
     PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String mid);
+
+    Optional<Review> findMyReview(String mid, String uid);
 
     void modify(ReviewDTO reviewDTO);
 

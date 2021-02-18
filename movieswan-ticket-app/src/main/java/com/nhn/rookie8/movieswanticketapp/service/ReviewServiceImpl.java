@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -58,6 +59,21 @@ public class ReviewServiceImpl implements ReviewService{
         Function<Review, ReviewDTO> fn = (entity -> entityToDTO(entity));
 
         return new PageResultDTO<>(result, fn);
+    }
+
+    @Override
+    public Optional<Review> findMyReview(String mid, String uid) {
+        Pageable pageable = PageRequest.of(0, 10);
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReview qReview = QReview.review;
+        BooleanExpression expression1 = qReview.mid.eq(mid);
+        booleanBuilder.and(expression1);
+        BooleanExpression expression2 = qReview.uid.eq(uid);
+        booleanBuilder.and(expression2);
+
+        Optional<Review> result = repository.findAll(booleanBuilder, pageable).stream().findFirst();
+
+        return result;
     }
 
     @Override

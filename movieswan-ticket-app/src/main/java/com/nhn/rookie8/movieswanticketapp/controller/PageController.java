@@ -53,8 +53,11 @@ public class PageController {
     @GetMapping("/movie/detail")
     public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, Model model) {
         MovieDTO movieDTO = movieService.read(mid);
+        String uid = "testuser";
+
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
+        model.addAttribute("my_review", reviewService.findMyReview(mid, uid));
         return "/page/movie_detail";
     }
 
