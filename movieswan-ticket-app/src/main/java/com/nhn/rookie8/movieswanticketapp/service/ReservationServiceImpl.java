@@ -15,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Function;
 
 @Service
@@ -23,6 +26,35 @@ import java.util.function.Function;
 public class ReservationServiceImpl implements ReservationService{
 
     private final ReservationRepository repository;
+
+    @Override
+    public String createReservationId() {
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        String reservationId;
+        do {
+            List<String> codeList = new ArrayList<>();
+            for(int i = 0; i < 4; i++){
+                StringBuilder salt = new StringBuilder();
+                Random rnd = new Random();
+                while (salt.length() < 4) {
+                    int index = (int) (rnd.nextFloat() * alphabet.length());
+                    salt.append(alphabet.charAt(index));
+                }
+                codeList.add(salt.toString());
+            }
+            reservationId = codeList.get(0);
+            for(int i = 1; i < 4; i++){
+                reservationId += '-';
+                reservationId += codeList.get(i);
+            }
+        } while(checkExist(reservationId));
+
+        return reservationId;
+    }
+
+    private boolean checkExist(String rid) {
+        return repository.findById(rid).isPresent();
+    }
 
     @Override
     public String register(ReservationDTO dto) {

@@ -10,24 +10,40 @@
 <th:block th:replace="~{/layout/common_page:: setContents(~{this:: #main-container} )}">
     <main id="main-container">
         <section class="result-header">
-            결과창 헤더 ㅎㅎ
+            <section>
+                <h1 id="result-page-title" th:text="${'예매 완료'}"></h1>
+            </section>
+            <section>
+                <span>영화, 극장, 시간 선택</span>
+                <span>&gt;&gt;</span>
+                <span>좌석 선택</span>
+                <span>&gt;&gt;</span>
+                <span>결제</span>
+                <span>&gt;&gt;</span>
+                <span class="current">예매 완료</span>
+            </section>
         </section>
         <section class="result-container">
-            <form>
-                <input type="hidden" name="title" th:value="${title}">
-                <input type="hidden" name="poster" th:value="${poster}">
-                <input type="hidden" name="theater" th:value="${theater}">
-                <input type="hidden" name="date" th:value="${date}">
-                <input type="hidden" name="time" th:value="${time}">
-
-                <input type="hidden" name="seats" th:value="${seats}">
-                <input type="hidden" name="childnum" th:value="${childnum}">
-                <input type="hidden" name="adultnum" th:value="${adultnum}">
-                <input type="hidden" name="oldnum" th:value="${oldnum}">
-                <input type="hidden" name="totalnum" th:value="${totalnum}">
-                <input type="hidden" name="price" th:value="${price}">
-            </form>
-            결과창 중간 ㅎㅎ
+            <section class="inner-container">
+                <section class="result-info">
+                    <img class="movie-poster" th:src="@{${'/asset/image/' + poster}}" alt="영화 포스터">
+                    <div>
+                        <h2>[[${title}]]</h2>
+                        <br>
+                        <h2>[[${theater}]]</h2>
+                        <div>[[${date}]][[${time}]]</div>
+                        <br>
+                        <div>선택 좌석: [[${seats}]]</div>
+                    </div>
+                </section>
+                <h1>영화 예매가 완료되었습니다.</h1>
+                <!-- 나중에 지울 버튼이에용~~ -->
+                <section class="button-container">
+                    <a href="#" class="prev-button">&lt;&lt; PREV</a>
+                    <a href="#" class="next-button">&gt;&gt; NEXT</a>
+                </section>
+                <!-- 나중에 지울 버튼이에용~~ -->
+            </section>
         </section>
     </main>
 </th:block>
