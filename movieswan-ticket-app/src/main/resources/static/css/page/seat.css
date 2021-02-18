@@ -155,6 +155,9 @@ span {cursor:pointer; }
 .seat-table > .line > button:hover {
   background: rgb(181, 253, 205);
 }
+.seat-table > .line > .na-seat {
+  background-color: black !important;
+}
 .seat-table > .line > .selected {
   background-color: rgb(116, 116, 255);
 }
