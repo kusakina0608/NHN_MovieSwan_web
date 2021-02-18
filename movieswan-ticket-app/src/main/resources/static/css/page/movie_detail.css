@@ -46,16 +46,29 @@ main {
     justify-content: center;
     align-items: center;
     margin: 10px 20px 10px 0;
-    padding: 0 5px 0;
+    padding: 0 10px 0;
+}
+
+.buttons .favorite {
+    background: white;
+    border-radius: 5px;
+}
+
+.buttons .reserve {
+    color: white;
+    background-color: tomato;
+    border: none;
+    border-radius: 5px;
 }
 
 .navigation {
-    width: 60%;
+    width: 50%;
     margin: 20px 0 20px;
     background-color: bisque;
     display: flex;
     justify-content: center;
     list-style: none;
+    border-radius: 5px;
 }
 
 .navigation li {
@@ -144,6 +157,11 @@ main > div {
     font-size: 18px;
 
     margin: 0 20px 0;
+
+    border: none;
+    color: white;
+    background-color: silver;
+    border-radius: 5px;
 }
 
 .myreview-view {
@@ -175,6 +193,29 @@ main > div {
 
 .myreview-view .content {
     flex: 5;
+}
+
+.myreview-view .links {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-left: hidden;
+    padding-top: 0;
+    padding-bottom: 40px;
+}
+
+.myreview-view .links button {
+    background-color: transparent;
+    border: none;
+
+}
+
+#reviews .hide {
+    display: none;
+}
+
+form {
+    width: 100%;
 }
 
 .review-list {

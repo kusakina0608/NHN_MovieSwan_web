@@ -12,7 +12,7 @@ public interface ReviewService {
 
     PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String mid);
 
-    Optional<Review> findMyReview(String mid, String uid);
+    ReviewDTO findMyReview(String mid, String uid);
 
     float getGradeByMid(String mid);
 
