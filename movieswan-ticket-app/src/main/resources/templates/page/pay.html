@@ -30,7 +30,8 @@
                 <input type="hidden" name="theater" th:value="${theater}">
                 <input type="hidden" name="date" th:value="${date}">
                 <input type="hidden" name="time" th:value="${time}">
-
+                <input type="hidden" name="discount" th:value="${discount}">
+                <input type="hidden" name="tid" th:value="${tid}">
                 <input type="hidden" name="seats" th:value="${seats}">
                 <input type="hidden" name="childnum" th:value="${childnum}">
                 <input type="hidden" name="adultnum" th:value="${adultnum}">
@@ -40,10 +41,30 @@
             </form>
             <section class="inner-container">
                 <section class="inner-left-container">
-                    <img>
+                    <img th:src="@{${'/asset/image/' + poster}}" alt="영화 포스터">
                 </section>
                 <section class="inner-right-container">
-
+                    <h2>[[${title}]]</h2>
+                    <section class="reservation-info debug">
+                        <h2>[[${theater}]]</h2>
+                        <div>상영일: [[${date}]]</div>
+                        <div>상영 시간: [[${time}]]</div>
+                        <div>좌석: [[${seats}]]</div>
+                    </section>
+                    <section class="people-info debug">
+                        <h2>관람 인원</h2>
+                        <div>성인: [[${adultnum}]]</div>
+                        <div>청소년: [[${childnum}]]</div>
+                        <div>우대: [[${othernum}]]</div>
+                    </section>
+                    <section class="discount-info debug">
+                        <h2>할인</h2>
+                        <div>[[${discount}]]</div>
+                    </section>
+                    <section class="price-info debug">
+                        <h2>총 결제 금액</h2>
+                        <div>[[${price}]] 원</div>
+                    </section>
                 </section>
             </section>
         </section>

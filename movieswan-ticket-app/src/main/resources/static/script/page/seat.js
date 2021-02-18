@@ -7,6 +7,8 @@
 
     const nextButton = document.querySelector(".next-button");
 
+    const timetableId = document.querySelector("#main-container > form > input[type=hidden]:nth-child(4)").value;
+
     var adultCount = 0;
     var childCount = 0;
     var otherCount = 0;
@@ -14,25 +16,56 @@
 
     var selected = 0;
 
+    const requestTicketAPI = axios.create({
+        // baseURL: "http://10.161.106.78"
+        baseURL: "http://127.0.0.1:8080"
+    });
+
+    // 상영시간표 API에 요청
+    const seatAPI = {
+        preemptSeat: (tid, sid) => {
+            return requestTicketAPI.post(`/api/seat/preempt?tid=${tid}&sid=${sid}`);
+        },
+        cancelSeat: (tid, sid) => {
+            return requestTicketAPI.delete(`/api/seat/preempt?tid=${tid}&sid=${sid}`);
+        }
+    }
+
     // 좌석을 클릭했을 때의 콜백 함수를 지정
     seatButtons.forEach(btn => {
-        btn.addEventListener("click", e => {
+        btn.addEventListener("click", async (e) => {
+            let seatId = e.target.querySelector("input").value;
             // 이미 선택되어 있는 좌석인 경우
             if(e.target.classList.contains("selected")){
-                e.target.classList.remove("selected");
-                selectedSeat.querySelector(`.${e.target.querySelector("input").value}`).remove();
-                selected--;
+                var res = await seatAPI.cancelSeat(timetableId, seatId);
+                console.log(res);
+                if(res.data){
+                    console.log("선점 취소 성공!");
+                    e.target.classList.remove("selected");
+                    selectedSeat.querySelector(`.${e.target.querySelector("input").value}`).remove();
+                    selected--;
+                }
+                else{
+                    console.log("이미 취소된 좌석입니다.");
+                }
             }
             else{ // 선택되어 있지 않은 좌석인 경우
                 if(selected < totalCount){
-                    e.target.classList.add("selected");
-                    selected++;
-                    let seatLabel = document.createElement("div");
-                    // console.log(e.target.id);
-                    seatLabel.classList.add(e.target.querySelector("input").value);
-                    seatLabel.innerHTML = e.target.querySelector("input").value;
-                    seatLabel.classList.add("seat-label")
-                    selectedSeat.appendChild(seatLabel);
+                    var res = await seatAPI.preemptSeat(timetableId, seatId);
+                    console.log(res.data);
+                    if(res.data){
+                        console.log("선 점 성 공");
+                        e.target.classList.add("selected");
+                        selected++;
+                        let seatLabel = document.createElement("div");
+                        seatLabel.classList.add(e.target.querySelector("input").value);
+                        seatLabel.innerHTML = e.target.querySelector("input").value;
+                        seatLabel.classList.add("seat-label")
+                        selectedSeat.appendChild(seatLabel);
+                    }
+                    else{
+                        console.log("선 점 실 패");
+                    }
                 }
                 else if(totalCount === 0){
                     alert("인원을 먼저 선택해 주세요");

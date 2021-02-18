@@ -2,6 +2,11 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
+import com.nhn.rookie8.movieswanticketapp.service.MovieService;
+import com.nhn.rookie8.movieswanticketapp.service.ReservationService;
+import com.nhn.rookie8.movieswanticketapp.service.SeatService;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
@@ -15,10 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PageController {
     private final MovieService movieService;
+    private final ReservationService reservationService;
+    private final SeatService seatService;
     private final ReviewService reviewService;
     private final QuestionService questionService;
 
@@ -81,17 +85,17 @@ public class PageController {
     }
 
     @PostMapping("/booking/seat")
-    public String seat(@RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, Model model) {
+    public String seat(@RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("tid") String tid, Model model) {
         System.out.println(mid);
         System.out.println(date);
         System.out.println(time);
+        System.out.println(tid);
         // TODO: mid로 영화 조회
-//        MovieDTO movieDTO = movieService.getMovie(mid);
-        model.addAttribute("title", "[15]극장판귀멸의칼날-무한열차편");
-//        model.addAttribute("title", movieDTO.getName());
-        model.addAttribute("poster", "/asset/image/poster99.jpg");
-//        model.addAttribute("poster", movieDTO.getPoster());
+        MovieDTO movieDTO = movieService.read(mid);
+        model.addAttribute("title", movieDTO.getName());
+        model.addAttribute("poster", movieDTO.getPoster());
         model.addAttribute("theater", "무비스완 판교점");
+        model.addAttribute("tid", tid);
         model.addAttribute("date", date);
         model.addAttribute("time", time);
         if(Integer.parseInt(time.split(":")[0]) < 9){
@@ -100,6 +104,7 @@ public class PageController {
         else{
             model.addAttribute("discount", "없음");
         }
+        model.addAttribute("seatlist", seatService.getReservedSeatList(tid));
         return "page/seat";
     }
 
@@ -115,7 +120,37 @@ public class PageController {
     public String bookingResult(@RequestParam HashMap<String,String> params, Model model) {
         params.keySet().forEach(key -> {
             model.addAttribute(key, params.get(key));
+            System.out.println(key + ": " +  params.get(key));
         });
+
+
+        String randomId = reservationService.createReservationId();
+        System.out.println(randomId);
+        ReservationDTO reservationDTO = ReservationDTO.builder()
+                .rid(randomId)
+                .tid(params.get("tid"))
+                .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
+                .childNum(Integer.parseInt(params.get("childnum")))
+                .adultNum(Integer.parseInt(params.get("adultnum")))
+                .oldNum(Integer.parseInt(params.get("oldnum")))
+                .totalNum(Integer.parseInt(params.get("totalnum")))
+                .price(Integer.parseInt(params.get("price")))
+                .build();
+
+        reservationService.register(reservationDTO);
+
+        List<SeatDTO> dtoList= new ArrayList<SeatDTO>();
+        String[] seatList = params.get("seats").split(",");
+        for (String seat : seatList) {
+            dtoList.add(SeatDTO.builder()
+                    .tid(params.get("tid"))
+                    .sid(seat)
+                    .rid(randomId)
+                    .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
+                    .build());
+        }
+        seatService.modify(dtoList, randomId);
+
         return "page/booking_result";
     }
 

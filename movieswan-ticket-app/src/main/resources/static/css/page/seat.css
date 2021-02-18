@@ -3,6 +3,20 @@
 }
 /* 헤더 */
 .seat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 25px;
+}
+#seat-page-title {
+  font-size: 50px;
+}
+.current {
+  color: red;
+}
+/* 헤더의 끝 */
+/* 몸통의 시작 */
+.outer-container {
   background-color: gray;
   border: 3px solid black;
   padding: 10px;
@@ -140,6 +154,9 @@ span {cursor:pointer; }
 }
 .seat-table > .line > button:hover {
   background: rgb(181, 253, 205);
+}
+.seat-table > .line > .na-seat {
+  background-color: black !important;
 }
 .seat-table > .line > .selected {
   background-color: rgb(116, 116, 255);
