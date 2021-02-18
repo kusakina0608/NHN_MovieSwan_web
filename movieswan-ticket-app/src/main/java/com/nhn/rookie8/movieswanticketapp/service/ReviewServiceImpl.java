@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -74,6 +75,26 @@ public class ReviewServiceImpl implements ReviewService{
         Optional<Review> result = repository.findAll(booleanBuilder, pageable).stream().findFirst();
 
         return result;
+    }
+
+    @Override
+    public float getGradeByMid(String mid) {
+        Pageable pageable = PageRequest.of(0, (int)repository.count());
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReview qReview = QReview.review;
+        BooleanExpression expression = qReview.mid.eq(mid);
+        booleanBuilder.and(expression);
+
+        List<Review> result = repository.findAll(booleanBuilder, pageable).toList();
+        if(result.isEmpty())
+            return 0;
+        else {
+            float sum = 0;
+            for (Review review : result)
+                sum += review.getGrade();
+
+            return sum / result.size();
+        }
     }
 
     @Override

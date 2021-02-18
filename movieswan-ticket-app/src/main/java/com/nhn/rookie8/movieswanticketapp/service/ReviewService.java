@@ -14,6 +14,8 @@ public interface ReviewService {
 
     Optional<Review> findMyReview(String mid, String uid);
 
+    float getGradeByMid(String mid);
+
     void modify(ReviewDTO reviewDTO);
 
     void remove(String rid);

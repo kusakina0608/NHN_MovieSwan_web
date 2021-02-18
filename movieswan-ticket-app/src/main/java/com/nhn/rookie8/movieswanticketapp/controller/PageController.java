@@ -2,16 +2,19 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReservationService;
 import com.nhn.rookie8.movieswanticketapp.service.SeatService;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,7 +57,16 @@ public class PageController {
 
     @GetMapping("/movie/current/list")
     public String currentMovieList(PageRequestDTO pageRequestDTO, Model model) {
-        model.addAttribute("result", movieService.getList(pageRequestDTO, true));
+        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, true);
+        List<MovieDTO> movieList = resultDTO.getDtoList();
+        HashMap<String, String> gradeMap = new HashMap<String, String>();
+        movieList.forEach(movieDTO -> {
+             float grade = reviewService.getGradeByMid(movieDTO.getMid());
+             gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
+        });
+
+        model.addAttribute("result", resultDTO);
+        model.addAttribute("gradeMap", gradeMap);
         model.addAttribute("current", true);
         return "/page/movie_list";
     }

@@ -1,6 +1,6 @@
-<li class="movie">
+<div class="movie">
     <!---영화 포스터 및 제목--->
-    <a class="movieLink" href="#">
+    <a class="movieLink" th:href="@{../detail(mid=${dto.mid})}">
         <img class="poster" th:src="|/api/movie/display?fileName=${dto.poster}|">
         <div class="title">[[${dto.name}]]</div>
         <div class="story">[[${dto.story}]]</div>
@@ -15,18 +15,18 @@
     <!---영화 정보 및 예매 버튼--->
     <div class="movieDescription">
         <div>
-            <span>감독 : [[${dto.director}]]</span>
+            <span class="director">감독 : [[${dto.director}]]</span>
             <span class="grade">
                 <span class="material-icons star">star_rate</span>
-                <span>3.3</span>
+                <span>[[${gradeMap[dto.mid]}]]</span>
             </span>
         </div>
         <div>
-            <span>주연 : [[${dto.actor}]]</span>
-            <button>
+            <span class="actor">주연 : [[${dto.actor}]]</span>
+            <button class="btn">
                 <span class="material-icons booking">local_activity</span>
                 <span>예매</span>
             </button>
         </div>
     </div>
-</li>
+</div>
