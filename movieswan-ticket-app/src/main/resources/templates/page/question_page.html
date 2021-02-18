@@ -14,6 +14,9 @@
 
     <!-- Common CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/page/question_page.css}" />
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -25,30 +28,31 @@
                 <img id="question_logo" src="/asset/image/logo2.png" />
                 <subject id="subject">1:1 문의하기</subject>
             </header>
-            <questionform id="question_contents">
+            <status id="status" th:value="${status}"></status>
+            <form id="question_contents" th:action="@{/api/question/register}" th:method="post">
                 <formgroup class="form_group">
                     <formlabel class="form_label">작성자 :</formlabel>
-                    <input type="text" class="form_control" name="uid">
+                    <input type="text" class="form_control" id="uid" name="uid">
                 </formgroup>
                 <formgroup class="form_group">
                     <formlabel class="form_label">제목 :</formlabel>
-                    <input type="text" class="form_control" name="title">
+                    <input type="text" class="form_control" id="title" name="title">
                 </formgroup>
                 <formgroup class="form_group">
                     <formlabel class="form_label">문의 내용 :</formlabel>
-                    <textarea class="form_control" name="content"></textarea>
+                    <textarea class="form_control" id="content" name="content"></textarea>
                 </formgroup>
                 <buttoncontrol id="button_control">
                     <button id="cancle_button" onclick="window.close()">
                         <span class="material-icons">close</span>
                         창 닫기
                     </button>
-                    <button id="question_button" onclick="submitButtonOnClick()">
+                    <button type="submit" id="question_button" onsubmit="window.close()">
                         <span class="material-icons">send</span>
                         제출하기
                     </button>
                 </buttoncontrol>
-            </questionform>
+            </form>
         </commonpage>
 
         <th:block th:replace="~{/fragment/scroll_to_top_button}"></th:block>
