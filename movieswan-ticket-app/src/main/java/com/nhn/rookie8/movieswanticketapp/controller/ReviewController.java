@@ -31,7 +31,11 @@ public class ReviewController {
     }
 
     @DeleteMapping("/delete")
-    public void removeReview(String rid) {
+    public String removeReview(@RequestParam("rid") String rid, @RequestParam("mid") String mid,
+                               RedirectAttributes redirectAttributes) {
         service.remove(rid);
+
+        redirectAttributes.addAttribute("mid", mid);
+        return "redirect:/movie/detail";
     }
 }

@@ -103,8 +103,13 @@
                 </div>
 
                 <div class="links">
-                    <a href="/api/review/modify">수정</a>
-                    <a href="/api/review/delete">삭제</a>
+                    <button class="review-modify">수정</button>
+
+                    <form th:action="@{/api/review/delete}" th:method="delete">
+                        <input type="hidden" name="rid" th:value="${my_review.get().rid}">
+                        <input type="hidden" name="mid" th:value="${dto.mid}">
+                        <button type="submit" class="review-delete">삭제</button>
+                    </form>
                 </div>
             </div>
 

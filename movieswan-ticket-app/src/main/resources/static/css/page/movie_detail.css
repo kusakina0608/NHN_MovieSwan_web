@@ -90,8 +90,7 @@ main > div {
 }
 
 .myreview .grade:not(:checked) > input {
-    position:absolute;
-    top:-9999px;
+    display: none;
     clip:rect(0,0,0,0);
 }
 
