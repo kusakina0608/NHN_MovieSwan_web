@@ -4,6 +4,7 @@
 
 #header_logo {
     width: 300px;
+    cursor: pointer;
 }
 
 #header_menu {
@@ -22,6 +23,8 @@
     font-weight: bold;
     color: darkslateblue;
     text-decoration: none;
+    
+    cursor: pointer;
 
     transition: 0.5s;
     opacity: 0.8;

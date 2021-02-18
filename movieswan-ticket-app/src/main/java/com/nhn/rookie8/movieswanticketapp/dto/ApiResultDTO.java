@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.HashMap;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDTO {
-    private Integer qid;
-    private String uid;
-    private String title;
-    private String content;
-    private LocalDateTime regdate;
+public class ApiResultDTO {
+    private String httpStatus;
+    private Boolean error;
+    private HashMap<Object, Object> data;
 }
