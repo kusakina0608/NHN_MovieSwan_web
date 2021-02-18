@@ -42,11 +42,9 @@
         <!---영화 목록--->
         <ul class="movieList currentMovieList">
             <!---영화(fragment로 가져오기)--->
-            <th:block th:each="dto : ${result.dtoList}">
-                <th:block th:replace="~{/fragment/movie}"></th:block>
-            </th:block>
-            <!---<li class="dummy"></li>
-            <li class="dummy"></li>--->
+            <li th:each="dto : ${result.dtoList}">
+                <div th:replace="~{/fragment/movie}"></div>
+            </li>
         </ul>
 
 
