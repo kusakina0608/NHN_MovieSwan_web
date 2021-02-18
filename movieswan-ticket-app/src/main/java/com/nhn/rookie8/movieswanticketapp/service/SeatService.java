@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface SeatService {
     String register(SeatDTO dto);
+    void modify(List<SeatDTO> dto, String rid);
     List<String> getReservedSeatList(String tid);
     Boolean preempt(SeatDTO dto);
     Boolean remove(SeatDTO dto);

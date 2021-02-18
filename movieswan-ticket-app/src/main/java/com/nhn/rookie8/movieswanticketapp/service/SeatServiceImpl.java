@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.UnexpectedRollbackException;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,25 @@ public class SeatServiceImpl implements SeatService{
         repository.save(entity);
 
         return entity.getSid();
+    }
+
+    @Override
+    @Transactional
+    public void modify(List<SeatDTO> dtoList, String rid) {
+        dtoList.forEach(dto -> {
+            repository.updateRid(rid, dto.getTid(), dto.getSid(), dto.getUid());
+        });
+
+//        List<SeatId> idList = new ArrayList<SeatId>();
+//        dtoList.forEach(dto -> {
+//            idList.add(SeatId.builder().tid(dto.getTid()).sid(dto.getSid()).build());
+//        });
+//        List<Seat> resultList = repository.findAllById(idList);
+//        resultList.forEach(seat -> {
+//            seat.changeRid(rid);
+//            System.out.println("이렇게 변경될거에요: " + seat.toString());
+//        });
+//        repository.deleteInBatch(resultList);
     }
 
     @Override
