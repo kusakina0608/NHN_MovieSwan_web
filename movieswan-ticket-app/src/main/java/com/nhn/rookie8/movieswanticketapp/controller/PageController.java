@@ -149,7 +149,7 @@ public class PageController {
                     .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
                     .build());
         }
-        seatService.modify(dtoList, "TEST-RID");
+        seatService.modify(dtoList, randomId);
 
         return "page/booking_result";
     }
