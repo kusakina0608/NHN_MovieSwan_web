@@ -53,7 +53,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO, boolean current) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("mid").descending());
+        Pageable pageable = requestDTO.getPageable(Sort.by("startdate").descending());
         BooleanBuilder booleanBuilder = current ? getReleaseMovies() : getExpectedMovies();
 
         Page<Movie> result = repository.findAll(booleanBuilder, pageable);
