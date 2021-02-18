@@ -48,11 +48,11 @@
 }
 
 #userlogin #loggedin {
-    display: block;
+    display: none;
 }
 
 #userlogin #notloggedin {
-    display: none;
+    display: block;
 }
 
 /* header navbar */
