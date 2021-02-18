@@ -91,11 +91,9 @@ public class PageController {
         System.out.println(time);
         System.out.println(tid);
         // TODO: mid로 영화 조회
-//        MovieDTO movieDTO = movieService.getMovie(mid);
-        model.addAttribute("title", "아이돌마스터 극장판");
-//        model.addAttribute("title", movieDTO.getName());
-        model.addAttribute("poster", "/asset/image/poster99.jpg");
-//        model.addAttribute("poster", movieDTO.getPoster());
+        MovieDTO movieDTO = movieService.read(mid);
+        model.addAttribute("title", movieDTO.getName());
+        model.addAttribute("poster", movieDTO.getPoster());
         model.addAttribute("theater", "무비스완 판교점");
         model.addAttribute("tid", tid);
         model.addAttribute("date", date);

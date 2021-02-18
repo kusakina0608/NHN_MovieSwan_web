@@ -41,7 +41,7 @@
             </form>
             <section class="inner-container">
                 <section class="inner-left-container">
-                    <img th:src="@{/asset/image/poster99.jpg}" alt="영화 포스터">
+                    <img th:src="@{${'/asset/image/' + poster}}" alt="영화 포스터">
                 </section>
                 <section class="inner-right-container">
                     <h2>[[${title}]]</h2>

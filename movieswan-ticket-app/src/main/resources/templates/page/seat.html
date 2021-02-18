@@ -36,7 +36,7 @@
             <section class="inner-container">
                 <section class="inner-left-container">
                     <section class="movie-info">
-                        <img class="movie-poster" th:src="@{/asset/image/poster99.jpg}" alt="영화 포스터">
+                        <img class="movie-poster" th:src="@{${'/asset/image/' + poster}}" alt="영화 포스터">
                         <section class="movie-text">
                             <h3>[[${title}]]</h3>
                             <h2>[[${theater}]]</h2>
