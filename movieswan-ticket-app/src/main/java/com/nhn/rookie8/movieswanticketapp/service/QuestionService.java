@@ -3,10 +3,11 @@ package com.nhn.rookie8.movieswanticketapp.service;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Question;
 
 public interface QuestionService {
-    void registerQuestion(QuestionDTO dto);
+    ApiResultDTO registerQuestion(QuestionDTO dto);
     QuestionDTO readQuestion(Integer qid);
     PageResultDTO<QuestionDTO, Question> getQuestionList(PageRequestDTO requestDTO);
     PageResultDTO<QuestionDTO, Question> getQuestionListAdmin(PageRequestDTO requestDTO);
@@ -17,6 +18,7 @@ public interface QuestionService {
                 .uid(dto.getUid())
                 .title(dto.getTitle())
                 .content(dto.getContent())
+                .regdate(dto.getRegdate())
                 .build();
         return entity;
     }
@@ -27,6 +29,7 @@ public interface QuestionService {
                 .uid(entity.getUid())
                 .title(entity.getTitle())
                 .content(entity.getContent())
+                .regdate(entity.getRegdate())
                 .build();
         return questionDTO;
     }

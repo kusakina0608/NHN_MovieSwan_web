@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: 회원정보</title>
+    <link th:href="@{/css/page/my_page_userinfo.css}" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+<th:block th:replace="~{/layout/my_page::setContents(~{this::my_userinfo})}">
+    <myuserinfo th:fragment="my_userinfo">
+        회원정보
+    </myuserinfo>
+</th:block>
+</body>
+
+</html>

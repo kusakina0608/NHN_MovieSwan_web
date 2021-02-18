@@ -10,6 +10,7 @@
 <th:block th:replace="~{/layout/common_page::setContents(~{this::admin_page})}">
     <adminpage th:fragment="admin_page">
         <th:block th:replace="~{/fragment/admin_ticket}"></th:block>
+        <th:block th:replace="~{/fragment/admin_movie}"></th:block>
         <th:block th:replace="~{/fragment/admin_user}"></th:block>
     </adminpage>
 </th:block>

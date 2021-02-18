@@ -17,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,8 +30,31 @@ public class MovieServiceImpl implements MovieService{
     private final MovieRepository repository;
 
     @Override
+    public String register(MovieDTO movieDTO) {
+        String mid = movieDTO.getMid();
+
+        Pageable pageable = PageRequest.of(0, (int)repository.count());
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        QMovie qMovie = QMovie.movie;
+        BooleanExpression expression = qMovie.mid.startsWith(mid);
+        booleanBuilder.and(expression);
+
+        long moviesWithSameCode = repository.findAll(booleanBuilder, pageable).stream().count() + 1;
+        mid += String.format("%03d", moviesWithSameCode);
+
+        movieDTO.setMid(mid);
+
+        Movie movie = dtoToEntity(movieDTO);
+
+        repository.save(movie);
+
+        return movie.getMid();
+    }
+
+    @Override
     public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO, boolean current) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("mid").descending());
+        Pageable pageable = requestDTO.getPageable(Sort.by("startdate").descending());
         BooleanBuilder booleanBuilder = current ? getReleaseMovies() : getExpectedMovies();
 
         Page<Movie> result = repository.findAll(booleanBuilder, pageable);

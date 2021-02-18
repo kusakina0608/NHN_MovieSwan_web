@@ -2,8 +2,10 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
+import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import java.util.Arrays;
 import java.util.HashMap;
+
 import java.util.List;
 
 @Controller
@@ -23,9 +29,10 @@ import java.util.List;
 public class PageController {
     private final MovieService movieService;
     private final ReviewService reviewService;
+    private final QuestionService questionService;
 
-    @GetMapping("/main")
-    public String mainPage() {
+    @GetMapping({"/", "/main"})
+    public String main_page() {
         return "page/main_page";
     }
 
@@ -34,6 +41,11 @@ public class PageController {
         List<MovieDTO> movieList = movieService.getReleaseList();
         model.addAttribute("movieList", movieList);
         return "page/admin_page";
+    }
+
+    @GetMapping("/movie")
+    public String movie_page() {
+        return "redirect:/movie/current/list";
     }
 
     @GetMapping("/movie/current/list")
@@ -105,5 +117,49 @@ public class PageController {
             model.addAttribute(key, params.get(key));
         });
         return "page/booking_result";
+    }
+
+    @GetMapping("/question")
+    public String question_page() {
+        return "page/question_page";
+    }
+
+    // 여기부터 전부 마이페이지 입니다...
+    @GetMapping("/mypage")
+    public String my_page() {
+        return "redirect:/mypage/userinfo";
+    }
+
+    @GetMapping("/mypage/userinfo")
+    public String my_page_userinfo() {
+        return "page/my_page_userinfo";
+    }
+
+    @GetMapping("/mypage/ticket")
+    public String my_page_ticket() {
+        return "page/my_page_ticket";
+    }
+
+    @GetMapping("/mypage/movie")
+    public String my_page_mymovie() {
+        return "page/my_page_mymovie";
+    }
+
+    @GetMapping("/mypage/review")
+    public String my_page_myreview() {
+        return "page/my_page_myreview";
+    }
+
+    @GetMapping("/mypage/question")
+    public String my_page_question(PageRequestDTO pageRequestDTO, Model model) {
+        model.addAttribute("result", questionService.getQuestionList(pageRequestDTO));
+        return "page/my_page_question";
+    }
+
+    @GetMapping("/mypage/question/post")
+    public String my_page_read_question(@RequestParam("qid") Integer qid, Model model) {
+        QuestionDTO dto = questionService.readQuestion(qid);
+        model.addAttribute("dto", dto);
+        return "page/my_page_read_question";
     }
 }

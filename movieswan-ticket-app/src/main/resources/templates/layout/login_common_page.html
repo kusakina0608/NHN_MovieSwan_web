@@ -14,14 +14,24 @@
     <!-- Icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/page/main_page.css" />
+    <!-- Common CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/layout/login_common_page.css" />
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <body>
-        <mainpage id="main_page">
-            <th:block th:replace="~{/fragment/main_header}"></th:block>
-            <th:block th:replace="~{/fragment/carousel}"></th:block>
-        </mainpage>
+        <background id="default_bg">
+            <!-- Page -->
+            <commonpage id="login_common_page">
+
+                <!-- Contents -->
+                <contents id="contents">
+                    <th:block th:replace="${contents}"></th:block>
+                </contents>
+            </commonpage>
+
+        </background>
     </body>
 </th:block>
 

@@ -7,14 +7,21 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDTO {
-    private Integer qid;
+@AllArgsConstructor
+@Data
+public class UserDTO {
+
     private String uid;
-    private String title;
-    private String content;
-    private LocalDateTime regdate;
+
+    private String password;
+
+    private String name;
+
+    private String email;
+
+    private String url;
+
+    private LocalDateTime regDate, modDate;
 }

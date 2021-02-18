@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: 내 문의 내역</title>
+    <link th:href="@{/css/page/my_page_question.css}" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+    <th:block th:replace="~{/layout/my_page::setContents(~{this::my_question})}">
+        <myquestion id="my_question" th:fragment="my_question">
+            <p id="question_subject">내 문의내역</p>
+            <table class="tg">
+                <thead>
+                    <tr>
+                        <th class="tg-0lax">No.</th>
+                        <th class="tg-baqh">제목</th>
+                        <th class="tg-baqh">작성자</th>
+                        <th class="tg-lqy6">등록일자</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="dto : ${result.dtoList}"
+                        th:onclick="'javascript:trClicked(\'' + ${dto.qid} + '\');'">
+                        <td class="tg-0lax" scope="row">[[${dto.qid}]]</th>
+                        <td class="tg-0lax1">[[${dto.title}]]</td>
+                        <td class="tg-baqh">[[${dto.uid}]]</td>
+                        <td class="tg-lqy6">[[${#temporals.format(dto.regdate, 'yyyy/MM/dd')}]]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div id="pagination">
+                <li th:if="${result.prev}">
+                    <a th:href="@{/mypage/question(page=${result.start - 1})}" tabindex="-1">Previous</a>
+                </li>
+
+                <li th:each="page: ${result.pageList}">
+                    <a th:href="@{/mypage/question(page=${page})}">
+                        [[${page}]]
+                    </a>
+                </li>
+
+                <li th:if="${result.next}">
+                    <a th:href="@{/mypage/question(page=${result.end + 1})}">Next</a>
+                </li>
+            </div>
+        </myquestion>
+    </th:block>
+</body>
+
+</html>
+
+<script>
+    function trClicked(value) {
+        location.href = "/mypage/question/post?qid=" + value;
+    }
+</script>
