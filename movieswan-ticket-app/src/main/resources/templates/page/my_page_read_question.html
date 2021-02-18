@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <th:block th:replace="~{/layout/my_page::setContents(~{this::read_question})}"></th:block>
+    <th:block th:replace="~{/layout/my_page::setContents(~{this::read_question})}">
     <readquestion id="read_question" th:fragment="read_question">
         <p id="question_subject">상세 문의내역</p>
         <questionform id="question_contents">
