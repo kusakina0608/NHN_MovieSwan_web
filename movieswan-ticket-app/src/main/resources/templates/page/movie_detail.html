@@ -45,26 +45,34 @@
         </div>
 
         <ul class="navigation">
-            <li>스토리</li>
-            <li>예고편</li>
-            <li>스틸컷</li>
-            <li>리뷰</li>
+            <li>
+                <a href="#story">스토리</a>
+            </li>
+            <li>
+                <a href="#trailer">예고편</a>
+            </li>
+            <li>
+                <a href="#stillcut">스틸컷</a>
+            </li>
+            <li>
+                <a href="#reviews">리뷰</a>
+            </li>
         </ul>
 
-        <div class="story">
+        <div id="story">
             <h1>스토리</h1>
             <p>[[${dto.story}]]</p>
         </div>
 
-        <div class="trailer">
+        <div id="trailer">
             <h1>예고편</h1>
         </div>
 
-        <div class="stillcut">
+        <div id="stillcut">
             <h1>스틸컷</h1>
         </div>
 
-        <div class="reviews">
+        <div id="reviews">
             <h1>리뷰</h1>
             <!---내 리뷰 / 리뷰 등록--->
             <div th:if="${!my_review.isPresent()}" class="myreview">

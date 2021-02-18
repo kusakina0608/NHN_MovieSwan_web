@@ -62,12 +62,17 @@ main {
     padding: 10px 40px 10px;
 }
 
+.navigation li a {
+    text-decoration: none;
+    color: black;
+}
+
 main > div {
     margin: 20px 0 20px;
     width: 80%;
 }
 
-.reviews {
+#reviews {
     display: flex;
     flex-direction: column;
 }
