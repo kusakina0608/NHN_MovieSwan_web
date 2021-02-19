@@ -92,10 +92,17 @@ public class PageController {
     }
 
     @GetMapping("/movie/detail")
-    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, Model model) {
+    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         MovieDTO movieDTO = movieService.read(mid);
-        //TODO uid를 받아서 구현
-        String uid = "testuser";
+
+        HttpSession session = httpServletRequest.getSession(false);
+        String uid;
+        if (!(session == null || session.getAttribute("uid") == null)) {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            uid = session.getAttribute("uid").toString();
+        }
+        else
+            uid = "";
 
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
