@@ -118,12 +118,16 @@ public class PageController {
     }
 
     @PostMapping("/booking/seat")
-    public String seat(@RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("tid") String tid, Model model) {
+    public String seat(HttpServletRequest httpServletRequest, @RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("tid") String tid, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null) {
+            return "redirect:/user/login";
+        }
         System.out.println(mid);
         System.out.println(date);
         System.out.println(time);
         System.out.println(tid);
-        // TODO: mid로 영화 조회
+
         MovieDTO movieDTO = movieService.read(mid);
         model.addAttribute("title", movieDTO.getName());
         model.addAttribute("poster", movieDTO.getPoster());
@@ -142,7 +146,11 @@ public class PageController {
     }
 
     @PostMapping("/booking/pay")
-    public String pay(@RequestParam HashMap<String,String> params, Model model) {
+    public String pay(HttpServletRequest httpServletRequest, @RequestParam HashMap<String,String> params, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null) {
+            return "redirect:/user/login";
+        }
         params.keySet().forEach(key -> {
             model.addAttribute(key, params.get(key));
         });
@@ -150,7 +158,11 @@ public class PageController {
     }
 
     @PostMapping("/booking/result")
-    public String bookingResult(@RequestParam HashMap<String,String> params, Model model) {
+    public String bookingResult(HttpServletRequest httpServletRequest, @RequestParam HashMap<String,String> params, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null) {
+            return "redirect:/user/login";
+        }
         params.keySet().forEach(key -> {
             model.addAttribute(key, params.get(key));
             System.out.println(key + ": " +  params.get(key));
@@ -162,7 +174,7 @@ public class PageController {
         ReservationDTO reservationDTO = ReservationDTO.builder()
                 .rid(randomId)
                 .tid(params.get("tid"))
-                .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
+                .uid((String) session.getAttribute("uid"))
                 .childNum(Integer.parseInt(params.get("childnum")))
                 .adultNum(Integer.parseInt(params.get("adultnum")))
                 .oldNum(Integer.parseInt(params.get("oldnum")))
@@ -179,7 +191,7 @@ public class PageController {
                     .tid(params.get("tid"))
                     .sid(seat)
                     .rid(randomId)
-                    .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
+                    .uid((String) session.getAttribute("uid"))
                     .build());
         }
         seatService.modify(dtoList, randomId);
