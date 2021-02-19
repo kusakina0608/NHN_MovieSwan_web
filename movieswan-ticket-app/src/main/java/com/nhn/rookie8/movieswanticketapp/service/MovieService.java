@@ -19,8 +19,6 @@ public interface MovieService {
 
     MovieDTO read(String mid);
 
-    //void modify(MovieDTO movieDTO);
-
     default Movie dtoToEntity(MovieDTO movieDTO) {
         Movie movie = Movie.builder()
                 .mid(movieDTO.getMid())
