@@ -43,7 +43,7 @@
         let uid = document.createElement("input");
         uid.setAttribute("type", "hidden");
         uid.setAttribute("name", "uid");
-        uid.setAttribute("value", "testuser");
+        uid.setAttribute("value", uidInput);
         form.appendChild(uid);
 
         let grade = document.createElement("input");
