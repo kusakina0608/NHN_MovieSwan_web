@@ -5,6 +5,7 @@ import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReservationResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.QReservation;
+import com.nhn.rookie8.movieswanticketapp.entity.Question;
 import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
 import com.nhn.rookie8.movieswanticketapp.repository.ReservationRepository;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -84,6 +86,26 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
+    public ReservationResultDTO readReservation(String rid) {
+        Optional<Reservation> result = repository.findById(rid);
+
+        if (!result.isPresent()) { return null; }
+
+        String tid = result.get().getTid();
+        String mid = repository.getMovieMid(tid);
+        String name = repository.getMovieName(tid);
+        String poster = repository.getMoviePoster(tid);
+        LocalDateTime startDate = LocalDateTime.of(
+                2000 + Integer.parseInt(tid.substring(3, 5)),
+                Integer.parseInt(tid.substring(5, 7)),
+                Integer.parseInt(tid.substring(7, 9)),
+                Integer.parseInt(tid.substring(9, 11)),
+                Integer.parseInt(tid.substring(11, 13)));
+
+        return entityToDto(result.get(), mid, name, poster, startDate);
+    }
+
+    @Override
     public PageResultDTO<ReservationResultDTO, Reservation> getMypageList(PageRequestDTO requestDTO, String uid) {
         Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
 
@@ -107,7 +129,7 @@ public class ReservationServiceImpl implements ReservationService{
                     Integer.parseInt(tid.substring(9, 11)),
                     Integer.parseInt(tid.substring(11, 13)));
 
-            return entityToDto(entity, mid, name, startDate);
+            return entityToDto(entity, mid, name, null, startDate);
         });
         return new PageResultDTO<>(result, fn);
     }

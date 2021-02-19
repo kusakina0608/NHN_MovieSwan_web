@@ -14,6 +14,7 @@ public interface ReservationService {
 
     PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO);
     PageResultDTO<ReservationResultDTO, Reservation> getMypageList(PageRequestDTO requestDTO, String uid);
+    ReservationResultDTO readReservation(String rid);
 
     default Reservation dtoToEntity(ReservationDTO dto){
         Reservation entity = Reservation.builder()
@@ -44,7 +45,7 @@ public interface ReservationService {
         return dto;
     }
 
-    default ReservationResultDTO entityToDto(Reservation entity, String mid, String movieName, LocalDateTime startDate){
+    default ReservationResultDTO entityToDto(Reservation entity, String mid, String movieName, String imagePath, LocalDateTime startDate){
         ReservationResultDTO dto = ReservationResultDTO.builder()
                 .rid(entity.getRid())
                 .tid(entity.getTid())
@@ -57,6 +58,7 @@ public interface ReservationService {
                 .regDate(entity.getRegDate())
                 .mid(mid)
                 .movieName(movieName)
+                .imgPath(imagePath)
                 .startDate(startDate)
                 .build();
         return dto;
