@@ -70,7 +70,16 @@ public class PageController {
 
     @GetMapping("/movie/expected/list")
     public String expectedMovieList(PageRequestDTO pageRequestDTO, Model model) {
-        model.addAttribute("result", movieService.getList(pageRequestDTO, false));
+        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, false);
+        List<MovieDTO> movieList = resultDTO.getDtoList();
+        HashMap<String, String> gradeMap = new HashMap<String, String>();
+        movieList.forEach(movieDTO -> {
+            float grade = reviewService.getGradeByMid(movieDTO.getMid());
+            gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
+        });
+
+        model.addAttribute("result", resultDTO);
+        model.addAttribute("gradeMap", gradeMap);
         model.addAttribute("current", false);
         return "/page/movie_list";
     }
