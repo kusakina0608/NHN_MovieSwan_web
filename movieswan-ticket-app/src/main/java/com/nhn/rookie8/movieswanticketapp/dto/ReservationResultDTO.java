@@ -17,6 +17,7 @@ public class ReservationResultDTO {
     private String uid;
     private String mid;
     private String movieName;
+    private String imgPath;
     private int childNum;
     private int adultNum;
     private int oldNum;

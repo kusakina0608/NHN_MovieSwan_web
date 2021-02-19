@@ -241,7 +241,7 @@ public class PageController {
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-//            model.addAttribute("result", reservationService.getMypageList(pageRequestDTO));
+            model.addAttribute("result", reservationService.readReservation(rid));
             return "page/my_page_ticket_detail";
         }
     }
