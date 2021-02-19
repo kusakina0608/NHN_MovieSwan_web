@@ -8,6 +8,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 public interface ReservationService {
     String createReservationId();
     String register(ReservationDTO dto);
+    String delete(ReservationDTO dto);
 
     PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO);
 
