@@ -24,8 +24,10 @@
 }
 
 .movie .title {
+    width: 180px;
     overflow: hidden;
     text-align: center;
+    overflow: hidden;
     text-overflow: clip;
     white-space: nowrap;
 }
@@ -41,6 +43,8 @@
     color: white;
     font-size: 12px;
     padding: 35px 15px 35px;
+    overflow: hidden;
+    text-overflow: clip;
 }
 
 .movie .favorite {
