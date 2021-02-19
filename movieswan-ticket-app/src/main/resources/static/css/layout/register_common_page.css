@@ -1,0 +1,44 @@
+:root {
+    --padding-default: 60px;
+    --footer-height: 200px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Gugi', cursive;
+}
+
+#default_bg {
+    display: block;
+    justify-content: center;
+
+    width: 100vw;
+    min-height: 100vh;
+    padding: var(--padding-default);
+
+    background-image: url(/asset/image/default_background.jpg);
+    background-repeat: repeat-y;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+#register_common_page {
+    display: block;
+    justify-content: center;
+
+    width: 80%;
+    min-height: calc(100vh - var(--footer-height) - var(--padding-default) * 2);
+    padding: 20px 15px;
+    margin: auto;
+    border: 3px solid #000;
+    background-color: white;
+}
+
+#contents {
+    display: block;
+    padding: 25px;
+}
