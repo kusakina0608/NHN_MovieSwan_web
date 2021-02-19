@@ -34,7 +34,7 @@
                         <span>3.3k</span>
                     </button>
         
-                    <button>
+                    <button class="reserve">
                         <span class="material-icons booking">local_activity</span>
                         <span>예매</span>
                     </button>
@@ -76,7 +76,7 @@
             <h1>리뷰</h1>
             <h3>내 리뷰</h3>
             <!---내 리뷰 / 리뷰 등록--->
-            <div th:if="${!my_review.isPresent()}" class="myreview">
+            <div class="myreview">
                 <div class="grade">
                     <input type="radio" id="star5" name="grade" value="5" required/>
                     <label for="star5" class="material-icons">star_outline</label>
@@ -99,27 +99,29 @@
 
                 <button class="review_register">등록</button>
             </div>
-            <div th:unless="${!my_review.isPresent()}" class="myreview-view">
-                <div class="grade">
-                    <th:block th:each="num : ${#numbers.sequence(1,5)}">
-                        <span th:if="${num <= my_review.get().grade}" class="material-icons">star</span>
-                        <span th:unless="${num <= my_review.get().grade}" class="material-icons">star_outline</span>
-                    </th:block>
-                </div>
-            
-                <div class="content">
-                    [[${my_review.get().content}]]
-                </div>
+            <div class="myreview-view">
+                <th:block th:if="${my_review != null}">
+                    <div class="grade">
+                        <th:block th:each="num : ${#numbers.sequence(1,5)}">
+                            <span th:if="${num <= my_review.grade}" class="material-icons">star</span>
+                            <span th:unless="${num <= my_review.grade}" class="material-icons">star_outline</span>
+                        </th:block>
+                    </div>
+                
+                    <div class="content">
+                        [[${my_review.content}]]
+                    </div>
 
-                <div class="links">
-                    <button class="review-modify">수정</button>
+                    <div class="links">
+                        <button class="review-modify">수정</button>
 
-                    <form th:action="@{/api/review/delete}" th:method="delete">
-                        <input type="hidden" name="rid" th:value="${my_review.get().rid}">
-                        <input type="hidden" name="mid" th:value="${dto.mid}">
-                        <button type="submit" class="review-delete">삭제</button>
-                    </form>
-                </div>
+                        <form th:action="@{/api/review/delete}" th:method="delete">
+                            <input type="hidden" name="rid" th:value="${my_review.rid}">
+                            <input type="hidden" name="mid" th:value="${dto.mid}">
+                            <button type="submit" class="review-delete">삭제</button>
+                        </form>
+                    </div>
+                </th:block>
             </div>
 
             <!---리뷰 목록--->
@@ -149,6 +151,7 @@
 
     <script>
         var midInput = "[[${dto.mid}]]";
+        var myReview = "[[${my_review}]]";
     </script>
     <script th:src="@{/script/page/movie_detail.js}"></script>
 
