@@ -5,6 +5,7 @@
     var seatButtons = document.querySelector(".seat-table").querySelectorAll("button");
     var selectedSeat = document.querySelector("#selected-seat");
 
+    const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
 
     const timetableId = document.querySelector("#main-container > form > input[type=hidden]:nth-child(4)").value;
@@ -120,6 +121,11 @@
         });
     });
 
+    prevButton.addEventListener("click", e => {
+        e.preventDefault();
+        window.history.back(1);
+    });
+    
     nextButton.addEventListener("click", e => {
         e.preventDefault();
 
