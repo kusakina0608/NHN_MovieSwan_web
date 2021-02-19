@@ -63,7 +63,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public ReviewDTO findMyReview(String mid, String uid) {
+    public ReviewDTO findMyReviewByMid(String mid, String uid) {
         Pageable pageable = PageRequest.of(0, 10);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QReview qReview = QReview.review;
@@ -75,6 +75,21 @@ public class ReviewServiceImpl implements ReviewService{
         Optional<Review> result = repository.findAll(booleanBuilder, pageable).stream().findFirst();
 
         return result.isPresent() ? entityToDTO(result.get()) : null;
+    }
+
+    @Override
+    public PageResultDTO<ReviewDTO, Review> findMyReviews(PageRequestDTO pageRequestDTO, String uid) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("moddate").descending());
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReview qReview = QReview.review;
+        BooleanExpression expression = qReview.uid.eq(uid);
+        booleanBuilder.and(expression);
+
+        Page<Review> result = repository.findAll(booleanBuilder, pageable);
+
+        Function<Review, ReviewDTO> fn = (entity -> entityToDTO(entity));
+
+        return new PageResultDTO<>(result, fn);
     }
 
     @Override

@@ -9,8 +9,29 @@
 
 <body>
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_myreview})}">
-    <mymyreview th:fragment="my_myreview">
-        My Review
+    <mymyreview id="my_myreview" th:fragment="my_myreview">
+        <p id="myreview_subject">My Review</p>
+        <ul id="reviews">
+            <th:block th:each="review : ${result.dtoList}">
+                <th:block th:replace="~{/fragment/review}"></th:block>
+            </th:block>
+        </ul>
+
+        <div id="pagination">
+                <li th:if="${result.prev}">
+                    <a th:href="@{/mypage/review(page=${result.start - 1})}" tabindex="-1">Previous</a>
+                </li>
+
+                <li th:each="page: ${result.pageList}">
+                    <a th:href="@{/mypage/review(page=${page})}">
+                        [[${page}]]
+                    </a>
+                </li>
+
+                <li th:if="${result.next}">
+                    <a th:href="@{/mypage/review(page=${result.end + 1})}">Next</a>
+                </li>
+            </div>
     </mymyreview>
 </th:block>
 </body>

@@ -106,7 +106,7 @@ public class PageController {
 
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
-        model.addAttribute("my_review", reviewService.findMyReview(mid, uid));
+        model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
         return "/page/movie_detail";
     }
 
@@ -238,12 +238,14 @@ public class PageController {
     }
 
     @GetMapping("/mypage/review")
-    public String my_page_myreview(HttpServletRequest httpServletRequest, Model model) {
+    public String my_page_myreview(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
+            String uid = session.getAttribute("uid").toString();
             model.addAttribute("uid", session.getAttribute("uid"));
+            model.addAttribute("result", reviewService.findMyReviews(pageRequestDTO, uid));
             return "page/my_page_myreview";
         }
     }
