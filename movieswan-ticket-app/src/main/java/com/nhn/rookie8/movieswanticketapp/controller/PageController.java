@@ -244,8 +244,17 @@ public class PageController {
             return "redirect:/user/login";
         } else {
             String uid = session.getAttribute("uid").toString();
+            PageResultDTO<ReviewDTO, Review> resultDTO = reviewService.findMyReviews(pageRequestDTO, uid);
+            List<ReviewDTO> reviewList = resultDTO.getDtoList();
+            HashMap<String, String> titleMap = new HashMap<String, String>();
+            reviewList.forEach(reviewDTO -> {
+                String title = movieService.read(reviewDTO.getMid()).getName();
+                titleMap.put(reviewDTO.getMid(), title);
+            });
+
             model.addAttribute("uid", session.getAttribute("uid"));
-            model.addAttribute("result", reviewService.findMyReviews(pageRequestDTO, uid));
+            model.addAttribute("result", resultDTO);
+            model.addAttribute("titleMap", titleMap);
             return "page/my_page_myreview";
         }
     }

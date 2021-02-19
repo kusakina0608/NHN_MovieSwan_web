@@ -13,6 +13,7 @@
         <p id="myreview_subject">My Review</p>
         <ul id="reviews">
             <th:block th:each="review : ${result.dtoList}">
+                <a class="title" th:href="@{/movie/detail(mid=${review.mid})}">[[${titleMap[review.mid]}]]</a>
                 <th:block th:replace="~{/fragment/review}"></th:block>
             </th:block>
         </ul>
