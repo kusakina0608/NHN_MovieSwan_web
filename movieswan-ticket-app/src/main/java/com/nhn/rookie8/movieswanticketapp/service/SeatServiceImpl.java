@@ -57,7 +57,7 @@ public class SeatServiceImpl implements SeatService{
     @Override
     public List<String> getReservedSeatList(String tid) {
         BooleanBuilder booleanBuilder = getReservedSeat(tid);
-        Pageable pageable = PageRequest.of(0, (int)repository.count());
+        Pageable pageable = PageRequest.of(0, 1000);
         List<Seat> seatList = repository.findAll(booleanBuilder, pageable).toList();
         List<String> seatIdList = new ArrayList<String>();
         seatList.forEach(el -> {

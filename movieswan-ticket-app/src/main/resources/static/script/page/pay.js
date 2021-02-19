@@ -2,7 +2,12 @@
 
 (function() {
     const nextButton = document.querySelector(".next-button");
+    const prevButton = document.querySelector(".prev-button");
 
+    prevButton.addEventListener("click", e => {
+        e.preventDefault();
+        window.history.back(1);
+    });
     nextButton.addEventListener("click", e => {
         e.preventDefault();
 

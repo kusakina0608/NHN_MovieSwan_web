@@ -5,6 +5,7 @@
     var seatButtons = document.querySelector(".seat-table").querySelectorAll("button");
     var selectedSeat = document.querySelector("#selected-seat");
 
+    const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
 
     const timetableId = document.querySelector("#main-container > form > input[type=hidden]:nth-child(4)").value;
@@ -53,7 +54,7 @@
                     var res = await seatAPI.preemptSeat(timetableId, seatId);
                     console.log(res.data);
                     if(res.data){
-                        console.log("선 점 성 공");
+                        // console.log("선 점 성 공");
                         e.target.classList.add("selected");
                         selected++;
                         let seatLabel = document.createElement("div");
@@ -63,7 +64,10 @@
                         selectedSeat.appendChild(seatLabel);
                     }
                     else{
-                        console.log("선 점 실 패");
+                        // console.log("선 점 실 패");
+                        alert("다른 사용자가 이미 선점한 좌석입니다.");
+                        e.target.classList.add("na-seat");
+                        e.target.disabled = true;
                     }
                 }
                 else if(totalCount === 0){
@@ -117,6 +121,11 @@
         });
     });
 
+    prevButton.addEventListener("click", e => {
+        e.preventDefault();
+        window.history.back(1);
+    });
+    
     nextButton.addEventListener("click", e => {
         e.preventDefault();
 
