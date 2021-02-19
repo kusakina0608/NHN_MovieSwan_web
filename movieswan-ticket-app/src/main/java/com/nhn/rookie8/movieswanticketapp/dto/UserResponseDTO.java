@@ -17,5 +17,5 @@ public class UserResponseDTO {
 
     private String message;
 
-    private Object content;
+    private UserDTO content;
 }

@@ -1,5 +1,4 @@
 (function() {
-    if (document.getElementById("status").value) {
-        window.close()
-    }
-})
+    const writer = document.getElementById("uid");
+    writer.value = localStorage.getItem("uid");
+} ());

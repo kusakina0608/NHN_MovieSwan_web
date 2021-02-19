@@ -71,7 +71,8 @@ public class UserController {
 
         RestTemplate template = new RestTemplate();
 
-        UserResponseDTO userResponseDTO = template.postForObject(url+"/api/login",userDTO, UserResponseDTO.class);
+        UserResponseDTO userResponseDTO = template.postForObject(url+"/api/login", userDTO, UserResponseDTO.class);
+        UserResponseDTO userInfo = template.postForObject(url+"/api/getUserInfo", userDTO, UserResponseDTO.class);
 
 
         if(userResponseDTO.isError()){
@@ -79,8 +80,12 @@ public class UserController {
         }
 
         HttpSession session = request.getSession();
-        session.setAttribute("uid",uid);
-        return "page/main_page";
+        String name = userInfo.getContent().getName();
+
+        session.setAttribute("uid", uid);
+        session.setAttribute("name", name);
+
+        return "redirect:/main";
     }
 
 }

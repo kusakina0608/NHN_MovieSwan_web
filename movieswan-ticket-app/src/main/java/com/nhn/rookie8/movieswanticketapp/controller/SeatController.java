@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RequestMapping("/api/seat")
@@ -25,9 +27,13 @@ public class SeatController {
     }
 
     @PostMapping("/preempt")
-    public boolean preemptSeat(@RequestParam String tid, @RequestParam String sid) {
+    public boolean preemptSeat(HttpServletRequest httpServletRequest, @RequestParam String tid, @RequestParam String sid) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null) {
+            return false;
+        }
         // TODO: 내 아이디를 불러오는 방식으로 변경
-        String uid = "kusakina0608";
+        String uid = (String)session.getAttribute("uid");
         SeatDTO seatDTO = SeatDTO.builder()
                 .tid(tid)
                 .sid(sid)

@@ -18,7 +18,6 @@
     console.log(nextButton);
 
     const requestTicketAPI = axios.create({
-        // baseURL: "http://10.161.106.78"
         baseURL: "http://movieswan.nhnent.com:8080"
     });
 

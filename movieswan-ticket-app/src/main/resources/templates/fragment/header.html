@@ -7,15 +7,16 @@
         <userlogin id="userlogin">
             <notloggedin id="notloggedin">
                 <span>
-                    <a href="#">로그인</a>
+                    <a href="/user/login">로그인</a>
                 </span>
             </notloggedin>
             <loggedin id="loggedin">
                 <span>
-                    <a href="/mypage">루키백조TF</a>
+                    <a href="/mypage" id="user_name"></a>
                     <span>님, 환영합니다.</span>
                     <a onclick="questionOnClick()">1:1 문의하기</a>
-                    <input id="logout_button" type="button" value="로그아웃" />
+                    <input id="logout_button" type="button" value="로그아웃"
+                        onclick="logoutOnClick()" />
                 </span>
             </loggedin>
         </userlogin>

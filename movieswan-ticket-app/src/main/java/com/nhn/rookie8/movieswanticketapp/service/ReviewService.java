@@ -5,6 +5,7 @@ import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReviewDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReviewService {
@@ -12,7 +13,9 @@ public interface ReviewService {
 
     PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String mid);
 
-    Optional<Review> findMyReview(String mid, String uid);
+    ReviewDTO findMyReviewByMid(String mid, String uid);
+
+    PageResultDTO<ReviewDTO, Review> findMyReviews(PageRequestDTO pageRequestDTO, String uid);
 
     float getGradeByMid(String mid);
 
