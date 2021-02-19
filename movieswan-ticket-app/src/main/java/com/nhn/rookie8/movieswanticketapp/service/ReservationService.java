@@ -13,7 +13,7 @@ public interface ReservationService {
     String register(ReservationDTO dto);
 
     PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO);
-    PageResultDTO<ReservationResultDTO, Reservation> getMypageList(PageRequestDTO requestDTO);
+    PageResultDTO<ReservationResultDTO, Reservation> getMypageList(PageRequestDTO requestDTO, String uid);
 
     default Reservation dtoToEntity(ReservationDTO dto){
         Reservation entity = Reservation.builder()

@@ -84,9 +84,15 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public PageResultDTO<ReservationResultDTO, Reservation> getMypageList(PageRequestDTO requestDTO) {
+    public PageResultDTO<ReservationResultDTO, Reservation> getMypageList(PageRequestDTO requestDTO, String uid) {
         Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
-        BooleanBuilder booleanBuilder = getMyList(requestDTO);
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReservation qReservation = QReservation.reservation;
+
+        BooleanExpression expression = qReservation.uid.eq(uid);
+        booleanBuilder.and(expression);
+
         Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
 
         Function<Reservation, ReservationResultDTO> fn = (entity -> {
