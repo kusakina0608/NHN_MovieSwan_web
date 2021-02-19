@@ -27,7 +27,7 @@
             let rid = document.createElement("input");
             rid.setAttribute("type", "hidden");
             rid.setAttribute("name", "rid");
-            rid.setAttribute("value", myReview.substr(myReview.lastIndexOf("rid")+4, 14));
+            rid.setAttribute("value", myReview.substring(myReview.lastIndexOf("rid=")+4, myReview.lastIndexOf("mid=")-2));
             form.appendChild(rid);
         }
 

@@ -56,6 +56,13 @@ public class MovieServiceImpl implements MovieService{
     public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO, boolean current) {
         Pageable pageable = requestDTO.getPageable(Sort.by("startdate").descending());
         BooleanBuilder booleanBuilder = current ? getReleaseMovies() : getExpectedMovies();
+        QMovie qMovie = QMovie.movie;
+        String keyword = requestDTO.getKeyword();
+
+        if(keyword != null) {
+            BooleanExpression expression = qMovie.name.contains(keyword);
+            booleanBuilder.and(expression);
+        }
 
         Page<Movie> result = repository.findAll(booleanBuilder, pageable);
 
