@@ -21,9 +21,8 @@
                 </tr>
                 </thead>
                 <tbody>
-
                 <tr th:each="dto : ${result.dtoList}"
-                    th:onclick="'javascript:trClicked(' + ${dto.rid} + ')'">
+                    th:onclick='javascript:trClicked([[${dto.rid}]]);'>
                         <td class="tg-0lax" scope="row">[[${dto.rid}]]</td>
                         <td class="tg-baqh">[[${dto.movieName}]]</td>
                         <td class="tg-baqh">[[${#temporals.format(dto.startDate, 'MM/dd HH:mm')}]]</td>
@@ -55,7 +54,7 @@
 </html>
 
 <script>
-    function trClicked() {
+    function trClicked(value) {
         location.href = "/mypage/ticket/detail?rid=" + value;
     }
 </script>
