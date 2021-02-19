@@ -1,14 +1,10 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.*;
+import com.nhn.rookie8.movieswanticketapp.entity.Review;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReservationService;
 import com.nhn.rookie8.movieswanticketapp.service.SeatService;
-import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
@@ -29,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -80,7 +77,16 @@ public class PageController {
 
     @GetMapping("/movie/expected/list")
     public String expectedMovieList(PageRequestDTO pageRequestDTO, Model model) {
-        model.addAttribute("result", movieService.getList(pageRequestDTO, false));
+        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, false);
+        List<MovieDTO> movieList = resultDTO.getDtoList();
+        HashMap<String, String> gradeMap = new HashMap<String, String>();
+        movieList.forEach(movieDTO -> {
+            float grade = reviewService.getGradeByMid(movieDTO.getMid());
+            gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
+        });
+
+        model.addAttribute("result", resultDTO);
+        model.addAttribute("gradeMap", gradeMap);
         model.addAttribute("current", false);
         return "/page/movie_list";
     }
@@ -88,6 +94,7 @@ public class PageController {
     @GetMapping("/movie/detail")
     public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, Model model) {
         MovieDTO movieDTO = movieService.read(mid);
+        //TODO uid를 받아서 구현
         String uid = "testuser";
 
         model.addAttribute("dto", movieDTO);
