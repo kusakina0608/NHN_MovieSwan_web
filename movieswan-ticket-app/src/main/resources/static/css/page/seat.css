@@ -46,6 +46,7 @@
   margin: 10px;
 }
 .movie-info > .movie-poster {
+  margin-right: 20px;
   height: 140px;
   width: 100px;
 }
