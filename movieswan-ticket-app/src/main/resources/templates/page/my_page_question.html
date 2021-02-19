@@ -23,7 +23,7 @@
                 <tbody>
                     <tr th:each="dto : ${result.dtoList}"
                         th:onclick="'javascript:trClicked(\'' + ${dto.qid} + '\');'">
-                        <td class="tg-0lax" scope="row">[[${dto.qid}]]</th>
+                        <td class="tg-0lax" scope="row">[[${dto.qid}]]</td>
                         <td class="tg-0lax1">[[${dto.title}]]</td>
                         <td class="tg-baqh">[[${dto.uid}]]</td>
                         <td class="tg-lqy6">[[${#temporals.format(dto.regdate, 'yyyy/MM/dd')}]]</td>

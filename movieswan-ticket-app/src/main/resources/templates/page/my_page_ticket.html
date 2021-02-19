@@ -9,10 +9,52 @@
 
 <body>
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_ticket})}">
-    <myticket th:fragment="my_ticket">
-        예매 내역
+    <myticket id="my_ticket" th:fragment="my_ticket">
+            <p id="ticket_subject">예매 내역</p>
+            <table class="tg">
+                <thead>
+                <tr>
+                    <th class="tg-0lax">예약번호</th>
+                    <th class="tg-baqh">영화 제목</th>
+                    <th class="tg-baqh">상영 일자</th>
+                    <th class="tg-baqh">등록 일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="dto : ${result.dtoList}"
+                    th:onclick='javascript:trClicked([[${dto.rid}]]);'>
+                        <td class="tg-0lax" scope="row">[[${dto.rid}]]</td>
+                        <td class="tg-baqh">[[${dto.movieName}]]</td>
+                        <td class="tg-baqh">[[${#temporals.format(dto.startDate, 'MM/dd HH:mm')}]]</td>
+                        <td class="tg-baqh">[[${#temporals.format(dto.regDate, 'MM/dd HH:mm:ss')}]]</td>
+                    </a>
+                </tr>
+                </tbody>
+            </table>
+
+            <div id="pagination">
+                <li th:if="${result.prev}">
+                    <a th:href="@{/mypage/ticket(page=${result.start - 1})}" tabindex="-1">Previous</a>
+                </li>
+
+                <li th:each="page: ${result.pageList}">
+                    <a th:href="@{/mypage/ticket(page=${page})}">
+                        [[${page}]]
+                    </a>
+                </li>
+
+                <li th:if="${result.next}">
+                    <a th:href="@{/mypage/ticket(page=${result.end + 1})}">Next</a>
+                </li>
+            </div>
     </myticket>
 </th:block>
 </body>
 
 </html>
+
+<script>
+    function trClicked(value) {
+        location.href = "/mypage/ticket/detail?rid=" + value;
+    }
+</script>
