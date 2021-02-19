@@ -11,6 +11,7 @@
 <th:block th:replace="~{/layout/my_page::setContents(~{this::ticket_detail})}">
     <ticket_detail th:fragment="ticket_detail">
         상세 예매내역
+        [[${result}]]
     </ticket_detail>
 </th:block>
 </body>
