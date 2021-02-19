@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     @Value("${accountURL}")
-    private String url;
+    private String accountUrl;
 
 
     @GetMapping("/register")
@@ -47,8 +47,9 @@ public class UserController {
 
         System.out.println(userDTO.toString());
         RestTemplate template = new RestTemplate();
-        UserResponseDTO userResponseDTO = template.postForObject(url+"/api/register",userDTO, UserResponseDTO.class);
+        UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/register",userDTO, UserResponseDTO.class);
 
+        System.out.println(userResponseDTO);
         return "page/main_page";
     }
 
@@ -71,8 +72,8 @@ public class UserController {
 
         RestTemplate template = new RestTemplate();
 
-        UserResponseDTO userResponseDTO = template.postForObject(url+"/api/login", userDTO, UserResponseDTO.class);
-        UserResponseDTO userInfo = template.postForObject(url+"/api/getUserInfo", userDTO, UserResponseDTO.class);
+        UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/login", userDTO, UserResponseDTO.class);
+        UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", userDTO, UserResponseDTO.class);
 
 
         if(userResponseDTO.isError()){

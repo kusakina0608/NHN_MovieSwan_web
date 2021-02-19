@@ -25,7 +25,7 @@
 
 
     const isVaildId = axios.create({
-        baseURL: "http://10.161.106.78:8081"
+        baseURL: "http://user.movieswan.nhnent.com:8081"
     });
 
     const isVaild = (uid) => {
@@ -43,6 +43,7 @@
         if(event.keyCode == 16) handle = true;
         else if(event.keyCode == 17) handle = true;
         else if(event.keyCode == 18) handle = true;
+
 
         if(handle){
             event.preventDefault();
@@ -315,8 +316,13 @@
     const no_url = document.querySelectorAll(".no_url");
     
     const url_btn = document.querySelector("#url_btn");
-    
-    
+    const url_hidden = document.querySelector('#url_hidden');
+    const auth_btn = document.querySelector("#auth_btn");
+    const auth = document.querySelector("#auth");
+
+    const ok_auth = document.querySelectorAll(".ok_auth");
+    const no_auth = document.querySelectorAll(".no_auth");
+
     url.addEventListener("keyup",(event)=>{
         var handle = false;
         if(event.keyCode == 16) handle = true;
@@ -328,7 +334,7 @@
         }
         else if(url.value === "fnzlqorwh"){
             document.querySelector("#div_url").value = 1;
-            url.value = "bfd952e955@nhnent.dooray.com";
+            url_hidden.value = "bfd952e955@nhnent.dooray.com";
             url.disabled = true;
             ok_url.forEach(i=>{
                 i.style.display = "inline";
@@ -347,7 +353,10 @@
                 i.style.display = "none";
             });
 
+            auth_btn.disabled = false;
             url_btn.disabled = false;
+
+            document.querySelector("#div_url").value = 0;
         } 
         else{
  
@@ -358,7 +367,10 @@
                 i.style.display = "inline";
             });
 
+            auth_btn.disabled = false;
             url_btn.disabled = true;
+
+            document.querySelector("#div_url").value = 0;
         }
 
         enableSubmit();
@@ -375,8 +387,10 @@
         auth_send.style.display = "block";
         div_auth.style.display = "block";
         url_btn.disabled = true;
+        url_hidden.value = url.value;
+        
         url.disabled = true;
-
+        
         authString = Math.floor(Math.random()*1000000).toString().padStart(6,'0');
         
         var templateParams = {
@@ -394,11 +408,7 @@
     }, false);
 
 
-    const auth_btn = document.querySelector("#auth_btn");
-    const auth = document.querySelector("#auth");
-
-    const ok_auth = document.querySelectorAll(".ok_auth");
-    const no_auth = document.querySelectorAll(".no_auth");
+    
 
     auth_btn.addEventListener("click",(event)=>{
 
