@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,7 +38,12 @@ public class PageController {
     private final QuestionService questionService;
 
     @GetMapping({"/", "/main"})
-    public String main_page() {
+    public String main_page(HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (!(session == null || session.getAttribute("uid") == null)) {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            model.addAttribute("name", session.getAttribute("name"));
+        }
         return "page/main_page";
     }
 
@@ -174,8 +181,14 @@ public class PageController {
     }
 
     @GetMapping("/question")
-    public String question_page() {
-        return "page/question_page";
+    public String question_page(HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            return "page/question_page";
+        }
     }
 
     // 여기부터 전부 마이페이지 입니다...
@@ -185,35 +198,71 @@ public class PageController {
     }
 
     @GetMapping("/mypage/userinfo")
-    public String my_page_userinfo() {
-        return "page/my_page_userinfo";
+    public String my_page_userinfo(HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            return "page/my_page_userinfo";
+        }
     }
 
     @GetMapping("/mypage/ticket")
-    public String my_page_ticket() {
-        return "page/my_page_ticket";
+    public String my_page_ticket(HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            return "page/my_page_ticket";
+        }
     }
 
     @GetMapping("/mypage/movie")
-    public String my_page_mymovie() {
-        return "page/my_page_mymovie";
+    public String my_page_mymovie(HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            return "page/my_page_mymovie";
+        }
     }
 
     @GetMapping("/mypage/review")
-    public String my_page_myreview() {
-        return "page/my_page_myreview";
+    public String my_page_myreview(HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            return "page/my_page_myreview";
+        }
     }
 
     @GetMapping("/mypage/question")
-    public String my_page_question(PageRequestDTO pageRequestDTO, Model model) {
-        model.addAttribute("result", questionService.getQuestionList(pageRequestDTO));
-        return "page/my_page_question";
+    public String my_page_question(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            model.addAttribute("result", questionService.getQuestionList(pageRequestDTO));
+            return "page/my_page_question";
+        }
     }
 
     @GetMapping("/mypage/question/post")
-    public String my_page_read_question(@RequestParam("qid") Integer qid, Model model) {
-        QuestionDTO dto = questionService.readQuestion(qid);
-        model.addAttribute("dto", dto);
-        return "page/my_page_read_question";
+    public String my_page_read_question(@RequestParam("qid") Integer qid, HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            QuestionDTO dto = questionService.readQuestion(qid);
+            model.addAttribute("uid", session.getAttribute("uid"));
+            model.addAttribute("dto", dto);
+            return "page/my_page_read_question";
+        }
     }
 }
