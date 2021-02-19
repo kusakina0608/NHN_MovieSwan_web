@@ -18,6 +18,8 @@ public class ReviewController {
     @PostMapping("/register")
     public String registerReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
         log.info(reviewDTO);
+        if(reviewDTO.getUid() == "")
+            return "redirect:/user/login";
         service.register(reviewDTO);
 
         redirectAttributes.addAttribute("mid", reviewDTO.getMid());

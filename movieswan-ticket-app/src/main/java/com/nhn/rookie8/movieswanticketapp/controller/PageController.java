@@ -92,14 +92,21 @@ public class PageController {
     }
 
     @GetMapping("/movie/detail")
-    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, Model model) {
+    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         MovieDTO movieDTO = movieService.read(mid);
-        //TODO uid를 받아서 구현
-        String uid = "testuser";
+
+        HttpSession session = httpServletRequest.getSession(false);
+        String uid;
+        if (!(session == null || session.getAttribute("uid") == null)) {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            uid = session.getAttribute("uid").toString();
+        }
+        else
+            uid = "";
 
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
-        model.addAttribute("my_review", reviewService.findMyReview(mid, uid));
+        model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
         return "/page/movie_detail";
     }
 
@@ -111,12 +118,16 @@ public class PageController {
     }
 
     @PostMapping("/booking/seat")
-    public String seat(@RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("tid") String tid, Model model) {
+    public String seat(HttpServletRequest httpServletRequest, @RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("tid") String tid, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null) {
+            return "redirect:/user/login";
+        }
         System.out.println(mid);
         System.out.println(date);
         System.out.println(time);
         System.out.println(tid);
-        // TODO: mid로 영화 조회
+
         MovieDTO movieDTO = movieService.read(mid);
         model.addAttribute("title", movieDTO.getName());
         model.addAttribute("poster", movieDTO.getPoster());
@@ -135,7 +146,11 @@ public class PageController {
     }
 
     @PostMapping("/booking/pay")
-    public String pay(@RequestParam HashMap<String,String> params, Model model) {
+    public String pay(HttpServletRequest httpServletRequest, @RequestParam HashMap<String,String> params, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null) {
+            return "redirect:/user/login";
+        }
         params.keySet().forEach(key -> {
             model.addAttribute(key, params.get(key));
         });
@@ -143,7 +158,11 @@ public class PageController {
     }
 
     @PostMapping("/booking/result")
-    public String bookingResult(@RequestParam HashMap<String,String> params, Model model) {
+    public String bookingResult(HttpServletRequest httpServletRequest, @RequestParam HashMap<String,String> params, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null) {
+            return "redirect:/user/login";
+        }
         params.keySet().forEach(key -> {
             model.addAttribute(key, params.get(key));
             System.out.println(key + ": " +  params.get(key));
@@ -155,7 +174,7 @@ public class PageController {
         ReservationDTO reservationDTO = ReservationDTO.builder()
                 .rid(randomId)
                 .tid(params.get("tid"))
-                .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
+                .uid((String) session.getAttribute("uid"))
                 .childNum(Integer.parseInt(params.get("childnum")))
                 .adultNum(Integer.parseInt(params.get("adultnum")))
                 .oldNum(Integer.parseInt(params.get("oldnum")))
@@ -172,7 +191,7 @@ public class PageController {
                     .tid(params.get("tid"))
                     .sid(seat)
                     .rid(randomId)
-                    .uid("kusakina0608") // TODO: 아이디 불러와서 여기에 넣어주기~!
+                    .uid((String) session.getAttribute("uid"))
                     .build());
         }
         seatService.modify(dtoList, randomId);
@@ -236,11 +255,25 @@ public class PageController {
     }
 
     @GetMapping("/mypage/review")
-    public String my_page_myreview(HttpServletRequest httpServletRequest, Model model) {
+    public String my_page_myreview(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
-        } else { return "page/my_page_myreview"; }
+        } else {
+            String uid = session.getAttribute("uid").toString();
+            PageResultDTO<ReviewDTO, Review> resultDTO = reviewService.findMyReviews(pageRequestDTO, uid);
+            List<ReviewDTO> reviewList = resultDTO.getDtoList();
+            HashMap<String, String> titleMap = new HashMap<String, String>();
+            reviewList.forEach(reviewDTO -> {
+                String title = movieService.read(reviewDTO.getMid()).getName();
+                titleMap.put(reviewDTO.getMid(), title);
+            });
+
+            model.addAttribute("uid", session.getAttribute("uid"));
+            model.addAttribute("result", resultDTO);
+            model.addAttribute("titleMap", titleMap);
+            return "page/my_page_myreview";
+        }
     }
 
     @GetMapping("/mypage/question")

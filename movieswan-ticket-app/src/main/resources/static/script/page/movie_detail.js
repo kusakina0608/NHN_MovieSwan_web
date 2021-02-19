@@ -27,7 +27,7 @@
             let rid = document.createElement("input");
             rid.setAttribute("type", "hidden");
             rid.setAttribute("name", "rid");
-            rid.setAttribute("value", myReview.substr(myReview.lastIndexOf("rid")+4, 14));
+            rid.setAttribute("value", myReview.substring(myReview.lastIndexOf("rid=")+4, myReview.lastIndexOf("mid=")-2));
             form.appendChild(rid);
         }
 
@@ -43,7 +43,7 @@
         let uid = document.createElement("input");
         uid.setAttribute("type", "hidden");
         uid.setAttribute("name", "uid");
-        uid.setAttribute("value", "testuser");
+        uid.setAttribute("value", uidInput);
         form.appendChild(uid);
 
         let grade = document.createElement("input");
