@@ -20,7 +20,7 @@
 
 .movie .poster {
     height: 300px;
-    width: 100%;
+    width: 200px;
 }
 
 .movie .title {
@@ -34,7 +34,7 @@
 
 .movie .story {
     height: 300px;
-    width: 100%;
+    width: 200px;
     visibility: hidden;
     position: absolute;
     top: 0px;
