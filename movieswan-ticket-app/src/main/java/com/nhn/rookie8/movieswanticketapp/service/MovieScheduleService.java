@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface MovieScheduleService {
     void registerMovieSchedule(MovieScheduleInpDTO dto);
+    MovieScheduleDTO findMovieSchedule(String tid);
     void deleteMovieSchedule(String tid);
     List<MovieScheduleDTO> getMovieSchedule(String mid);
 

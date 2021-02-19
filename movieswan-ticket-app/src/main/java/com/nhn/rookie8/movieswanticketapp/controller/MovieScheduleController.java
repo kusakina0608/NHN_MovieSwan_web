@@ -62,6 +62,11 @@ public class MovieScheduleController {
         return movieScheduleResponse;
     }
 
+    @GetMapping("/find")
+    public MovieScheduleDTO getOneSchd(@RequestParam String tid) {
+        return service.findMovieSchedule(tid);
+    }
+
     @GetMapping("/get")
     public List<MovieScheduleDTO> getSchd(@RequestParam String mid) {
         List<MovieScheduleDTO> scheduleDTOList = service.getMovieSchedule(mid);

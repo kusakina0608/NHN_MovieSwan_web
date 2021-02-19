@@ -1,0 +1,134 @@
+#header_logo {
+    width: 300px;
+    display: block;
+}
+
+
+#reg {
+    margin: 60px;
+    font-size: 50px;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.div {
+    margin: 20px auto;
+    padding: 10px;
+    width: 90%;
+}
+
+.div p {
+    font-size: 30px;
+    margin: 10px;
+}
+
+
+.info:focus {
+    outline: none;
+}
+
+#div_url {
+    margin-bottom: 0;
+}
+
+.div #url_btn {
+    width: 150px;
+    font-size: 20px;
+}
+
+.div #auth_btn {
+    padding: 0;
+    height: 30px;
+    width: 50px;
+    font-size: 15px;
+}
+
+.div #auth_send {
+    display: none;
+    margin: 5px;
+}
+#div_auth {
+    display: none;
+    margin-top:20px;
+}
+
+#div_auth2 {
+    margin : 3px;
+}
+
+#auth {
+    width: 200px;
+}
+
+.btn {
+    font-size: 20px;
+    padding: 10px;
+    width: 100px;
+    margin: 0 20px;
+}
+
+.expl {
+    display: inline-block;
+    margin: 10px;
+}
+
+#div_btn{
+    margin: 50px; 
+    display: flex;
+    justify-content: flex-end;
+}
+
+.div .material-icons{
+    margin-left: 5px;
+    position: relative;
+    top: 5px;
+}
+
+.div .ok {
+    display: none;
+    color: green;
+
+}
+
+.div .no {
+    display: none;
+    color: red;
+}
+
+
+.info {
+    font-size: 20px;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid;
+    width: 500px;
+}
+
+
+.div2 {
+    display: flex;
+}
+
+.div3 {
+    width: 500px;
+}
+
+.div4 {
+    flex: 1;
+}
+
+.look_pw {
+    float: right;
+    margin: 12px;
+}
+
+#url {
+    width: 300px;
+}
+

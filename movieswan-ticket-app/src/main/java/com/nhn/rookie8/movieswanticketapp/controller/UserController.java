@@ -21,17 +21,36 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     @Value("${accountURL}")
-    private String url;
+    private String accountUrl;
 
 
     @GetMapping("/register")
     public String register(){
-        return null;
+        return "page/register_page";
     }
 
     @PostMapping("/register_process")
-    public String register_process(){
-        return null;
+    public String register_process(HttpServletRequest request){
+        String uid = request.getParameter("uid");
+        String password = request.getParameter("password");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String url = request.getParameter("url");
+
+        UserDTO userDTO = UserDTO.builder()
+                .uid(uid)
+                .password(password)
+                .name(name)
+                .email(email)
+                .url(url)
+                .build();
+
+        System.out.println(userDTO.toString());
+        RestTemplate template = new RestTemplate();
+        UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/register",userDTO, UserResponseDTO.class);
+
+        System.out.println(userResponseDTO);
+        return "page/main_page";
     }
 
     @GetMapping("/login")
@@ -53,8 +72,8 @@ public class UserController {
 
         RestTemplate template = new RestTemplate();
 
-        UserResponseDTO userResponseDTO = template.postForObject(url+"/api/login", userDTO, UserResponseDTO.class);
-        UserResponseDTO userInfo = template.postForObject(url+"/api/getUserInfo", userDTO, UserResponseDTO.class);
+        UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/login", userDTO, UserResponseDTO.class);
+        UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", userDTO, UserResponseDTO.class);
 
 
         if(userResponseDTO.isError()){
