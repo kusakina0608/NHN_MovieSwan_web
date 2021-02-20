@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -73,18 +75,25 @@ public class UserController {
         RestTemplate template = new RestTemplate();
 
         UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/login", userDTO, UserResponseDTO.class);
-        UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", userDTO, UserResponseDTO.class);
+
 
 
         if(userResponseDTO.isError()){
             return "redirect:/user/login?err=1";
         }
-
+        UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", userDTO, UserResponseDTO.class);
         HttpSession session = request.getSession();
-        String name = userInfo.getContent().getName();
-
+        Map<String,String> content = (HashMap<String,String>) userInfo.getContent();
         session.setAttribute("uid", uid);
-        session.setAttribute("name", name);
+        session.setAttribute("name", content.get("name"));
+
+        return "redirect:/main";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession(false);
+        session.invalidate();
 
         return "redirect:/main";
     }
