@@ -221,20 +221,28 @@ public class PageController {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
-        } else {
-            model.addAttribute("uid", session.getAttribute("uid"));
-            return "page/my_page_userinfo";
-        }
+        } else { return "page/my_page_userinfo"; }
     }
 
     @GetMapping("/mypage/ticket")
-    public String my_page_ticket(HttpServletRequest httpServletRequest, Model model) {
+    public String my_page_ticket(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-            model.addAttribute("uid", session.getAttribute("uid"));
+            model.addAttribute("result", reservationService.getMypageList(pageRequestDTO, (String) session.getAttribute("uid")));
             return "page/my_page_ticket";
+        }
+    }
+
+    @GetMapping("/mypage/ticket/detail")
+    public String my_page_ticket_detail(@RequestParam String rid, PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            model.addAttribute("result", reservationService.readReservation(rid));
+            return "page/my_page_ticket_detail";
         }
     }
 
@@ -243,10 +251,7 @@ public class PageController {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
-        } else {
-            model.addAttribute("uid", session.getAttribute("uid"));
-            return "page/my_page_mymovie";
-        }
+        } else { return "page/my_page_mymovie"; }
     }
 
     @GetMapping("/mypage/review")
@@ -277,7 +282,6 @@ public class PageController {
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-            model.addAttribute("uid", session.getAttribute("uid"));
             model.addAttribute("result", questionService.getQuestionList(pageRequestDTO));
             return "page/my_page_question";
         }
@@ -289,9 +293,7 @@ public class PageController {
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-            QuestionDTO dto = questionService.readQuestion(qid);
-            model.addAttribute("uid", session.getAttribute("uid"));
-            model.addAttribute("dto", dto);
+            model.addAttribute("dto", questionService.readQuestion(qid));
             return "page/my_page_read_question";
         }
     }

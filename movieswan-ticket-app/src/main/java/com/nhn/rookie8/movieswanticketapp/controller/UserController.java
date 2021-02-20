@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -21,17 +23,36 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     @Value("${accountURL}")
-    private String url;
+    private String accountUrl;
 
 
     @GetMapping("/register")
     public String register(){
-        return null;
+        return "page/register_page";
     }
 
     @PostMapping("/register_process")
-    public String register_process(){
-        return null;
+    public String register_process(HttpServletRequest request){
+        String uid = request.getParameter("uid");
+        String password = request.getParameter("password");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String url = request.getParameter("url");
+
+        UserDTO userDTO = UserDTO.builder()
+                .uid(uid)
+                .password(password)
+                .name(name)
+                .email(email)
+                .url(url)
+                .build();
+
+        System.out.println(userDTO.toString());
+        RestTemplate template = new RestTemplate();
+        UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/register",userDTO, UserResponseDTO.class);
+
+        System.out.println(userResponseDTO);
+        return "page/main_page";
     }
 
     @GetMapping("/login")
@@ -53,19 +74,26 @@ public class UserController {
 
         RestTemplate template = new RestTemplate();
 
-        UserResponseDTO userResponseDTO = template.postForObject(url+"/api/login", userDTO, UserResponseDTO.class);
-        UserResponseDTO userInfo = template.postForObject(url+"/api/getUserInfo", userDTO, UserResponseDTO.class);
+        UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/login", userDTO, UserResponseDTO.class);
+
 
 
         if(userResponseDTO.isError()){
             return "redirect:/user/login?err=1";
         }
-
+        UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", userDTO, UserResponseDTO.class);
         HttpSession session = request.getSession();
-        String name = userInfo.getContent().getName();
-
+        Map<String,String> content = (HashMap<String,String>) userInfo.getContent();
         session.setAttribute("uid", uid);
-        session.setAttribute("name", name);
+        session.setAttribute("name", content.get("name"));
+
+        return "redirect:/main";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession(false);
+        session.invalidate();
 
         return "redirect:/main";
     }
