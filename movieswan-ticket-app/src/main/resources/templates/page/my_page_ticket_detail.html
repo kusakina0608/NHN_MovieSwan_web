@@ -38,7 +38,7 @@
                         <span class="cont">[[${#temporals.format(result.regDate, 'yyyy년 M월 d일, HH:mm:ss')}]]</span>
                     </item>
                     <item class="ticket_item">
-                        <span class="item">상세 예약 내용 :</span>
+                        <span class="item">상세 내용 :</span>
                         <div>
                         <span class="cont" th:if="${0 < result.adultNum}">성인 : [[${result.adultNum}]]명 x 16,000 원</span>
                         <span class="cont" th:if="${0 < result.childNum}">청소년 : [[${result.childNum}]]명 x 12,000 원</span>
