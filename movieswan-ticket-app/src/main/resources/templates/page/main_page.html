@@ -30,8 +30,11 @@
             const uid = [[${uid}]];
             const name = [[${name}]];
 
+
             localStorage.setItem("uid", uid);
             localStorage.setItem("name", name);
+            
+            
         } ());
     </script>
     <script th:src="@{/script/layout/getUserInfo.js}"></script>
