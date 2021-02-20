@@ -4,8 +4,11 @@ import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.QQuestion;
 import com.nhn.rookie8.movieswanticketapp.entity.Question;
 import com.nhn.rookie8.movieswanticketapp.repository.QuestionRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -44,10 +47,16 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PageResultDTO<QuestionDTO, Question> getQuestionList(PageRequestDTO requestDTO) {
+    public PageResultDTO<QuestionDTO, Question> getQuestionList(PageRequestDTO requestDTO, String uid) {
         Pageable pageable = requestDTO.getPageable(Sort.by("qid").descending());
 
-        Page<Question> result = repository.findAll(pageable);
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QQuestion qQuestion = QQuestion.question;
+
+        BooleanExpression expression = qQuestion.uid.eq(uid);
+        booleanBuilder.and(expression);
+
+        Page<Question> result = repository.findAll(booleanBuilder, pageable);
         Function<Question, QuestionDTO> fn = (entity) -> entityToDTO(entity);
         return new PageResultDTO<>(result, fn);
     }
