@@ -9,7 +9,8 @@
 
     box-sizing: border-box;
     scroll-behavior: smooth;
-    font-family: 'Gugi', cursive;
+    /* font-family: 'Gugi', cursive; */
+    font-family: 'Jua', sans-serif;
 }
 
 #default_bg {
