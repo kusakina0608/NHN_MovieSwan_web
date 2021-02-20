@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: 내 문의 내역</title>
-    <link th:href="@{/css/page/my_page_read_question.css}" type="text/css" rel="stylesheet" />
+    <link th:href="@{/css/page/my_page_read_question.css}" rel="stylesheet" />
 </head>
-
 <body>
     <th:block th:replace="~{/layout/my_page::setContents(~{this::read_question})}">
     <readquestion id="read_question" th:fragment="read_question">
@@ -38,7 +36,5 @@
     </readquestion>
     </th:block>
 </body>
-
 <script th:src="@{/script/page/my_page_read_question.js}"></script>
-
 </html>

@@ -11,33 +11,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 <!--    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">-->
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-
     <!-- Icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
     <!-- Common CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/layout/common_page.css" />
-
+    <link th:href="@{/css/layout/common_page.css}" rel="stylesheet" />
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
     <body>
         <background id="default_bg">
             <!-- Page -->
             <commonpage id="common_page">
                 <th:block th:replace="~{/fragment/header}"></th:block>
-
                 <!-- Contents -->
                 <contents id="contents">
                     <th:block th:replace="${contents}"></th:block>
                 </contents>
             </commonpage>
-
             <th:block th:replace="~{/fragment/footer}"></th:block>
             <th:block th:replace="~{/fragment/scroll_to_top_button}"></th:block>
         </background>
     </body>
-
     <script th:src="@{/script/fragment/scroll_to_top_button.js}"></script>
     <script th:src="@{/script/layout/getUserInfo.js}"></script>
 </th:block>
