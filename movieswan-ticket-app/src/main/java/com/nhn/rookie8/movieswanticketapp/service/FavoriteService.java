@@ -8,6 +8,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
 public interface FavoriteService {
     String register(FavoriteDTO favoriteDTO);
     PageResultDTO<FavoriteDTO, Favorite> getList(PageRequestDTO pageRequestDTO, String uid);
+    boolean isFavorite(String uid, String mid);
     void remove(FavoriteDTO favoriteDTO);
 
     default Favorite dtoToEntity(FavoriteDTO favoriteDTO) {

@@ -24,7 +24,6 @@ public class FavoriteController {
 
     @DeleteMapping("/delete")
     public void deleteFav(FavoriteDTO favoriteDTO) {
-        System.out.println("delete");
         service.remove(favoriteDTO);
     }
 }

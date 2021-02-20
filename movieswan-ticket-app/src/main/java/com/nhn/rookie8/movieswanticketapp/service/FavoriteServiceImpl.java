@@ -7,6 +7,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,19 @@ public class FavoriteServiceImpl implements FavoriteService{
         Function<Favorite, FavoriteDTO> fn = (entity -> entityToDto(entity));
 
         return new PageResultDTO<>(result, fn);
+    }
+
+    @Override
+    public boolean isFavorite(String uid, String mid) {
+        Pageable pageable = PageRequest.of(0, (int) repository.count());
+        FavoriteId favoriteId = FavoriteId.builder()
+                .uid(uid)
+                .mid(mid)
+                .build();
+
+        Optional<Favorite> result = repository.findById(favoriteId);
+
+        return result.isPresent();
     }
 
     @Override
