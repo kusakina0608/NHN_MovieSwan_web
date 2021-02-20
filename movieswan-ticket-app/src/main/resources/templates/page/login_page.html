@@ -9,9 +9,9 @@
 <th:block th:replace="~{/layout/login_common_page:: setContents(~{this:: #login_page} )}">
     <loginPage id="login_page">
         <main id="main">
-            <img id="header_logo" src="/asset/image/logo2.png" />
+            <img id="header_logo" th:src="@{/asset/image/logo2.png}" />
             <div id="login_title">로그인</div>
-            <form id="login_form" action="/user/login_process" method="post">
+            <form id="login_form" th:action="@{/user/login_process}" method="post">
                 <div class="input_form">
                     <span id="person" class="material-icons">person</span>
                     <input id="uid" type="text" name="uid">
@@ -22,22 +22,19 @@
                     <span id="visibility" class="material-icons">visibility</span>
                     <span id="visibility_off" class="material-icons">visibility_off</span>
                 </div>
-
                 <div id="err" th:if="${param.err}">ID 또는 Password가 잘못 입력 되었습니다.</div>
-
                 <div id="div_submit" class="input_form">
                     <input id="submit" type="submit" value="Movieswan 로그인">
                 </div>
             </form>
-
             <div>
                 <span>아직도 Movieswan 회원이 아니세요?</span>
-                <a href="/user/register">회원가입</a>
+                <a th:href="@{/user/register}">회원가입</a>
             </div>
             <div>
-                <a href="#">아이디 찾기</a>
+                <a th:href="@{#}">아이디 찾기</a>
                 /
-                <a href="#">비밀번호 찾기</a>
+                <a th:href="@{#}">비밀번호 찾기</a>
             </div>
         </main>
     </loginPage>

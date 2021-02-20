@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: My Movie</title>
-    <link th:href="@{/css/page/my_page_mymovie.css}" type="text/css" rel="stylesheet" />
+    <link th:href="@{/css/page/my_page_mymovie.css}" rel="stylesheet" />
 </head>
-
 <body>
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_mymovie})}">
     <mymymovie id="my_mymovie" th:fragment="my_mymovie">

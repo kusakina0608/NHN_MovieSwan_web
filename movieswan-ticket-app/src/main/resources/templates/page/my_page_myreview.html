@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: My Review</title>
-    <link th:href="@{/css/page/my_page_myreview.css}" type="text/css" rel="stylesheet" />
+    <link th:href="@{/css/page/my_page_myreview.css}" rel="stylesheet" />
 </head>
-
 <body>
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_myreview})}">
     <mymyreview id="my_myreview" th:fragment="my_myreview">
@@ -17,7 +15,6 @@
                 <th:block th:replace="~{/fragment/review}"></th:block>
             </th:block>
         </ul>
-
         <div id="pagination">
             <li th:if="${result.prev}">
                 <a th:href="@{/mypage/review(page=${result.start - 1})}" tabindex="-1">Previous</a>
@@ -36,7 +33,5 @@
     </mymyreview>
 </th:block>
 </body>
-
 <script th:src="@{/script/page/my_page_myreview.js}"></script>
-
 </html>

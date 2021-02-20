@@ -6,8 +6,7 @@
     <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지</title>
 </head>
 <th:block th:fragment="setContents(mycontents)">
-    <link th:href="@{/css/layout/my_page.css}" type="text/css" rel="stylesheet" />
-
+    <link th:href="@{/css/layout/my_page.css}" rel="stylesheet" />
     <body>
         <th:block th:replace="~{/layout/common_page::setContents(~{this::my_page})}">
             <mypage id="my_page" th:fragment="my_page">
@@ -15,23 +14,23 @@
                 <hr id="hr1" class="rounded">
                 <div id="my_page_div">
                     <mypagenav id="my_page_nav">
-                        <a href="/mypage/userinfo" id="menu_userinfo">
+                        <a th:href="@{/mypage/userinfo}" id="menu_userinfo">
                             <span class="material-icons">person</span>
                             회원 정보
                         </a>
-                        <a href="/mypage/ticket" id="menu_ticket">
+                        <a th:href="@{/mypage/ticket}" id="menu_ticket">
                             <span class="material-icons">confirmation_number</span>
                             예매 내역
                         </a>
-                        <a href="/mypage/movie" id="menu_movie">
+                        <a th:href="@{/mypage/movie}" id="menu_movie">
                             <span class="material-icons">theaters</span>
                             My Movie
                         </a>
-                        <a href="/mypage/review" id="menu_review">
+                        <a th:href="@{/mypage/review}" id="menu_review">
                             <span class="material-icons">chat</span>
                             My Review
                         </a>
-                        <a href="/mypage/question" id="menu_question">
+                        <a th:href="@{/mypage/question}" id="menu_question">
                             <span class="material-icons">help_outline</span>
                             내 문의내역
                         </a>
@@ -44,5 +43,4 @@
         </th:block>
     </body>
 </th:block>
-
 </html>

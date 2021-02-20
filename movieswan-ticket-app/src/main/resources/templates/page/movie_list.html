@@ -1,78 +1,63 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Swan - 영화 리스트</title>
-
     <!---CSS 파일--->
     <link th:href="@{/css/page/movie_list.css}" rel="stylesheet" />
-
     <!---ICON--->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
-
 <th:block th:replace="~{/layout/common_page :: setContents(~{this::contents})}">
-
-<th:block th:fragment="contents">
-    <main>
-        <!---상영 중 / 상영 예정 탭--->
-        <ul class="currentMovie">
-            <a th:href="@{/movie/current/list}" th:class=" ${current ? 'selected' : ''} ">
-                <li id="current">
-                    상영 중
-                </li>
-            </a>
-
-            <a th:href="@{/movie/expected/list}" th:class=" ${!current ? 'selected' : ''} ">
-                <li id="expected">
-                    상영 예정
-                </li>
-            </a>
-        </ul>
-
-        <!---영화 검색창--->
-        <form th:action="@{list}" method="get" class="movieSearch">
-            <input type="text" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="영화 찾기" />
-            <button type="submit">검색</button>
-        </form>
-
-        <!---영화 목록--->
-        <ul class="movieList currentMovieList">
-            <!---영화(fragment로 가져오기)--->
-            <li th:each="dto : ${result.dtoList}">
-                <div th:replace="~{/fragment/movie}"></div>
-            </li>
-        </ul>
-
-
-        <!---pagination--->
-        <ul class="pagination">
-            <li class="page-item" th:if="${result.prev}">
-                <a class="page-link" th:href="@{list(page=${result.start - 1}, keyword=${pageRequestDTO.keyword})}" tabindex="-1">Prev</a>
-            </li>
-
-            <li th:class=" 'page-item ' + ${result.page == page?'active':''}"
-                th:each="page: ${result.pageList}">
-                <a class="page-link" th:href="@{list(page=${page}, keyword=${pageRequestDTO.keyword})}">
-                    [[${page}]]
+    <th:block th:fragment="contents">
+        <main>
+            <!---상영 중 / 상영 예정 탭--->
+            <ul class="currentMovie">
+                <a th:href="@{/movie/current/list}" th:class=" ${current ? 'selected' : ''} ">
+                    <li id="current">
+                        상영 중
+                    </li>
                 </a>
-            </li>
-
-            <li class="page-item" th:if="${result.next}">
-                <a class="page-link" th:href="@{list(page=${result.end + 1}, keyword=${pageRequestDTO.keyword})}">Next</a>
-            </li>
-        </ul>
-
-    </main>
-
-    <!---<script th:src="@{/script/page/movie_list.js}"></script>--->
-    <script>
-        var uidInput = "[[${uid}]]";
-    </script>
-    <script th:src="@{/script/fragment/movie.js}"></script>
-
-</th:block>
+                <a th:href="@{/movie/expected/list}" th:class=" ${!current ? 'selected' : ''} ">
+                    <li id="expected">
+                        상영 예정
+                    </li>
+                </a>
+            </ul>
+            <!---영화 검색창--->
+            <form th:action="@{list}" method="get" class="movieSearch">
+                <input type="text" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="영화 찾기" />
+                <button type="submit">검색</button>
+            </form>
+            <!---영화 목록--->
+            <ul class="movieList currentMovieList">
+                <!---영화(fragment로 가져오기)--->
+                <li th:each="dto : ${result.dtoList}">
+                    <div th:replace="~{/fragment/movie}"></div>
+                </li>
+            </ul>
+            <!---pagination--->
+            <ul class="pagination">
+                <li class="page-item" th:if="${result.prev}">
+                    <a class="page-link" th:href="@{list(page=${result.start - 1}, keyword=${pageRequestDTO.keyword})}" tabindex="-1">Prev</a>
+                </li>
+                <li th:class=" 'page-item ' + ${result.page == page?'active':''}"
+                    th:each="page: ${result.pageList}">
+                    <a class="page-link" th:href="@{list(page=${page}, keyword=${pageRequestDTO.keyword})}">
+                        [[${page}]]
+                    </a>
+                </li>
+                <li class="page-item" th:if="${result.next}">
+                    <a class="page-link" th:href="@{list(page=${result.end + 1}, keyword=${pageRequestDTO.keyword})}">Next</a>
+                </li>
+            </ul>
+        </main>
+        <!---<script th:src="@{/script/page/movie_list.js}"></script>--->
+        <script>
+            var uidInput = "[[${uid}]]";
+        </script>
+        <script th:src="@{/script/fragment/movie.js}"></script>
+    </th:block>
 </th:block>
 </html>
