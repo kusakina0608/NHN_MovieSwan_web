@@ -31,7 +31,7 @@ import java.util.UUID;
 public class MovieController {
     private final MovieService service;
 
-    private String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/asset/image";
+    private String uploadPath = System.getProperty("user.dir") + "/images";
 
     final static char[] digits = {
             '0', '1', '2', '3', '4', '5', '6', '7',
@@ -95,6 +95,7 @@ public class MovieController {
             header.add("Content-Type", Files.probeContentType(file.toPath()));
             result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

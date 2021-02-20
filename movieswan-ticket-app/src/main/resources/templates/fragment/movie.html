@@ -4,8 +4,8 @@
 
 <div class="movie">
     <!---영화 포스터 및 제목--->
-    <a class="movieLink" th:href="@{/movie/detail(mid=${dto.mid})}">
-        <img class="poster" th:src="|/api/movie/display?fileName=${dto.poster}|">
+    <a class="movieLink" th:href="@{../detail(mid=${dto.mid})}">
+        <img class="poster" th:src="|/movie/api/movie/display?fileName=${dto.poster}|">
         <div class="title">[[${dto.name}]]</div>
         <div class="story">[[${dto.story}]]</div>
     </a>
