@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.*;
+import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
 import com.nhn.rookie8.movieswanticketapp.service.*;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -280,11 +281,33 @@ public class PageController {
     }
 
     @GetMapping("/mypage/movie")
-    public String my_page_mymovie(HttpServletRequest httpServletRequest, Model model) {
+    public String my_page_mymovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
-        } else { return "page/my_page_mymovie"; }
+        } else {
+            String uid = session.getAttribute("uid").toString();
+            List<String> midList = favoriteService.getList(uid);
+            PageResultDTO<MovieDTO, Movie> result = movieService.getListByMid(pageRequestDTO, midList);
+            List<MovieDTO> movieList = result.getDtoList();
+
+            HashMap<String, String> gradeMap = new HashMap<String, String>();
+            movieList.forEach(movieDTO -> {
+                float grade = reviewService.getGradeByMid(movieDTO.getMid());
+                gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
+            });
+
+            HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
+            movieList.forEach(movieDTO -> {
+                boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
+                favMap.put(movieDTO.getMid(), isFav);
+            });
+
+            model.addAttribute("result", result);
+            model.addAttribute("gradeMap", gradeMap);
+            model.addAttribute("favMap", favMap);
+
+            return "page/my_page_mymovie"; }
     }
 
     @GetMapping("/mypage/review")

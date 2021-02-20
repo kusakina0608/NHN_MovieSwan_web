@@ -5,9 +5,11 @@ import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
 
+import java.util.List;
+
 public interface FavoriteService {
     String register(FavoriteDTO favoriteDTO);
-    PageResultDTO<FavoriteDTO, Favorite> getList(PageRequestDTO pageRequestDTO, String uid);
+    List<String> getList(String uid);
     boolean isFavorite(String uid, String mid);
     void remove(FavoriteDTO favoriteDTO);
 

@@ -19,20 +19,20 @@
         </ul>
 
         <div id="pagination">
-                <li th:if="${result.prev}">
-                    <a th:href="@{/mypage/review(page=${result.start - 1})}" tabindex="-1">Previous</a>
-                </li>
+            <li th:if="${result.prev}">
+                <a th:href="@{/mypage/review(page=${result.start - 1})}" tabindex="-1">Previous</a>
+            </li>
 
-                <li th:each="page: ${result.pageList}">
-                    <a th:href="@{/mypage/review(page=${page})}">
-                        [[${page}]]
-                    </a>
-                </li>
+            <li th:each="page: ${result.pageList}">
+                <a th:href="@{/mypage/review(page=${page})}">
+                    [[${page}]]
+                </a>
+            </li>
 
-                <li th:if="${result.next}">
-                    <a th:href="@{/mypage/review(page=${result.end + 1})}">Next</a>
-                </li>
-            </div>
+            <li th:if="${result.next}">
+                <a th:href="@{/mypage/review(page=${result.end + 1})}">Next</a>
+            </li>
+        </div>
     </mymyreview>
 </th:block>
 </body>

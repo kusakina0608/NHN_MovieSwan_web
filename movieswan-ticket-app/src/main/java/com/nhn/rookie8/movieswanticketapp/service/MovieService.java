@@ -13,6 +13,8 @@ public interface MovieService {
 
     PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO, boolean current);
 
+    PageResultDTO<MovieDTO, Movie> getListByMid(PageRequestDTO requestDTO, List<String> midList);
+
     List<MovieDTO> getAllList();
 
     List<MovieDTO> getReleaseList();

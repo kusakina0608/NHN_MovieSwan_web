@@ -72,6 +72,23 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
+    public PageResultDTO<MovieDTO, Movie> getListByMid(PageRequestDTO requestDTO, List<String> midList) {
+        Pageable pageable = requestDTO.getPageable(Sort.by("startdate").descending());
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QMovie qMovie = QMovie.movie;
+        for(String mid : midList) {
+            BooleanExpression expression = qMovie.mid.eq(mid);
+            booleanBuilder.or(expression);
+        }
+
+        Page<Movie> result = repository.findAll(booleanBuilder, pageable);
+
+        Function<Movie, MovieDTO> fn = (entity -> entityToDTO(entity));
+
+        return new PageResultDTO<>(result, fn);
+    }
+
+    @Override
     public List<MovieDTO> getAllList() {
         List<Movie> movieList = repository.findAll();
         List<MovieDTO> movieDTOList = new ArrayList<MovieDTO>();

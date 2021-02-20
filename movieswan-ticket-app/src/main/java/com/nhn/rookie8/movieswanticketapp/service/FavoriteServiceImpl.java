@@ -31,8 +31,8 @@ public class FavoriteServiceImpl implements FavoriteService{
     }
 
     @Override
-    public PageResultDTO<FavoriteDTO, Favorite> getList(PageRequestDTO pageRequestDTO, String uid) {
-        Pageable pageable = pageRequestDTO.getPageable(Sort.by("mid"));
+    public List<String> getList(String uid) {
+        Pageable pageable = PageRequest.of(0, (int) repository.count());
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QFavorite qFavorite = QFavorite.favorite;
         BooleanExpression expression = qFavorite.uid.eq(uid);
@@ -40,9 +40,11 @@ public class FavoriteServiceImpl implements FavoriteService{
 
         Page<Favorite> result = repository.findAll(booleanBuilder, pageable);
 
-        Function<Favorite, FavoriteDTO> fn = (entity -> entityToDto(entity));
+        List<String> midList = new ArrayList<String>();
+        for(Favorite fav : result)
+            midList.add(fav.getMid());
 
-        return new PageResultDTO<>(result, fn);
+        return midList;
     }
 
     @Override
