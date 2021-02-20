@@ -21,6 +21,10 @@
                 <input type="text" class="form_control" name="title" th:value="${dto.title}" disabled>
             </formgroup>
             <formgroup class="form_group">
+                <formlabel class="form_label">작성 시간 :</formlabel>
+                <input type="text" class="form_control" name="regdate" th:value="${#temporals.format(dto.regdate, 'yyyy/MM/dd HH:mm:ss')}" disabled>
+            </formgroup>
+            <formgroup class="form_group">
                 <formlabel class="form_label">문의 내용 :</formlabel>
                 <textarea class="form_control" name="content" disabled>[[${dto.content}]]</textarea>
             </formgroup>
@@ -34,5 +38,7 @@
     </readquestion>
     </th:block>
 </body>
+
+<script th:src="@{/script/page/my_page_read_question.js}"></script>
 
 </html>

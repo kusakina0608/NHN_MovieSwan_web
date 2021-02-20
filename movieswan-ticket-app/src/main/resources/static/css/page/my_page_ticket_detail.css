@@ -1,0 +1,81 @@
+#ticket_subject {
+    font-size: 30px;
+    font-weight: bold;
+
+    margin: 20px 0 20px 20px;
+}
+
+#ticket_detail {
+    width: 100%;
+    height: 100%;
+
+    border: 3px dashed grey;
+    background-color: white;
+}
+
+#ticket_content {
+    display: flex;
+
+    padding: 10px 20px;
+}
+
+#ticket_content .poster {
+    width: 400px;
+}
+
+#ticket_moviename {
+    font-size: 20px;
+    color: grey;
+
+    margin: 0 0 10px 0;
+}
+
+#ticket_content_detail {
+    flex: 1;
+
+    margin: 0 10px 0 20px;
+}
+
+.ticket_item {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+.ticket_item .item {
+    width: 200px;
+
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.ticket_item .cont {
+    font-size: 20px;
+}
+
+.ticket_item .alarm {
+    color: red;
+    font-size: 15px;
+}
+
+.ticket_item .material-icons {
+    position: relative;
+    top: -3px;
+    left: 7px;
+
+    color: red;
+    font-size: 20px;
+}
+
+.ticket_item #mark {
+    display: block;
+    position: relative;
+
+    left: -5px;
+}
+
+#reservation .cont {
+    text-decoration: 3px wavy underline red;
+    text-underline-position: under;
+}

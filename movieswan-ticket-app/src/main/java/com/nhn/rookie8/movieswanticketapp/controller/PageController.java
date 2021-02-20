@@ -241,6 +241,7 @@ public class PageController {
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
+//            model.addAttribute("seatResult", seatService.)
             model.addAttribute("result", reservationService.readReservation(rid));
             return "page/my_page_ticket_detail";
         }
@@ -282,7 +283,8 @@ public class PageController {
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-            model.addAttribute("result", questionService.getQuestionList(pageRequestDTO));
+            String uid = (String) session.getAttribute("uid");
+            model.addAttribute("result", questionService.getQuestionList(pageRequestDTO, uid));
             return "page/my_page_question";
         }
     }
