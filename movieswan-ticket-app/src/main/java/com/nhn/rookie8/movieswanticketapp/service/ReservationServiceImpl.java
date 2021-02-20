@@ -77,6 +77,13 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
+    public String delete(ReservationDTO dto) {
+        String rid = dto.getRid();
+        repository.deleteById(rid);
+        return null;
+    }
+
+    @Override
     public PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO) {
         Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
         BooleanBuilder booleanBuilder = getMyList(requestDTO);

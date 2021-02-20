@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public interface ReservationService {
     String createReservationId();
     String register(ReservationDTO dto);
+    String delete(ReservationDTO dto);
 
     PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO);
     PageResultDTO<ReservationResultDTO, Reservation> getMypageList(PageRequestDTO requestDTO, String uid);
