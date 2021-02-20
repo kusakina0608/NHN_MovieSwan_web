@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/favorite")
@@ -14,9 +16,10 @@ public class FavoriteController {
     private final FavoriteService service;
 
     @PostMapping("/register")
-    public String registerFav(FavoriteDTO favoriteDTO) {
-        
+    public String registerFav(FavoriteDTO favoriteDTO, HttpServletRequest request) {
+        service.register(favoriteDTO);
 
-        return "";
+        String referer = request.getHeader("Referer");
+        return "redirect:"+ referer;
     }
 }
