@@ -133,9 +133,12 @@ public class PageController {
         else
             uid = "";
 
+        boolean isFav = favoriteService.isFavorite(uid, mid);
+
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
         model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
+        model.addAttribute("isFav", isFav);
         return "/page/movie_detail";
     }
 

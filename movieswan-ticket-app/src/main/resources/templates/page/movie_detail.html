@@ -29,7 +29,8 @@
                 </div>
 
                 <div class="buttons">
-                    <button class="favorite">
+                    <button th:class=" 'favorite ' + ${isFav ? 'clicked' : ''}">
+                        <input type="hidden" name="mid" th:value="${dto.mid}">
                         <span class="material-icons">favorite_border</span>
                         <span>3.3k</span>
                     </button>

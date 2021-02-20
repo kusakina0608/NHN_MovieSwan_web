@@ -1,6 +1,38 @@
 'use strict';
 
 (function() {
+    //찜 버튼 클릭 동작 관련
+    const requestTicketAPI = axios.create({
+        baseURL: "http://movieswan.nhnent.com:8080"
+    });
+
+    const favoriteAPI = {
+        registerFav: (uid, mid) => {
+            return requestTicketAPI.post(`/api/favorite/register?uid=${uid}&mid=${mid}`);
+        },
+        deleteFav: (uid, mid) => {
+            return requestTicketAPI.delete(`/api/favorite/delete?uid=${uid}&mid=${mid}`);
+        }
+    }
+
+    var favBtn = document.querySelector(".favorite");
+    favBtn.addEventListener("click", async (e) => {
+        if(uidInput != "") {
+            let mid = favBtn.querySelector("input").value;
+
+            // 찜 영화 등록 과정
+            if(!favBtn.classList.contains("clicked")){
+                await favoriteAPI.registerFav(uidInput, mid);
+                favBtn.classList.add("clicked");   
+            }
+            //찜 영화 삭제 과정
+            else {
+                await favoriteAPI.deleteFav(uidInput, mid);
+                favBtn.classList.remove("clicked");
+            }
+        }
+    });
+
     if(myReview == "") {
         var review = document.querySelector(".myreview-view");
         review.className = "myreview-view hide";
