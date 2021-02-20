@@ -10,6 +10,7 @@ import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,14 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -36,6 +34,9 @@ public class PageController {
     private final SeatService seatService;
     private final ReviewService reviewService;
     private final QuestionService questionService;
+
+    @Value("${accountURL}")
+    private String accountUrl;
 
     @GetMapping({"/", "/main"})
     public String main_page(HttpServletRequest httpServletRequest, Model model) {
@@ -221,7 +222,25 @@ public class PageController {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
-        } else { return "page/my_page_userinfo"; }
+        } else {
+
+            UserDTO userDTO = UserDTO.builder()
+                    .uid((String)session.getAttribute("uid"))
+                    .build();
+
+            RestTemplate template = new RestTemplate();
+            UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo",userDTO, UserResponseDTO.class);
+
+            Map<String,String> content = (HashMap<String,String>) userInfo.getContent();
+
+            model.addAttribute("regDate", content.get("regDate").split("T")[0]);
+            model.addAttribute("uid", content.get("uid"));
+            model.addAttribute("name", content.get("name"));
+            model.addAttribute("email", content.get("email"));
+            model.addAttribute("url", content.get("url"));
+
+            return "page/my_page_userinfo";
+        }
     }
 
     @GetMapping("/mypage/ticket")
