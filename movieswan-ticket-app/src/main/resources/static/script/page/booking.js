@@ -18,7 +18,7 @@
     console.log(nextButton);
 
     const requestTicketAPI = axios.create({
-        baseURL: "http://movieswan.nhnent.com:8080"
+        baseURL: "http://movieswan.nhnent.com/movie"
     });
 
     // 상영시간표 API에 요청
@@ -131,7 +131,7 @@
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
-        form.setAttribute("action", "/booking/seat");
+        form.setAttribute("action", "/movie/booking/seat");
         
         let selectedMovie = movieList.querySelector(".selected");
         let selectedDay = dayList.querySelector(".selected");

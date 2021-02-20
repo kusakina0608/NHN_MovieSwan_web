@@ -1,41 +1,42 @@
-<link rel="stylesheet" type="text/css" href="/css/fragment/header.css" />
-<script src="/script/fragment/header.js"></script>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<link th:href="@{/css/fragment/header.css}" rel="stylesheet" />
+<script th:src="@{/script/fragment/header.js}"></script>
 
 <header id="header">
-    <img id="header_logo" src="/asset/image/logo2.png" onclick="location.href='/'" />
+    <img id="header_logo" th:src="@{/asset/image/logo2.png}" onclick="location.href='/movie/'" />
     <headernav id="header_menu">
         <userlogin id="userlogin">
             <notloggedin id="notloggedin">
                 <span>
-                    <a href="/user/login">로그인</a>
+                    <a th:href="@{/movie/user/login}">로그인</a>
                 </span>
             </notloggedin>
             <loggedin id="loggedin">
                 <span>
-                    <a href="/mypage" id="user_name"></a>
+                    <a th:href="@{/mypage}" id="user_name"></a>
                     <span>님, 환영합니다.</span>
                     <a onclick="questionOnClick()">1:1 문의하기</a>
                     <input id="logout_button" type="button" value="로그아웃"
-                        onclick="location.href='/user/logout'" />
+                        onclick="location.href='/movie/user/logout'" />
                 </span>
             </loggedin>
         </userlogin>
 
         <navbar id="header_navbar">
             <ul id="header_mainnav">
-                <li><a href="/movie">영화</a></li>
-                <li><a href="/booking">예매</a></li>
-                <li><a href="#">극장</a></li>
+                <li><a th:href="@{/movie}">영화</a></li>
+                <li><a th:href="@{/booking}">예매</a></li>
+                <li><a th:href="@{/}">극장</a></li>
             </ul>
             <ul id="header_subnav">
                 <li>
-                    <a href="/mypage/ticket">
+                    <a th:href="@{/mypage/ticket}">
                         <span class="material-icons">schedule</span>
                         <span class="button_name">예매 내역</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/mypage">
+                    <a th:href="@{/mypage}">
                         <span class="material-icons">person</span>
                         <span class="button_name">마이페이지</span>
                     </a>
@@ -44,3 +45,4 @@
         </navbar>
     </headernav>
 </header>
+</html>

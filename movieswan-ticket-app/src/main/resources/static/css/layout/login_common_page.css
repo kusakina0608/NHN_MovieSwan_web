@@ -22,7 +22,7 @@
     min-height: 100vh;
     padding: var(--padding-default);
 
-    background-image: url(/asset/image/default_background.jpg);
+    background-image: url(/movie/asset/image/default_background.jpg);
     background-repeat: repeat-y;
     background-attachment: fixed;
     overflow: hidden;

@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: 내 문의 내역</title>
     <link th:href="@{/css/page/my_page_question.css}" type="text/css" rel="stylesheet" />
 </head>
-
 <body>
     <th:block th:replace="~{/layout/my_page::setContents(~{this::my_question})}">
         <myquestion id="my_question" th:fragment="my_question">
@@ -30,18 +28,15 @@
                     </tr>
                 </tbody>
             </table>
-
             <div id="pagination">
                 <li th:if="${result.prev}">
                     <a th:href="@{/mypage/question(page=${result.start - 1})}" tabindex="-1">Previous</a>
                 </li>
-
                 <li th:each="page: ${result.pageList}">
                     <a th:href="@{/mypage/question(page=${page})}">
                         [[${page}]]
                     </a>
                 </li>
-
                 <li th:if="${result.next}">
                     <a th:href="@{/mypage/question(page=${result.end + 1})}">Next</a>
                 </li>
@@ -49,7 +44,5 @@
         </myquestion>
     </th:block>
 </body>
-
 <script th:src="@{/script/page/my_page_question.js}"></script>
-
 </html>

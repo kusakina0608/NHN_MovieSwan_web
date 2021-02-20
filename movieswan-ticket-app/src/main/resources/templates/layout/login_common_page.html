@@ -11,29 +11,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 <!--    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">-->
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-
     <!-- Icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
     <!-- Common CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/layout/login_common_page.css" />
-
+    <link th:href="@{/css/layout/login_common_page.css}" rel="stylesheet" />
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
     <body>
         <background id="default_bg">
             <!-- Page -->
             <commonpage id="login_common_page">
-
                 <!-- Contents -->
                 <contents id="contents">
                     <th:block th:replace="${contents}"></th:block>
                 </contents>
             </commonpage>
-
         </background>
     </body>
 </th:block>
-
 </html>

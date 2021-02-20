@@ -1,5 +1,5 @@
-<link rel="stylesheet" type="text/css" href="/css/fragment/footer.css" />
-
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<link th:href="@{/css/fragment/footer.css}" rel="stylesheet" />
 <footer id="footer">
     <aboutus id="footer_aboutus">
         <span class="footer_teamname">Team RookieSwan</span>
@@ -13,6 +13,7 @@
         </div>
     </aboutus>
     <logo>
-        <img id="footer_logo" src="/asset/image/logo1_light.png" />
+        <img id="footer_logo" th:src="@{/asset/image/logo1_light.png}" />
     </logo>
 </footer>
+</html>
