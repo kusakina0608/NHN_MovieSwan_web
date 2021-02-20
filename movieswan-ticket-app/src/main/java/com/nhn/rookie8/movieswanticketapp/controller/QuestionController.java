@@ -37,7 +37,7 @@ public class QuestionController {
     }
 
     @GetMapping("/list")
-    public void getQuestionList(PageRequestDTO pageRequestDTO, Model model) {
-        model.addAttribute("result", service.getQuestionList(pageRequestDTO));
+    public void getQuestionListAdmin(PageRequestDTO pageRequestDTO, Model model) {
+        model.addAttribute("result", service.getQuestionListAdmin(pageRequestDTO));
     }
 }
