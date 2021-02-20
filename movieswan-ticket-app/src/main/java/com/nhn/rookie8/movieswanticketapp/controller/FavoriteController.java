@@ -4,22 +4,27 @@ import com.nhn.rookie8.movieswanticketapp.dto.FavoriteDTO;
 import com.nhn.rookie8.movieswanticketapp.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/favorite")
 public class FavoriteController {
     private final FavoriteService service;
 
     @PostMapping("/register")
-    public String registerFav(FavoriteDTO favoriteDTO, HttpServletRequest request) {
+    public void registerFav(FavoriteDTO favoriteDTO) {
         service.register(favoriteDTO);
+    }
 
-        String referer = request.getHeader("Referer");
-        return "redirect:"+ referer;
+    @DeleteMapping("/delete")
+    public void deleteFav(FavoriteDTO favoriteDTO) {
+        System.out.println("delete");
+        service.remove(favoriteDTO);
     }
 }

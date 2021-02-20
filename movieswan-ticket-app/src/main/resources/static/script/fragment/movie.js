@@ -11,7 +11,7 @@
             return requestTicketAPI.post(`/api/favorite/register?uid=${uid}&mid=${mid}`);
         },
         deleteFav: (uid, mid) => {
-            return requestTicketAPI.delete(`/api/favorite/delete?uid=${uid}&sid=${mid}`);
+            return requestTicketAPI.delete(`/api/favorite/delete?uid=${uid}&mid=${mid}`);
         }
     }
 
@@ -19,12 +19,19 @@
     favBtns.forEach(btn => {
         btn.addEventListener("click", async (e) => {
             let mid = btn.querySelector("input").value;
-            
+
             // 찜 영화 등록 과정
             if(!btn.classList.contains("clicked")){
+                alert(mid);
                 await favoriteAPI.registerFav("testuser", mid);
                 btn.classList.add("clicked");   
-            }            
+            }
+            //찜 영화 삭제 과정
+            else {
+                alert(mid);
+                await favoriteAPI.deleteFav("testuser", mid);
+                btn.classList.remove("clicked");
+            }
         })
     });
 
