@@ -10,7 +10,7 @@
 <th:block th:replace="~{/layout/register_common_page:: setContents(~{this:: #register_page} )}">
     <registerPage id="register_page">
         <main>
-            <img id="header_logo" th:src="@{/asset/image/logo1.png}" />
+            <img id="header_logo" th:src="@{/asset/image/logo1.png}" onclick="location.href='/movie/'"/>
             <h1 id="reg">회원가입</h1>
             <hr>
             <form id="form" method="POST" action="register_process">            
