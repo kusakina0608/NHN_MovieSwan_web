@@ -16,6 +16,9 @@
     }
 
     var favBtn = document.querySelector(".favorite");
+    if(favBtn.classList.contains("clicked"))
+            favBtn.querySelector(".material-icons").innerText = "favorite";
+
     favBtn.addEventListener("click", async (e) => {
         if(uidInput != "") {
             let mid = favBtn.querySelector("input").value;
@@ -24,11 +27,13 @@
             if(!favBtn.classList.contains("clicked")){
                 await favoriteAPI.registerFav(uidInput, mid);
                 favBtn.classList.add("clicked");   
+                btn.querySelector(".material-icons").innerText = "favorite";
             }
             //찜 영화 삭제 과정
             else {
                 await favoriteAPI.deleteFav(uidInput, mid);
                 favBtn.classList.remove("clicked");
+                btn.querySelector(".material-icons").innerText = "favorite-border";
             }
         }
     });

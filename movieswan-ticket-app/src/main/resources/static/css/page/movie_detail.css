@@ -50,13 +50,10 @@ main {
 }
 
 .buttons .favorite {
-    background: white;
-    border-radius: 5px;
-}
-
-.buttons .clicked {
-    background: red;
-    color: white;
+    background: transparent;
+    color: red;
+    border: 0;
+    outline: 0;
 }
 
 .buttons .reserve {

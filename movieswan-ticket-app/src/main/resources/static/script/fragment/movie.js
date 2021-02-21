@@ -17,6 +17,9 @@
 
     var favBtns = document.querySelectorAll(".favorite");
     favBtns.forEach(btn => {
+        if(btn.classList.contains("clicked"))
+            btn.querySelector(".material-icons").innerText = "favorite";
+
         btn.addEventListener("click", async (e) => {
             if(uidInput != "") {
                 let mid = btn.querySelector("input").value;
@@ -24,12 +27,14 @@
                 // 찜 영화 등록 과정
                 if(!btn.classList.contains("clicked")){
                     await favoriteAPI.registerFav(uidInput, mid);
-                    btn.classList.add("clicked");   
+                    btn.classList.add("clicked");
+                    btn.querySelector(".material-icons").innerText = "favorite";
                 }
                 //찜 영화 삭제 과정
                 else {
                     await favoriteAPI.deleteFav(uidInput, mid);
                     btn.classList.remove("clicked");
+                    btn.querySelector(".material-icons").innerText = "favorite_border";
                 }
             }
         })

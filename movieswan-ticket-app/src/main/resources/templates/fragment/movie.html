@@ -14,7 +14,6 @@
     <button th:class=" 'favorite ' + ${favMap[dto.mid] ? 'clicked' : ''}">
         <input type="hidden" name="mid" th:value="${dto.mid}">
         <span class="material-icons">favorite_border</span>
-        <span>3.3k</span>
     </button>
 
     <!---영화 정보 및 예매 버튼--->
