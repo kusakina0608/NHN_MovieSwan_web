@@ -76,6 +76,10 @@ public class MovieServiceImpl implements MovieService{
         Pageable pageable = requestDTO.getPageable(Sort.by("startdate").descending());
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
+        if(midList.isEmpty()) {
+            BooleanExpression expression = qMovie.mid.eq("");
+            booleanBuilder.and(expression);
+        }
         for(String mid : midList) {
             BooleanExpression expression = qMovie.mid.eq(mid);
             booleanBuilder.or(expression);

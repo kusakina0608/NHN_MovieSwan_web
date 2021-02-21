@@ -204,7 +204,10 @@ public class PageController {
             model.addAttribute(key, params.get(key));
             System.out.println(key + ": " +  params.get(key));
         });
-
+        String uid = (String)session.getAttribute("uid");
+        UserDTO userDTO = userService.getUserInfoById(uid);
+        model.addAttribute("user", userDTO.getName());
+        model.addAttribute("dooray_url", userDTO.getUrl());
 
         String randomId = reservationService.createReservationId();
         System.out.println(randomId);
@@ -236,7 +239,7 @@ public class PageController {
         return "page/booking_result";
     }
 
-    @GetMapping("/question")
+    @GetMapping("/mypage/question/register")
     public String question_page(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
@@ -289,7 +292,13 @@ public class PageController {
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-//            model.addAttribute("seatResult", seatService.)
+            List<String> result = seatService.getMySeatList(rid);
+            String seatResult = "";
+
+            for (int i = 0; i < result.size(); i++)
+                seatResult += " " + result.get(i);
+
+            model.addAttribute("seatResult", seatResult);
             model.addAttribute("result", reservationService.readReservation(rid));
             return "page/my_page_ticket_detail";
         }
@@ -332,6 +341,7 @@ public class PageController {
                 favMap.put(movieDTO.getMid(), isFav);
             });
 
+            model.addAttribute("uid", session.getAttribute("uid"));
             model.addAttribute("result", result);
             model.addAttribute("gradeMap", gradeMap);
             model.addAttribute("favMap", favMap);

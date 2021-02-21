@@ -16,7 +16,7 @@
                 <span>
                     <a th:href="@{/mypage}" id="user_name"></a>
                     <span>님, 환영합니다.</span>
-                    <a onclick="questionOnClick()">1:1 문의하기</a>
+                    <a th:href="@{/mypage/question}">1:1 문의하기</a>
                     <input id="logout_button" type="button" value="로그아웃"
                         onclick="location.href='/movie/user/logout'"/>
                 </span>

@@ -5,6 +5,7 @@
     <title>결제 페이지</title>
     <link th:href="@{/css/page/booking_result.css}" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
 </head>
 <body>
 <th:block th:replace="~{/layout/common_page:: setContents(~{this:: #main-container} )}">
@@ -45,6 +46,20 @@
         </section>
     </main>
 </th:block>
+<script>
+    var movie_title = [[${title}]];
+    var movie_date = [[${date}]];
+    var movie_time = [[${time}]];
+    var movie_theater = [[${theater}]];
+    var user_name = [[${user}]];
+    var user_url = [[${dooray_url}]];
+    console.log(movie_title);
+    console.log(movie_date);
+    console.log(movie_time);
+    console.log(movie_theater);
+    console.log(user_name);
+    console.log(user_url);    
+</script>
 <script th:src="@{/script/page/booking_result.js}"></script>
 </body>
 </html>
