@@ -27,7 +27,7 @@ public class QuestionController {
             return "redirect:/question";
         } else {
             model.addAttribute("status", "success");
-            return "redirect:/question";
+            return "redirect:/mypage/question";
         }
     }
 

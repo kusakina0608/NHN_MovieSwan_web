@@ -26,18 +26,22 @@
                 <item class="ticket_item" id="reservation">
                     <span class="item">상영 일자 :</span>
                     <span class="cont">[[${#temporals.format(result.startDate, 'yyyy년 M월 d일, HH:mm')}]]</span>
-                    <div id="mark">
-                        <span class="material-icons">favorite</span>
+                    <div class="mark">
                         <span class="alarm">꼭 기억해요</span>
+                        <span class="material-icons">favorite</span>
                     </div>
                 </item>
                 <item class="ticket_item">
                     <span class="item">예약 일자 :</span>
                     <span class="cont">[[${#temporals.format(result.regDate, 'yyyy년 M월 d일, HH:mm:ss')}]]</span>
                 </item>
-                <item class="ticket_item">
+                <item class="ticket_item" id="seat">
                     <span class="item">좌석 정보 :</span>
-                    <span class="cont">A10, A11</span>
+                    <span class="cont">[[${seatResult}]]</span>
+                    <div class="mark">
+                        <span class="alarm">꼭 기억해요</span>
+                        <span class="material-icons">favorite</span>
+                    </div>
                 </item>
                 <item class="ticket_item">
                     <span class="item">결제 정보 :</span>

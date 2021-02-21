@@ -51,7 +51,7 @@
 
 .ticket_item .cont {
     position: relative;
-    top: 5px;
+    top: 3px;
 
     font-size: 20px;
 }
@@ -63,21 +63,27 @@
 
 .ticket_item .material-icons {
     position: relative;
-    top: -3px;
-    left: 7px;
+    top: 2px;
+    left: -7px;
 
     color: red;
     font-size: 20px;
 }
 
-.ticket_item #mark {
+.ticket_item .mark {
     display: block;
     position: relative;
 
-    left: -5px;
+    top: 5px;
+    left: 7px;
 }
 
 #reservation .cont {
+    text-decoration: 3px wavy underline red;
+    text-underline-position: under;
+}
+
+#seat .cont {
     text-decoration: 3px wavy underline red;
     text-underline-position: under;
 }
