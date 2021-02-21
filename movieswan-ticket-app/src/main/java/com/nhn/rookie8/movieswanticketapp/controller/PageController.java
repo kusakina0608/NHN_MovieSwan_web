@@ -7,6 +7,7 @@ import com.nhn.rookie8.movieswanticketapp.service.*;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -26,12 +27,14 @@ import java.util.*;
 @RequestMapping("/")
 @RequiredArgsConstructor
 public class PageController {
+
     private final MovieService movieService;
     private final ReservationService reservationService;
     private final SeatService seatService;
     private final ReviewService reviewService;
     private final QuestionService questionService;
     private final FavoriteService favoriteService;
+    private final UserService userService;
 
     @Value("${accountURL}")
     private String accountUrl;
@@ -257,20 +260,13 @@ public class PageController {
             return "redirect:/user/login";
         } else {
 
-            UserDTO userDTO = UserDTO.builder()
-                    .uid((String)session.getAttribute("uid"))
-                    .build();
+            UserDTO userDTO = userService.getUserInfoById((String) session.getAttribute("uid"));
 
-            RestTemplate template = new RestTemplate();
-            UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo",userDTO, UserResponseDTO.class);
-
-            Map<String,String> content = (HashMap<String,String>) userInfo.getContent();
-
-            model.addAttribute("regDate", content.get("regDate").split("T")[0]);
-            model.addAttribute("uid", content.get("uid"));
-            model.addAttribute("name", content.get("name"));
-            model.addAttribute("email", content.get("email"));
-            model.addAttribute("url", content.get("url"));
+            model.addAttribute("regDate", userDTO.getRegDate().toString().split("T")[0]);
+            model.addAttribute("uid", userDTO.getUid());
+            model.addAttribute("name", userDTO.getName());
+            model.addAttribute("email", userDTO.getEmail());
+            model.addAttribute("url", userDTO.getUrl());
 
             return "page/my_page_userinfo";
         }
