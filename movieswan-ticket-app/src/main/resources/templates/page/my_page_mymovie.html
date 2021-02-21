@@ -7,8 +7,30 @@
 </head>
 <body>
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_mymovie})}">
-    <mymymovie th:fragment="my_mymovie">
-        My Movie
+    <mymymovie id="my_mymovie" th:fragment="my_mymovie">
+        <p id="mymovie_subject">My Movie</p>
+        <ul class="movieList">
+            <!---영화(fragment로 가져오기)--->
+            <li th:each="dto : ${result.dtoList}">
+                <div th:replace="~{/fragment/movie}"></div>
+            </li>
+        </ul>
+
+        <div id="pagination">
+            <li th:if="${result.prev}">
+                <a th:href="@{/mypage/moview(page=${result.start - 1})}" tabindex="-1">Previous</a>
+            </li>
+
+            <li th:each="page: ${result.pageList}">
+                <a th:href="@{/mypage/movie(page=${page})}">
+                    [[${page}]]
+                </a>
+            </li>
+
+            <li th:if="${result.next}">
+                <a th:href="@{/mypage/movie(page=${result.end + 1})}">Next</a>
+            </li>
+        </div>
     </mymymovie>
 </th:block>
 </body>

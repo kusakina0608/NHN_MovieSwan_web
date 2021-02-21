@@ -6,7 +6,6 @@
     <title>Movie Swan - 영화 리스트</title>
     <!---CSS 파일--->
     <link th:href="@{/css/page/movie_list.css}" rel="stylesheet" />
-    <link th:href="@{/css/fragment/movie.css}" rel="stylesheet" />
     <!---ICON--->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
@@ -55,6 +54,9 @@
             </ul>
         </main>
         <!---<script th:src="@{/script/page/movie_list.js}"></script>--->
+        <script>
+            var uidInput = "[[${uid}]]";
+        </script>
         <script th:src="@{/script/fragment/movie.js}"></script>
     </th:block>
 </th:block>
