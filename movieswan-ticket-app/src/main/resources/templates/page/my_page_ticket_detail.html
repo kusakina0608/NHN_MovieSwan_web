@@ -11,7 +11,7 @@
         <p id="ticket_subject">상세 예매내역</p>
         <ticket_content id="ticket_content">
             <ticket_poster id="ticket_poster">
-                <img class="poster" th:src="@{${'/asset/image/' + result.imgPath}}">
+                <img class="poster" th:src="|/movie/api/movie/display?fileName=${result.imgPath}|">
             </ticket_poster>
             <ticket_content_detail id="ticket_content_detail">
                 <p id="ticket_moviename">[[${result.movieName}]]</p>

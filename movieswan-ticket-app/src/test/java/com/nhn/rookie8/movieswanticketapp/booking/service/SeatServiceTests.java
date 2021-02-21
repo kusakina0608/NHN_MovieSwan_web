@@ -103,4 +103,12 @@ public class SeatServiceTests {
             service.register(dto);
         });
     }
+
+    @Test
+    public void testGetMySeatList(){
+        List<String> sidList = service.getMySeatList("W16M-FA4B-43D7-VIIS");
+        sidList.forEach(sid -> {
+            System.out.println(sid);
+        });
+    }
 }
