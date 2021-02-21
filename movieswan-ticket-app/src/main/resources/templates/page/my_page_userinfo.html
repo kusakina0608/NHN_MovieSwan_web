@@ -7,8 +7,36 @@
 </head>
 <body>
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_userinfo})}">
-    <myuserinfo th:fragment="my_userinfo">
-        회원정보
+    <myuserinfo id="my_userinfo" th:fragment="my_userinfo">
+        <div id="user_title">회원 정보</div>
+        <div id="content">
+            <div class="info">
+                <div class="info_attr">가입일자</div>
+                <hr />
+                <div class="info_data">[[${regDate}]]</div>
+            </div>
+            <div class="info">
+                <div class="info_attr">ID</div>
+                <hr />
+                <div class="info_data">[[${uid}]]</div>
+            </div>
+            <div class="info">
+                <div class="info_attr">이름</div>
+                <hr />
+                <div class="info_data">[[${name}]]</div>
+            </div>
+            <div class="info">
+                <div class="info_attr">email</div>
+                <hr />
+                <div class="info_data">[[${email}]]</div>
+            </div>
+            <div class="info">
+                <div class="info_attr">Dooray! URL</div>
+                <hr />
+                <div class="info_data">[[${url}]]</div>
+            </div>
+        </div>
+
     </myuserinfo>
 </th:block>
 </body>
