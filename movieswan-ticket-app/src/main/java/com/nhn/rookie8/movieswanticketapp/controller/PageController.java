@@ -233,7 +233,7 @@ public class PageController {
         return "page/booking_result";
     }
 
-    @GetMapping("/question")
+    @GetMapping("/mypage/question/register")
     public String question_page(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
