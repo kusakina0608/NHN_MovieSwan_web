@@ -41,6 +41,12 @@
                     <a th:href="@{/mypage/question(page=${result.end + 1})}">Next</a>
                 </li>
             </div>
+            <buttoncontrol id="button_control">
+                <button id="question_button" onclick="location.href='/movie/mypage/question/register'">
+                    <span class="material-icons">help_outline</span>
+                    1:1 문의하기
+                </button>
+            </buttoncontrol>
         </myquestion>
     </th:block>
 </body>
