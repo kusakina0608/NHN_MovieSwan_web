@@ -204,7 +204,10 @@ public class PageController {
             model.addAttribute(key, params.get(key));
             System.out.println(key + ": " +  params.get(key));
         });
-
+        String uid = (String)session.getAttribute("uid");
+        UserDTO userDTO = userService.getUserInfoById(uid);
+        model.addAttribute("user", userDTO.getName());
+        model.addAttribute("dooray_url", userDTO.getUrl());
 
         String randomId = reservationService.createReservationId();
         System.out.println(randomId);
