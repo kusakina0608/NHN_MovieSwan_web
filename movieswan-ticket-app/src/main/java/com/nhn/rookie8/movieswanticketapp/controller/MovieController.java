@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +25,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-@RestController
+@Controller
+@ResponseBody
 @RequiredArgsConstructor
 @RequestMapping("/api/movie")
 @Log4j2
@@ -45,14 +47,14 @@ public class MovieController {
     };
 
     @PostMapping("/register")
-    public void registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile,
+    public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile,
                               HttpServletRequest request, HttpServletResponse response) throws IOException  {
         log.info(movieDTO.getName());
         log.info(uploadFile.getName());
 
         if(uploadFile.getContentType().startsWith("image") == false) {
             log.warn("this file is not image type");
-            return;
+            return "redirect:/admin";
         }
 
         log.info(uploadPath);
@@ -75,6 +77,8 @@ public class MovieController {
         service.register(movieDTO);
 
         response.sendRedirect("/admin");
+
+        return "redirect:/admin";
     }
 
     @GetMapping("/display")

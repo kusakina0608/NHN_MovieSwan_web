@@ -8,6 +8,7 @@ import com.nhn.rookie8.movieswanticketapp.response.MovieScheduleResponse;
 import com.nhn.rookie8.movieswanticketapp.service.MovieScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -21,18 +22,25 @@ import java.util.Map;
 @RequestMapping("/api/schedule")
 @Log4j2
 @RequiredArgsConstructor
-@RestController
+@Controller
+@ResponseBody
 public class MovieScheduleController {
     private final MovieScheduleService service;
 
     @PostMapping("/register")
-    public void registerSchd(MovieScheduleInpDTO inpDTO) {
+    public String registerSchd(MovieScheduleInpDTO inpDTO) {
+
         service.registerMovieSchedule(inpDTO);
+
+        return "redirect:/admin";
     }
 
     @DeleteMapping("/delete")
-    public void deleteSchd(String tid) {
+    public String deleteSchd(String tid) {
+
         service.deleteMovieSchedule(tid);
+
+        return "redirect:/admin";
     }
 
     @GetMapping("/timetable")
