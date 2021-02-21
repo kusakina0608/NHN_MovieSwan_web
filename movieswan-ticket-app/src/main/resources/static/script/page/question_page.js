@@ -4,3 +4,8 @@
     writer.innerHTML = localStorage.getItem("uid");
     val.value = localStorage.getItem("uid");
 } ());
+
+(function() {
+    const menu = document.getElementById("menu_question");
+    menu.className = "active";
+} ());
