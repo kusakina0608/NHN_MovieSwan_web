@@ -1,14 +1,11 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.*;
+import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
-import com.nhn.rookie8.movieswanticketapp.service.MovieService;
-import com.nhn.rookie8.movieswanticketapp.service.ReservationService;
-import com.nhn.rookie8.movieswanticketapp.service.SeatService;
+import com.nhn.rookie8.movieswanticketapp.service.*;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
-import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
-import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -36,6 +33,7 @@ public class PageController {
     private final SeatService seatService;
     private final ReviewService reviewService;
     private final QuestionService questionService;
+    private final FavoriteService favoriteService;
 
     @GetMapping({"/", "/main"})
     public String main_page(HttpServletRequest httpServletRequest, Model model) {
@@ -60,7 +58,7 @@ public class PageController {
     }
 
     @GetMapping("/movie/current/list")
-    public String currentMovieList(PageRequestDTO pageRequestDTO, Model model) {
+    public String currentMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, true);
         List<MovieDTO> movieList = resultDTO.getDtoList();
         HashMap<String, String> gradeMap = new HashMap<String, String>();
@@ -69,14 +67,30 @@ public class PageController {
              gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
         });
 
+        HttpSession session = httpServletRequest.getSession(false);
+        String uid;
+        if (!(session == null || session.getAttribute("uid") == null)) {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            uid = session.getAttribute("uid").toString();
+        }
+        else
+            uid = "";
+
+        HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
+        movieList.forEach(movieDTO -> {
+            boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
+            favMap.put(movieDTO.getMid(), isFav);
+        });
+
         model.addAttribute("result", resultDTO);
         model.addAttribute("gradeMap", gradeMap);
+        model.addAttribute("favMap", favMap);
         model.addAttribute("current", true);
         return "/page/movie_list";
     }
 
     @GetMapping("/movie/expected/list")
-    public String expectedMovieList(PageRequestDTO pageRequestDTO, Model model) {
+    public String expectedMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, false);
         List<MovieDTO> movieList = resultDTO.getDtoList();
         HashMap<String, String> gradeMap = new HashMap<String, String>();
@@ -85,8 +99,24 @@ public class PageController {
             gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
         });
 
+        HttpSession session = httpServletRequest.getSession(false);
+        String uid;
+        if (!(session == null || session.getAttribute("uid") == null)) {
+            model.addAttribute("uid", session.getAttribute("uid"));
+            uid = session.getAttribute("uid").toString();
+        }
+        else
+            uid = "";
+
+        HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
+        movieList.forEach(movieDTO -> {
+            boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
+            favMap.put(movieDTO.getMid(), isFav);
+        });
+
         model.addAttribute("result", resultDTO);
         model.addAttribute("gradeMap", gradeMap);
+        model.addAttribute("favMap", favMap);
         model.addAttribute("current", false);
         return "/page/movie_list";
     }
@@ -104,9 +134,12 @@ public class PageController {
         else
             uid = "";
 
+        boolean isFav = favoriteService.isFavorite(uid, mid);
+
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
         model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
+        model.addAttribute("isFav", isFav);
         return "/page/movie_detail";
     }
 
@@ -248,11 +281,33 @@ public class PageController {
     }
 
     @GetMapping("/mypage/movie")
-    public String my_page_mymovie(HttpServletRequest httpServletRequest, Model model) {
+    public String my_page_mymovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
-        } else { return "page/my_page_mymovie"; }
+        } else {
+            String uid = session.getAttribute("uid").toString();
+            List<String> midList = favoriteService.getList(uid);
+            PageResultDTO<MovieDTO, Movie> result = movieService.getListByMid(pageRequestDTO, midList);
+            List<MovieDTO> movieList = result.getDtoList();
+
+            HashMap<String, String> gradeMap = new HashMap<String, String>();
+            movieList.forEach(movieDTO -> {
+                float grade = reviewService.getGradeByMid(movieDTO.getMid());
+                gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
+            });
+
+            HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
+            movieList.forEach(movieDTO -> {
+                boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
+                favMap.put(movieDTO.getMid(), isFav);
+            });
+
+            model.addAttribute("result", result);
+            model.addAttribute("gradeMap", gradeMap);
+            model.addAttribute("favMap", favMap);
+
+            return "page/my_page_mymovie"; }
     }
 
     @GetMapping("/mypage/review")

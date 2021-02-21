@@ -22,11 +22,13 @@
                     <p>개봉 : [[${dto.startdate}]]</p>
                 </div>
                 <div class="buttons">
-                    <button class="favorite">
+                    <button th:class=" 'favorite ' + ${isFav ? 'clicked' : ''}">
+                        <input type="hidden" name="mid" th:value="${dto.mid}">
                         <span class="material-icons">favorite_border</span>
                         <span>3.3k</span>
                     </button>
-                    <button class="reserve">
+        
+                    <button class="reserve" th:onclick=" 'location.href = \'' + @{/booking} + '\' '">
                         <span class="material-icons booking">local_activity</span>
                         <span>예매</span>
                     </button>
