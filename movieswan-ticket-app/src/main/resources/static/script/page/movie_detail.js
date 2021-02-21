@@ -33,7 +33,7 @@
             else {
                 await favoriteAPI.deleteFav(uidInput, mid);
                 favBtn.classList.remove("clicked");
-                favBtn.querySelector(".material-icons").innerText = "favorite-border";
+                favBtn.querySelector(".material-icons").innerText = "favorite_border";
             }
         }
     });
