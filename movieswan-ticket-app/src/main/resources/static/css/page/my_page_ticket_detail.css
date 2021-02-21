@@ -38,7 +38,6 @@
 
 .ticket_item {
     display: flex;
-    align-items: center;
 
     margin-bottom: 10px;
 }
@@ -51,6 +50,9 @@
 }
 
 .ticket_item .cont {
+    position: relative;
+    top: 5px;
+
     font-size: 20px;
 }
 
@@ -78,4 +80,66 @@
 #reservation .cont {
     text-decoration: 3px wavy underline red;
     text-underline-position: under;
+}
+
+hr {
+    border-top: 5px double;
+
+    margin: 20px 20px 10px 20px;
+}
+
+#button_control {
+    display: flex;
+    justify-content: flex-end;
+
+    margin: 0px 20px 20px 0px;
+}
+
+#button_control button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 120px;
+    height: 35px;
+
+    margin-left: 10px;
+
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 17px;
+
+    cursor: pointer;
+}
+
+#button_control .material-icons {
+    margin-right: 10px;
+}
+
+#cancle_button {
+    background-color: red;
+    border: none;
+}
+
+#ticket_button {
+    background-color: green;
+    border: none;
+}
+
+.totalprice {
+    display: flex;
+    align-items: flex-end;
+
+    padding-right: 20px;
+    margin-left: 50px;
+}
+
+.totalprice .cont {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.ticket_item p:first-child {
+    font-weight: bold;
 }

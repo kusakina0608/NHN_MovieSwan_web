@@ -299,6 +299,20 @@ public class PageController {
         }
     }
 
+    @GetMapping("/mypage/ticket/delete")
+    public String my_page_ticket_delete(@RequestParam String rid, PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("uid") == null) {
+            return "redirect:/user/login";
+        } else {
+            ReservationDTO reservationDTO = ReservationDTO.builder()
+                    .rid(rid)
+                    .build();
+            reservationService.delete(reservationDTO);
+            return "redirect:/mypage/ticket";
+        }
+    }
+
     @GetMapping("/mypage/movie")
     public String my_page_mymovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
