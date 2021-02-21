@@ -1,7 +1,7 @@
 'use strict';
 
 function trClicked(value) {
-    location.href = "/mypage/question/post?qid=" + value;
+    location.href = "/movie/mypage/question/post?qid=" + value;
 }
 
 (function() {

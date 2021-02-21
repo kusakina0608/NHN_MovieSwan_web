@@ -54,6 +54,11 @@ main {
     border-radius: 5px;
 }
 
+.buttons .clicked {
+    background: red;
+    color: white;
+}
+
 .buttons .reserve {
     color: white;
     background-color: tomato;

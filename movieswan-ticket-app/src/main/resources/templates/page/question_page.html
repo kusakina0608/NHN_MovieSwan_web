@@ -5,7 +5,9 @@
     <title>MovieSwan 1:1 문의</title>
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
     <!-- Icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Common CSS -->
@@ -24,8 +26,11 @@
             </header>
             <form id="question_contents" th:action="@{/api/question/register}" th:method="post">
                 <formgroup class="form_group">
+                    <input type="hidden" class="form_control" id="uid_hidden" name="uid">
+                </formgroup>
+                <formgroup class="form_group">
                     <formlabel class="form_label">작성자 :</formlabel>
-                    <input type="text" class="form_control" id="uid" name="uid" disabled>
+                    <label class="form_control" id="uid"></label>
                 </formgroup>
                 <formgroup class="form_group">
                     <formlabel class="form_label">제목 :</formlabel>
