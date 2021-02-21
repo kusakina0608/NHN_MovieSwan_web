@@ -1,37 +1,8 @@
-:root {
-    --padding-default: 30px;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-
-    box-sizing: border-box;
-    scroll-behavior: smooth;
-    /* font-family: 'Gugi', cursive; */
-    font-family: 'Jua', sans-serif;
-}
-
-#default_bg {
-    display: block;
-    justify-content: center;
-
-    width: 100vw;
-    min-height: 100vh;
-    padding: var(--padding-default);
-
-    background-image: url(/movie/asset/image/default_background.jpg);
-    background-repeat: repeat-y;
-    background-attachment: fixed;
-    overflow: hidden;
-}
-
-#common_page {
+#question {
     display: block;
     justify-content: center;
 
     width: 100%;
-    min-height: calc(100vh - var(--padding-default) * 2);
     padding: 30px 25px;
 
     border: 3px solid #000;
