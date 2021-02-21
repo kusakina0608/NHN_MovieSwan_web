@@ -51,16 +51,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: white;
-    border-radius: 15%;
+    background: transparent;
+    color: red;
+    border: 0;
+    outline: 0;
     position: absolute;
     top: 5px;
     right: 10px;
-}
-
-.movie .clicked {
-    background: red;
-    color: white;
 }
 
 .movie .movieDescription {

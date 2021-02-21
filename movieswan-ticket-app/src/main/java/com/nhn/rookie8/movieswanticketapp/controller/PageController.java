@@ -341,6 +341,7 @@ public class PageController {
                 favMap.put(movieDTO.getMid(), isFav);
             });
 
+            model.addAttribute("uid", session.getAttribute("uid"));
             model.addAttribute("result", result);
             model.addAttribute("gradeMap", gradeMap);
             model.addAttribute("favMap", favMap);

@@ -9,16 +9,16 @@
 <th:block th:replace="~{/layout/login_common_page:: setContents(~{this:: #login_page} )}">
     <loginPage id="login_page">
         <main id="main">
-            <img id="header_logo" th:src="@{/asset/image/logo2.png}" />
+            <img id="header_logo" th:src="@{/asset/image/logo2.png}" onclick="location.href='/movie/'" />
             <div id="login_title">로그인</div>
             <form id="login_form" th:action="@{/user/login_process}" method="post">
                 <div class="input_form">
                     <span id="person" class="material-icons">person</span>
-                    <input id="uid" type="text" name="uid">
+                    <input id="uid" type="text" name="uid" placeholder="ID">
                 </div>
                 <div class="input_form">
                     <span id="lock" class="material-icons">lock</span>
-                    <input id="password" type="password" name="password">
+                    <input id="password" type="password" name="password" placeholder="Password">
                     <span id="visibility" class="material-icons">visibility</span>
                     <span id="visibility_off" class="material-icons">visibility_off</span>
                 </div>
