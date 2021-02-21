@@ -132,3 +132,6 @@
     width: 300px;
 }
 
+img {
+    cursor: pointer;
+}

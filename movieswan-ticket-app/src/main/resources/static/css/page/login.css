@@ -70,3 +70,6 @@ main > div {
     margin: 10px;
 }
 
+img {
+    cursor: pointer;
+}
