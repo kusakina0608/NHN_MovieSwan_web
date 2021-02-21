@@ -293,7 +293,13 @@ public class PageController {
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-//            model.addAttribute("seatResult", seatService.)
+            List<String> result = seatService.getMySeatList(rid);
+            String seatResult = "";
+
+            for (int i = 0; i < result.size(); i++)
+                seatResult += " " + result.get(i);
+
+            model.addAttribute("seatResult", seatResult);
             model.addAttribute("result", reservationService.readReservation(rid));
             return "page/my_page_ticket_detail";
         }
