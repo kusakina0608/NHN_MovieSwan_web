@@ -27,13 +27,13 @@
             if(!favBtn.classList.contains("clicked")){
                 await favoriteAPI.registerFav(uidInput, mid);
                 favBtn.classList.add("clicked");   
-                btn.querySelector(".material-icons").innerText = "favorite";
+                favBtn.querySelector(".material-icons").innerText = "favorite";
             }
             //찜 영화 삭제 과정
             else {
                 await favoriteAPI.deleteFav(uidInput, mid);
                 favBtn.classList.remove("clicked");
-                btn.querySelector(".material-icons").innerText = "favorite-border";
+                favBtn.querySelector(".material-icons").innerText = "favorite-border";
             }
         }
     });
@@ -57,9 +57,9 @@
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
         if(myReview == "")
-            form.setAttribute("action", "/api/review/register");
+            form.setAttribute("action", "/movie/api/review/register");
         else {
-            form.setAttribute("action", "/api/review/modify");
+            form.setAttribute("action", "/movie/api/review/modify");
 
             let rid = document.createElement("input");
             rid.setAttribute("type", "hidden");
