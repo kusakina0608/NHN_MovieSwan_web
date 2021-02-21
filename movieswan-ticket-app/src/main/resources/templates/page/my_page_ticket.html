@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: 예매 내역</title>
     <link th:href="@{/css/page/my_page_ticket.css}" type="text/css" rel="stylesheet" />
 </head>
-
 <body>
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_ticket})}">
     <myticket id="my_ticket" th:fragment="my_ticket">
@@ -31,18 +29,15 @@
                 </tr>
                 </tbody>
             </table>
-
             <div id="pagination">
                 <li th:if="${result.prev}">
                     <a th:href="@{/mypage/ticket(page=${result.start - 1})}" tabindex="-1">Previous</a>
                 </li>
-
                 <li th:each="page: ${result.pageList}">
                     <a th:href="@{/mypage/ticket(page=${page})}">
                         [[${page}]]
                     </a>
                 </li>
-
                 <li th:if="${result.next}">
                     <a th:href="@{/mypage/ticket(page=${result.end + 1})}">Next</a>
                 </li>
@@ -50,7 +45,5 @@
     </myticket>
 </th:block>
 </body>
-
 <script th:src="@{/script/page/my_page_ticket.js}"></script>
-
 </html>
