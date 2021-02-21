@@ -1,7 +1,7 @@
 'use strict';
 
 function trClicked(value) {
-    location.href = "/mypage/ticket/detail?rid=" + value;
+    location.href = "/movie/mypage/ticket/detail?rid=" + value;
 }
 
 (function() {
