@@ -13,6 +13,7 @@ public interface SeatService {
     String register(SeatDTO dto);
     void modify(List<SeatDTO> dto, String rid);
     List<String> getReservedSeatList(String tid);
+    List<String> getMySeatList(String rid);
     Boolean preempt(SeatDTO dto);
     Boolean remove(SeatDTO dto);
 
