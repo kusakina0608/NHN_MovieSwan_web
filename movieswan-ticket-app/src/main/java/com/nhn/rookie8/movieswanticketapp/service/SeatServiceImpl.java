@@ -66,10 +66,30 @@ public class SeatServiceImpl implements SeatService{
         return seatIdList;
     }
 
+    @Override
+    public List<String> getMySeatList(String rid) {
+        BooleanBuilder booleanBuilder = getMySeat(rid);
+        Pageable pageable = PageRequest.of(0, 1000);
+        List<Seat> seatList = repository.findAll(booleanBuilder, pageable).toList();
+        List<String> seatIdList = new ArrayList<String>();
+        seatList.forEach(el -> {
+            seatIdList.add(el.getSid());
+        });
+        return seatIdList;
+    }
+
     private BooleanBuilder getReservedSeat(String tid) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QSeat qSeat = QSeat.seat;
         BooleanExpression expression = qSeat.tid.eq(tid);
+        booleanBuilder.and(expression);
+        return booleanBuilder;
+    }
+
+    private BooleanBuilder getMySeat(String rid) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QSeat qSeat = QSeat.seat;
+        BooleanExpression expression = qSeat.rid.eq(rid);
         booleanBuilder.and(expression);
         return booleanBuilder;
     }
