@@ -48,7 +48,7 @@ public class MovieController {
 
     @PostMapping("/register")
     public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile,
-                              HttpServletRequest request, HttpServletResponse response) throws IOException  {
+                              HttpServletRequest request) throws IOException  {
         log.info(movieDTO.getName());
         log.info(uploadFile.getName());
 
@@ -75,8 +75,6 @@ public class MovieController {
 
         movieDTO.setPoster(posterPath);
         service.register(movieDTO);
-
-        response.sendRedirect("/admin");
 
         return "redirect:/admin";
     }
