@@ -1,42 +1,37 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInpDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInputDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.MovieSchedule;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public interface MovieScheduleService {
-    void registerMovieSchedule(MovieScheduleInpDTO dto);
-    MovieScheduleDTO findMovieSchedule(String tid);
+    void registerMovieSchedule(MovieScheduleInputDTO dto);
     void deleteMovieSchedule(String tid);
-    List<MovieScheduleDTO> getMovieSchedule(String mid);
 
-    default MovieSchedule dtoToEntity(MovieScheduleInpDTO dto) {
-        String datetime = dto.getDate() + ' ' + dto.getTime();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern ("yyyy-MM-dd HH:mm");
-        LocalDateTime time = LocalDateTime.parse(datetime, formatter);
+    MovieScheduleDTO getASchedule(String tid);
+    List<MovieScheduleDTO> getAllSchedulesOfMovie(String mid);
 
-        String tid = "aaa";
-        String[] tid_date = {Integer.toString(time.getYear()).substring(2),
-                Integer.toString(time.getMonthValue()),
-                Integer.toString(time.getDayOfMonth()),
-                Integer.toString(time.getHour()),
-                Integer.toString(time.getMinute())};
+    default MovieSchedule dtoToEntity(MovieScheduleInputDTO movieScheduleInputDTO) {
+        LocalDate date = LocalDate.parse(movieScheduleInputDTO.getDate());
+        LocalTime time = LocalTime.parse(movieScheduleInputDTO.getTime());
+        LocalDateTime datetime = LocalDateTime.of(date, time);
+        datetime.format(DateTimeFormatter.ofPattern("yyMMddHHmm"));
 
-        for (int i = 0; i < tid_date.length; i++) {
-            tid_date[i] = tid_date[i].length() < 2 ? '0' + tid_date[i] : tid_date[i];
-            tid += tid_date[i];
-        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("aaa").append(datetime);
 
-        System.out.println(tid);
+        String tid = builder.toString();
 
         MovieSchedule entity = MovieSchedule.builder()
                 .tid(tid)
-                .mid(dto.getMid())
-                .time(time)
+                .mid(movieScheduleInputDTO.getMid())
+                .time(datetime)
                 .build();
         return entity;
     }
