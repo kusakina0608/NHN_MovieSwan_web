@@ -38,6 +38,7 @@ public class MovieScheduleController {
     }
 
     @GetMapping("/getall")
+    // TODO: 컬렉션 반환값을 클래스로 처리하는 과정이 필요합니다. 추후 논의...
     public List<LinkedHashMap<String, List<String>>> getAllSchedulesOfMovie(@RequestParam String mid) {
         List<MovieScheduleDTO> result = service.getAllSchedulesOfMovie(mid);
 
