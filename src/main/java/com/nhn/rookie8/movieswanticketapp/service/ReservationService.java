@@ -18,7 +18,7 @@ public interface ReservationService {
     ReservationResultDTO readReservation(String rid);
 
     default Reservation dtoToEntity(ReservationDTO dto){
-        Reservation entity = Reservation.builder()
+        return Reservation.builder()
                 .rid(dto.getRid())
                 .tid(dto.getTid())
                 .uid(dto.getUid())
@@ -28,11 +28,10 @@ public interface ReservationService {
                 .totalNum(dto.getTotalNum())
                 .price(dto.getPrice())
                 .build();
-        return entity;
     }
 
     default ReservationDTO entityToDto(Reservation entity){
-        ReservationDTO dto = ReservationDTO.builder()
+        return ReservationDTO.builder()
                 .rid(entity.getRid())
                 .tid(entity.getTid())
                 .uid(entity.getUid())
@@ -43,7 +42,6 @@ public interface ReservationService {
                 .price(entity.getPrice())
                 .regDate(entity.getRegDate())
                 .build();
-        return dto;
     }
 
     default ReservationResultDTO entityToDto(Reservation entity, String mid, String movieName, String imagePath, LocalDateTime startDate){
