@@ -24,7 +24,7 @@
     // 상영시간표 API에 요청
     const scheduleAPI = {
         getSchedules: (mid) => {
-            return requestTicketAPI.get(`/api/schedule/timetable?mid=${mid}`);
+            return requestTicketAPI.get(`/api/schedule/getall?mid=${mid}`);
         }
     }
 
@@ -100,7 +100,7 @@
                 timeList.innerHTML = '';
                 
                 // API로부터 전달받은 영화의 상영시간표를 저장
-                movieSchedule = res.data.data[0];
+                movieSchedule = res.data[0];
                 // 일자를 추가
                 for(var key in movieSchedule){
                     let newListElement = document.createElement("li");

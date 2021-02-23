@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovieScheduleInpDTO {
+public class MovieScheduleInputDTO {
     private String mid;
     private String date;
     private String time;

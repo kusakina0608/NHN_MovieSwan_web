@@ -23,8 +23,4 @@ public class MovieSchedule {
 
     @Column
     private LocalDateTime time;
-
-    public void changeTime(LocalDateTime changed) {
-        this.time = changed;
-    }
 }
