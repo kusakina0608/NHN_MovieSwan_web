@@ -18,7 +18,7 @@
     console.log(nextButton);
 
     const requestTicketAPI = axios.create({
-        baseURL: "http://movieswan.nhnent.com/movie"
+        baseURL: "http://dev-movieswan.nhn.com/movie"
     });
 
     // 상영시간표 API에 요청
