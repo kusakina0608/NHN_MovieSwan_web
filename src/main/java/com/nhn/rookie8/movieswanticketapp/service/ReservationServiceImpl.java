@@ -32,13 +32,13 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     public String createReservationId() {
+        Random rnd = new Random();
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         String reservationId;
         do {
             List<String> codeList = new ArrayList<>();
             for(int i = 0; i < 4; i++){
                 StringBuilder salt = new StringBuilder();
-                Random rnd = new Random();
                 while (salt.length() < 4) {
                     int index = (int) (rnd.nextFloat() * alphabet.length());
                     salt.append(alphabet.charAt(index));
