@@ -51,26 +51,33 @@ public class MovieController {
                               HttpServletRequest request) throws IOException  {
         log.info(movieDTO.getName());
         log.info(uploadFile.getName());
+        String posterPath;
+        Path savePath;
 
-        if(uploadFile.getContentType().startsWith("image") == false) {
-            log.warn("this file is not image type");
+        try {
+            if(uploadFile.getContentType().startsWith("image") == false) {
+                log.warn("이미지 타입의 파일이 아닙니다. {}", uploadFile);
+                return "redirect:/admin";
+            }
+
+            log.info(uploadPath);
+            UUID uuid = UUID.randomUUID();
+            String uuidStr = toUnsignedString(uuid.getMostSignificantBits(), 6) + toUnsignedString(uuid.getLeastSignificantBits(), 6);
+            String originalName = uploadFile.getOriginalFilename();
+            String extensionName = originalName.substring(originalName.lastIndexOf("."));
+            posterPath = makeFolder() + File.separator + uuidStr + extensionName;
+            log.info(posterPath);
+            String saveName = uploadPath + File.separator + posterPath;
+            savePath = Paths.get(saveName);
+        } catch (NullPointerException e) {
+            log.error("파일이 존재하지 않습니다.", e);
             return "redirect:/admin";
         }
-
-        log.info(uploadPath);
-        UUID uuid = UUID.randomUUID();
-        String uuidStr = toUnsignedString(uuid.getMostSignificantBits(), 6) + toUnsignedString(uuid.getLeastSignificantBits(), 6);
-        String originalName = uploadFile.getOriginalFilename();
-        String extensionName = originalName.substring(originalName.lastIndexOf("."));
-        String posterPath = makeFolder() + File.separator + uuidStr + extensionName;
-        log.info(posterPath);
-        String saveName = uploadPath + File.separator + posterPath;
-        Path savePath = Paths.get(saveName);
 
         try {
             uploadFile.transferTo(savePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("파일 업로드에 문제가 발생했습니다. {}", uploadFile, e);
         }
 
         movieDTO.setPoster(posterPath);
@@ -97,8 +104,7 @@ public class MovieController {
             header.add("Content-Type", Files.probeContentType(file.toPath()));
             result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("이미지를 띄우는데 문제가 발생했습니다.", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return result;
@@ -121,7 +127,7 @@ public class MovieController {
         char[] buf = new char[64];
         int charPos = 64;
         int radix = 1 << shift;
-        long mask = radix - 1;
+        long mask = (long)radix - 1;
         long number = i;
         do {
             buf[--charPos] = digits[(int) (number & mask)];
