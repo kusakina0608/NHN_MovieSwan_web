@@ -36,7 +36,7 @@
             <section class="inner-container">
                 <section class="inner-left-container">
                     <section class="movie-info">
-                        <img class="movie-poster" th:src="|/movie/api/movie/display?fileName=${poster}|" alt="영화 포스터">
+                        <img class="movie-poster" th:src="|/api/movie/display?fileName=${poster}|" alt="영화 포스터">
                         <section class="movie-text">
                             <h3>[[${title}]]</h3>
                             <h2>[[${theater}]]</h2>
@@ -352,11 +352,13 @@
                             </div>
                             <script>
                                 var seatsList = "[[${seatlist}]]".split("[")[1].split("]")[0].split(", ");
-                                seatsList.forEach(seat => {
-                                    let naSeat = document.querySelector("#" + seat).parentElement;
-                                    naSeat.classList.add("na-seat");
-                                    naSeat.disabled = true;
-                                });
+                                if(seatsList.length !== 1 || seatsList){
+                                    seatsList.forEach(seat => {
+                                        let naSeat = document.querySelector("#" + seat).parentElement;
+                                        naSeat.classList.add("na-seat");
+                                        naSeat.disabled = true;
+                                    });
+                                }
                             </script>
                         </section>
                     </section>

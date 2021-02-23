@@ -3,7 +3,7 @@
 (function() {
     //찜 버튼 클릭 동작 관련
     const requestTicketAPI = axios.create({
-        baseURL: "http://dev-movieswan.nhn.com/movie"
+        baseURL: location.origin
     });
 
     const favoriteAPI = {
@@ -65,9 +65,9 @@
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
         if(myReview == "")
-            form.setAttribute("action", "/movie/api/review/register");
+            form.setAttribute("action", "/api/review/register");
         else {
-            form.setAttribute("action", "/movie/api/review/modify");
+            form.setAttribute("action", "/api/review/modify");
 
             let rid = document.createElement("input");
             rid.setAttribute("type", "hidden");

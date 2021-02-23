@@ -25,7 +25,7 @@
 
 
     const isVaildId = axios.create({
-        baseURL: "http://dev-movieswan.nhn.com:8081/account/"
+        baseURL: location.origin + "/account/"
     });
 
     const isVaild = (uid) => {
