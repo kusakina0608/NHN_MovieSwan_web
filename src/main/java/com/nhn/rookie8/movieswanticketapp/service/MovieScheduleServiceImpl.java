@@ -2,20 +2,15 @@ package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInputDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.ReservationResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.MovieSchedule;
-import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Service
 @Log4j2
