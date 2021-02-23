@@ -22,7 +22,7 @@
                     <p>개봉 : [[${dto.startdate}]]</p>
                 </div>
                 <div class="buttons">
-                    <button th:class=" 'favorite ' + ${isFav ? 'clicked' : ''}">
+                    <button th:class="favorite">
                         <input type="hidden" name="mid" th:value="${dto.mid}">
                         <span class="material-icons">favorite_border</span>
                     </button>

@@ -11,7 +11,7 @@
     </a>
 
     <!---찜 버튼--->
-    <button th:class=" 'favorite ' + ${favMap[dto.mid] ? 'clicked' : ''}">
+    <button th:class="favorite">
         <input type="hidden" name="mid" th:value="${dto.mid}">
         <span class="material-icons">favorite_border</span>
     </button>
@@ -21,8 +21,9 @@
         <div>
             <span class="director">감독 : [[${dto.director}]]</span>
             <span class="grade">
+                <input type="hidden" name="mid" th:value="${dto.mid}">
                 <span class="material-icons star">star_rate</span>
-                <span>[[${gradeMap[dto.mid]}]]</span>
+                <span class="grade-num"></span>
             </span>
         </div>
         <div>
