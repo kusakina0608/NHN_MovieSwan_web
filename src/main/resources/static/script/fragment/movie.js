@@ -18,6 +18,12 @@
         }
     }
 
+    const reviewAPI = {
+        calculateGrade: (mid) => {
+            return requestTicketAPI.get(`/api/review/getGrade?mid=${mid}`)
+        }
+    }
+
     var favBtns = document.querySelectorAll(".favorite");
     favBtns.forEach(btn => {
         let mid = btn.querySelector("input").value;
@@ -47,6 +53,16 @@
             }
         })
     });
+
+    //평균 평점 계산
+    var grades = document.querySelectorAll(".grade");
+    grades.forEach(grade => {
+        let mid = grade.querySelector("input").value;
+
+        reviewAPI.calculateGrade(mid).then(response => {
+            grade.querySelector(".grade-num").innerText = (response.data).toFixed(1);
+        })
+    })
 
     //영화 이미지에 마우스 호버 동작 관련
     var movies = document.querySelectorAll(".movieLink");

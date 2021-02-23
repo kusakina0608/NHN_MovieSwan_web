@@ -21,8 +21,9 @@
         <div>
             <span class="director">감독 : [[${dto.director}]]</span>
             <span class="grade">
+                <input type="hidden" name="mid" th:value="${dto.mid}">
                 <span class="material-icons star">star_rate</span>
-                <span>[[${gradeMap[dto.mid]}]]</span>
+                <span class="grade-num"></span>
             </span>
         </div>
         <div>
