@@ -71,16 +71,15 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public String delete(ReservationDTO dto) {
+    public void delete(ReservationDTO dto) {
         String rid = dto.getRid();
         repository.deleteById(rid);
-        return null;
     }
 
     @Override
-    public PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO) {
+    public PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO, String uid) {
         Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
-        BooleanBuilder booleanBuilder = getMyList(requestDTO);
+        BooleanBuilder booleanBuilder = getMyReservationList(uid);
         Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
         Function<Reservation, ReservationDTO> fn = (entity -> entityToDto(entity));
         return new PageResultDTO<>(result, fn);
