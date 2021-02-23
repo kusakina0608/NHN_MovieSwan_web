@@ -1,7 +1,9 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.nhn.rookie8.movieswanticketapp.dto.*;
-import com.nhn.rookie8.movieswanticketapp.entity.*;
+import com.nhn.rookie8.movieswanticketapp.dto.FavoriteDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
+import com.nhn.rookie8.movieswanticketapp.entity.FavoriteId;
+import com.nhn.rookie8.movieswanticketapp.entity.QFavorite;
 import com.nhn.rookie8.movieswanticketapp.repository.FavoriteRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -9,13 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor

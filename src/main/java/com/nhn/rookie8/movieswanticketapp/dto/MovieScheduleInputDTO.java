@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovieScheduleInpDTO {
+public class MovieScheduleInputDTO {
     private String mid;
     private String date;
     private String time;

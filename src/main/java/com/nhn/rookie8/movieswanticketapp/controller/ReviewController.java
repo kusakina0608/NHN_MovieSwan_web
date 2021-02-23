@@ -44,4 +44,10 @@ public class ReviewController {
         redirectAttributes.addAttribute("mid", mid);
         return "redirect:/movie/detail";
     }
+
+    @ResponseBody
+    @GetMapping("/getGrade")
+    public float calculateGrade(String mid) {
+        return service.getGradeByMid(mid);
+    }
 }

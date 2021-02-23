@@ -10,10 +10,5 @@
         user_name,
         user_url
     }
-    emailjs.send('service_x131zev','template_21e1e7g',templateParams)
-        .then(res=>{
-            console.log(res.text);
-        },err=>{
-            console.log("failed"+error);
-        });
+    emailjs.send('service_x131zev','template_21e1e7g',templateParams);
 }());

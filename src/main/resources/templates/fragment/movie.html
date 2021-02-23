@@ -5,13 +5,13 @@
 <div class="movie">
     <!---영화 포스터 및 제목--->
     <a class="movieLink" th:href="@{/movie/detail(mid=${dto.mid})}">
-        <img class="poster" th:src="|/movie/api/movie/display?fileName=${dto.poster}|">
+        <img class="poster" th:src="|/api/movie/display?fileName=${dto.poster}|">
         <div class="title">[[${dto.name}]]</div>
         <div class="story">[[${dto.story}]]</div>
     </a>
 
     <!---찜 버튼--->
-    <button th:class=" 'favorite ' + ${favMap[dto.mid] ? 'clicked' : ''}">
+    <button th:class="favorite">
         <input type="hidden" name="mid" th:value="${dto.mid}">
         <span class="material-icons">favorite_border</span>
     </button>
@@ -21,8 +21,9 @@
         <div>
             <span class="director">감독 : [[${dto.director}]]</span>
             <span class="grade">
+                <input type="hidden" name="mid" th:value="${dto.mid}">
                 <span class="material-icons star">star_rate</span>
-                <span>[[${gradeMap[dto.mid]}]]</span>
+                <span class="grade-num"></span>
             </span>
         </div>
         <div>

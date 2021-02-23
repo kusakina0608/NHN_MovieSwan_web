@@ -1,29 +1,27 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.*;
-import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
+import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
 import com.nhn.rookie8.movieswanticketapp.service.*;
-import com.nhn.rookie8.movieswanticketapp.entity.Movie;
-import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
+@Log4j2
 @RequestMapping("/")
 @RequiredArgsConstructor
 public class PageController {
@@ -64,31 +62,12 @@ public class PageController {
     @GetMapping("/movie/current/list")
     public String currentMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, true);
-        List<MovieDTO> movieList = resultDTO.getDtoList();
-        HashMap<String, String> gradeMap = new HashMap<String, String>();
-        movieList.forEach(movieDTO -> {
-             float grade = reviewService.getGradeByMid(movieDTO.getMid());
-             gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
-        });
 
         HttpSession session = httpServletRequest.getSession(false);
-        String uid;
-        if (!(session == null || session.getAttribute("uid") == null)) {
+        if (!(session == null || session.getAttribute("uid") == null))
             model.addAttribute("uid", session.getAttribute("uid"));
-            uid = session.getAttribute("uid").toString();
-        }
-        else
-            uid = "";
-
-        HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
-        movieList.forEach(movieDTO -> {
-            boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
-            favMap.put(movieDTO.getMid(), isFav);
-        });
 
         model.addAttribute("result", resultDTO);
-        model.addAttribute("gradeMap", gradeMap);
-        model.addAttribute("favMap", favMap);
         model.addAttribute("current", true);
         return "/page/movie_list";
     }
@@ -96,31 +75,12 @@ public class PageController {
     @GetMapping("/movie/expected/list")
     public String expectedMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, false);
-        List<MovieDTO> movieList = resultDTO.getDtoList();
-        HashMap<String, String> gradeMap = new HashMap<String, String>();
-        movieList.forEach(movieDTO -> {
-            float grade = reviewService.getGradeByMid(movieDTO.getMid());
-            gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
-        });
 
         HttpSession session = httpServletRequest.getSession(false);
-        String uid;
-        if (!(session == null || session.getAttribute("uid") == null)) {
+        if (!(session == null || session.getAttribute("uid") == null))
             model.addAttribute("uid", session.getAttribute("uid"));
-            uid = session.getAttribute("uid").toString();
-        }
-        else
-            uid = "";
-
-        HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
-        movieList.forEach(movieDTO -> {
-            boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
-            favMap.put(movieDTO.getMid(), isFav);
-        });
 
         model.addAttribute("result", resultDTO);
-        model.addAttribute("gradeMap", gradeMap);
-        model.addAttribute("favMap", favMap);
         model.addAttribute("current", false);
         return "/page/movie_list";
     }
@@ -137,13 +97,10 @@ public class PageController {
         }
         else
             uid = "";
-
-        boolean isFav = favoriteService.isFavorite(uid, mid);
-
+        
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
         model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
-        model.addAttribute("isFav", isFav);
         return "/page/movie_detail";
     }
 
@@ -160,10 +117,10 @@ public class PageController {
         if (session == null) {
             return "redirect:/user/login";
         }
-        System.out.println(mid);
-        System.out.println(date);
-        System.out.println(time);
-        System.out.println(tid);
+        log.debug("mid: {}", mid);
+        log.debug("date: {}", date);
+        log.debug("time: {}", time);
+        log.debug("tid: {}", tid);
 
         MovieDTO movieDTO = movieService.read(mid);
         model.addAttribute("title", movieDTO.getName());
@@ -202,7 +159,7 @@ public class PageController {
         }
         params.keySet().forEach(key -> {
             model.addAttribute(key, params.get(key));
-            System.out.println(key + ": " +  params.get(key));
+            log.debug("{}: {}", key, params.get(key));
         });
         String uid = (String)session.getAttribute("uid");
         UserDTO userDTO = userService.getUserInfoById(uid);
@@ -210,7 +167,7 @@ public class PageController {
         model.addAttribute("dooray_url", userDTO.getUrl());
 
         String randomId = reservationService.createReservationId();
-        System.out.println(randomId);
+        log.debug("생성된 랜덤 아이디: {}", randomId);
         ReservationDTO reservationDTO = ReservationDTO.builder()
                 .rid(randomId)
                 .tid(params.get("tid"))
@@ -327,24 +284,9 @@ public class PageController {
             String uid = session.getAttribute("uid").toString();
             List<String> midList = favoriteService.getList(uid);
             PageResultDTO<MovieDTO, Movie> result = movieService.getListByMid(pageRequestDTO, midList);
-            List<MovieDTO> movieList = result.getDtoList();
-
-            HashMap<String, String> gradeMap = new HashMap<String, String>();
-            movieList.forEach(movieDTO -> {
-                float grade = reviewService.getGradeByMid(movieDTO.getMid());
-                gradeMap.put(movieDTO.getMid(), String.format("%.1f", grade));
-            });
-
-            HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
-            movieList.forEach(movieDTO -> {
-                boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
-                favMap.put(movieDTO.getMid(), isFav);
-            });
 
             model.addAttribute("uid", session.getAttribute("uid"));
             model.addAttribute("result", result);
-            model.addAttribute("gradeMap", gradeMap);
-            model.addAttribute("favMap", favMap);
 
             return "page/my_page_mymovie"; }
     }
