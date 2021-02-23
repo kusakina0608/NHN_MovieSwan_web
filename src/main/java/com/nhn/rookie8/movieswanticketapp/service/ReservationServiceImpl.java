@@ -135,13 +135,10 @@ public class ReservationServiceImpl implements ReservationService{
         return new PageResultDTO<>(result, fn);
     }
 
-    private BooleanBuilder getMyList(PageRequestDTO requestDTO) {
+    private BooleanBuilder getMyReservationList(String uid) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QReservation qReservation = QReservation.reservation;
-        // TODO: get user id from session;
-        String userId = "kusakina0608";
-        // TODO: 아직 관람하지 않은 영화만 리스트로 가져오도록 구현
-        BooleanExpression expression = qReservation.uid.eq(userId);
+        BooleanExpression expression = qReservation.uid.eq(uid);
         booleanBuilder.and(expression);
         return booleanBuilder;
     }
