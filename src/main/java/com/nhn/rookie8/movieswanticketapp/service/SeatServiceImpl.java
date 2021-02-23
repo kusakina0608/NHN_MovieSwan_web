@@ -33,13 +33,11 @@ public class SeatServiceImpl implements SeatService{
 
     @Override
     public String register(SeatDTO dto) {
-        log.info("DTO====================");
-        log.info(dto);
+        log.debug("DTO: {}", dto);
 
         Seat entity = dtoToEntity(dto);
 
-        log.info("Entity====================");
-        log.info(entity);
+        log.debug("Entity: {}", entity);
 
         repository.save(entity);
 
@@ -61,6 +59,7 @@ public class SeatServiceImpl implements SeatService{
         List<Seat> seatList = repository.findAll(booleanBuilder, pageable).toList();
         List<String> seatIdList = new ArrayList<String>();
         seatList.forEach(el -> {
+            log.debug("seat: {}", el);
             seatIdList.add(el.getSid());
         });
         return seatIdList;
@@ -101,18 +100,10 @@ public class SeatServiceImpl implements SeatService{
 
         Optional<Seat> result = repository.findById(new SeatId(dto.getTid(), dto.getSid()));
         if(result.isPresent() && !(result.get().getUid().equals(dto.getUid()))){
-            System.out.println("다른 사람이 이미 선점했어");
             return false;
         }
-        else if(result.isPresent() && result.get().getUid().equals(dto.getUid())){
-            System.out.println("여긴 이미 내 자리야");
-            return true;
-        }
-        else {
-            repository.save(entity);
-            System.out.println("성공했어");
-            return true;
-        }
+        repository.save(entity);
+        return true;
     }
 
     @Override

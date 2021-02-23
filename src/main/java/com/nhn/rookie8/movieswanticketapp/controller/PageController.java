@@ -7,6 +7,7 @@ import com.nhn.rookie8.movieswanticketapp.service.*;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
+@Log4j2
 @RequestMapping("/")
 @RequiredArgsConstructor
 public class PageController {
@@ -160,10 +162,10 @@ public class PageController {
         if (session == null) {
             return "redirect:/user/login";
         }
-        System.out.println(mid);
-        System.out.println(date);
-        System.out.println(time);
-        System.out.println(tid);
+        log.debug("mid: {}", mid);
+        log.debug("date: {}", date);
+        log.debug("time: {}", time);
+        log.debug("tid: {}", tid);
 
         MovieDTO movieDTO = movieService.read(mid);
         model.addAttribute("title", movieDTO.getName());
@@ -202,7 +204,7 @@ public class PageController {
         }
         params.keySet().forEach(key -> {
             model.addAttribute(key, params.get(key));
-            System.out.println(key + ": " +  params.get(key));
+            log.debug("{}: {}", key, params.get(key));
         });
         String uid = (String)session.getAttribute("uid");
         UserDTO userDTO = userService.getUserInfoById(uid);
@@ -210,7 +212,7 @@ public class PageController {
         model.addAttribute("dooray_url", userDTO.getUrl());
 
         String randomId = reservationService.createReservationId();
-        System.out.println(randomId);
+        log.debug("생성된 랜덤 아이디: {}", randomId);
         ReservationDTO reservationDTO = ReservationDTO.builder()
                 .rid(randomId)
                 .tid(params.get("tid"))
