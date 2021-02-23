@@ -21,10 +21,9 @@ public interface MovieScheduleService {
         LocalDate date = LocalDate.parse(movieScheduleInputDTO.getDate());
         LocalTime time = LocalTime.parse(movieScheduleInputDTO.getTime());
         LocalDateTime datetime = LocalDateTime.of(date, time);
-        datetime.format(DateTimeFormatter.ofPattern("yyMMddHHmm"));
 
         StringBuilder builder = new StringBuilder();
-        builder.append("aaa").append(datetime);
+        builder.append("aaa").append(datetime.format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
 
         String tid = builder.toString();
 

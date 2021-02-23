@@ -20,27 +20,47 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
 
     @Override
     public void registerMovieSchedule(MovieScheduleInputDTO movieScheduleInputDTO) {
-        MovieSchedule entity = dtoToEntity(movieScheduleInputDTO);
-        repository.save(entity);
+        try {
+            MovieSchedule entity = dtoToEntity(movieScheduleInputDTO);
+            log.info("Entity : {}", entity);
+            repository.save(entity);
+        } catch (Exception e) {
+            log.error(e);
+        }
     }
 
     @Override
     public void deleteMovieSchedule(String timeTableId) {
-        repository.deleteById(timeTableId);
+        try {
+            log.info("Deleted tid : {}", timeTableId);
+            repository.deleteById(timeTableId);
+        } catch (Exception e) {
+            log.error(e);
+        }
     }
 
     @Override
     public MovieScheduleDTO getASchedule(String timeTableId) {
-        Optional<MovieSchedule> result = repository.findById(timeTableId);
-        return result.isPresent() ? entityToDTO(result.get()) : null;
+        try {
+            Optional<MovieSchedule> result = repository.findById(timeTableId);
+            return result.isPresent() ? entityToDTO(result.get()) : null;
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
     public List<MovieScheduleDTO> getAllSchedulesOfMovie(String mid) {
-        List<MovieSchedule> result = repository.findByMidOrderByTimeAsc(mid);
-        List<MovieScheduleDTO> schedulesList = new ArrayList<> ();
+        try {
+            List<MovieSchedule> result = repository.findByMidOrderByTimeAsc(mid);
+            List<MovieScheduleDTO> schedulesList = new ArrayList<>();
 
-        result.forEach(e -> schedulesList.add(entityToDTO(e)));
-        return schedulesList;
+            result.forEach(e -> schedulesList.add(entityToDTO(e)));
+            return schedulesList;
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 }
