@@ -1,7 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.entity;
 
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,8 +23,4 @@ public class MovieSchedule {
 
     @Column
     private LocalDateTime time;
-
-    public void changeTime(LocalDateTime changed) {
-        this.time = changed;
-    }
 }

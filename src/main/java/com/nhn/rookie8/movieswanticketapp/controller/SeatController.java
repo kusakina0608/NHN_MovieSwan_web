@@ -1,8 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.Seat;
-import com.nhn.rookie8.movieswanticketapp.service.ReservationService;
 import com.nhn.rookie8.movieswanticketapp.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
