@@ -15,10 +15,9 @@
     var movieSchedule;
 
     const nextButton = document.querySelector(".next-button");
-    console.log(nextButton);
 
     const requestTicketAPI = axios.create({
-        baseURL: "http://dev-movieswan.nhn.com/movie"
+        baseURL: location.origin
     });
 
     // 상영시간표 API에 요청
@@ -131,7 +130,7 @@
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
-        form.setAttribute("action", "/movie/booking/seat");
+        form.setAttribute("action", "/booking/seat");
         
         let selectedMovie = movieList.querySelector(".selected");
         let selectedDay = dayList.querySelector(".selected");
@@ -167,7 +166,6 @@
         }
         else {
             alert("영화, 극장, 시간, 날짜를 모두 선택해 주세요.");
-            console.log("NO");
         }
     })
 
