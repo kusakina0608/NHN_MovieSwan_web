@@ -7,31 +7,39 @@
     });
 
     const favoriteAPI = {
-        registerFav: (uid, mid) => {
+        registerFavorite: (uid, mid) => {
             return requestTicketAPI.post(`/api/favorite/register?uid=${uid}&mid=${mid}`);
         },
-        deleteFav: (uid, mid) => {
+        deleteFavorite: (uid, mid) => {
             return requestTicketAPI.delete(`/api/favorite/delete?uid=${uid}&mid=${mid}`);
+        },
+        isFavorite: (uid, mid) => {
+            return requestTicketAPI.get(`/api/favorite/isFavorite?uid=${uid}&mid=${mid}`);
         }
     }
 
     var favBtn = document.querySelector(".favorite");
-    if(favBtn.classList.contains("clicked"))
+    let mid = favBtn.querySelector("input").value;
+
+    //찜한 영화라면 꽉찬 하트로 바꾸기
+    favoriteAPI.isFavorite(uidInput, mid).then(response => {
+        if(response.data) {
+            favBtn.classList.add("clicked");
             favBtn.querySelector(".material-icons").innerText = "favorite";
+        }
+    });
 
     favBtn.addEventListener("click", async (e) => {
         if(uidInput != "") {
-            let mid = favBtn.querySelector("input").value;
-
             // 찜 영화 등록 과정
             if(!favBtn.classList.contains("clicked")){
-                await favoriteAPI.registerFav(uidInput, mid);
+                await favoriteAPI.registerFavorite(uidInput, mid);
                 favBtn.classList.add("clicked");   
                 favBtn.querySelector(".material-icons").innerText = "favorite";
             }
             //찜 영화 삭제 과정
             else {
-                await favoriteAPI.deleteFav(uidInput, mid);
+                await favoriteAPI.deleteFavorite(uidInput, mid);
                 favBtn.classList.remove("clicked");
                 favBtn.querySelector(".material-icons").innerText = "favorite_border";
             }
