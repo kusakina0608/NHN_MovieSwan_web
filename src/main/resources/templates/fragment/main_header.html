@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <link th:href="@{/css/fragment/main_header.css}" rel="stylesheet" />
-<script th:src="@{/script/fragment/header.js}"></script>
 
 <header id="header">
     <img id="header_logo" th:src="@{/asset/image/logo2_light.png}" onclick="location.href='/movie'"/>
@@ -18,7 +17,7 @@
                     <span>님, 환영합니다.</span>
                     <a th:href="@{/mypage/question}">1:1 문의하기</a>
                     <input id="logout_button" type="button" value="로그아웃"
-                        onclick="location.href='/movie/user/logout'"/>
+                        onclick="location.href='/user/logout'"/>
                 </span>
             </loggedin>
         </userlogin>

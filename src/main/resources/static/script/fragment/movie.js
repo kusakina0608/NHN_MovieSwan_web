@@ -3,7 +3,7 @@
 (function() {
     //찜 버튼 클릭 동작 관련
     const requestTicketAPI = axios.create({
-        baseURL: "http://dev-movieswan.nhn.com/movie"
+        baseURL: location.origin
     });
 
     const favoriteAPI = {

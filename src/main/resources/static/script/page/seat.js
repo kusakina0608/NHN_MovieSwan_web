@@ -18,7 +18,7 @@
     var selected = 0;
 
     const requestTicketAPI = axios.create({
-        baseURL: "http://dev-movieswan.nhn.com/movie"
+        baseURL: location.origin
     });
 
     // 상영시간표 API에 요청
@@ -38,23 +38,19 @@
             // 이미 선택되어 있는 좌석인 경우
             if(e.target.classList.contains("selected")){
                 var res = await seatAPI.cancelSeat(timetableId, seatId);
-                console.log(res);
                 if(res.data){
-                    console.log("선점 취소 성공!");
                     e.target.classList.remove("selected");
                     selectedSeat.querySelector(`.${e.target.querySelector("input").value}`).remove();
                     selected--;
                 }
                 else{
-                    console.log("이미 취소된 좌석입니다.");
+                    alert("이미 취소된 좌석입니다.")
                 }
             }
             else{ // 선택되어 있지 않은 좌석인 경우
                 if(selected < totalCount){
                     var res = await seatAPI.preemptSeat(timetableId, seatId);
-                    console.log(res.data);
                     if(res.data){
-                        // console.log("선 점 성 공");
                         e.target.classList.add("selected");
                         selected++;
                         let seatLabel = document.createElement("div");
@@ -64,7 +60,6 @@
                         selectedSeat.appendChild(seatLabel);
                     }
                     else{
-                        // console.log("선 점 실 패");
                         alert("다른 사용자가 이미 선점한 좌석입니다.");
                         e.target.classList.add("na-seat");
                         e.target.disabled = true;
@@ -84,13 +79,6 @@
     const childPrice = 12000;
     const otherPrice = 8000;
 
-    var showCount = function(){
-        console.log(`adultCount: ${adultCount}`);
-        console.log(`childCount: ${childCount}`);
-        console.log(`otherCount: ${otherCount}`);
-        console.log(`totalCount: ${totalCount}`);
-    }
-
     var refreshCount = function() {
         adultCount = parseInt(document.querySelector("#adultCount").value);
         childCount = parseInt(document.querySelector("#childCount").value);
@@ -107,7 +95,6 @@
             count = count < 0 ? 0 : count;
             input.value = count;
             refreshCount();
-            // showCount();
         });
     });
 
@@ -117,7 +104,6 @@
             var input = e.target.parentNode.querySelector('input');
             input.value = parseInt(input.value) + 1;
             refreshCount();
-            // showCount();
         });
     });
 
@@ -133,7 +119,7 @@
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
-        form.setAttribute("action", "/movie/booking/pay");
+        form.setAttribute("action", "/booking/pay");
 
         if(selected === totalCount){
             let selectedSeatList = [];
