@@ -5,9 +5,6 @@ import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReviewDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
 
-import java.util.List;
-import java.util.Optional;
-
 public interface ReviewService {
     String register(ReviewDTO reviewDTO);
 

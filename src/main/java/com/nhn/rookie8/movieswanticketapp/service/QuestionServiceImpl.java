@@ -1,9 +1,9 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
+import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.QQuestion;
 import com.nhn.rookie8.movieswanticketapp.entity.Question;
 import com.nhn.rookie8.movieswanticketapp.repository.QuestionRepository;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Function;
 

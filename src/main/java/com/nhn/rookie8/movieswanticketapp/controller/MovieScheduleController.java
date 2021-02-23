@@ -1,9 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInpDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.MovieSchedule;
 import com.nhn.rookie8.movieswanticketapp.response.MovieScheduleResponse;
 import com.nhn.rookie8.movieswanticketapp.service.MovieScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +9,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
