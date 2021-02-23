@@ -44,9 +44,7 @@ public class SeatServiceImpl implements SeatService{
     @Override
     @Transactional
     public void modify(List<SeatDTO> dtoList, String rid) {
-        dtoList.forEach(dto -> {
-            repository.updateRid(rid, dto.getTid(), dto.getSid(), dto.getUid());
-        });
+        dtoList.forEach(dto -> repository.updateRid(rid, dto.getTid(), dto.getSid(), dto.getUid()));
     }
 
     @Override
@@ -54,7 +52,7 @@ public class SeatServiceImpl implements SeatService{
         BooleanBuilder booleanBuilder = getReservedSeat(tid);
         Pageable pageable = PageRequest.of(0, 1000);
         List<Seat> seatList = repository.findAll(booleanBuilder, pageable).toList();
-        List<String> seatIdList = new ArrayList<String>();
+        List<String> seatIdList = new ArrayList<>();
         seatList.forEach(el -> {
             log.debug("seat: {}", el);
             seatIdList.add(el.getSid());
@@ -67,10 +65,8 @@ public class SeatServiceImpl implements SeatService{
         BooleanBuilder booleanBuilder = getMySeat(rid);
         Pageable pageable = PageRequest.of(0, 1000);
         List<Seat> seatList = repository.findAll(booleanBuilder, pageable).toList();
-        List<String> seatIdList = new ArrayList<String>();
-        seatList.forEach(el -> {
-            seatIdList.add(el.getSid());
-        });
+        List<String> seatIdList = new ArrayList<>();
+        seatList.forEach(el -> seatIdList.add(el.getSid()));
         return seatIdList;
     }
 
@@ -108,7 +104,7 @@ public class SeatServiceImpl implements SeatService{
         SeatId seatId = SeatId.builder().tid(dto.getTid()).sid(dto.getSid()).build();
         Optional<Seat> result = repository.findById(seatId);
         if(result.isPresent() && result.get().getUid().equals(dto.getUid())) {
-            List<Seat> deleteList = new ArrayList<Seat>();
+            List<Seat> deleteList = new ArrayList<>();
             deleteList.add(dtoToEntity(dto));
             repository.deleteInBatch(deleteList);
             return true;

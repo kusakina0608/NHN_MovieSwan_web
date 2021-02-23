@@ -14,23 +14,21 @@ public interface SeatService {
     Boolean remove(SeatDTO dto);
 
     default Seat dtoToEntity(SeatDTO dto){
-        Seat entity = Seat.builder()
+        return Seat.builder()
                 .tid(dto.getTid())
                 .sid(dto.getSid())
                 .uid(dto.getUid())
                 .rid(dto.getRid())
                 .build();
-        return entity;
     }
 
     default SeatDTO entityToDto(Seat entity){
-        SeatDTO dto = SeatDTO.builder()
+        return SeatDTO.builder()
                 .tid(entity.getTid())
                 .sid(entity.getSid())
                 .uid(entity.getSid())
                 .rid(entity.getRid())
                 .regDate(entity.getRegDate())
                 .build();
-        return dto;
     }
 }
