@@ -1,8 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.FavoriteDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
 
 import java.util.List;

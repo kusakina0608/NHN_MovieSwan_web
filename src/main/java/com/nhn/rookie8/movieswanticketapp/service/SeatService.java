@@ -1,11 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 import com.nhn.rookie8.movieswanticketapp.entity.Seat;
-import com.nhn.rookie8.movieswanticketapp.entity.SeatId;
 
 import java.util.List;
 

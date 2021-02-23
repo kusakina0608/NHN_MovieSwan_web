@@ -3,7 +3,6 @@ package com.nhn.rookie8.movieswanticketapp.service;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInpDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.MovieSchedule;
-import com.nhn.rookie8.movieswanticketapp.entity.Question;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

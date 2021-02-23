@@ -1,7 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.entity.QSeat;
 import com.nhn.rookie8.movieswanticketapp.entity.Seat;
 import com.nhn.rookie8.movieswanticketapp.entity.SeatId;
@@ -14,13 +13,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.UnexpectedRollbackException;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
