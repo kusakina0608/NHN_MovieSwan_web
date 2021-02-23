@@ -279,7 +279,9 @@ public class PageController {
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-            model.addAttribute("result", reservationService.getMypageList(pageRequestDTO, (String) session.getAttribute("uid")));
+            PageResultDTO result = reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("uid"));
+
+            model.addAttribute("result", reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("uid")));
             return "page/my_page_ticket";
         }
     }
@@ -291,14 +293,12 @@ public class PageController {
             return "redirect:/user/login";
         } else {
             List<String> result = seatService.getMySeatList(rid);
-            String seatResult = "";
+            StringBuilder seat = new StringBuilder();
+            result.forEach(s -> seat.append(s).append(' '));
 
-            for (int i = 0; i < result.size(); i++)
-                seatResult += " " + result.get(i);
-
-            model.addAttribute("seatResult", seatResult);
-            model.addAttribute("result", reservationService.readReservation(rid));
-            return "page/my_page_ticket_detail";
+            model.addAttribute("seatResult", seat);
+            model.addAttribute("result", reservationService.getReservation(rid));
+            return "page/my_page_ticket_detail";                                           
         }
     }
 
