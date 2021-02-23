@@ -76,15 +76,8 @@ public class PageController {
         else
             uid = "";
 
-        HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
-        movieList.forEach(movieDTO -> {
-            boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
-            favMap.put(movieDTO.getMid(), isFav);
-        });
-
         model.addAttribute("result", resultDTO);
         model.addAttribute("gradeMap", gradeMap);
-        model.addAttribute("favMap", favMap);
         model.addAttribute("current", true);
         return "/page/movie_list";
     }
@@ -108,15 +101,8 @@ public class PageController {
         else
             uid = "";
 
-        HashMap<String, Boolean> favMap = new HashMap<String, Boolean>();
-        movieList.forEach(movieDTO -> {
-            boolean isFav = favoriteService.isFavorite(uid, movieDTO.getMid());
-            favMap.put(movieDTO.getMid(), isFav);
-        });
-
         model.addAttribute("result", resultDTO);
         model.addAttribute("gradeMap", gradeMap);
-        model.addAttribute("favMap", favMap);
         model.addAttribute("current", false);
         return "/page/movie_list";
     }
