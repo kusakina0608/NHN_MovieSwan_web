@@ -1,9 +1,9 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
+import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Question;
 
 public interface QuestionService {

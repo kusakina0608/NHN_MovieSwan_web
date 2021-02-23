@@ -4,7 +4,6 @@ import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
-import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
 
 import java.util.List;
 
