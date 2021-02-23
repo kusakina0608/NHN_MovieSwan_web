@@ -97,21 +97,4 @@ public class MovieScheduleController {
             return null;
         }
     }
-
-    @GetMapping("/getlist")
-    @ResponseBody
-    public List<MovieScheduleDTO> getAllSchedulesListOfMovie(@RequestParam String mid) {
-        try {
-            log.info("Request MID : {}", mid);
-            List<MovieScheduleDTO> scheduleDTOList = service.getAllSchedulesOfMovie(mid);
-
-            if (scheduleDTOList.isEmpty())
-                throw new Exception("No results were found for your search.");
-
-            return service.getAllSchedulesOfMovie(mid);
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
-    }
 }
