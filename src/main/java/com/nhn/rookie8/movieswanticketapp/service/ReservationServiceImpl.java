@@ -34,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService{
     public String createReservationId() {
         Random rnd = new Random();
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        String reservationId;
+        StringBuilder reservationId = new StringBuilder();
         do {
             List<String> codeList = new ArrayList<>();
             for(int i = 0; i < 4; i++){
@@ -43,16 +43,12 @@ public class ReservationServiceImpl implements ReservationService{
                     int index = (int) (rnd.nextFloat() * alphabet.length());
                     salt.append(alphabet.charAt(index));
                 }
-                codeList.add(salt.toString());
+                reservationId.append(salt.toString());
+                reservationId.append("-");
             }
-            reservationId = codeList.get(0);
-            for(int i = 1; i < 4; i++){
-                reservationId += '-';
-                reservationId += codeList.get(i);
-            }
-        } while(checkExist(reservationId));
+        } while(checkExist(reservationId.toString()));
 
-        return reservationId;
+        return reservationId.toString();
     }
 
     private boolean checkExist(String rid) {
