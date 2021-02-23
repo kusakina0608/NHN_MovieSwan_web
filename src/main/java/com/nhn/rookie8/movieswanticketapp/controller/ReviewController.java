@@ -18,7 +18,7 @@ public class ReviewController {
     @PostMapping("/register")
     public String registerReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
         log.info(reviewDTO);
-        if(reviewDTO.getUid() == "")
+        if(reviewDTO.getUid().equals(""))
             return "redirect:/user/login";
         service.register(reviewDTO);
 
