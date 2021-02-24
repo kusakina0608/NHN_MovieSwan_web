@@ -15,12 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.function.Function;
 
 @Service
@@ -32,11 +28,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public String createReservationId() {
-        Random rnd = new Random();
+        SecureRandom rnd = new SecureRandom();
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder reservationId = new StringBuilder();
         do {
-            List<String> codeList = new ArrayList<>();
             for(int i = 0; i < 4; i++){
                 StringBuilder salt = new StringBuilder();
                 while (salt.length() < 4) {
@@ -44,10 +39,9 @@ public class ReservationServiceImpl implements ReservationService {
                     salt.append(alphabet.charAt(index));
                 }
                 reservationId.append(salt.toString());
-                reservationId.append("-");
+                if(i < 3) reservationId.append("-");
             }
         } while(checkExist(reservationId.toString()));
-
         return reservationId.toString();
     }
 
