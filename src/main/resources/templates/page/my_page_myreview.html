@@ -11,8 +11,11 @@
         <p id="myreview_subject">My Review</p>
         <ul id="reviews">
             <th:block th:each="review : ${result.dtoList}">
-                <a class="title" th:href="@{/movie/detail(mid=${review.mid})}">[[${titleMap[review.mid]}]]</a>
-                <th:block th:replace="~{/fragment/review}"></th:block>
+                <div class="review_title">
+                    <input type="hidden" th:value="${review.mid}">
+                    <a class="title" th:href="@{/movie/detail(mid=${review.mid})}"></a>
+                    <th:block th:replace="~{/fragment/review}"></th:block>
+                </div>
             </th:block>
         </ul>
         <div id="pagination">
