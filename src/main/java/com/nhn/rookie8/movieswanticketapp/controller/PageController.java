@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Log4j2
@@ -140,19 +141,17 @@ public class PageController {
     }
 
     @PostMapping("/booking/pay")
-    public String pay(HttpServletRequest httpServletRequest, @RequestParam HashMap<String,String> params, Model model) {
+    public String pay(HttpServletRequest httpServletRequest, @RequestParam Map<String,String> params, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null) {
             return "redirect:/user/login";
         }
-        params.keySet().forEach(key -> {
-            model.addAttribute(key, params.get(key));
-        });
+        params.keySet().forEach(key -> model.addAttribute(key, params.get(key)));
         return "page/pay";
     }
 
     @PostMapping("/booking/result")
-    public String bookingResult(HttpServletRequest httpServletRequest, @RequestParam HashMap<String,String> params, Model model) {
+    public String bookingResult(HttpServletRequest httpServletRequest, @RequestParam Map<String,String> params, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null) {
             return "redirect:/user/login";
@@ -181,7 +180,7 @@ public class PageController {
 
         reservationService.register(reservationDTO);
 
-        List<SeatDTO> dtoList= new ArrayList<SeatDTO>();
+        List<SeatDTO> dtoList= new ArrayList<>();
         String[] seatList = params.get("seats").split(",");
         for (String seat : seatList) {
             dtoList.add(SeatDTO.builder()
@@ -300,7 +299,7 @@ public class PageController {
             String uid = session.getAttribute("uid").toString();
             PageResultDTO<ReviewDTO, Review> resultDTO = reviewService.findMyReviews(pageRequestDTO, uid);
             List<ReviewDTO> reviewList = resultDTO.getDtoList();
-            HashMap<String, String> titleMap = new HashMap<String, String>();
+            Map<String, String> titleMap = new HashMap<String, String>();
             reviewList.forEach(reviewDTO -> {
                 String title = movieService.read(reviewDTO.getMid()).getName();
                 titleMap.put(reviewDTO.getMid(), title);

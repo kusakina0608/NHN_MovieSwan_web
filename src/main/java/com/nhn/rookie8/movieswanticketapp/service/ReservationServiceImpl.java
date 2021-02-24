@@ -32,27 +32,23 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     public String createReservationId() {
+        Random rnd = new Random();
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        String reservationId;
+        StringBuilder reservationId = new StringBuilder();
         do {
             List<String> codeList = new ArrayList<>();
             for(int i = 0; i < 4; i++){
                 StringBuilder salt = new StringBuilder();
-                Random rnd = new Random();
                 while (salt.length() < 4) {
                     int index = (int) (rnd.nextFloat() * alphabet.length());
                     salt.append(alphabet.charAt(index));
                 }
-                codeList.add(salt.toString());
+                reservationId.append(salt.toString());
+                reservationId.append("-");
             }
-            reservationId = codeList.get(0);
-            for(int i = 1; i < 4; i++){
-                reservationId += '-';
-                reservationId += codeList.get(i);
-            }
-        } while(checkExist(reservationId));
+        } while(checkExist(reservationId.toString()));
 
-        return reservationId;
+        return reservationId.toString();
     }
 
     private boolean checkExist(String rid) {
@@ -75,16 +71,15 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public String delete(ReservationDTO dto) {
+    public void delete(ReservationDTO dto) {
         String rid = dto.getRid();
         repository.deleteById(rid);
-        return null;
     }
 
     @Override
-    public PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO) {
+    public PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO, String uid) {
         Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
-        BooleanBuilder booleanBuilder = getMyList(requestDTO);
+        BooleanBuilder booleanBuilder = getMyReservationList(uid);
         Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
         Function<Reservation, ReservationDTO> fn = (entity -> entityToDto(entity));
         return new PageResultDTO<>(result, fn);
@@ -139,13 +134,10 @@ public class ReservationServiceImpl implements ReservationService{
         return new PageResultDTO<>(result, fn);
     }
 
-    private BooleanBuilder getMyList(PageRequestDTO requestDTO) {
+    private BooleanBuilder getMyReservationList(String uid) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QReservation qReservation = QReservation.reservation;
-        // TODO: get user id from session;
-        String userId = "kusakina0608";
-        // TODO: 아직 관람하지 않은 영화만 리스트로 가져오도록 구현
-        BooleanExpression expression = qReservation.uid.eq(userId);
+        BooleanExpression expression = qReservation.uid.eq(uid);
         booleanBuilder.and(expression);
         return booleanBuilder;
     }
