@@ -317,7 +317,7 @@ public class PageController {
             return "redirect:/user/login";
         } else {
             String uid = (String) session.getAttribute("uid");
-            model.addAttribute("result", questionService.getQuestionList(pageRequestDTO, uid));
+            model.addAttribute("result", questionService.getMyQuestionList(pageRequestDTO, uid));
             return "page/my_page_question";
         }
     }
