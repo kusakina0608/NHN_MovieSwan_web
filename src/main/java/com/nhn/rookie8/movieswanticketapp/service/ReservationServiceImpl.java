@@ -8,6 +8,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 import com.nhn.rookie8.movieswanticketapp.repository.ReservationRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.sun.istack.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -15,11 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.security.SecureRandom;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -27,27 +25,24 @@ import java.util.function.Function;
 @Log4j2
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
-
     private final ReservationRepository repository;
+    private final Random random = new SecureRandom();
 
     @Override
     public String createReservationId() {
-        Random rnd = new Random();
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder reservationId = new StringBuilder();
         do {
-            List<String> codeList = new ArrayList<>();
             for(int i = 0; i < 4; i++){
                 StringBuilder salt = new StringBuilder();
                 while (salt.length() < 4) {
-                    int index = (int) (rnd.nextFloat() * alphabet.length());
+                    int index = (int) (random.nextFloat() * alphabet.length());
                     salt.append(alphabet.charAt(index));
                 }
                 reservationId.append(salt.toString());
-                reservationId.append("-");
+                if(i < 3) reservationId.append("-");
             }
         } while(checkExist(reservationId.toString()));
-
         return reservationId.toString();
     }
 
@@ -82,7 +77,7 @@ public class ReservationServiceImpl implements ReservationService {
             Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
             BooleanBuilder booleanBuilder = getUserInfo(uid);
             Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
-            Function<Reservation, ReservationDTO> fn = (entity -> entityToDto(entity));
+            Function<Reservation, ReservationDTO> fn = (this::entityToDto);
             return new PageResultDTO<>(result, fn);
         } catch (Exception e) {
             log.error(e);
