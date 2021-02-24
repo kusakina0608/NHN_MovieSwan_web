@@ -12,24 +12,22 @@ public interface QuestionService {
     PageResultDTO<QuestionDTO, Question> getAllQuestionList(PageRequestDTO requestDTO);
 
     default Question dtoToEntity(QuestionDTO dto) {
-        Question entity = Question.builder()
+        return Question.builder()
                 .qid(dto.getQid())
                 .uid(dto.getUid())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .regdate(dto.getRegdate())
                 .build();
-        return entity;
     }
 
     default QuestionDTO entityToDTO(Question entity) {
-        QuestionDTO questionDTO = QuestionDTO.builder()
+        return QuestionDTO.builder()
                 .qid(entity.getQid())
                 .uid(entity.getUid())
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .regdate(entity.getRegdate())
                 .build();
-        return questionDTO;
     }
 }

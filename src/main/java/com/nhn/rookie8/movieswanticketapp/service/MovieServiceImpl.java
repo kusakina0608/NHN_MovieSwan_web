@@ -92,7 +92,7 @@ public class MovieServiceImpl implements MovieService{
     @Override
     public List<MovieDTO> getAllList() {
         List<Movie> movieList = repository.findAll();
-        List<MovieDTO> movieDTOList = new ArrayList<MovieDTO>();
+        List<MovieDTO> movieDTOList = new ArrayList<>();
 
         for (Movie movie: movieList)
             movieDTOList.add(entityToDTO(movie));
@@ -105,7 +105,7 @@ public class MovieServiceImpl implements MovieService{
         BooleanBuilder booleanBuilder = getReleaseMovies();
         Pageable pageable = PageRequest.of(0, (int)repository.count());
         List<Movie> movieList = repository.findAll(booleanBuilder, pageable).toList();
-        List<MovieDTO> movieDTOList = new ArrayList<MovieDTO>();
+        List<MovieDTO> movieDTOList = new ArrayList<>();
         for (Movie movie: movieList)
             movieDTOList.add(entityToDTO(movie));
 

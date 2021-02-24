@@ -12,20 +12,16 @@ public interface FavoriteService {
     void remove(FavoriteDTO favoriteDTO);
 
     default Favorite dtoToEntity(FavoriteDTO favoriteDTO) {
-        Favorite favorite = Favorite.builder()
+        return Favorite.builder()
                 .uid(favoriteDTO.getUid())
                 .mid(favoriteDTO.getMid())
                 .build();
-
-        return favorite;
     }
 
     default FavoriteDTO entityToDto(Favorite favorite) {
-        FavoriteDTO favoriteDTO = FavoriteDTO.builder()
+        return FavoriteDTO.builder()
                 .uid(favorite.getUid())
                 .mid(favorite.getMid())
                 .build();
-
-        return favoriteDTO;
     }
 }

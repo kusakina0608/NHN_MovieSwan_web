@@ -15,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +34,6 @@ public class ReservationServiceImpl implements ReservationService {
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder reservationId = new StringBuilder();
         do {
-            List<String> codeList = new ArrayList<>();
             for(int i = 0; i < 4; i++){
                 StringBuilder salt = new StringBuilder();
                 while (salt.length() < 4) {
@@ -102,16 +99,11 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private BooleanBuilder getUserInfo(String uid) {
-        try {
-            BooleanBuilder booleanBuilder = new BooleanBuilder();
-            QReservation qReservation = QReservation.reservation;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReservation qReservation = QReservation.reservation;
 
-            BooleanExpression expression = qReservation.uid.eq(uid);
-            booleanBuilder.and(expression);
-            return booleanBuilder;
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+        BooleanExpression expression = qReservation.uid.eq(uid);
+        booleanBuilder.and(expression);
+        return booleanBuilder;
     }
 }

@@ -40,7 +40,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 
         Page<Favorite> result = repository.findAll(booleanBuilder, pageable);
 
-        List<String> midList = new ArrayList<String>();
+        List<String> midList = new ArrayList<>();
         for(Favorite fav : result)
             midList.add(fav.getMid());
 
@@ -49,7 +49,6 @@ public class FavoriteServiceImpl implements FavoriteService{
 
     @Override
     public boolean isFavorite(String uid, String mid) {
-        Pageable pageable = PageRequest.of(0, (int) repository.count());
         FavoriteId favoriteId = FavoriteId.builder()
                 .uid(uid)
                 .mid(mid)

@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +61,7 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
             return schedulesList;
         } catch (Exception e) {
             log.error(e);
-            return null;
+            return Collections.EMPTY_LIST;
         }
     }
 }
