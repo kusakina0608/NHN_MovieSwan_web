@@ -77,10 +77,16 @@ public class UserController {
 
 
 
-        if(userResponseDTO.isError()){
+        if(userResponseDTO == null || userResponseDTO.isError()){
             return "redirect:/user/login?err=1";
         }
+
         UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", userDTO, UserResponseDTO.class);
+
+        if (userInfo == null) {
+            return "redirect:/user/login?err=1";
+        }
+
         HttpSession session = request.getSession();
         Map<String,String> content = (HashMap<String,String>) userInfo.getContent();
         session.setAttribute("uid", uid);

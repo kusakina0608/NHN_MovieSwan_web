@@ -28,6 +28,10 @@ public class UserServiceImpl implements UserService{
         RestTemplate template = new RestTemplate();
         UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo",requestDTO, UserResponseDTO.class);
 
+        if (userInfo == null) {
+            return requestDTO;
+        }
+
         Map<String,String> content = (HashMap<String,String>) userInfo.getContent();
 
         UserDTO result = UserDTO.builder()
