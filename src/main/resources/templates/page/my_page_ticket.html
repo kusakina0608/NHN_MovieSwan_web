@@ -22,9 +22,10 @@
                 <tr th:each="dto : ${result.dtoList}"
                     th:onclick='javascript:trClicked([[${dto.rid}]]);'>
                         <td class="tg-0lax" scope="row">[[${dto.rid}]]</td>
-                        <td class="tg-baqh">[[${dto.movieName}]]</td>
-                        <td class="tg-baqh">[[${#temporals.format(dto.startDate, 'MM/dd HH:mm')}]]</td>
+                        <td class="tg-baqh"></td>
+                        <td class="tg-baqh"></td>
                         <td class="tg-baqh">[[${#temporals.format(dto.regDate, 'MM/dd HH:mm:ss')}]]</td>
+                        <td class="tid" style="display: none;">[[${dto.tid}]]</td>
                     </a>
                 </tr>
                 </tbody>

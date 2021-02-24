@@ -108,6 +108,11 @@ public class MovieController {
         return result;
     }
 
+    @GetMapping("/getMovieInfo")
+    public MovieDTO getMovieInfo(String mid) {
+        return service.read(mid);
+    }
+
     private String makeFolder() {
         String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
