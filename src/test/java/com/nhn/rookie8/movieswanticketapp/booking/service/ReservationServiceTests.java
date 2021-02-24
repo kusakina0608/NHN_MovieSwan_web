@@ -36,7 +36,7 @@ public class ReservationServiceTests {
         ReservationDTO reservationDTO = ReservationDTO.builder()
                 .rid("1DVI-JME4-IZC3-584C")
                 .build();
-        System.out.println(service.delete(reservationDTO));
+        service.delete(reservationDTO);
     }
 
     @Test

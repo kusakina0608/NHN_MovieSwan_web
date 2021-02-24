@@ -8,13 +8,13 @@ import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 public interface ReservationService {
     String createReservationId();
     String register(ReservationDTO dto);
-    String delete(ReservationDTO dto);
+    void delete(ReservationDTO dto);
 
     PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String uid);
     ReservationDTO getReservation(String rid);
 
     default Reservation dtoToEntity(ReservationDTO dto){
-        Reservation entity = Reservation.builder()
+        return Reservation.builder()
                 .rid(dto.getRid())
                 .tid(dto.getTid())
                 .uid(dto.getUid())
@@ -24,7 +24,6 @@ public interface ReservationService {
                 .totalNum(dto.getTotalNum())
                 .price(dto.getPrice())
                 .build();
-        return entity;
     }
 
     default ReservationDTO entityToDto(Reservation entity){

@@ -12,9 +12,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,9 +44,7 @@ public class SeatServiceImpl implements SeatService{
     @Override
     @Transactional
     public void modify(List<SeatDTO> dtoList, String rid) {
-        dtoList.forEach(dto -> {
-            repository.updateRid(rid, dto.getTid(), dto.getSid(), dto.getUid());
-        });
+        dtoList.forEach(dto -> repository.updateRid(rid, dto.getTid(), dto.getSid(), dto.getUid()));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class SeatServiceImpl implements SeatService{
         BooleanBuilder booleanBuilder = getReservedSeat(tid);
         Pageable pageable = PageRequest.of(0, 1000);
         List<Seat> seatList = repository.findAll(booleanBuilder, pageable).toList();
-        List<String> seatIdList = new ArrayList<String>();
+        List<String> seatIdList = new ArrayList<>();
         seatList.forEach(el -> {
             log.debug("seat: {}", el);
             seatIdList.add(el.getSid());
@@ -65,10 +65,8 @@ public class SeatServiceImpl implements SeatService{
         BooleanBuilder booleanBuilder = getMySeat(rid);
         Pageable pageable = PageRequest.of(0, 1000);
         List<Seat> seatList = repository.findAll(booleanBuilder, pageable).toList();
-        List<String> seatIdList = new ArrayList<String>();
-        seatList.forEach(el -> {
-            seatIdList.add(el.getSid());
-        });
+        List<String> seatIdList = new ArrayList<>();
+        seatList.forEach(el -> seatIdList.add(el.getSid()));
         return seatIdList;
     }
 
@@ -106,7 +104,7 @@ public class SeatServiceImpl implements SeatService{
         SeatId seatId = SeatId.builder().tid(dto.getTid()).sid(dto.getSid()).build();
         Optional<Seat> result = repository.findById(seatId);
         if(result.isPresent() && result.get().getUid().equals(dto.getUid())) {
-            List<Seat> deleteList = new ArrayList<Seat>();
+            List<Seat> deleteList = new ArrayList<>();
             deleteList.add(dtoToEntity(dto));
             repository.deleteInBatch(deleteList);
             return true;
@@ -114,5 +112,27 @@ public class SeatServiceImpl implements SeatService{
         else{
             return false;
         }
+    }
+
+    @Scheduled(fixedDelay = 1000)
+    public void cancelPreemption(){
+        BooleanBuilder booleanBuilder = getExpiredSeat();
+        Pageable pageable = PageRequest.of(0, 1000);
+        List<Seat> list = repository.findAll(booleanBuilder, pageable).toList();
+        System.out.println("hello " + list);
+        list.forEach(e -> {
+            log.info("{} 사용자의 좌석 선점 만료. 상영번호: {}, 좌석번호: {}", e.getUid(), e.getTid(), e.getSid());
+        });
+        repository.deleteInBatch(list);
+    }
+
+    private BooleanBuilder getExpiredSeat() {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QSeat qSeat = QSeat.seat;
+        BooleanExpression expression1 = qSeat.regDate.lt(LocalDateTime.now().minusMinutes(5));
+        BooleanExpression expression2 = qSeat.rid.isNull();
+        booleanBuilder.and(expression1);
+        booleanBuilder.and(expression2);
+        return booleanBuilder;
     }
 }

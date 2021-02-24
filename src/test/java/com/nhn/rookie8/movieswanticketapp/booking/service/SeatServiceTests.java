@@ -85,7 +85,7 @@ public class SeatServiceTests {
 
     @Test
     public void testModify(){
-        List<SeatDTO> dtoList= new ArrayList<SeatDTO>();
+        List<SeatDTO> dtoList= new ArrayList<>();
         dtoList.add(SeatDTO.builder()
                 .tid("AAA2102251230")
                 .sid("A01")
