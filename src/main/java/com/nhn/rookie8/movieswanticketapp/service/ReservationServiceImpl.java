@@ -8,6 +8,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 import com.nhn.rookie8.movieswanticketapp.repository.ReservationRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.sun.istack.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -76,7 +77,7 @@ public class ReservationServiceImpl implements ReservationService {
             Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
             BooleanBuilder booleanBuilder = getUserInfo(uid);
             Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
-            Function<Reservation, ReservationDTO> fn = (entity -> entityToDto(entity));
+            Function<Reservation, ReservationDTO> fn = (this::entityToDto);
             return new PageResultDTO<>(result, fn);
         } catch (Exception e) {
             log.error(e);
