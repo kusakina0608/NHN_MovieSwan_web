@@ -1,8 +1,9 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.ApiResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.Question;
 import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,31 +15,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/api/question")
-@Log4j2
-@RequiredArgsConstructor
 @Controller
+
+@RequiredArgsConstructor
+
+@Log4j2
 public class QuestionController {
     private final QuestionService service;
 
     @PostMapping("/register")
     public String registerQuestion(QuestionDTO questionDTO, Model model) {
-        ApiResultDTO response = service.registerQuestion(questionDTO);
-        if (response.getError()) {
-            model.addAttribute("dto", questionDTO);
+        try {
+            service.registerQuestion(questionDTO);
             return "redirect:/question";
-        } else {
-            model.addAttribute("status", "success");
-            return "redirect:/mypage/question";
+        } catch (Exception e){
+            log.error(e);
+            return null;
         }
     }
 
     @GetMapping("/post")
     public QuestionDTO readQuestion(@RequestParam Integer qid) {
-        return service.readQuestion(qid);
+        try {
+            return service.readQuestion(qid);
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 
-    @GetMapping("/list")
-    public void getQuestionListAdmin(PageRequestDTO pageRequestDTO, Model model) {
-        model.addAttribute("result", service.getQuestionListAdmin(pageRequestDTO));
+    @GetMapping("/getall")
+    public PageResultDTO<QuestionDTO, Question> getAllQuestionList(PageRequestDTO pageRequestDTO, Model model) {
+        try {
+            return service.getAllQuestionList(pageRequestDTO);
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 }
