@@ -119,8 +119,7 @@ public class SeatServiceImpl implements SeatService{
         BooleanBuilder booleanBuilder = getExpiredSeat();
         Pageable pageable = PageRequest.of(0, 1000);
         List<Seat> list = repository.findAll(booleanBuilder, pageable).toList();
-        list.forEach(e ->
-            log.info("{} 사용자의 좌석 선점 만료. 상영번호: {}, 좌석번호: {}", e.getUid(), e.getTid(), e.getSid()));
+        list.forEach(e -> log.info("{} 사용자의 좌석 선점 만료. 상영번호: {}, 좌석번호: {}", e.getUid(), e.getTid(), e.getSid()));
         repository.deleteInBatch(list);
     }
 
