@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Log4j2
@@ -140,19 +141,17 @@ public class PageController {
     }
 
     @PostMapping("/booking/pay")
-    public String pay(HttpServletRequest httpServletRequest, @RequestParam HashMap<String,String> params, Model model) {
+    public String pay(HttpServletRequest httpServletRequest, @RequestParam Map<String,String> params, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null) {
             return "redirect:/user/login";
         }
-        params.keySet().forEach(key -> {
-            model.addAttribute(key, params.get(key));
-        });
+        params.keySet().forEach(key -> model.addAttribute(key, params.get(key)));
         return "page/pay";
     }
 
     @PostMapping("/booking/result")
-    public String bookingResult(HttpServletRequest httpServletRequest, @RequestParam HashMap<String,String> params, Model model) {
+    public String bookingResult(HttpServletRequest httpServletRequest, @RequestParam Map<String,String> params, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null) {
             return "redirect:/user/login";
@@ -181,7 +180,7 @@ public class PageController {
 
         reservationService.register(reservationDTO);
 
-        List<SeatDTO> dtoList= new ArrayList<SeatDTO>();
+        List<SeatDTO> dtoList= new ArrayList<>();
         String[] seatList = params.get("seats").split(",");
         for (String seat : seatList) {
             dtoList.add(SeatDTO.builder()
@@ -233,31 +232,29 @@ public class PageController {
     }
 
     @GetMapping("/mypage/ticket")
-    public String my_page_ticket(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+    public String myTicketPage(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-            model.addAttribute("result", reservationService.getMypageList(pageRequestDTO, (String) session.getAttribute("uid")));
+            model.addAttribute("result", reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("uid")));
             return "page/my_page_ticket";
         }
     }
 
     @GetMapping("/mypage/ticket/detail")
-    public String my_page_ticket_detail(@RequestParam String rid, PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+    public String myTicketDetailPage(@RequestParam String rid, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
             List<String> result = seatService.getMySeatList(rid);
-            String seatResult = "";
+            StringBuilder seat = new StringBuilder();
+            result.forEach(s -> seat.append(s).append(' '));
 
-            for (int i = 0; i < result.size(); i++)
-                seatResult += " " + result.get(i);
-
-            model.addAttribute("seatResult", seatResult);
-            model.addAttribute("result", reservationService.readReservation(rid));
-            return "page/my_page_ticket_detail";
+            model.addAttribute("seat", seat.toString());
+            model.addAttribute("result", reservationService.getReservation(rid));
+            return "page/my_page_ticket_detail";                                           
         }
     }
 

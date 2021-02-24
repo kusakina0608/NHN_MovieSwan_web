@@ -36,13 +36,13 @@ public class ReservationServiceTests {
         ReservationDTO reservationDTO = ReservationDTO.builder()
                 .rid("1DVI-JME4-IZC3-584C")
                 .build();
-        System.out.println(service.delete(reservationDTO));
+        service.delete(reservationDTO);
     }
 
     @Test
     public void testList() {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
-        PageResultDTO<ReservationDTO, Reservation> resultDTO = service.getList(pageRequestDTO);
+        PageResultDTO<ReservationDTO, Reservation> resultDTO = service.getMyReservationList(pageRequestDTO, "");
         for(ReservationDTO reservationDTO : resultDTO.getDtoList()) {
             System.out.println(reservationDTO);
         }

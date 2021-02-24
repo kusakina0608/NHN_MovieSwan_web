@@ -11,21 +11,22 @@
         <p id="ticket_subject">상세 예매내역</p>
         <ticket_content id="ticket_content">
             <ticket_poster id="ticket_poster">
-                <img class="poster" th:src="|/api/movie/display?fileName=${result.imgPath}|">
+                <img class="poster" id="ticket_movie_poster">
             </ticket_poster>
             <ticket_content_detail id="ticket_content_detail">
-                <p id="ticket_moviename">[[${result.movieName}]]</p>
+                <p id="ticket_moviename"></p>
+                <div id="tid" style="display: none;">[[${result.tid}]]</div>
                 <item class="ticket_item">
                     <vspan class="item">예약 번호 :</vspan>
                     <span class="cont">[[${result.rid}]]</span>
                 </item>
                 <item class="ticket_item">
                     <span class="item">영화 코드 :</span>
-                    <span class="cont">[[${result.mid}]]</span>
+                    <span class="cont" id="ticket_movie_id"></span>
                 </item>
                 <item class="ticket_item" id="reservation">
                     <span class="item">상영 일자 :</span>
-                    <span class="cont">[[${#temporals.format(result.startDate, 'yyyy년 M월 d일, HH:mm')}]]</span>
+                    <span class="cont" id="ticket_movie_time"></span>
                     <div class="mark">
                         <span class="alarm">꼭 기억해요</span>
                         <span class="material-icons">favorite</span>
@@ -37,7 +38,7 @@
                 </item>
                 <item class="ticket_item" id="seat">
                     <span class="item">좌석 정보 :</span>
-                    <span class="cont">[[${seatResult}]]</span>
+                    <span class="cont">[[${seat}]]</span>
                     <div class="mark">
                         <span class="alarm">꼭 기억해요</span>
                         <span class="material-icons">favorite</span>
