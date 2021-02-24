@@ -17,25 +17,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.security.SecureRandom;
+import java.util.Random;
 import java.util.function.Function;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
-
     private final ReservationRepository repository;
+    private final Random random = new SecureRandom();
 
     @Override
     public String createReservationId() {
-        SecureRandom rnd = new SecureRandom();
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder reservationId = new StringBuilder();
         do {
             for(int i = 0; i < 4; i++){
                 StringBuilder salt = new StringBuilder();
                 while (salt.length() < 4) {
-                    int index = (int) (rnd.nextFloat() * alphabet.length());
+                    int index = (int) (random.nextFloat() * alphabet.length());
                     salt.append(alphabet.charAt(index));
                 }
                 reservationId.append(salt.toString());
