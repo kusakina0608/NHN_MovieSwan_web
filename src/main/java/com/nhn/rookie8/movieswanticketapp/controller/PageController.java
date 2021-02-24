@@ -274,20 +274,18 @@ public class PageController {
     }
 
     @GetMapping("/mypage/ticket")
-    public String my_page_ticket(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+    public String myTicketPage(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
         } else {
-            PageResultDTO result = reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("uid"));
-
             model.addAttribute("result", reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("uid")));
             return "page/my_page_ticket";
         }
     }
 
     @GetMapping("/mypage/ticket/detail")
-    public String my_page_ticket_detail(@RequestParam String rid, PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+    public String myTicketDetailPage(@RequestParam String rid, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
@@ -296,7 +294,7 @@ public class PageController {
             StringBuilder seat = new StringBuilder();
             result.forEach(s -> seat.append(s).append(' '));
 
-            model.addAttribute("seatResult", seat);
+            model.addAttribute("seat", seat.toString());
             model.addAttribute("result", reservationService.getReservation(rid));
             return "page/my_page_ticket_detail";                                           
         }
