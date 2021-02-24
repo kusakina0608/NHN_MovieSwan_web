@@ -3,6 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 import com.nhn.rookie8.movieswanticketapp.dto.UserDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
+@Log4j2
 @RequiredArgsConstructor
 public class UserController {
 
@@ -31,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/register_process")
-    public String register_process(HttpServletRequest request){
+    public String registerProcess(HttpServletRequest request){
         String uid = request.getParameter("uid");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
@@ -46,11 +48,11 @@ public class UserController {
                 .url(url)
                 .build();
 
-        System.out.println(userDTO.toString());
+        log.info(userDTO.toString());
         RestTemplate template = new RestTemplate();
         UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/register",userDTO, UserResponseDTO.class);
 
-        System.out.println(userResponseDTO);
+        log.info(userResponseDTO);
         return "page/main_page";
     }
 
