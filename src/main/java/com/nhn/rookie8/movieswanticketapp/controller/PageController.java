@@ -39,7 +39,7 @@ public class PageController {
     private String accountUrl;
 
     @GetMapping({"/", "/main"})
-    public String main_page(HttpServletRequest httpServletRequest, Model model) {
+    public String mainPage(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (!(session == null || session.getAttribute("uid") == null)) {
             model.addAttribute("uid", session.getAttribute("uid"));
@@ -49,14 +49,14 @@ public class PageController {
     }
 
     @GetMapping("/admin")
-    public String admin_page(Model model) {
+    public String adminPage(Model model) {
         List<MovieDTO> movieList = movieService.getReleaseList();
         model.addAttribute("movieList", movieList);
         return "page/admin_page";
     }
 
     @GetMapping("/movie")
-    public String movie_page() {
+    public String moviePage() {
         return "redirect:/movie/current/list";
     }
 
@@ -196,7 +196,7 @@ public class PageController {
     }
 
     @GetMapping("/mypage/question/register")
-    public String question_page(HttpServletRequest httpServletRequest, Model model) {
+    public String questionPage(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
@@ -213,7 +213,7 @@ public class PageController {
     }
 
     @GetMapping("/mypage/userinfo")
-    public String my_page_userinfo(HttpServletRequest httpServletRequest, Model model) {
+    public String myPageUserinfo(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
@@ -259,7 +259,7 @@ public class PageController {
     }
 
     @GetMapping("/mypage/ticket/delete")
-    public String my_page_ticket_delete(@RequestParam String rid, PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+    public String myPageTicketDelete(@RequestParam String rid, PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
@@ -273,7 +273,7 @@ public class PageController {
     }
 
     @GetMapping("/mypage/movie")
-    public String my_page_mymovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+    public String myPageMyMovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
@@ -289,7 +289,7 @@ public class PageController {
     }
 
     @GetMapping("/mypage/review")
-    public String my_page_myreview(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+    public String myPageMyReview(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
@@ -304,7 +304,7 @@ public class PageController {
     }
 
     @GetMapping("/mypage/question")
-    public String my_page_question(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+    public String myPageQuestion(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
@@ -316,7 +316,7 @@ public class PageController {
     }
 
     @GetMapping("/mypage/question/post")
-    public String my_page_read_question(@RequestParam("qid") Integer qid, HttpServletRequest httpServletRequest, Model model) {
+    public String myPageReadQuestion(@RequestParam("qid") Integer qid, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null || session.getAttribute("uid") == null) {
             return "redirect:/user/login";
