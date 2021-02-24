@@ -83,25 +83,40 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String uid) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
-        BooleanBuilder booleanBuilder = getUserInfo(uid);
-        Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
-        Function<Reservation, ReservationDTO> fn = (entity -> entityToDto(entity));
-        return new PageResultDTO<>(result, fn);
+        try {
+            Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
+            BooleanBuilder booleanBuilder = getUserInfo(uid);
+            Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
+            Function<Reservation, ReservationDTO> fn = (entity -> entityToDto(entity));
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
     public ReservationDTO getReservation(String rid) {
-        Optional<Reservation> result = repository.findById(rid);
-        return result.isPresent() ? entityToDto(result.get()) : null;
+        try {
+            Optional<Reservation> result = repository.findById(rid);
+            return result.isPresent() ? entityToDto(result.get()) : null;
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 
     private BooleanBuilder getUserInfo(String uid) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QReservation qReservation = QReservation.reservation;
+        try {
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+            QReservation qReservation = QReservation.reservation;
 
-        BooleanExpression expression = qReservation.uid.eq(uid);
-        booleanBuilder.and(expression);
-        return booleanBuilder;
+            BooleanExpression expression = qReservation.uid.eq(uid);
+            booleanBuilder.and(expression);
+            return booleanBuilder;
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 }
