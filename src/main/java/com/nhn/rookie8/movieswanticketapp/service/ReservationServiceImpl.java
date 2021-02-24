@@ -97,16 +97,11 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private BooleanBuilder getUserInfo(String uid) {
-        try {
-            BooleanBuilder booleanBuilder = new BooleanBuilder();
-            QReservation qReservation = QReservation.reservation;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReservation qReservation = QReservation.reservation;
 
-            BooleanExpression expression = qReservation.uid.eq(uid);
-            booleanBuilder.and(expression);
-            return booleanBuilder;
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+        BooleanExpression expression = qReservation.uid.eq(uid);
+        booleanBuilder.and(expression);
+        return booleanBuilder;
     }
 }

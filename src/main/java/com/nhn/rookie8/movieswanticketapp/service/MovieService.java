@@ -21,7 +21,7 @@ public interface MovieService {
     MovieDTO read(String mid);
 
     default Movie dtoToEntity(MovieDTO movieDTO) {
-        Movie movie = Movie.builder()
+        return Movie.builder()
                 .mid(movieDTO.getMid())
                 .name(movieDTO.getName())
                 .poster(movieDTO.getPoster())
@@ -33,12 +33,10 @@ public interface MovieService {
                 .startdate(movieDTO.getStartdate())
                 .enddate(movieDTO.getEnddate())
                 .build();
-
-        return movie;
     }
 
     default MovieDTO entityToDTO(Movie movie) {
-        MovieDTO movieDTO = MovieDTO.builder()
+        return MovieDTO.builder()
                 .mid(movie.getMid())
                 .name(movie.getName())
                 .poster(movie.getPoster())
@@ -50,7 +48,5 @@ public interface MovieService {
                 .startdate(movie.getStartdate())
                 .enddate(movie.getEnddate())
                 .build();
-
-        return movieDTO;
     }
 }

@@ -10,21 +10,23 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Data
-public class PageResultDTO<DTO, EN> {
-    private List<DTO> dtoList;
+public class PageResultDTO<T1, T2> {
+    private List<T1> dtoList;
 
     private int totalPage;
 
     private int page;
     private int size;
 
-    private int start, end;
+    private int start;
+    private int end;
 
-    private boolean prev, next;
+    private boolean prev;
+    private boolean next;
 
     private List<Integer> pageList;
 
-    public PageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
+    public PageResultDTO(Page<T2> result, Function<T2, T1> fn) {
         dtoList = result.stream().map(fn).collect(Collectors.toList());
         totalPage = result.getTotalPages();
         makePageList(result.getPageable());

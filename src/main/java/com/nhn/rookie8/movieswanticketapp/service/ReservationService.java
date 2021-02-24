@@ -27,7 +27,7 @@ public interface ReservationService {
     }
 
     default ReservationDTO entityToDto(Reservation entity){
-        ReservationDTO reservationDTO = ReservationDTO.builder()
+        return ReservationDTO.builder()
                 .rid(entity.getRid())
                 .tid(entity.getTid())
                 .uid(entity.getUid())
@@ -38,6 +38,5 @@ public interface ReservationService {
                 .price(entity.getPrice())
                 .regDate(entity.getRegDate())
                 .build();
-        return reservationDTO;
     }
 }

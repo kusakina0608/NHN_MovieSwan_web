@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -208,7 +207,7 @@ public class PageController {
 
     // 여기부터 전부 마이페이지 입니다...
     @GetMapping("/mypage")
-    public String my_page() {
+    public String myPage() {
         return "redirect:/mypage/userinfo";
     }
 

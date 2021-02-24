@@ -21,7 +21,7 @@ public interface ReviewService {
     void remove(String rid);
 
     default ReviewDTO entityToDTO(Review review) {
-        ReviewDTO reviewDTO = ReviewDTO.builder()
+        return ReviewDTO.builder()
                 .rid(review.getRid())
                 .mid(review.getMid())
                 .uid(review.getUid())
@@ -30,17 +30,15 @@ public interface ReviewService {
                 .regdate(review.getRegdate())
                 .moddate(review.getModdate())
                 .build();
-        return reviewDTO;
     }
 
     default Review dtoToEntity(ReviewDTO reviewDTO) {
-        Review review = Review.builder()
+        return Review.builder()
                 .rid(reviewDTO.getRid())
                 .mid(reviewDTO.getMid())
                 .uid(reviewDTO.getUid())
                 .grade(reviewDTO.getGrade())
                 .content(reviewDTO.getContent())
                 .build();
-        return review;
     }
 }

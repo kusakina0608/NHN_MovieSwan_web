@@ -27,20 +27,18 @@ public interface MovieScheduleService {
 
         String tid = builder.toString();
 
-        MovieSchedule entity = MovieSchedule.builder()
+        return MovieSchedule.builder()
                 .tid(tid)
                 .mid(movieScheduleInputDTO.getMid())
                 .time(datetime)
                 .build();
-        return entity;
     }
 
     default MovieScheduleDTO entityToDTO(MovieSchedule entity) {
-        MovieScheduleDTO movieScheduleDTO = MovieScheduleDTO.builder()
+        return MovieScheduleDTO.builder()
                 .tid(entity.getTid())
                 .mid(entity.getMid())
                 .time(entity.getTime())
                 .build();
-        return movieScheduleDTO;
     }
 }
