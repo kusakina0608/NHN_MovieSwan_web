@@ -3,7 +3,6 @@ package com.nhn.rookie8.movieswanticketapp.service;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.ReservationResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.QReservation;
 import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 import com.nhn.rookie8.movieswanticketapp.repository.ReservationRepository;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +26,7 @@ import java.util.function.Function;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class ReservationServiceImpl implements ReservationService{
+public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository repository;
 
@@ -77,68 +77,41 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public PageResultDTO<ReservationDTO, Reservation> getList(PageRequestDTO requestDTO, String uid) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
-        BooleanBuilder booleanBuilder = getMyReservationList(uid);
-        Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
-        Function<Reservation, ReservationDTO> fn = (entity -> entityToDto(entity));
-        return new PageResultDTO<>(result, fn);
+    public PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String uid) {
+        try {
+            Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
+            BooleanBuilder booleanBuilder = getUserInfo(uid);
+            Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
+            Function<Reservation, ReservationDTO> fn = (entity -> entityToDto(entity));
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
-    public ReservationResultDTO readReservation(String rid) {
-        Optional<Reservation> result = repository.findById(rid);
-
-        if (!result.isPresent()) { return null; }
-
-        String tid = result.get().getTid();
-        String mid = repository.getMovieMid(tid);
-        String name = repository.getMovieName(tid);
-        String poster = repository.getMoviePoster(tid);
-        LocalDateTime startDate = LocalDateTime.of(
-                2000 + Integer.parseInt(tid.substring(3, 5)),
-                Integer.parseInt(tid.substring(5, 7)),
-                Integer.parseInt(tid.substring(7, 9)),
-                Integer.parseInt(tid.substring(9, 11)),
-                Integer.parseInt(tid.substring(11, 13)));
-
-        return entityToDto(result.get(), mid, name, poster, startDate);
+    public ReservationDTO getReservation(String rid) {
+        try {
+            Optional<Reservation> result = repository.findById(rid);
+            return result.isPresent() ? entityToDto(result.get()) : null;
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 
-    @Override
-    public PageResultDTO<ReservationResultDTO, Reservation> getMypageList(PageRequestDTO requestDTO, String uid) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
+    private BooleanBuilder getUserInfo(String uid) {
+        try {
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+            QReservation qReservation = QReservation.reservation;
 
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QReservation qReservation = QReservation.reservation;
-
-        BooleanExpression expression = qReservation.uid.eq(uid);
-        booleanBuilder.and(expression);
-
-        Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
-
-        Function<Reservation, ReservationResultDTO> fn = (entity -> {
-            String mid = repository.getMovieMid(entity.getTid());
-            String name = repository.getMovieName(entity.getTid());
-
-            String tid = entity.getTid();
-            LocalDateTime startDate = LocalDateTime.of(
-                    2000 + Integer.parseInt(tid.substring(3, 5)),
-                    Integer.parseInt(tid.substring(5, 7)),
-                    Integer.parseInt(tid.substring(7, 9)),
-                    Integer.parseInt(tid.substring(9, 11)),
-                    Integer.parseInt(tid.substring(11, 13)));
-
-            return entityToDto(entity, mid, name, null, startDate);
-        });
-        return new PageResultDTO<>(result, fn);
-    }
-
-    private BooleanBuilder getMyReservationList(String uid) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QReservation qReservation = QReservation.reservation;
-        BooleanExpression expression = qReservation.uid.eq(uid);
-        booleanBuilder.and(expression);
-        return booleanBuilder;
+            BooleanExpression expression = qReservation.uid.eq(uid);
+            booleanBuilder.and(expression);
+            return booleanBuilder;
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 }

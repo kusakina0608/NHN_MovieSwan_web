@@ -42,7 +42,7 @@ public class ReservationServiceTests {
     @Test
     public void testList() {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
-        PageResultDTO<ReservationDTO, Reservation> resultDTO = service.getList(pageRequestDTO);
+        PageResultDTO<ReservationDTO, Reservation> resultDTO = service.getMyReservationList(pageRequestDTO, "");
         for(ReservationDTO reservationDTO : resultDTO.getDtoList()) {
             System.out.println(reservationDTO);
         }
