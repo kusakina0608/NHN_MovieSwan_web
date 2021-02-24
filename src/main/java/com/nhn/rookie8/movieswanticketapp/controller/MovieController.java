@@ -24,7 +24,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Controller
-@ResponseBody
 @RequiredArgsConstructor
 @RequestMapping("/api/movie")
 @Log4j2
@@ -50,27 +49,32 @@ public class MovieController {
         log.info(movieDTO.getName());
         log.info(uploadFile.getName());
         String posterPath;
+        String originalName = "";
         Path savePath;
 
         try {
-            if(!uploadFile.getContentType().startsWith("image")) {
-                log.warn("이미지 타입의 파일이 아닙니다. {}", uploadFile);
-                return "redirect:/admin";
-            }
+            if (uploadFile == null)
+                throw new NullPointerException();
 
-            log.info(uploadPath);
-            UUID uuid = UUID.randomUUID();
-            String uuidStr = toUnsignedString(uuid.getMostSignificantBits(), 6) + toUnsignedString(uuid.getLeastSignificantBits(), 6);
-            String originalName = uploadFile.getOriginalFilename();
-            String extensionName = originalName.substring(originalName.lastIndexOf("."));
-            posterPath = makeFolder() + File.separator + uuidStr + extensionName;
-            log.info(posterPath);
-            String saveName = uploadPath + File.separator + posterPath;
-            savePath = Paths.get(saveName);
+            originalName = uploadFile.getOriginalFilename();
+            if (!uploadFile.getContentType().startsWith("image"))
+                throw new Exception("이미지 타입의 파일이 아닙니다.");
         } catch (NullPointerException e) {
             log.error("파일이 존재하지 않습니다.", e);
             return "redirect:/admin";
+        } catch (Exception e) {
+            log.error("uploadfile : {}", originalName, e);
+            return "redirect:/admin";
         }
+
+        log.info(uploadPath);
+        UUID uuid = UUID.randomUUID();
+        String uuidStr = toUnsignedString(uuid.getMostSignificantBits(), 6) + toUnsignedString(uuid.getLeastSignificantBits(), 6);
+        String extensionName = originalName.substring(originalName.lastIndexOf("."));
+        posterPath = makeFolder() + File.separator + uuidStr + extensionName;
+        log.info(posterPath);
+        String saveName = uploadPath + File.separator + posterPath;
+        savePath = Paths.get(saveName);
 
         try {
             uploadFile.transferTo(savePath);
@@ -84,6 +88,7 @@ public class MovieController {
         return "redirect:/admin";
     }
 
+    @ResponseBody
     @GetMapping("/display")
     public ResponseEntity<byte[]> getFile(String fileName) {
         ResponseEntity<byte[]> result = null;
@@ -108,6 +113,7 @@ public class MovieController {
         return result;
     }
 
+    @ResponseBody
     @GetMapping("/getMovieInfo")
     public MovieDTO getMovieInfo(String mid) {
         return service.read(mid);
