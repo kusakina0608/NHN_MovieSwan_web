@@ -8,7 +8,6 @@ import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 import com.nhn.rookie8.movieswanticketapp.repository.ReservationRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.sun.istack.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -16,8 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -94,6 +95,25 @@ public class ReservationServiceImpl implements ReservationService {
             log.error(e);
             return null;
         }
+    }
+
+    @Override
+    public String getReservationInfo(ReservationDTO reservation) {
+        StringBuilder info = new StringBuilder();
+        String title = repository.getMovieName(reservation.getTid());
+        LocalDateTime startTime = repository.getStartTime(reservation.getTid());
+
+        info.append(reservation.getRid() + "\t");
+        info.append(title + "\t");
+        info.append(startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + "\t");
+        info.append(reservation.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + "\n");
+
+        return info.toString();
+    }
+
+    @Override
+    public String getReservationDetail(ReservationDTO reservation) {
+        return null;
     }
 
     private BooleanBuilder getUserInfo(String uid) {
