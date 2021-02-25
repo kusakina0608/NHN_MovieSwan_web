@@ -61,7 +61,7 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
             return schedulesList;
         } catch (Exception e) {
             log.error(e);
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
     }
 }

@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
 
             Map<String, String> content = (HashMap<String, String>) userInfo.getContent();
 
-            UserDTO result = UserDTO.builder()
+            return UserDTO.builder()
                     .uid(content.get("uid"))
                     .name(content.get("name"))
                     .email(content.get("email"))
@@ -43,8 +43,6 @@ public class UserServiceImpl implements UserService{
                     .regDate(LocalDateTime.parse(content.get("regDate")))
                     .modDate(LocalDateTime.parse(content.get("modDate")))
                     .build();
-
-            return result;
         } catch (Exception e) {
             log.error(e);
             return new UserDTO();

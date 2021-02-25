@@ -94,7 +94,7 @@ public class MovieScheduleController {
             return scheduleList;
         } catch (Exception e) {
             log.error(e);
-            return null;
+            return Collections.emptyList();
         }
     }
 }
