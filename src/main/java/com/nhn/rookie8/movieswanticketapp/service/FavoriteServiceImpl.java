@@ -32,7 +32,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 
     @Override
     public List<String> getList(String uid) {
-        Pageable pageable = PageRequest.of(0, (int) repository.count());
+        Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QFavorite qFavorite = QFavorite.favorite;
         BooleanExpression expression = qFavorite.uid.eq(uid);
