@@ -13,6 +13,9 @@ public interface ReservationService {
     PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String uid);
     ReservationDTO getReservation(String rid);
 
+    String getReservationInfo(ReservationDTO reservation);
+    String getReservationDetail(ReservationDTO reservation);
+
     default Reservation dtoToEntity(ReservationDTO dto){
         return Reservation.builder()
                 .rid(dto.getRid())
