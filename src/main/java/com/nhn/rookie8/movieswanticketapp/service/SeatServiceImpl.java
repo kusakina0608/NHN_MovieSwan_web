@@ -89,13 +89,12 @@ public class SeatServiceImpl implements SeatService{
     @Override
     @Transactional(rollbackOn = {DataIntegrityViolationException.class})
     public Boolean preempt(SeatDTO dto) {
-        Seat entity = dtoToEntity(dto);
-
-        Optional<Seat> result = repository.findById(new SeatId(dto.getTid(), dto.getSid()));
+        SeatId seatId = SeatId.builder().tid(dto.getTid()).sid(dto.getSid()).build();
+        Optional<Seat> result = repository.findById(seatId);
         if(result.isPresent() && !(result.get().getUid().equals(dto.getUid()))){
             return false;
         }
-        repository.save(entity);
+        repository.save(dtoToEntity(dto));
         return true;
     }
 
