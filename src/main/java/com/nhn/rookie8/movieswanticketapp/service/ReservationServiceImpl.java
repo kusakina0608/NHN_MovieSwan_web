@@ -8,7 +8,6 @@ import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 import com.nhn.rookie8.movieswanticketapp.repository.ReservationRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.sun.istack.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -16,8 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.security.SecureRandom;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 
