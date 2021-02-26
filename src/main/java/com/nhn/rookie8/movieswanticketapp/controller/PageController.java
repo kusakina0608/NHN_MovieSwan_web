@@ -40,6 +40,7 @@ public class PageController {
     @GetMapping({"/", "/main"})
     public String mainPage(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
+
         if (!(session == null || session.getAttribute("uid") == null)) {
             model.addAttribute("uid", session.getAttribute("uid"));
             model.addAttribute("name", session.getAttribute("name"));
@@ -214,114 +215,77 @@ public class PageController {
     @GetMapping("/mypage/userinfo")
     public String myPageUserinfo(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
+        UserDTO userDTO = userService.getUserInfoById((String) session.getAttribute("uid"));
 
-            UserDTO userDTO = userService.getUserInfoById((String) session.getAttribute("uid"));
-
-            model.addAttribute("regDate", userDTO.getRegDate().toString().split("T")[0]);
-            model.addAttribute("uid", userDTO.getUid());
-            model.addAttribute("name", userDTO.getName());
-            model.addAttribute("email", userDTO.getEmail());
-            model.addAttribute("url", userDTO.getUrl());
-
-            return "page/my_page_userinfo";
-        }
+        model.addAttribute("regDate", userDTO.getRegDate().toString().split("T")[0]);
+        model.addAttribute("uid", userDTO.getUid());
+        model.addAttribute("name", userDTO.getName());
+        model.addAttribute("email", userDTO.getEmail());
+        model.addAttribute("url", userDTO.getUrl());
+        return "page/my_page_userinfo";
     }
 
     @GetMapping("/mypage/ticket")
     public String myTicketPage(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            model.addAttribute("result", reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("uid")));
-            return "page/my_page_ticket";
-        }
+
+        model.addAttribute("result", reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("uid")));
+        return "page/my_page_ticket";
     }
 
     @GetMapping("/mypage/ticket/detail")
-    public String myTicketDetailPage(@RequestParam String rid, HttpServletRequest httpServletRequest, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            List<String> result = seatService.getMySeatList(rid);
-            StringBuilder seat = new StringBuilder();
-            result.forEach(s -> seat.append(s).append(' '));
+    public String myTicketDetailPage(@RequestParam String rid, Model model) {
+        List<String> result = seatService.getMySeatList(rid);
+        StringBuilder seat = new StringBuilder();
+        result.forEach(s -> seat.append(s).append(' '));
 
-            model.addAttribute("seat", seat.toString());
-            model.addAttribute("result", reservationService.getReservation(rid));
-            return "page/my_page_ticket_detail";                                           
-        }
+        model.addAttribute("seat", seat.toString());
+        model.addAttribute("result", reservationService.getReservation(rid));
+        return "page/my_page_ticket_detail";
     }
 
     @GetMapping("/mypage/ticket/delete")
-    public String myPageTicketDelete(@RequestParam String rid, PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            ReservationDTO reservationDTO = ReservationDTO.builder()
-                    .rid(rid)
-                    .build();
-            reservationService.delete(reservationDTO);
-            return "redirect:/mypage/ticket";
-        }
+    public String myPageTicketDelete(@RequestParam String rid) {
+        ReservationDTO reservationDTO = ReservationDTO.builder()
+                .rid(rid)
+                .build();
+        reservationService.delete(reservationDTO);
+        return "redirect:/mypage/ticket";
     }
 
     @GetMapping("/mypage/movie")
     public String myPageMyMovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            String uid = session.getAttribute("uid").toString();
-            List<String> midList = favoriteService.getList(uid);
-            PageResultDTO<MovieDTO, Movie> result = movieService.getListByMid(pageRequestDTO, midList);
+        String uid = session.getAttribute("uid").toString();
+        List<String> midList = favoriteService.getList(uid);
+        PageResultDTO<MovieDTO, Movie> result = movieService.getListByMid(pageRequestDTO, midList);
 
-            model.addAttribute("uid", session.getAttribute("uid"));
-            model.addAttribute("result", result);
-
-            return "page/my_page_mymovie"; }
+        model.addAttribute("result", result);
+        return "page/my_page_mymovie";
     }
 
     @GetMapping("/mypage/review")
     public String myPageMyReview(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            String uid = session.getAttribute("uid").toString();
-            PageResultDTO<ReviewDTO, Review> resultDTO = reviewService.findMyReviews(pageRequestDTO, uid);
+        String uid = session.getAttribute("uid").toString();
+        PageResultDTO<ReviewDTO, Review> resultDTO = reviewService.findMyReviews(pageRequestDTO, uid);
 
-            model.addAttribute("uid", session.getAttribute("uid"));
-            model.addAttribute("result", resultDTO);
-            return "page/my_page_myreview";
-        }
+        model.addAttribute("result", resultDTO);
+        return "page/my_page_myreview";
     }
 
     @GetMapping("/mypage/question")
     public String myPageQuestion(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            String uid = (String) session.getAttribute("uid");
-            model.addAttribute("result", questionService.getMyQuestionList(pageRequestDTO, uid));
-            return "page/my_page_question";
-        }
+        String uid = (String) session.getAttribute("uid");
+
+        model.addAttribute("result", questionService.getMyQuestionList(pageRequestDTO, uid));
+        return "page/my_page_question";
     }
 
     @GetMapping("/mypage/question/post")
-    public String myPageReadQuestion(@RequestParam("qid") Integer qid, HttpServletRequest httpServletRequest, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            model.addAttribute("dto", questionService.readQuestion(qid));
-            return "page/my_page_read_question";
-        }
+    public String myPageReadQuestion(@RequestParam("qid") Integer qid, Model model) {
+        model.addAttribute("dto", questionService.readQuestion(qid));
+        return "page/my_page_read_question";
     }
 }
