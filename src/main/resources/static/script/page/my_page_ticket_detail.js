@@ -25,7 +25,7 @@
 
     const movieAPI = {
         getMovieInfo: (mid) => {
-            return requestTicketAPI.get(`/api/movie/getMovieInfo?mid=${mid}`);
+            return requestTicketAPI.get(`/movie/getMovieInfo?mid=${mid}`);
         }
     }
 

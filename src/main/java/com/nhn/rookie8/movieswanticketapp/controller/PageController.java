@@ -55,33 +55,6 @@ public class PageController {
         return "page/admin_page";
     }
 
-    @GetMapping("/movie")
-    public String moviePage() {
-        return "redirect:/movie/list?current=true";
-    }
-
-    @GetMapping("/movie/list")
-    public String currentMovieList(PageRequestDTO pageRequestDTO, boolean current, Model model) {
-        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getMoviePage(pageRequestDTO, current);
-
-        model.addAttribute("result", resultDTO);
-        model.addAttribute("current", current);
-        return "/page/movie_list";
-    }
-
-    @GetMapping("/movie/detail")
-    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        MovieDTO movieDTO = movieService.getMovieDetail(mid);
-        
-        HttpSession session = httpServletRequest.getSession(false);
-        String uid = session.getAttribute("uid").toString();
-
-        model.addAttribute("dto", movieDTO);
-        model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, mid));
-        model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
-        return "/page/movie_detail";
-    }
-
     @GetMapping("/booking")
     public String booking(Model model) {
         List<MovieDTO> movieList = movieService.getCurrentMovieList();

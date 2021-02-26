@@ -1,18 +1,24 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
+import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -25,16 +31,43 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/movie")
+@RequestMapping("/movie")
 @Log4j2
 public class MovieController {
-    private final MovieService service;
+    private final MovieService movieService;
+    private final ReviewService reviewService;
 
     private String uploadPath = System.getProperty("user.dir") + "/images";
 
+    @GetMapping("/")
+    public String moviePage() {
+        return "redirect:/movie/list?current=true";
+    }
+
+    @GetMapping("/list")
+    public String currentMovieList(PageRequestDTO pageRequestDTO, boolean current, Model model) {
+        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getMoviePage(pageRequestDTO, current);
+
+        model.addAttribute("result", resultDTO);
+        model.addAttribute("current", current);
+        return "/page/movie_list";
+    }
+
+    @GetMapping("/detail")
+    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+        MovieDTO movieDTO = movieService.getMovieDetail(mid);
+
+        HttpSession session = httpServletRequest.getSession(false);
+        String uid = session.getAttribute("uid").toString();
+
+        model.addAttribute("dto", movieDTO);
+        model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, mid));
+        model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
+        return "/page/movie_detail";
+    }
+
     @PostMapping("/register")
-    public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile,
-                              HttpServletRequest request) {
+    public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile) {
         log.info(movieDTO.getName());
         log.info(uploadFile.getName());
         String posterPath;
@@ -77,7 +110,7 @@ public class MovieController {
         }
 
         movieDTO.setPoster(posterPath);
-        service.registerMovie(movieDTO);
+        movieService.registerMovie(movieDTO);
 
         return "redirect:/admin";
     }
@@ -110,7 +143,7 @@ public class MovieController {
     @ResponseBody
     @GetMapping("/getMovieInfo")
     public MovieDTO getMovieInfo(String mid) {
-        return service.getMovieDetail(mid);
+        return movieService.getMovieDetail(mid);
     }
 
     private String makeFolder() {
