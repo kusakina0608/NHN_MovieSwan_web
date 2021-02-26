@@ -11,18 +11,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.shell.jline.InteractiveShellApplicationRunner;
+import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+        InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
+        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT + ".enabled=false"})
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Log4j2
@@ -66,25 +72,30 @@ public class MovieScheduleServiceTest {
                     .date(date.toString())
                     .time(time.plusMinutes(i).toString())
                     .build();
-            MovieSchedule entity = movieScheduleService.dtoToEntity(testDTO);
 
             StringBuilder builder = new StringBuilder();
             builder.append("aaa").append(dateTime.plusMinutes(i).format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
             String tid = builder.toString();
 
-//            when(movieScheduleRepository.save(entity)).thenReturn(entity);
             assertThat(tid, is(movieScheduleService.registerMovieSchedule(testDTO)));
         }
+//        verify(movieScheduleRepository, times(10)).save(any());
     }
 
     @Test
     @Order(1)
     public void readScheduleTest() {
+        MovieScheduleInputDTO testDTO = MovieScheduleInputDTO.builder()
+                .mid(new StringBuilder(mid).append('1').toString())
+                .date(date.toString())
+                .time(time.toString())
+                .build();
+
         StringBuilder builder = new StringBuilder();
         builder.append("aaa").append(dateTime.format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
         String tid = builder.toString();
 
-//        when(movieScheduleRepository.findById(tid)).thenReturn(Optional.of(testEntity));
+        when(movieScheduleRepository.findById(tid)).thenReturn(Optional.of(movieScheduleService.dtoToEntity(testDTO)));
         MovieScheduleDTO result = movieScheduleService.getASchedule(tid);
         assertThat(tid, is(result.getTid()));
     }
@@ -92,7 +103,12 @@ public class MovieScheduleServiceTest {
     @Test
     @Order(2)
     public void readAllScheduleTest() {
+        String testMid = "TEST0001";
 
+        when(movieScheduleRepository.findByMidOrderByTimeAsc(mid)).thenReturn(Collections.emptyList());
+        List<MovieScheduleDTO> movieScheduleList = movieScheduleService.getAllSchedulesOfMovie(testMid);
+
+        assertThat(Collections.emptyList(), is(movieScheduleList));
     }
 
     @Test
@@ -102,7 +118,6 @@ public class MovieScheduleServiceTest {
         builder.append("aaa").append(dateTime.format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
         String tid = builder.toString();
 
-//        when(movieScheduleService.deleteMovieSchedule(tid)).thenReturn(tid);
         assertThat(tid, is(movieScheduleService.deleteMovieSchedule(tid)));
     }
 
