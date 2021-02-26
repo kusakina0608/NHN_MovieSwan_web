@@ -49,7 +49,7 @@ public class PageController {
 
     @GetMapping("/admin")
     public String adminPage(Model model) {
-        List<MovieDTO> movieList = movieService.getReleaseList();
+        List<MovieDTO> movieList = movieService.getCurrentMovieList();
         model.addAttribute("movieList", movieList);
         return "page/admin_page";
     }
@@ -61,7 +61,7 @@ public class PageController {
 
     @GetMapping("/movie/list")
     public String currentMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, boolean current, Model model) {
-        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, current);
+        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getMoviePage(pageRequestDTO, current);
 
         HttpSession session = httpServletRequest.getSession(false);
         if (!(session == null || session.getAttribute("uid") == null))
@@ -74,7 +74,7 @@ public class PageController {
 
     @GetMapping("/movie/detail")
     public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        MovieDTO movieDTO = movieService.read(mid);
+        MovieDTO movieDTO = movieService.getMovieDetail(mid);
 
         HttpSession session = httpServletRequest.getSession(false);
         String uid;
@@ -86,14 +86,14 @@ public class PageController {
             uid = "";
         
         model.addAttribute("dto", movieDTO);
-        model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
+        model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, mid));
         model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
         return "/page/movie_detail";
     }
 
     @GetMapping("/booking")
     public String booking(Model model) {
-        List<MovieDTO> movieList = movieService.getReleaseList();
+        List<MovieDTO> movieList = movieService.getCurrentMovieList();
         model.addAttribute("movieList", movieList);
         return "page/booking";
     }
@@ -109,7 +109,7 @@ public class PageController {
         log.debug("time: {}", time);
         log.debug("tid: {}", tid);
 
-        MovieDTO movieDTO = movieService.read(mid);
+        MovieDTO movieDTO = movieService.getMovieDetail(mid);
         model.addAttribute("title", movieDTO.getName());
         model.addAttribute("poster", movieDTO.getPoster());
         model.addAttribute("theater", "무비스완 판교점");
@@ -265,8 +265,8 @@ public class PageController {
             return "redirect:/user/login";
         } else {
             String uid = session.getAttribute("uid").toString();
-            List<String> midList = favoriteService.getList(uid);
-            PageResultDTO<MovieDTO, Movie> result = movieService.getListByMid(pageRequestDTO, midList);
+            List<String> midList = favoriteService.getFavoriteList(uid);
+            PageResultDTO<MovieDTO, Movie> result = movieService.getPageByMids(pageRequestDTO, midList);
 
             model.addAttribute("uid", session.getAttribute("uid"));
             model.addAttribute("result", result);

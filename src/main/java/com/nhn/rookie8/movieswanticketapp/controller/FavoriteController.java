@@ -13,12 +13,12 @@ public class FavoriteController {
 
     @PostMapping("/register")
     public void registerFavorite(FavoriteDTO favoriteDTO) {
-        service.register(favoriteDTO);
+        service.registerFavorite(favoriteDTO);
     }
 
     @DeleteMapping("/delete")
     public void deleteFavorite(FavoriteDTO favoriteDTO) {
-        service.remove(favoriteDTO);
+        service.removeFavorite(favoriteDTO);
     }
 
     @GetMapping("/isFavorite")

@@ -20,7 +20,7 @@ public class ReviewController {
         log.info(reviewDTO);
         if(reviewDTO.getUid().equals(""))
             return "redirect:/user/login";
-        service.register(reviewDTO);
+        service.registerReview(reviewDTO);
 
         redirectAttributes.addAttribute("mid", reviewDTO.getMid());
 
@@ -30,7 +30,7 @@ public class ReviewController {
     @PostMapping("/modify")
     public String modifyReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
         log.info(reviewDTO);
-        service.modify(reviewDTO);
+        service.editReview(reviewDTO);
 
         redirectAttributes.addAttribute("mid", reviewDTO.getMid());
         return "redirect:/movie/detail";
@@ -39,7 +39,7 @@ public class ReviewController {
     @DeleteMapping("/delete")
     public String removeReview(@RequestParam("rid") String rid, @RequestParam("mid") String mid,
                                RedirectAttributes redirectAttributes) {
-        service.remove(rid);
+        service.deleteReview(rid);
 
         redirectAttributes.addAttribute("mid", mid);
         return "redirect:/movie/detail";

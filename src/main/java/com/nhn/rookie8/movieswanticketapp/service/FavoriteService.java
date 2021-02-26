@@ -6,10 +6,10 @@ import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
 import java.util.List;
 
 public interface FavoriteService {
-    String register(FavoriteDTO favoriteDTO);
-    List<String> getList(String uid);
+    String registerFavorite(FavoriteDTO favoriteDTO);
+    List<String> getFavoriteList(String uid);
     boolean isFavorite(String uid, String mid);
-    void remove(FavoriteDTO favoriteDTO);
+    void removeFavorite(FavoriteDTO favoriteDTO);
 
     default Favorite dtoToEntity(FavoriteDTO favoriteDTO) {
         return Favorite.builder()

@@ -21,7 +21,6 @@ import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -66,7 +65,7 @@ class MovieServiceTest {
         when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class)))
                 .thenReturn(page);
 
-        String mid = service.register(service.entityToDTO(movie));
+        String mid = service.registerMovie(service.entityToDTO(movie));
 
         assertThat(mid, is(movie.getMid() + "001"));
     }
@@ -76,7 +75,7 @@ class MovieServiceTest {
         String mid = movie.getMid();
         when(repository.findById(mid)).thenReturn(Optional.of(movie));
 
-        MovieDTO returnMovie = service.read(mid);
+        MovieDTO returnMovie = service.getMovieDetail(mid);
 
         assertThat(returnMovie, is(service.entityToDTO(movie)));
     }
@@ -88,7 +87,7 @@ class MovieServiceTest {
 
         when(repository.findAll()).thenReturn(movieList);
 
-        List<MovieDTO> returnList = service.getAllList();
+        List<MovieDTO> returnList = service.getAllMovieList();
 
         assertThat(returnList, is(movieDTOList));
     }
@@ -101,7 +100,7 @@ class MovieServiceTest {
 
         when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
 
-        List<MovieDTO> returnList = service.getReleaseList();
+        List<MovieDTO> returnList = service.getCurrentMovieList();
 
         assertThat(returnList, is(movieDTOList));
     }
@@ -118,7 +117,7 @@ class MovieServiceTest {
 
         when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
 
-        PageResultDTO<MovieDTO, Movie> resultDTO = service.getList(requestDTO, false);
+        PageResultDTO<MovieDTO, Movie> resultDTO = service.getMoviePage(requestDTO, false);
         List<MovieDTO> returnDTOList = resultDTO.getDtoList();
 
         assertThat(returnDTOList, is(movieDTOList));
@@ -137,7 +136,7 @@ class MovieServiceTest {
 
         when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
 
-        PageResultDTO<MovieDTO, Movie> resultDTO = service.getListByMid(requestDTO, midList);
+        PageResultDTO<MovieDTO, Movie> resultDTO = service.getPageByMids(requestDTO, midList);
         List<MovieDTO> returnDTOList = resultDTO.getDtoList();
 
         assertThat(returnDTOList, is(movieDTOList));

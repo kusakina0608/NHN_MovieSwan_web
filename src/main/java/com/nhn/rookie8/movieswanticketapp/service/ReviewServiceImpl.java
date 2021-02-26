@@ -25,7 +25,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final ReviewRepository repository;
 
     @Override
-    public String register(ReviewDTO reviewDTO) {
+    public String registerReview(ReviewDTO reviewDTO) {
         String mid = reviewDTO.getMid();
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("rid").descending());
@@ -50,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String mid) {
+    public PageResultDTO<ReviewDTO, Review> getReviewPage(PageRequestDTO pageRequestDTO, String mid) {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("rid").descending());
         BooleanBuilder booleanBuilder = getReviewsByMid(mid);
 
@@ -112,7 +112,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public void modify(ReviewDTO reviewDTO) {
+    public void editReview(ReviewDTO reviewDTO) {
         Optional<Review> result = repository.findById(reviewDTO.getRid());
 
         if(result.isPresent()) {
@@ -126,7 +126,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public void remove(String rid) {
+    public void deleteReview(String rid) {
         repository.deleteById(rid);
     }
 

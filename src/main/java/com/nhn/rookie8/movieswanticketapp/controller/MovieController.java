@@ -77,7 +77,7 @@ public class MovieController {
         }
 
         movieDTO.setPoster(posterPath);
-        service.register(movieDTO);
+        service.registerMovie(movieDTO);
 
         return "redirect:/admin";
     }
@@ -110,7 +110,7 @@ public class MovieController {
     @ResponseBody
     @GetMapping("/getMovieInfo")
     public MovieDTO getMovieInfo(String mid) {
-        return service.read(mid);
+        return service.getMovieDetail(mid);
     }
 
     private String makeFolder() {
