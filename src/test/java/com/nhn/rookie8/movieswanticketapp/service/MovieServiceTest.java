@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(properties = {
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
@@ -39,14 +39,17 @@ class MovieServiceTest {
     @MockBean
     private MovieRepository repository;
 
+    EasyRandomParameters parameters;
+    EasyRandom generator;
+
     private MovieDTO movieDTO;
     private Movie movie;
 
     @BeforeAll
     void createMovieDto() {
-        EasyRandomParameters parameters = new EasyRandomParameters();
+        parameters = new EasyRandomParameters();
         parameters.stringLengthRange(4, 4);
-        EasyRandom generator = new EasyRandom();
+        generator = new EasyRandom(parameters);
 
         movieDTO = generator.nextObject(MovieDTO.class);
 
@@ -79,15 +82,25 @@ class MovieServiceTest {
 
     @Test
     void movieListTest() {
-        EasyRandomParameters parameters = new EasyRandomParameters();
-        parameters.stringLengthRange(4, 4);
-        EasyRandom generator = new EasyRandom();
         List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
         List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
 
         when(repository.findAll()).thenReturn(movieList);
 
         List<MovieDTO> returnList = service.getAllList();
+
+        assertThat(returnList, is(movieDTOList));
+    }
+
+    @Test
+    void movieReleaseListTest() {
+        List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
+        List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
+        Page<Movie> moviePage = new PageImpl(movieList);
+
+        when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
+
+        List<MovieDTO> returnList = service.getReleaseList();
 
         assertThat(returnList, is(movieDTOList));
     }
