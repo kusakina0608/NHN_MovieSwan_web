@@ -32,20 +32,9 @@ public class MovieController {
 
     private String uploadPath = System.getProperty("user.dir") + "/images";
 
-    static final char[] digits = {
-            '0', '1', '2', '3', '4', '5', '6', '7',
-            '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
-            'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-            'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-            'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
-            'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-            'U', 'V', 'W', 'X', 'Y', 'Z', '_', '*'
-    };
-
     @PostMapping("/register")
     public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile,
-                              HttpServletRequest request) throws IOException  {
+                              HttpServletRequest request) {
         log.info(movieDTO.getName());
         log.info(uploadFile.getName());
         String posterPath;
@@ -60,13 +49,12 @@ public class MovieController {
             if (!contentType.startsWith("image"))
                 throw new Exception("이미지 타입의 파일이 아닙니다.");
         } catch (Exception e) {
-            log.error("uploadfile type : {}", uploadFile.getContentType(), e);
+            log.error("upload file type : {}", uploadFile.getContentType(), e);
             return "redirect:/admin";
         }
 
         log.info(uploadPath);
-        UUID uuid = UUID.randomUUID();
-        String uuidStr = toUnsignedString(uuid.getMostSignificantBits(), 6) + toUnsignedString(uuid.getLeastSignificantBits(), 6);
+        String uuid = UUID.randomUUID().toString();
         String originalName = uploadFile.getOriginalFilename();
         String extensionName;
         try {
@@ -77,7 +65,7 @@ public class MovieController {
             log.error("잘못된 파일 이름입니다.");
             return "redirect:/admin";
         }
-        posterPath = makeFolder() + File.separator + uuidStr + extensionName;
+        posterPath = makeFolder() + File.separator + uuid + extensionName;
         log.info(posterPath);
         String saveName = uploadPath + File.separator + posterPath;
         savePath = Paths.get(saveName);
@@ -137,19 +125,4 @@ public class MovieController {
 
         return folderPath;
     }
-
-    private static String toUnsignedString(long i, int shift) {
-        char[] buf = new char[64];
-        int charPos = 64;
-        int radix = 1 << shift;
-        long mask = (long)radix - 1;
-        long number = i;
-        do {
-            buf[--charPos] = digits[(int) (number & mask)];
-            number >>>= shift;
-        } while (number != 0);
-        return new String(buf, charPos, (64 - charPos));
-    }
-
-
 }
