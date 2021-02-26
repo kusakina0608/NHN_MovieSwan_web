@@ -49,28 +49,31 @@ public class MovieController {
         log.info(movieDTO.getName());
         log.info(uploadFile.getName());
         String posterPath;
-        String originalName = "";
+
         Path savePath;
 
         try {
-            if (uploadFile == null)
-                throw new NullPointerException();
-
-            originalName = uploadFile.getOriginalFilename();
-            if (!uploadFile.getContentType().startsWith("image"))
+            if (uploadFile.getContentType() == null ||
+                    !uploadFile.getContentType().startsWith("image"))
                 throw new Exception("이미지 타입의 파일이 아닙니다.");
-        } catch (NullPointerException e) {
-            log.error("파일이 존재하지 않습니다.", e);
-            return "redirect:/admin";
         } catch (Exception e) {
-            log.error("uploadfile : {}", originalName, e);
+            log.error("uploadfile type : {}", uploadFile.getContentType(), e);
             return "redirect:/admin";
         }
 
         log.info(uploadPath);
         UUID uuid = UUID.randomUUID();
         String uuidStr = toUnsignedString(uuid.getMostSignificantBits(), 6) + toUnsignedString(uuid.getLeastSignificantBits(), 6);
-        String extensionName = originalName.substring(originalName.lastIndexOf("."));
+        String originalName = uploadFile.getOriginalFilename();
+        String extensionName;
+        try {
+            if(originalName == null)
+                throw new NullPointerException();
+            extensionName = originalName.substring(originalName.lastIndexOf("."));
+        } catch (NullPointerException e) {
+            log.error("잘못된 파일 이름입니다.");
+            return "redirect:/admin";
+        }
         posterPath = makeFolder() + File.separator + uuidStr + extensionName;
         log.info(posterPath);
         String saveName = uploadPath + File.separator + posterPath;
