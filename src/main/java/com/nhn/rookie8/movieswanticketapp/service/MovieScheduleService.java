@@ -11,8 +11,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public interface MovieScheduleService {
-    void registerMovieSchedule(MovieScheduleInputDTO dto);
-    void deleteMovieSchedule(String tid);
+    String registerMovieSchedule(MovieScheduleInputDTO dto);
+    String deleteMovieSchedule(String tid);
 
     MovieScheduleDTO getASchedule(String tid);
     List<MovieScheduleDTO> getAllSchedulesOfMovie(String mid);
