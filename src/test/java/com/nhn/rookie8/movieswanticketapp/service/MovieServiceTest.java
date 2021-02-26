@@ -4,6 +4,8 @@ import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
 import com.querydsl.core.BooleanBuilder;
+import org.jeasy.random.EasyRandom;
+import org.jeasy.random.EasyRandomParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,10 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,42 +41,15 @@ class MovieServiceTest {
 
     private MovieDTO movieDTO;
     private Movie movie;
-    private String mid;
-    private String name;
-    private String poster;
-    private String director;
-    private String actor;
-    private String genre;
-    private int runtime;
-    private String story;
-    private LocalDate startdate;
-    private LocalDate enddate;
 
     @BeforeAll
     void createMovieDto() {
-        mid = "AAAA";
-        name = "name";
-        poster = "poster";
-        director = "director";
-        actor = "actor";
-        genre = "genre";
-        runtime = 100;
-        story = "story";
-        startdate = LocalDate.of(2000, 1, 1);
-        enddate = LocalDate.of(2020, 12, 31);
+        EasyRandomParameters parameters = new EasyRandomParameters();
+        parameters.stringLengthRange(4, 4);
+        EasyRandom generator = new EasyRandom();
 
-        movieDTO = MovieDTO.builder()
-                .mid(mid)
-                .name(name)
-                .poster(poster)
-                .director(director)
-                .actor(actor)
-                .genre(genre)
-                .runtime(runtime)
-                .story(story)
-                .startdate(startdate)
-                .enddate(enddate)
-                .build();
+        movieDTO = generator.nextObject(MovieDTO.class);
+
         movie = service.dtoToEntity(movieDTO);
     }
 
@@ -94,11 +69,26 @@ class MovieServiceTest {
 
     @Test
     void movieReadTest() {
-        when(repository.findById("AAAA001")).thenReturn(Optional.of(movie));
+        String mid = movie.getMid();
+        when(repository.findById(mid)).thenReturn(Optional.of(movie));
 
-        MovieDTO returnMovie = service.read("AAAA001");
+        MovieDTO returnMovie = service.read(mid);
 
         assertThat(returnMovie, is(service.entityToDTO(movie)));
     }
 
+    @Test
+    void movieListTest() {
+        EasyRandomParameters parameters = new EasyRandomParameters();
+        parameters.stringLengthRange(4, 4);
+        EasyRandom generator = new EasyRandom();
+        List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
+        List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
+
+        when(repository.findAll()).thenReturn(movieList);
+
+        List<MovieDTO> returnList = service.getAllList();
+
+        assertThat(returnList, is(movieDTOList));
+    }
 }
