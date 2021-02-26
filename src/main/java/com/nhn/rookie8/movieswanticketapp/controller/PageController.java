@@ -74,7 +74,7 @@ public class PageController {
         log.debug("tid: {}", tid);
 
         MovieDTO movieDTO = movieService.getMovieDetail(mid);
-        model.addAttribute("title", movieDTO.getName());
+        model.addAttribute("title", movieDTO.getMovieTitle());
         model.addAttribute("poster", movieDTO.getPoster());
         model.addAttribute("theater", "무비스완 판교점");
         model.addAttribute("tid", tid);

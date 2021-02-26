@@ -27,7 +27,7 @@ public class FavoriteServiceImpl implements FavoriteService{
         Favorite favorite = dtoToEntity(favoriteDTO);
         repository.save(favorite);
 
-        return favorite.getMid();
+        return favorite.getMovieId();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 
         List<String> midList = new ArrayList<>();
         for(Favorite fav : result)
-            midList.add(fav.getMid());
+            midList.add(fav.getMovieId());
 
         return midList;
     }
@@ -50,8 +50,8 @@ public class FavoriteServiceImpl implements FavoriteService{
     @Override
     public boolean isFavorite(String uid, String mid) {
         FavoriteId favoriteId = FavoriteId.builder()
-                .uid(uid)
-                .mid(mid)
+                .userId(uid)
+                .movieId(mid)
                 .build();
 
         Optional<Favorite> result = repository.findById(favoriteId);
@@ -62,8 +62,8 @@ public class FavoriteServiceImpl implements FavoriteService{
     @Override
     public void removeFavorite(FavoriteDTO favoriteDTO) {
         FavoriteId favoriteId = FavoriteId.builder()
-                .uid(favoriteDTO.getUid())
-                .mid(favoriteDTO.getMid())
+                .userId(favoriteDTO.getUserId())
+                .movieId(favoriteDTO.getMovieId())
                 .build();
 
         repository.deleteById(favoriteId);

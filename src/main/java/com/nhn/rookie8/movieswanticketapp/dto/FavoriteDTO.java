@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class FavoriteDTO {
-    private String uid;
-    private String mid;
+    private String userId;
+    private String movieId;
 }

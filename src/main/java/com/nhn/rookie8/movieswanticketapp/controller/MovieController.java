@@ -39,7 +39,7 @@ public class MovieController {
 
     private String uploadPath = System.getProperty("user.dir") + "/images";
 
-    @GetMapping("/")
+    @GetMapping({"", "/"})
     public String moviePage() {
         return "redirect:/movie/list?current=true";
     }
@@ -68,7 +68,7 @@ public class MovieController {
 
     @PostMapping("/register")
     public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile) {
-        log.info(movieDTO.getName());
+        log.info(movieDTO.getMovieTitle());
         log.info(uploadFile.getName());
         String posterPath;
 

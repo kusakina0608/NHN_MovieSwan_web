@@ -20,20 +20,20 @@ import java.time.LocalDateTime;
 @EntityListeners(value = {AuditingEntityListener.class})
 public class Review {
     @Id
-    @Column(name = "rid", length = 15, nullable = false)
-    private String rid;
+    @Column(name = "review_id", length = 15, nullable = false)
+    private String reviewId;
 
-    @Column(name = "mid", length = 10, nullable = false)
-    private String mid;
+    @Column(name = "movie_id", length = 10, nullable = false)
+    private String movieId;
 
-    @Column(name = "uid", length = 21, nullable = false)
-    private String uid;
+    @Column(name = "user_id", length = 21, nullable = false)
+    private String userId;
 
-    @Column(name = "grade", nullable = false)
-    private int grade;
+    @Column(name = "rating", nullable = false)
+    private int rating;
 
-    @Column(name = "content", length = 500, nullable = false)
-    private String content;
+    @Column(name = "review_content", length = 500)
+    private String reviewContent;
 
     @CreatedDate
     @Column(name = "regdate", updatable = false)
@@ -43,11 +43,11 @@ public class Review {
     @Column(name = "moddate")
     private LocalDateTime moddate;
 
-    public void changeGrade(int grade) {
-        this.grade = grade;
+    public void changeGrade(int rating) {
+        this.rating = rating;
     }
 
     public void changeContent(String content) {
-        this.content = content;
+        this.reviewContent = content;
     }
 }

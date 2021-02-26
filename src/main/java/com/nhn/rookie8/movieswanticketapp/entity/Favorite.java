@@ -16,10 +16,10 @@ import javax.persistence.IdClass;
 @IdClass(FavoriteId.class)
 public class Favorite {
     @Id
-    @Column(name = "uid", length = 21, nullable = false)
-    private String uid;
+    @Column(name = "user_id", length = 21, nullable = false)
+    private String userId;
 
     @Id
-    @Column(name = "mid", length = 10, nullable = false)
-    private String mid;
+    @Column(name = "movie_id", length = 10, nullable = false)
+    private String movieId;
 }

@@ -22,11 +22,11 @@ public interface ReviewService {
 
     default ReviewDTO entityToDTO(Review review) {
         return ReviewDTO.builder()
-                .rid(review.getRid())
-                .mid(review.getMid())
-                .uid(review.getUid())
-                .grade(review.getGrade())
-                .content(review.getContent())
+                .reviewId(review.getReviewId())
+                .movieId(review.getMovieId())
+                .userId(review.getUserId())
+                .rating(review.getRating())
+                .reviewContent(review.getReviewContent())
                 .regdate(review.getRegdate())
                 .moddate(review.getModdate())
                 .build();
@@ -34,11 +34,11 @@ public interface ReviewService {
 
     default Review dtoToEntity(ReviewDTO reviewDTO) {
         return Review.builder()
-                .rid(reviewDTO.getRid())
-                .mid(reviewDTO.getMid())
-                .uid(reviewDTO.getUid())
-                .grade(reviewDTO.getGrade())
-                .content(reviewDTO.getContent())
+                .reviewId(reviewDTO.getReviewId())
+                .movieId(reviewDTO.getMovieId())
+                .userId(reviewDTO.getUserId())
+                .rating(reviewDTO.getRating())
+                .reviewContent(reviewDTO.getReviewContent())
                 .build();
     }
 }

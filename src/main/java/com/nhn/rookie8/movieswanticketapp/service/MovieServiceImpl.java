@@ -28,7 +28,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public String registerMovie(MovieDTO movieDTO) {
-        String mid = movieDTO.getMid();
+        String mid = movieDTO.getMovieId();
 
         Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
@@ -40,13 +40,13 @@ public class MovieServiceImpl implements MovieService{
         long moviesWithSameCode = repository.findAll(booleanBuilder, pageable).stream().count() + 1;
         mid += String.format("%03d", moviesWithSameCode);
 
-        movieDTO.setMid(mid);
+        movieDTO.setMovieId(mid);
 
         Movie movie = dtoToEntity(movieDTO);
 
         repository.save(movie);
 
-        return movie.getMid();
+        return movie.getMovieId();
     }
 
     @Override

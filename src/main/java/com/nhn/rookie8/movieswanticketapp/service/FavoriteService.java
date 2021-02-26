@@ -13,15 +13,15 @@ public interface FavoriteService {
 
     default Favorite dtoToEntity(FavoriteDTO favoriteDTO) {
         return Favorite.builder()
-                .uid(favoriteDTO.getUid())
-                .mid(favoriteDTO.getMid())
+                .userId(favoriteDTO.getUserId())
+                .movieId(favoriteDTO.getMovieId())
                 .build();
     }
 
     default FavoriteDTO entityToDto(Favorite favorite) {
         return FavoriteDTO.builder()
-                .uid(favorite.getUid())
-                .mid(favorite.getMid())
+                .userId(favorite.getUserId())
+                .movieId(favorite.getMovieId())
                 .build();
     }
 }

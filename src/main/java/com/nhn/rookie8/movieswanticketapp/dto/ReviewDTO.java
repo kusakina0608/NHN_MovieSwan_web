@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class ReviewDTO {
-    private String rid;
-    private String mid;
-    private String uid;
-    private int grade;
-    private String content;
+    private String reviewId;
+    private String movieId;
+    private String userId;
+    private int rating;
+    private String reviewContent;
     private LocalDateTime regdate;
     private LocalDateTime moddate;
 }

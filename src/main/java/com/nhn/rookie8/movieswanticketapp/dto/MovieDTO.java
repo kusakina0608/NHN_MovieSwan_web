@@ -13,8 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieDTO {
-    private String mid;
-    private String name;
+    private String movieId;
+    private String movieTitle;
     private String poster;
     private String director;
     private String actor;
@@ -23,7 +23,7 @@ public class MovieDTO {
     private String story;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startdate;
+    private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate enddate;
+    private LocalDate endDate;
 }

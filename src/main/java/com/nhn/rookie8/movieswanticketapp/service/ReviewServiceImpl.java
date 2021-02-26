@@ -26,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public String registerReview(ReviewDTO reviewDTO) {
-        String mid = reviewDTO.getMid();
+        String mid = reviewDTO.getMovieId();
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("rid").descending());
         BooleanBuilder booleanBuilder = getReviewsByMid(mid);
@@ -34,19 +34,19 @@ public class ReviewServiceImpl implements ReviewService{
         Optional<Review> lastReview = repository.findAll(booleanBuilder, pageable).stream().findFirst();
         String rid;
         if(lastReview.isPresent()) {
-            String lastRid = lastReview.get().getRid();
+            String lastRid = lastReview.get().getReviewId();
             int num = Integer.parseInt(lastRid.substring(lastRid.lastIndexOf('-') + 1));
             rid = mid + "-" + String.format("%05d", num + 1);
         }
         else
             rid = mid + "-00001";
-        reviewDTO.setRid(rid);
+        reviewDTO.setReviewId(rid);
 
         Review review = dtoToEntity(reviewDTO);
 
         repository.save(review);
 
-        return review.getRid();
+        return review.getReviewId();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class ReviewServiceImpl implements ReviewService{
         else {
             float sum = 0;
             for (Review review : result)
-                sum += review.getGrade();
+                sum += review.getRating();
 
             return sum / result.size();
         }
@@ -113,13 +113,13 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public void editReview(ReviewDTO reviewDTO) {
-        Optional<Review> result = repository.findById(reviewDTO.getRid());
+        Optional<Review> result = repository.findById(reviewDTO.getReviewId());
 
         if(result.isPresent()) {
             Review review = result.get();
 
-            review.changeGrade(reviewDTO.getGrade());
-            review.changeContent(reviewDTO.getContent());
+            review.changeGrade(reviewDTO.getRating());
+            review.changeContent(reviewDTO.getReviewContent());
 
             repository.save(review);
         }
