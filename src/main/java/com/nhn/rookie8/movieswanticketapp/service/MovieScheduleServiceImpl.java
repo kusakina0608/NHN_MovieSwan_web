@@ -20,23 +20,27 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     private final MovieScheduleRepository repository;
 
     @Override
-    public void registerMovieSchedule(MovieScheduleInputDTO movieScheduleInputDTO) {
+    public String registerMovieSchedule(MovieScheduleInputDTO movieScheduleInputDTO) {
         try {
             MovieSchedule entity = dtoToEntity(movieScheduleInputDTO);
             log.info("Entity : {}", entity);
             repository.save(entity);
+            return entity.getTid();
         } catch (Exception e) {
             log.error(e);
+            return "";
         }
     }
 
     @Override
-    public void deleteMovieSchedule(String timeTableId) {
+    public String deleteMovieSchedule(String timeTableId) {
         try {
             log.info("Deleted tid : {}", timeTableId);
             repository.deleteById(timeTableId);
+            return timeTableId;
         } catch (Exception e) {
             log.error(e);
+            return "";
         }
     }
 
