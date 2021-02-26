@@ -56,32 +56,19 @@ public class PageController {
 
     @GetMapping("/movie")
     public String moviePage() {
-        return "redirect:/movie/current/list";
+        return "redirect:/movie/list?current=true";
     }
 
-    @GetMapping("/movie/current/list")
-    public String currentMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, true);
+    @GetMapping("/movie/list")
+    public String currentMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, boolean current, Model model) {
+        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, current);
 
         HttpSession session = httpServletRequest.getSession(false);
         if (!(session == null || session.getAttribute("uid") == null))
             model.addAttribute("uid", session.getAttribute("uid"));
 
         model.addAttribute("result", resultDTO);
-        model.addAttribute("current", true);
-        return "/page/movie_list";
-    }
-
-    @GetMapping("/movie/expected/list")
-    public String expectedMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, false);
-
-        HttpSession session = httpServletRequest.getSession(false);
-        if (!(session == null || session.getAttribute("uid") == null))
-            model.addAttribute("uid", session.getAttribute("uid"));
-
-        model.addAttribute("result", resultDTO);
-        model.addAttribute("current", false);
+        model.addAttribute("current", current);
         return "/page/movie_list";
     }
 

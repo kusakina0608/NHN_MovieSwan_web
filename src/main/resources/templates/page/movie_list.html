@@ -14,12 +14,12 @@
         <main>
             <!---상영 중 / 상영 예정 탭--->
             <ul class="currentMovie">
-                <a th:href="@{/movie/current/list}" th:class=" ${current ? 'selected' : ''} ">
+                <a th:href="@{/movie/list(current=true)}" th:class=" ${current ? 'selected' : ''} ">
                     <li id="current">
                         상영 중
                     </li>
                 </a>
-                <a th:href="@{/movie/expected/list}" th:class=" ${!current ? 'selected' : ''} ">
+                <a th:href="@{/movie/list(current=false)}" th:class=" ${!current ? 'selected' : ''} ">
                     <li id="expected">
                         상영 예정
                     </li>
@@ -27,6 +27,7 @@
             </ul>
             <!---영화 검색창--->
             <form th:action="@{list}" method="get" class="movieSearch">
+                <input type="hidden" name="current" th:value="${current}">
                 <input type="text" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="영화 찾기" />
                 <button type="submit">검색</button>
             </form>
@@ -40,16 +41,16 @@
             <!---pagination--->
             <ul class="pagination">
                 <li class="page-item" th:if="${result.prev}">
-                    <a class="page-link" th:href="@{list(page=${result.start - 1}, keyword=${pageRequestDTO.keyword})}" tabindex="-1">Prev</a>
+                    <a class="page-link" th:href="@{list(current=${current}, page=${result.start - 1}, keyword=${pageRequestDTO.keyword})}" tabindex="-1">Prev</a>
                 </li>
                 <li th:class=" 'page-item ' + ${result.page == page?'active':''}"
                     th:each="page: ${result.pageList}">
-                    <a class="page-link" th:href="@{list(page=${page}, keyword=${pageRequestDTO.keyword})}">
+                    <a class="page-link" th:href="@{list(current=${current}, page=${page}, keyword=${pageRequestDTO.keyword})}">
                         [[${page}]]
                     </a>
                 </li>
                 <li class="page-item" th:if="${result.next}">
-                    <a class="page-link" th:href="@{list(page=${result.end + 1}, keyword=${pageRequestDTO.keyword})}">Next</a>
+                    <a class="page-link" th:href="@{list(current=${current}, page=${result.end + 1}, keyword=${pageRequestDTO.keyword})}">Next</a>
                 </li>
             </ul>
         </main>
