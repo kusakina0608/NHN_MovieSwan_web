@@ -53,8 +53,11 @@ public class MovieController {
         Path savePath;
 
         try {
-            if (uploadFile.getContentType() == null ||
-                    !uploadFile.getContentType().startsWith("image"))
+            String contentType = uploadFile.getContentType();
+            if(contentType == null)
+                throw new NullPointerException();
+
+            if (!contentType.startsWith("image"))
                 throw new Exception("이미지 타입의 파일이 아닙니다.");
         } catch (Exception e) {
             log.error("uploadfile type : {}", uploadFile.getContentType(), e);
