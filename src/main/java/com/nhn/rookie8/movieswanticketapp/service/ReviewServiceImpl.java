@@ -93,7 +93,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public float getGradeByMid(String mid) {
-        Pageable pageable = PageRequest.of(0, (int)repository.count());
+        Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QReview qReview = QReview.review;
         BooleanExpression expression = qReview.mid.eq(mid);
