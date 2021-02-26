@@ -25,6 +25,7 @@
     }
 
     var favBtns = document.querySelectorAll(".favorite");
+    var uidInput = localStorage.getItem("uid");
     favBtns.forEach(btn => {
         let mid = btn.querySelector("input").value;
 

@@ -61,12 +61,8 @@ public class PageController {
     }
 
     @GetMapping("/movie/list")
-    public String currentMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, boolean current, Model model) {
+    public String currentMovieList(PageRequestDTO pageRequestDTO, boolean current, Model model) {
         PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getMoviePage(pageRequestDTO, current);
-
-        HttpSession session = httpServletRequest.getSession(false);
-        if (!(session == null || session.getAttribute("uid") == null))
-            model.addAttribute("uid", session.getAttribute("uid"));
 
         model.addAttribute("result", resultDTO);
         model.addAttribute("current", current);
@@ -76,16 +72,10 @@ public class PageController {
     @GetMapping("/movie/detail")
     public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         MovieDTO movieDTO = movieService.getMovieDetail(mid);
-
-        HttpSession session = httpServletRequest.getSession(false);
-        String uid;
-        if (!(session == null || session.getAttribute("uid") == null)) {
-            model.addAttribute("uid", session.getAttribute("uid"));
-            uid = session.getAttribute("uid").toString();
-        }
-        else
-            uid = "";
         
+        HttpSession session = httpServletRequest.getSession(false);
+        String uid = session.getAttribute("uid").toString();
+
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, mid));
         model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
@@ -244,7 +234,7 @@ public class PageController {
     public String myPageMyMovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         String uid = session.getAttribute("uid").toString();
-        List<String> midList = favoriteService.getList(uid);
+        List<String> midList = favoriteService.getFavoriteList(uid);
         PageResultDTO<MovieDTO, Movie> result = movieService.getPageByMids(pageRequestDTO, midList);
 
         model.addAttribute("result", result);

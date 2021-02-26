@@ -19,6 +19,7 @@
     }
 
     var favBtn = document.querySelector(".favorite");
+    var uidInput = localStorage.getItem("uid");
     let mid = favBtn.querySelector("input").value;
 
     //찜한 영화라면 꽉찬 하트로 바꾸기
