@@ -30,7 +30,7 @@ public class MovieServiceImpl implements MovieService{
     public String register(MovieDTO movieDTO) {
         String mid = movieDTO.getMid();
 
-        Pageable pageable = PageRequest.of(0, (int)repository.count());
+        Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         QMovie qMovie = QMovie.movie;
@@ -103,7 +103,7 @@ public class MovieServiceImpl implements MovieService{
     @Override
     public List<MovieDTO> getReleaseList() {
         BooleanBuilder booleanBuilder = getReleaseMovies();
-        Pageable pageable = PageRequest.of(0, (int)repository.count());
+        Pageable pageable = PageRequest.of(0, 1000);
         List<Movie> movieList = repository.findAll(booleanBuilder, pageable).toList();
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for (Movie movie: movieList)
