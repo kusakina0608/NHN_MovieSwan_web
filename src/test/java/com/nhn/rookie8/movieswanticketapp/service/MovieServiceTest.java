@@ -1,6 +1,8 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -12,15 +14,14 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -103,5 +104,42 @@ class MovieServiceTest {
         List<MovieDTO> returnList = service.getReleaseList();
 
         assertThat(returnList, is(movieDTOList));
+    }
+
+    @Test
+    void moviePageTest() {
+        List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
+        List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
+        Page<Movie> moviePage = mock(Page.class);
+
+        when(moviePage.getPageable()).thenReturn(PageRequest.of(0, 10));
+        when(moviePage.stream()).thenReturn(movieList.stream());
+        PageRequestDTO requestDTO = PageRequestDTO.builder().page(1).size(10).build();
+
+        when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
+
+        PageResultDTO<MovieDTO, Movie> resultDTO = service.getList(requestDTO, false);
+        List<MovieDTO> returnDTOList = resultDTO.getDtoList();
+
+        assertThat(returnDTOList, is(movieDTOList));
+    }
+
+    @Test
+    void moviePageByMidTest() {
+        List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
+        List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
+        Page<Movie> moviePage = mock(Page.class);
+        List<String> midList = movieList.stream().map(movie -> movie.getMid()).collect(Collectors.toList());
+
+        when(moviePage.getPageable()).thenReturn(PageRequest.of(0, 10));
+        when(moviePage.stream()).thenReturn(movieList.stream());
+        PageRequestDTO requestDTO = PageRequestDTO.builder().page(1).size(10).build();
+
+        when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
+
+        PageResultDTO<MovieDTO, Movie> resultDTO = service.getListByMid(requestDTO, midList);
+        List<MovieDTO> returnDTOList = resultDTO.getDtoList();
+
+        assertThat(returnDTOList, is(movieDTOList));
     }
 }
