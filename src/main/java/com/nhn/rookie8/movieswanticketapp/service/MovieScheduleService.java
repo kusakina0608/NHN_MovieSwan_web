@@ -12,33 +12,35 @@ import java.util.List;
 
 public interface MovieScheduleService {
     String registerMovieSchedule(MovieScheduleInputDTO dto);
-    String deleteMovieSchedule(String tid);
+    String deleteMovieSchedule(String timetableId);
 
-    MovieScheduleDTO getASchedule(String tid);
-    List<MovieScheduleDTO> getAllSchedulesOfMovie(String mid);
+    MovieScheduleDTO getASchedule(String timetableId);
+    List<MovieScheduleDTO> getAllSchedulesOfMovie(String movieId);
 
     default MovieSchedule dtoToEntity(MovieScheduleInputDTO movieScheduleInputDTO) {
-        LocalDate date = LocalDate.parse(movieScheduleInputDTO.getDate());
-        LocalTime time = LocalTime.parse(movieScheduleInputDTO.getTime());
+        LocalDate date = LocalDate.parse(movieScheduleInputDTO.getStartDate());
+        LocalTime time = LocalTime.parse(movieScheduleInputDTO.getStartTime());
         LocalDateTime datetime = LocalDateTime.of(date, time);
 
         StringBuilder builder = new StringBuilder();
         builder.append("aaa").append(datetime.format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
 
-        String tid = builder.toString();
+        String timetableId = builder.toString();
 
         return MovieSchedule.builder()
-                .tid(tid)
-                .mid(movieScheduleInputDTO.getMid())
-                .time(datetime)
+                .timetableId(timetableId)
+                .movieId(movieScheduleInputDTO.getMovieId())
+                .startTime(datetime)
                 .build();
     }
 
-    default MovieScheduleDTO entityToDTO(MovieSchedule entity) {
+    default MovieScheduleDTO entityToDto(MovieSchedule entity) {
         return MovieScheduleDTO.builder()
-                .tid(entity.getTid())
-                .mid(entity.getMid())
-                .time(entity.getTime())
+                .timetableId(entity.getTimetableId())
+                .movieId(entity.getMovieId())
+                .startTime(entity.getStartTime())
+                .regDate(entity.getRegDate())
+                .modDate(entity.getModDate())
                 .build();
     }
 }
