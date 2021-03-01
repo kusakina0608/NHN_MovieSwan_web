@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MovieSchedule {
+public class MovieSchedule extends BaseEntity {
     @Id
-    @Column(length = 15, nullable = false)
-    private String tid;
+    @Column(name = "timetable_id", length = 15, nullable = false)
+    private String timetableId;
 
-    @Column(length = 10, nullable = false)
-    private String mid;
+    @Column(name = "movie_id", length = 10, nullable = false)
+    private String movieId;
 
-    @Column
-    private LocalDateTime time;
+    @Column(name = "start_time", nullable = false)
+    private LocalDateTime startTime;
 }
