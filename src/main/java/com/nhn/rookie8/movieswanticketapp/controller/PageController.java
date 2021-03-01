@@ -195,17 +195,6 @@ public class PageController {
         return "page/booking_result";
     }
 
-    @GetMapping("/mypage/question/register")
-    public String questionPage(HttpServletRequest httpServletRequest, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            model.addAttribute("uid", session.getAttribute("uid"));
-            return "page/question_page";
-        }
-    }
-
     // 여기부터 전부 마이페이지 입니다...
     @GetMapping("/mypage")
     public String myPage() {
@@ -283,9 +272,14 @@ public class PageController {
         return "page/my_page_question";
     }
 
+    @GetMapping("/mypage/question/register")
+    public String questionPage(HttpServletRequest httpServletRequest, Model model) {
+        return "page/question_page";
+    }
+
     @GetMapping("/mypage/question/post")
-    public String myPageReadQuestion(@RequestParam("qid") Integer qid, Model model) {
-        model.addAttribute("dto", questionService.readQuestion(qid));
+    public String myPageReadQuestion(@RequestParam("questionId") Integer questionId, Model model) {
+        model.addAttribute("dto", questionService.readQuestion(questionId));
         return "page/my_page_read_question";
     }
 }
