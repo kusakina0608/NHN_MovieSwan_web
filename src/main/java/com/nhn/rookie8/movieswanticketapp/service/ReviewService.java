@@ -20,25 +20,25 @@ public interface ReviewService {
 
     void remove(String rid);
 
-    default ReviewDTO entityToDTO(Review review) {
-        return ReviewDTO.builder()
-                .rid(review.getRid())
-                .mid(review.getMid())
-                .uid(review.getUid())
-                .grade(review.getGrade())
-                .content(review.getContent())
-                .regdate(review.getRegdate())
-                .moddate(review.getModdate())
+    default Review dtoToEntity(ReviewDTO reviewDTO) {
+        return Review.builder()
+                .reviewId(reviewDTO.getReviewId())
+                .movieId(reviewDTO.getMovieId())
+                .memberId(reviewDTO.getMemberId())
+                .rating(reviewDTO.getRating())
+                .content(reviewDTO.getContent())
                 .build();
     }
 
-    default Review dtoToEntity(ReviewDTO reviewDTO) {
-        return Review.builder()
-                .rid(reviewDTO.getRid())
-                .mid(reviewDTO.getMid())
-                .uid(reviewDTO.getUid())
-                .grade(reviewDTO.getGrade())
-                .content(reviewDTO.getContent())
+    default ReviewDTO entityToDTO(Review review) {
+        return ReviewDTO.builder()
+                .reviewId(review.getReviewId())
+                .movieId(review.getMovieId())
+                .memberId(review.getMemberId())
+                .rating(review.getRating())
+                .content(review.getContent())
+                .regDate(review.getRegDate())
+                .modDate(review.getModDate())
                 .build();
     }
 }

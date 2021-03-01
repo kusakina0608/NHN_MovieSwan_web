@@ -1,9 +1,9 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInputDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.MovieSchedule;
-import com.nhn.rookie8.movieswanticketapp.repository.MovieScheduleRepository;
+import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.Timetable;
+import com.nhn.rookie8.movieswanticketapp.repository.TimetableRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -16,16 +16,16 @@ import java.util.Optional;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class MovieScheduleServiceImpl implements MovieScheduleService {
-    private final MovieScheduleRepository repository;
+public class TimetableServiceImpl implements TimetableService {
+    private final TimetableRepository repository;
 
     @Override
-    public String registerMovieSchedule(MovieScheduleInputDTO movieScheduleInputDTO) {
+    public String registerTimetable(TimetableInputDTO timetableInputDTO) {
         try {
-            MovieSchedule entity = dtoToEntity(movieScheduleInputDTO);
+            Timetable entity = dtoToEntity(timetableInputDTO);
             log.info("Entity : {}", entity);
             repository.save(entity);
-            return entity.getTid();
+            return entity.getTimetableId();
         } catch (Exception e) {
             log.error(e);
             return "";
@@ -33,7 +33,7 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     }
 
     @Override
-    public String deleteMovieSchedule(String timeTableId) {
+    public String deleteTimetable(String timeTableId) {
         try {
             log.info("Deleted tid : {}", timeTableId);
             repository.deleteById(timeTableId);
@@ -45,9 +45,9 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     }
 
     @Override
-    public MovieScheduleDTO getASchedule(String timeTableId) {
+    public TimetableDTO getTimetable(String timeTableId) {
         try {
-            Optional<MovieSchedule> result = repository.findById(timeTableId);
+            Optional<Timetable> result = repository.findById(timeTableId);
             return result.isPresent() ? entityToDTO(result.get()) : null;
         } catch (Exception e) {
             log.error(e);
@@ -56,10 +56,10 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     }
 
     @Override
-    public List<MovieScheduleDTO> getAllSchedulesOfMovie(String mid) {
+    public List<TimetableDTO> getAllTimetable(String mid) {
         try {
-            List<MovieSchedule> result = repository.findByMidOrderByTimeAsc(mid);
-            List<MovieScheduleDTO> schedulesList = new ArrayList<>();
+            List<Timetable> result = repository.findByMovieIdOrderByStartTimeAsc(mid);
+            List<TimetableDTO> schedulesList = new ArrayList<>();
 
             result.forEach(e -> schedulesList.add(entityToDTO(e)));
             return schedulesList;

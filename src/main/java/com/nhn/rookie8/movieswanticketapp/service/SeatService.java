@@ -7,28 +7,29 @@ import java.util.List;
 
 public interface SeatService {
     String register(SeatDTO dto);
-    void modify(List<SeatDTO> dto, String rid);
+    void confirmSeat(String timetableId, String memberId, String reservationId, String seatCode);
     List<String> getReservedSeatList(String tid);
     List<String> getMySeatList(String rid);
     Boolean preempt(SeatDTO dto);
     Boolean remove(SeatDTO dto);
 
-    default Seat dtoToEntity(SeatDTO dto){
+    default Seat dtoToEntity(SeatDTO seatDTO){
         return Seat.builder()
-                .tid(dto.getTid())
-                .sid(dto.getSid())
-                .uid(dto.getUid())
-                .rid(dto.getRid())
+                .timetableId(seatDTO.getTimetableId())
+                .seatCode(seatDTO.getSeatCode())
+                .memberId(seatDTO.getMemberId())
+                .reservationId(seatDTO.getReservationId())
                 .build();
     }
 
-    default SeatDTO entityToDto(Seat entity){
+    default SeatDTO entityToDto(Seat seat){
         return SeatDTO.builder()
-                .tid(entity.getTid())
-                .sid(entity.getSid())
-                .uid(entity.getSid())
-                .rid(entity.getRid())
-                .regDate(entity.getRegDate())
+                .timetableId(seat.getTimetableId())
+                .seatCode(seat.getSeatCode())
+                .memberId(seat.getMemberId())
+                .reservationId(seat.getReservationId())
+                .regDate(seat.getRegDate())
+                .modDate(seat.getModDate())
                 .build();
     }
 }

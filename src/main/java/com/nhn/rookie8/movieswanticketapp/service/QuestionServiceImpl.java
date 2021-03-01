@@ -71,7 +71,7 @@ public class QuestionServiceImpl implements QuestionService {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QQuestion qQuestion = QQuestion.question;
 
-        BooleanExpression expression = qQuestion.uid.eq(uid);
+        BooleanExpression expression = qQuestion.memberId.eq(uid);
         booleanBuilder.and(expression);
         return booleanBuilder;
     }
