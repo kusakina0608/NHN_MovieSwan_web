@@ -25,20 +25,28 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository repository;
 
     @Override
-    public void registerQuestion(QuestionDTO dto) {
+    public Integer registerQuestion(QuestionDTO dto) {
         try {
             Question entity = dtoToEntity(dto);
             repository.save(entity);
+
+            log.info("Registered Entity : {}", entity);
+
+            return entity.getQuestionId();
         } catch (Exception e) {
             log.error(e);
+            return -1;
         }
     }
 
     @Override
-    public QuestionDTO readQuestion(Integer qid) {
+    public QuestionDTO readQuestion(Integer questionId) {
         try {
-            Optional<Question> result = repository.findById(qid);
-            return result.isPresent() ? entityToDTO(result.get()) : null;
+            Optional<Question> result = repository.findById(questionId);
+
+            log.info("Search Result : {}", result.isPresent() ? result : "No Result");
+
+            return result.isPresent() ? entityToDto(result.get()) : null;
         } catch (Exception e) {
             log.error(e);
             return null;
@@ -46,12 +54,15 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PageResultDTO<QuestionDTO, Question> getMyQuestionList(PageRequestDTO requestDTO, String uid) {
+    public PageResultDTO<QuestionDTO, Question> getMyQuestionList(PageRequestDTO requestDTO, String userId) {
         try {
-            Pageable pageable = requestDTO.getPageable(Sort.by("qid").descending());
-            BooleanBuilder booleanBuilder = getUserInfo(uid);
+            Pageable pageable = requestDTO.getPageable(Sort.by("questionId").descending());
+            BooleanBuilder booleanBuilder = getUserInfo(userId);
             Page<Question> result = repository.findAll(booleanBuilder, pageable);
-            Function<Question, QuestionDTO> fn = (entity -> entityToDTO(entity));
+
+            log.info("Search Results : {}", result);
+
+            Function<Question, QuestionDTO> fn = (entity -> entityToDto(entity));
             return new PageResultDTO<>(result, fn);
         } catch (Exception e) {
             log.error(e);
@@ -61,17 +72,22 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public PageResultDTO<QuestionDTO, Question> getAllQuestionList(PageRequestDTO requestDTO) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("qid").descending());
-        Page<Question> result = repository.findAll(pageable);
-        Function<Question, QuestionDTO> fn = (entity -> entityToDTO(entity));
-        return new PageResultDTO<>(result, fn);
+        try {
+            Pageable pageable = requestDTO.getPageable(Sort.by("questionId").descending());
+            Page<Question> result = repository.findAll(pageable);
+            Function<Question, QuestionDTO> fn = (entity -> entityToDto(entity));
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 
-    private BooleanBuilder getUserInfo(String uid) {
+    private BooleanBuilder getUserInfo(String userId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QQuestion qQuestion = QQuestion.question;
 
-        BooleanExpression expression = qQuestion.uid.eq(uid);
+        BooleanExpression expression = qQuestion.userId.eq(userId);
         booleanBuilder.and(expression);
         return booleanBuilder;
     }
