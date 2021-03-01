@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MovieScheduleRepository extends JpaRepository<MovieSchedule, String> {
-    List<MovieSchedule> findByMidOrderByTimeAsc(String mid);
+    List<MovieSchedule> findByMovieIdOrderByStartTimeAsc(String mid);
 }
