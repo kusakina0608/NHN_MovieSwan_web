@@ -7,5 +7,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Integer>, QuerydslPredicateExecutor<Question> {
-    List<Question> findByUid(String uid);
+    List<Question> findByMemberId(String memberId);
 }

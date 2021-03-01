@@ -13,6 +13,6 @@ import javax.transaction.Transactional;
 public interface SeatRepository extends JpaRepository<Seat, SeatId>, QuerydslPredicateExecutor<Seat> {
     @Transactional
     @Modifying
-    @Query("update Seat s set s.rid = :rid where s.tid = :tid AND s.sid = :sid AND s.uid = :uid ")
-    int updateRid(@Param("rid") String rid, @Param("tid") String tid, @Param("sid") String sid, @Param("uid") String uid);
+    @Query("update Seat s set s.reservationId = :reservationId where s.timetableId = :timetableId AND s.seatCode = :seatCode AND s.memberId = :memberId")
+    int updateRid(@Param("reservationId") String reservationId, @Param("timetableId") String timetableId, @Param("seatCode") String seatCode, @Param("memberId") String memberId);
 }
