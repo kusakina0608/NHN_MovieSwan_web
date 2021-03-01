@@ -1,5 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
+import com.nhn.rookie8.movieswanticketapp.dto.GetScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInputDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieScheduleService;
@@ -14,7 +15,6 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/api/schedule")
-
 @RequiredArgsConstructor
 
 @Log4j2
@@ -24,8 +24,10 @@ public class MovieScheduleController {
     @PostMapping("/register")
     public String registerMovieSchedule(MovieScheduleInputDTO movieScheduleInputDTO) {
         try {
-            log.info("Request Input DTO : {}", movieScheduleInputDTO);
             service.registerMovieSchedule(movieScheduleInputDTO);
+
+            log.info("Request Input DTO : {}", movieScheduleInputDTO);
+
             return "redirect:/admin";
         } catch (Exception e) {
             log.error(e);
@@ -34,10 +36,12 @@ public class MovieScheduleController {
     }
 
     @DeleteMapping("/delete")
-    public String deleteMovieSchedule(String tid) {
+    public String deleteMovieSchedule(String timetableId) {
         try {
-            log.info("Request TID : {}", tid);
-            service.deleteMovieSchedule(tid);
+            service.deleteMovieSchedule(timetableId);
+
+            log.info("Request TimeTableID : {}", timetableId);
+
             return "redirect:/admin";
         } catch (Exception e) {
             log.error(e);
@@ -47,15 +51,16 @@ public class MovieScheduleController {
 
     @GetMapping("/get")
     @ResponseBody
-    public MovieScheduleDTO getASchedule(@RequestParam String tid) {
+    public MovieScheduleDTO getASchedule(@RequestParam String timetableId) {
         try {
-            log.info("Request TID : {}", tid);
-            MovieScheduleDTO result = service.getASchedule(tid);
+            MovieScheduleDTO result = service.getASchedule(timetableId);
+
+            log.info("Request TimeTableID : {}", timetableId);
 
             if (result == null)
                 throw new Exception("No results were found for your search.");
 
-            return service.getASchedule(tid);
+            return service.getASchedule(timetableId);
         } catch (Exception e) {
             log.error(e);
             return null;
@@ -64,11 +69,10 @@ public class MovieScheduleController {
 
     @GetMapping("/getall")
     @ResponseBody
-    // TODO: 컬렉션 반환값을 클래스로 처리하는 과정이 필요합니다. 추후 논의...
-    public List<LinkedHashMap<String, List<String>>> getAllSchedulesOfMovie(@RequestParam String mid) {
+    public GetScheduleDTO getAllSchedulesOfMovie(@RequestParam String movieId) {
         try {
-            log.info("Request MID : {}", mid);
-            List<MovieScheduleDTO> result = service.getAllSchedulesOfMovie(mid);
+            log.info("Request MovieID : {}", movieId);
+            List<MovieScheduleDTO> result = service.getAllSchedulesOfMovie(movieId);
             if (result.isEmpty())
                 throw new Exception("No results were found for your search.");
 
@@ -76,7 +80,7 @@ public class MovieScheduleController {
             LinkedHashMap<String, List<String>> linkedHashMap = new LinkedHashMap<>();
 
             result.forEach(e -> {
-                String[] datetime = e.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).split(" ");
+                String[] datetime = e.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).split(" ");
                 String date = datetime[0];
                 String time = datetime[1];
 
@@ -86,15 +90,17 @@ public class MovieScheduleController {
                 }
 
                 StringBuilder str = new StringBuilder();
-                str.append(time).append(' ').append(e.getTid());
+                str.append(time).append(' ').append(e.getTimetableId());
                 linkedHashMap.get(date).add(str.toString());
             });
             scheduleList.add(linkedHashMap);
 
-            return scheduleList;
+            return GetScheduleDTO.builder()
+                    .scheduleData(scheduleList)
+                    .build();
         } catch (Exception e) {
             log.error(e);
-            return Collections.emptyList();
+            return null;
         }
     }
 }
