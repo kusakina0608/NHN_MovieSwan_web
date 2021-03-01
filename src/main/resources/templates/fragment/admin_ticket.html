@@ -10,9 +10,9 @@
             <label class="label_ticket">
                 영화 선택
             </label>
-            <select class="input_ticket" name="mid" size="1" required>
-                <option th:each="movieDto:${movieList}" th:value="${movieDto.mid}">
-                    [[${movieDto.name}]]
+            <select class="input_ticket" name="movieId" size="1" required>
+                <option th:each="movieDto:${movieList}" th:value="${movieDto.movieId}">
+                    [[${movieDto.title}]][[${movieDto.movieId}]]
                 </option>
             </select>
         </div>
@@ -37,8 +37,8 @@
                 영화 선택
             </label>
             <select class="input_ticket" name="mid" size="1" onchange="movieSelectorOnChange()" required>
-                <option id="movieSelector" th:each="movieDto:${movieList}" th:value="${movieDto.mid}">
-                    [[${movieDto.name}]]
+                <option id="movieSelector" th:each="movieDto:${movieList}" th:value="${movieDto.movieId}">
+                    [[${movieDto.title}]]
                 </option>
             </select>
         </div>
