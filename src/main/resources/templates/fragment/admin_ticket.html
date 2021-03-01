@@ -10,7 +10,7 @@
             <label class="label_ticket">
                 영화 선택
             </label>
-            <select class="input_ticket" name="mid" size="1" required>
+            <select class="input_ticket" name="movieId" size="1" required>
                 <option th:each="movieDto:${movieList}" th:value="${movieDto.mid}">
                     [[${movieDto.name}]]
                 </option>
@@ -20,12 +20,12 @@
             <label class="label_ticket">
                 날짜 선택
             </label>
-            <input class="input_ticket" type="date" name="date" required>
+            <input class="input_ticket" type="date" name="startDate" required>
 
             <label class="label_ticket">
                 시간 선택
             </label>
-            <input class="input_ticket" type="time" name="time" min="06:00" max="23:59" required>
+            <input class="input_ticket" type="time" name="startTime" min="06:00" max="23:59" required>
         </div>
         <button type="submit" class="form_ticket_btn">영화 등록</button>
     </form>
@@ -46,7 +46,7 @@
             <label class="label_ticket">
                 시간 선택
             </label>
-            <select class="input_ticket" name="time" size="1" required>
+            <select class="input_ticket" id="delete_movie_table" name="startTime" size="1" required>
                 <option value="1" selected>-</option>
                 <option value="2" selected>-</option>
                 <option value="3" selected>-</option>

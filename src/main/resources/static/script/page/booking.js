@@ -99,7 +99,8 @@
                 timeList.innerHTML = '';
                 
                 // API로부터 전달받은 영화의 상영시간표를 저장
-                movieSchedule = res.data[0];
+                movieSchedule = res.data.scheduleData;
+
                 // 일자를 추가
                 for(var key in movieSchedule){
                     let newListElement = document.createElement("li");
