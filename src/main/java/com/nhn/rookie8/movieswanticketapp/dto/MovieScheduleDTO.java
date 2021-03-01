@@ -9,11 +9,13 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class MovieScheduleDTO {
-    private String tid;
-    private String mid;
-    private LocalDateTime time;
+    private String timetableId;
+    private String movieId;
+    private LocalDateTime startTime;
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
 }
 
