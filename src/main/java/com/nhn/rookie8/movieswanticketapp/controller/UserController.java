@@ -74,7 +74,7 @@ public class UserController {
                 .build();
 
         RestTemplate template = new RestTemplate();
-
+        log.info(accountUrl + "/api/login");
         UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/login", userDTO, UserResponseDTO.class);
 
 

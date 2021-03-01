@@ -1,8 +1,8 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInputDTO;
-import com.nhn.rookie8.movieswanticketapp.service.MovieScheduleService;
+import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
+import com.nhn.rookie8.movieswanticketapp.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -18,14 +18,14 @@ import java.util.*;
 @RequiredArgsConstructor
 
 @Log4j2
-public class MovieScheduleController {
-    private final MovieScheduleService service;
+public class TimetableController {
+    private final TimetableService service;
 
     @PostMapping("/register")
-    public String registerMovieSchedule(MovieScheduleInputDTO movieScheduleInputDTO) {
+    public String registerMovieSchedule(TimetableInputDTO timetableInputDTO) {
         try {
-            log.info("Request Input DTO : {}", movieScheduleInputDTO);
-            service.registerMovieSchedule(movieScheduleInputDTO);
+            log.info("Request Input DTO : {}", timetableInputDTO);
+            service.registerTimetable(timetableInputDTO);
             return "redirect:/admin";
         } catch (Exception e) {
             log.error(e);
@@ -37,7 +37,7 @@ public class MovieScheduleController {
     public String deleteMovieSchedule(String tid) {
         try {
             log.info("Request TID : {}", tid);
-            service.deleteMovieSchedule(tid);
+            service.deleteTimetable(tid);
             return "redirect:/admin";
         } catch (Exception e) {
             log.error(e);
@@ -47,15 +47,15 @@ public class MovieScheduleController {
 
     @GetMapping("/get")
     @ResponseBody
-    public MovieScheduleDTO getASchedule(@RequestParam String tid) {
+    public TimetableDTO getASchedule(@RequestParam String tid) {
         try {
             log.info("Request TID : {}", tid);
-            MovieScheduleDTO result = service.getASchedule(tid);
+            TimetableDTO result = service.getTimetable(tid);
 
             if (result == null)
                 throw new Exception("No results were found for your search.");
 
-            return service.getASchedule(tid);
+            return service.getTimetable(tid);
         } catch (Exception e) {
             log.error(e);
             return null;
@@ -68,7 +68,7 @@ public class MovieScheduleController {
     public List<LinkedHashMap<String, List<String>>> getAllSchedulesOfMovie(@RequestParam String mid) {
         try {
             log.info("Request MID : {}", mid);
-            List<MovieScheduleDTO> result = service.getAllSchedulesOfMovie(mid);
+            List<TimetableDTO> result = service.getAllTimetable(mid);
             if (result.isEmpty())
                 throw new Exception("No results were found for your search.");
 
@@ -76,7 +76,7 @@ public class MovieScheduleController {
             LinkedHashMap<String, List<String>> linkedHashMap = new LinkedHashMap<>();
 
             result.forEach(e -> {
-                String[] datetime = e.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).split(" ");
+                String[] datetime = e.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).split(" ");
                 String date = datetime[0];
                 String time = datetime[1];
 
@@ -86,7 +86,7 @@ public class MovieScheduleController {
                 }
 
                 StringBuilder str = new StringBuilder();
-                str.append(time).append(' ').append(e.getTid());
+                str.append(time).append(' ').append(e.getTimetableId());
                 linkedHashMap.get(date).add(str.toString());
             });
             scheduleList.add(linkedHashMap);

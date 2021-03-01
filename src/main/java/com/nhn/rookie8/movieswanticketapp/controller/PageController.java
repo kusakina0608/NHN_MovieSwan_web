@@ -10,15 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @Log4j2
@@ -88,7 +85,7 @@ public class PageController {
 
     @GetMapping("/movie/detail")
     public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        MovieDTO movieDTO = movieService.read(mid);
+        MovieDTO movieDTO = movieService.getMovie(mid);
 
         HttpSession session = httpServletRequest.getSession(false);
         String uid;
@@ -103,96 +100,6 @@ public class PageController {
         model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
         model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
         return "/page/movie_detail";
-    }
-
-    @GetMapping("/booking")
-    public String booking(Model model) {
-        List<MovieDTO> movieList = movieService.getReleaseList();
-        model.addAttribute("movieList", movieList);
-        return "page/booking";
-    }
-
-    @PostMapping("/booking/seat")
-    public String seat(HttpServletRequest httpServletRequest, @RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("tid") String tid, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null) {
-            return "redirect:/user/login";
-        }
-        log.debug("mid: {}", mid);
-        log.debug("date: {}", date);
-        log.debug("time: {}", time);
-        log.debug("tid: {}", tid);
-
-        MovieDTO movieDTO = movieService.read(mid);
-        model.addAttribute("title", movieDTO.getName());
-        model.addAttribute("poster", movieDTO.getPoster());
-        model.addAttribute("theater", "무비스완 판교점");
-        model.addAttribute("tid", tid);
-        model.addAttribute("date", date);
-        model.addAttribute("time", time);
-        if(Integer.parseInt(time.split(":")[0]) < 9){
-            model.addAttribute("discount", "조조 할인(오전 09:00 이전)");
-        }
-        else{
-            model.addAttribute("discount", "없음");
-        }
-        model.addAttribute("seatlist", seatService.getReservedSeatList(tid));
-        return "page/seat";
-    }
-
-    @PostMapping("/booking/pay")
-    public String pay(HttpServletRequest httpServletRequest, @RequestParam Map<String,String> params, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null) {
-            return "redirect:/user/login";
-        }
-        params.keySet().forEach(key -> model.addAttribute(key, params.get(key)));
-        return "page/pay";
-    }
-
-    @PostMapping("/booking/result")
-    public String bookingResult(HttpServletRequest httpServletRequest, @RequestParam Map<String,String> params, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null) {
-            return "redirect:/user/login";
-        }
-        params.keySet().forEach(key -> {
-            model.addAttribute(key, params.get(key));
-            log.debug("{}: {}", key, params.get(key));
-        });
-        String uid = (String)session.getAttribute("uid");
-        UserDTO userDTO = userService.getUserInfoById(uid);
-        model.addAttribute("user", userDTO.getName());
-        model.addAttribute("dooray_url", userDTO.getUrl());
-
-        String randomId = reservationService.createReservationId();
-        log.debug("생성된 랜덤 아이디: {}", randomId);
-        ReservationDTO reservationDTO = ReservationDTO.builder()
-                .rid(randomId)
-                .tid(params.get("tid"))
-                .uid((String) session.getAttribute("uid"))
-                .childNum(Integer.parseInt(params.get("childnum")))
-                .adultNum(Integer.parseInt(params.get("adultnum")))
-                .oldNum(Integer.parseInt(params.get("oldnum")))
-                .totalNum(Integer.parseInt(params.get("totalnum")))
-                .price(Integer.parseInt(params.get("price")))
-                .build();
-
-        reservationService.register(reservationDTO);
-
-        List<SeatDTO> dtoList= new ArrayList<>();
-        String[] seatList = params.get("seats").split(",");
-        for (String seat : seatList) {
-            dtoList.add(SeatDTO.builder()
-                    .tid(params.get("tid"))
-                    .sid(seat)
-                    .rid(randomId)
-                    .uid((String) session.getAttribute("uid"))
-                    .build());
-        }
-        seatService.modify(dtoList, randomId);
-
-        return "page/booking_result";
     }
 
     @GetMapping("/mypage/question/register")
@@ -247,7 +154,7 @@ public class PageController {
     @GetMapping("/mypage/ticket/delete")
     public String myPageTicketDelete(@RequestParam String rid) {
         ReservationDTO reservationDTO = ReservationDTO.builder()
-                .rid(rid)
+                .reservationId(rid)
                 .build();
         reservationService.delete(reservationDTO);
         return "redirect:/mypage/ticket";

@@ -18,11 +18,11 @@ public class ReviewController {
     @PostMapping("/register")
     public String registerReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
         log.info(reviewDTO);
-        if(reviewDTO.getUid().equals(""))
+        if(reviewDTO.getMemberId().equals(""))
             return "redirect:/user/login";
         service.register(reviewDTO);
 
-        redirectAttributes.addAttribute("mid", reviewDTO.getMid());
+        redirectAttributes.addAttribute("mid", reviewDTO.getMovieId());
 
         return "redirect:/movie/detail";
     }
@@ -32,7 +32,7 @@ public class ReviewController {
         log.info(reviewDTO);
         service.modify(reviewDTO);
 
-        redirectAttributes.addAttribute("mid", reviewDTO.getMid());
+        redirectAttributes.addAttribute("mid", reviewDTO.getMovieId());
         return "redirect:/movie/detail";
     }
 

@@ -37,7 +37,7 @@ public class CliController {
     public String dtl(@ShellOption String uid, @ShellOption String rid) {
         ReservationDTO reservationDTO = service.getReservation(rid);
 
-        if(reservationDTO == null || !reservationDTO.getUid().equals(uid)) {
+        if(reservationDTO == null || !reservationDTO.getMemberId().equals(uid)) {
             log.warn("reservation : {}", reservationDTO);
             log.warn("uid : {}", uid);
             return "잘못된 예약 번호입니다.";
