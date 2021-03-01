@@ -64,7 +64,7 @@
                     let newLink = document.createElement("a");
                     newLink.appendChild(newListElement);
                     newLink.classList.add("list-element-link");
-                    newLink.href = "/booking/";
+                    newLink.href = "/reserve/";
                     timeList.appendChild(newLink);
                 })
                 // 추가된 시간 요소들을 갱신
@@ -108,7 +108,7 @@
                     let newLink = document.createElement("a");
                     newLink.appendChild(newListElement);
                     newLink.classList.add("list-element-link");
-                    newLink.href = "/booking/";
+                    newLink.href = "/reserve/";
                     dayList.appendChild(newLink);
                 }
                 // 추가된 일자 요소들을 갱신
@@ -130,7 +130,7 @@
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
-        form.setAttribute("action", "/booking/seat");
+        form.setAttribute("action", "/reserve/seat");
         
         let selectedMovie = movieList.querySelector(".selected");
         let selectedDay = dayList.querySelector(".selected");
@@ -139,7 +139,7 @@
         if(selectedMovie && selectedDay && selectedTime){
             let movieInput = document.createElement("input");
             movieInput.setAttribute("type", "hidden");
-            movieInput.setAttribute("name", "mid");
+            movieInput.setAttribute("name", "movieId");
             movieInput.setAttribute("value", selectedMovie.querySelector("div").innerHTML);
             form.appendChild(movieInput);
 
@@ -157,7 +157,7 @@
 
             let tidInput = document.createElement("input");
             tidInput.setAttribute("type", "hidden");
-            tidInput.setAttribute("name", "tid");
+            tidInput.setAttribute("name", "timetableId");
             tidInput.setAttribute("value", selectedTime.children[0].innerText);
             form.appendChild(tidInput);
 

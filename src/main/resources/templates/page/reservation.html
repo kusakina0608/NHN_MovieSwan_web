@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>예매 페이지</title>
-    <link th:href="@{/css/page/booking.css}" rel="stylesheet" />
+    <link th:href="@{/css/page/reservation.css}" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -27,10 +27,10 @@
             <section class="booking-section">
                 <h1>영화</h1>
                 <ul id="movie-list">
-                    <a class="list-element-link" th:each="movie : ${movieList}" th:href="@{/booking/}">
+                    <a class="list-element-link" th:each="movie : ${movieList}" th:href="@{/reservation/}">
                         <li class="list-element">
-                            [[${movie.name}]]
-                            <div class="movie-code">[[${movie.mid}]]</div>
+                            [[${movie.title}]]
+                            <div class="movie-code">[[${movie.movieId}]]</div>
                         </li>
                     </a>
                 </ul>
@@ -38,7 +38,7 @@
             <section class="booking-section">
                 <h1>극장</h1>
                 <ul id="theater-list">
-                    <a class="list-element-link" th:href="@{/booking/}"><li class="list-element selected">무비스완 판교점</li></a>
+                    <a class="list-element-link" th:href="@{/reservation/}"><li class="list-element selected">무비스완 판교점</li></a>
                 </ul>
             </section>
             <section class="booking-section">
@@ -67,6 +67,6 @@
         </section>
     </main>
 </th:block>
-<script th:src="@{/script/page/booking.js}"></script>
+<script th:src="@{/script/page/reservation.js}"></script>
 </body>
 </html>
