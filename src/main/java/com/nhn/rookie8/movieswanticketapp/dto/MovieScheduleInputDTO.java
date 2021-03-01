@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieScheduleInputDTO {
-    private String mid;
-    private String date;
-    private String time;
+    private String movieId;
+    private String startDate;
+    private String startTime;
 }
