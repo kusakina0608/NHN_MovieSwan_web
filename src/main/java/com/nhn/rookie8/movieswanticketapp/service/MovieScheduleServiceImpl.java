@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Log4j2
 @RequiredArgsConstructor
+@Log4j2
 public class MovieScheduleServiceImpl implements MovieScheduleService {
     private final MovieScheduleRepository repository;
 
@@ -23,9 +23,11 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     public String registerMovieSchedule(MovieScheduleInputDTO movieScheduleInputDTO) {
         try {
             MovieSchedule entity = dtoToEntity(movieScheduleInputDTO);
-            log.info("Entity : {}", entity);
             repository.save(entity);
-            return entity.getTid();
+
+            log.info("Registered Entity : {}", entity);
+
+            return entity.getTimetableId();
         } catch (Exception e) {
             log.error(e);
             return "";
@@ -35,8 +37,10 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     @Override
     public String deleteMovieSchedule(String timeTableId) {
         try {
-            log.info("Deleted tid : {}", timeTableId);
             repository.deleteById(timeTableId);
+
+            log.info("Deleted TimetableID : {}", timeTableId);
+
             return timeTableId;
         } catch (Exception e) {
             log.error(e);
@@ -48,7 +52,10 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     public MovieScheduleDTO getASchedule(String timeTableId) {
         try {
             Optional<MovieSchedule> result = repository.findById(timeTableId);
-            return result.isPresent() ? entityToDTO(result.get()) : null;
+
+            log.info("Search Result : {}", result.isPresent() ? result : "No Result");
+
+            return result.isPresent() ? entityToDto(result.get()) : null;
         } catch (Exception e) {
             log.error(e);
             return null;
@@ -56,12 +63,14 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
     }
 
     @Override
-    public List<MovieScheduleDTO> getAllSchedulesOfMovie(String mid) {
+    public List<MovieScheduleDTO> getAllSchedulesOfMovie(String movieId) {
         try {
-            List<MovieSchedule> result = repository.findByMidOrderByTimeAsc(mid);
+            List<MovieSchedule> result = repository.findByMovieIdOrderByStartTimeAsc(movieId);
             List<MovieScheduleDTO> schedulesList = new ArrayList<>();
 
-            result.forEach(e -> schedulesList.add(entityToDTO(e)));
+            log.info("Search Results : {}", result);
+
+            result.forEach(e -> schedulesList.add(entityToDto(e)));
             return schedulesList;
         } catch (Exception e) {
             log.error(e);
