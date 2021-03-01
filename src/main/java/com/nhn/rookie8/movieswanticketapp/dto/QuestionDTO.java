@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionDTO {
-    private Integer qid;
-    private String uid;
+    private Integer questionId;
+    private String memberId;
     private String title;
     private String content;
-    private LocalDateTime regdate;
+    private LocalDateTime regDate, modDate;
 }

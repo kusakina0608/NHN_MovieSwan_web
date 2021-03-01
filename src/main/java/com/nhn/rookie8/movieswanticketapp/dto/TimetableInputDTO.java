@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovieScheduleInputDTO {
-    private String mid;
+public class TimetableInputDTO {
+    private String movieId;
     private String date;
     private String time;
 }

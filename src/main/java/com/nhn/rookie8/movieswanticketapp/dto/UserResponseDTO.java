@@ -10,12 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class UserResponseDTO {
-
     private Integer httpCode;
-
     private boolean error;
-
     private String message;
-
     private Object content;
 }

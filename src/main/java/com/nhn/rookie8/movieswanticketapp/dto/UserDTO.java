@@ -12,17 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class UserDTO {
-
     private String uid;
-
     private String password;
-
     private String name;
-
     private String email;
-
     private String url;
-
-    private LocalDateTime regDate;
-    private LocalDateTime modDate;
+    private LocalDateTime regDate, modDate;
 }
