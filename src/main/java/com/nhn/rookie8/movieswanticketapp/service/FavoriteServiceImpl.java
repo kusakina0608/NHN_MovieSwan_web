@@ -31,20 +31,20 @@ public class FavoriteServiceImpl implements FavoriteService{
     }
 
     @Override
-    public List<String> getList(String uid) {
+    public List<String> getList(String memberId) {
         Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QFavorite qFavorite = QFavorite.favorite;
-        BooleanExpression expression = qFavorite.memberId.eq(uid);
+        BooleanExpression expression = qFavorite.memberId.eq(memberId);
         booleanBuilder.and(expression);
 
         Page<Favorite> result = repository.findAll(booleanBuilder, pageable);
 
-        List<String> midList = new ArrayList<>();
+        List<String> movieIdList = new ArrayList<>();
         for(Favorite fav : result)
-            midList.add(fav.getMovieId());
+            movieIdList.add(fav.getMovieId());
 
-        return midList;
+        return movieIdList;
     }
 
     @Override

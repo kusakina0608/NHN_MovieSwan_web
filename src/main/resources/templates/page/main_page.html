@@ -21,10 +21,10 @@
     </body>
     <script th:inline="javascript">
         (function() {
-            const uid = [[${uid}]];
+            const memberId = [[${memberId}]];
             const name = [[${name}]];
 
-            localStorage.setItem("uid", uid);
+            localStorage.setItem("memberId", memberId);
             localStorage.setItem("name", name);
         } ());
     </script>

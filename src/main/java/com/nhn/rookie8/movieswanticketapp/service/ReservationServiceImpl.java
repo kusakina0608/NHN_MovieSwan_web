@@ -67,10 +67,10 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String uid) {
+    public PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String memberId) {
         try {
             Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
-            BooleanBuilder booleanBuilder = getUserInfo(uid);
+            BooleanBuilder booleanBuilder = getUserInfo(memberId);
             Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
             Function<Reservation, ReservationDTO> fn = (this::entityToDto);
             return new PageResultDTO<>(result, fn);
@@ -81,9 +81,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDTO getReservation(String rid) {
+    public ReservationDTO getReservation(String reservationId) {
         try {
-            Optional<Reservation> result = repository.findById(rid);
+            Optional<Reservation> result = repository.findById(reservationId);
             return result.isPresent() ? entityToDto(result.get()) : null;
         } catch (Exception e) {
             log.error(e);
@@ -128,11 +128,11 @@ public class ReservationServiceImpl implements ReservationService {
         return detail.toString();
     }
 
-    private BooleanBuilder getUserInfo(String uid) {
+    private BooleanBuilder getUserInfo(String memberId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QReservation qReservation = QReservation.reservation;
 
-        BooleanExpression expression = qReservation.memberId.eq(uid);
+        BooleanExpression expression = qReservation.memberId.eq(memberId);
         booleanBuilder.and(expression);
         return booleanBuilder;
     }

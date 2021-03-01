@@ -3,6 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
 import com.nhn.rookie8.movieswanticketapp.service.TimetableService;
+import com.nhn.rookie8.movieswanticketapp.dto.GetScheduleDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,6 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/api/schedule")
-
 @RequiredArgsConstructor
 
 @Log4j2
@@ -34,10 +34,10 @@ public class TimetableController {
     }
 
     @DeleteMapping("/delete")
-    public String deleteMovieSchedule(String tid) {
+    public String deleteMovieSchedule(String timetableId) {
         try {
-            log.info("Request TID : {}", tid);
-            service.deleteTimetable(tid);
+            log.info("Request TID : {}", timetableId);
+            service.deleteTimetable(timetableId);
             return "redirect:/admin";
         } catch (Exception e) {
             log.error(e);
@@ -47,15 +47,14 @@ public class TimetableController {
 
     @GetMapping("/get")
     @ResponseBody
-    public TimetableDTO getASchedule(@RequestParam String tid) {
+    public TimetableDTO getSchedule(@RequestParam String timetableId) {
         try {
-            log.info("Request TID : {}", tid);
-            TimetableDTO result = service.getTimetable(tid);
+            log.info("Request TimeTableID : {}", timetableId);
+            TimetableDTO result = service.getTimetable(timetableId);
 
             if (result == null)
                 throw new Exception("No results were found for your search.");
-
-            return service.getTimetable(tid);
+            return service.getTimetable(timetableId);
         } catch (Exception e) {
             log.error(e);
             return null;
@@ -64,11 +63,10 @@ public class TimetableController {
 
     @GetMapping("/getall")
     @ResponseBody
-    // TODO: 컬렉션 반환값을 클래스로 처리하는 과정이 필요합니다. 추후 논의...
-    public List<LinkedHashMap<String, List<String>>> getAllSchedulesOfMovie(@RequestParam String mid) {
+    public GetScheduleDTO getAllSchedulesOfMovie(@RequestParam String movieId) {
         try {
-            log.info("Request MID : {}", mid);
-            List<TimetableDTO> result = service.getAllTimetable(mid);
+            log.info("Request MovieId : {}", movieId);
+            List<TimetableDTO> result = service.getAllTimetableOfMovie(movieId);
             if (result.isEmpty())
                 throw new Exception("No results were found for your search.");
 
@@ -91,10 +89,12 @@ public class TimetableController {
             });
             scheduleList.add(linkedHashMap);
 
-            return scheduleList;
+            return GetScheduleDTO.builder()
+                    .scheduleData(scheduleList)
+                    .build();
         } catch (Exception e) {
             log.error(e);
-            return Collections.emptyList();
+            return null;
         }
     }
 }

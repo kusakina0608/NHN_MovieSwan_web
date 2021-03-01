@@ -5,13 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class TimetableInputDTO {
-    private String timetableId;
-    private String movieId;
-    private String date;
-    private String time;
+@NoArgsConstructor
+public class GetScheduleDTO {
+    private List<LinkedHashMap<String, List<String>>> scheduleData;
 }

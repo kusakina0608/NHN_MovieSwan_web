@@ -15,10 +15,10 @@
             </ticket_poster>
             <ticket_content_detail id="ticket_content_detail">
                 <p id="ticket_moviename"></p>
-                <div id="tid" style="display: none;">[[${result.tid}]]</div>
+                <div id="tid" style="display: none;">[[${result.timetableId}]]</div>
                 <item class="ticket_item">
                     <vspan class="item">예약 번호 :</vspan>
-                    <span class="cont">[[${result.rid}]]</span>
+                    <span class="cont">[[${result.reservationId}]]</span>
                 </item>
                 <item class="ticket_item">
                     <span class="item">영화 코드 :</span>
@@ -49,18 +49,18 @@
                     <div>
                         <p class="cont" style="font-weight: bold">결제 완료</p>
                         <p class="cont" th:if="${-1 < result.adultNum}">성인 : [[${result.adultNum}]]명 x 16,000 원</p>
-                        <p class="cont" th:if="${-1 < result.childNum}">청소년 : [[${result.childNum}]]명 x 12,000 원</p>
-                        <p class="cont" th:if="${-1 < result.oldNum}">우대 : [[${result.oldNum}]]명 x 8,000 원</p>
+                        <p class="cont" th:if="${-1 < result.youngNum}">청소년 : [[${result.youngNum}]]명 x 12,000 원</p>
+                        <p class="cont" th:if="${-1 < result.elderNum}">우대 : [[${result.elderNum}]]명 x 8,000 원</p>
                     </div>
                     <div class="totalprice">
-                        <p class="cont" th:if="${-1 < result.oldNum}">총 금액 : [[${result.price}]] 원</p>
+                        <p class="cont" th:if="${-1 < result.price}">총 금액 : [[${result.price}]] 원</p>
                     </div>
                 </item>
             </ticket_content_detail>
         </ticket_content>
         <hr>
         <buttoncontrol id="button_control">
-            <button id="cancle_button" th:onclick='javascript:onButtonClick([[${result.rid}]]);'>
+            <button id="cancle_button" th:onclick='javascript:onButtonClick([[${result.reservationId}]]);'>
                 <span class="material-icons">clear</span>
                 예약 취소
             </button>

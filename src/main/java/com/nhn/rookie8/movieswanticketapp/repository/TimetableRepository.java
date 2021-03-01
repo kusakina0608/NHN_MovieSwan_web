@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TimetableRepository extends JpaRepository<Timetable, String> {
-    List<Timetable> findByMovieIdOrderByStartTimeAsc(String mid);
+    List<Timetable> findByMovieIdOrderByStartTimeAsc(String movieId);
 }

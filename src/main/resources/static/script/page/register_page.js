@@ -28,17 +28,17 @@
         baseURL: location.origin + "/account/"
     });
 
-    const isVaild = (uid) => {
-        return isVaildId.get(`/api/isValidId?uid=${uid}`);
+    const isVaild = (memberId) => {
+        return isVaildId.get(`/api/isValidId?memberId=${memberId}`);
     }
 
-    const uid = document.querySelector("#uid");
+    const memberId = document.querySelector("#memberId");
     const ok_id = document.querySelectorAll(".ok_id");
     const no_id = document.querySelectorAll(".no_id");
 
-    var uid_reg = /^[a-z0-9._-]{6,20}$/
+    var memberId_reg = /^[a-z0-9._-]{6,20}$/
 
-    uid.addEventListener("keyup",(event)=>{
+    memberId.addEventListener("keyup",(event)=>{
         var handle = false;
         if(event.keyCode == 16) handle = true;
         else if(event.keyCode == 17) handle = true;
@@ -48,8 +48,8 @@
         if(handle){
             event.preventDefault();
         }
-        else if(uid_reg.test(uid.value)){
-            isVaild(uid.value).then(result=>{
+        else if(memberId_reg.test(memberId.value)){
+            isVaild(memberId.value).then(result=>{
                 if(result.data.error){
                     ok_id.forEach(i=>{
                         i.style.display = "none";

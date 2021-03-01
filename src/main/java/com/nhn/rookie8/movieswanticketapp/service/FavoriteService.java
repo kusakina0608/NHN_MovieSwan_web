@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface FavoriteService {
     String register(FavoriteDTO favoriteDTO);
-    List<String> getList(String uid);
-    boolean isFavorite(String uid, String mid);
+    List<String> getList(String memberId);
+    boolean isFavorite(String memberId, String movieId);
     void remove(FavoriteDTO favoriteDTO);
 
     default Favorite dtoToEntity(FavoriteDTO favoriteDTO) {

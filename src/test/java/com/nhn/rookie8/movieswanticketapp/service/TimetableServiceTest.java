@@ -39,7 +39,7 @@ public class TimetableServiceTest {
     @InjectMocks
     TimetableService timetableService = new TimetableServiceImpl(timetableRepository);
 
-    private String mid;
+    private String movieId;
     private LocalDate date;
     private LocalTime time;
     private LocalDateTime dateTime;
@@ -48,13 +48,13 @@ public class TimetableServiceTest {
     @BeforeAll
     public void beforeAllTest() {
         log.info("--- Before All Test ---");
-        mid = "TEST000";
+        movieId = "TEST000";
         dateTime = LocalDateTime.now();
         date = dateTime.toLocalDate();
         time = dateTime.toLocalTime();
 
         testEntity = timetableService.dtoToEntity(TimetableInputDTO.builder()
-                .movieId(new StringBuilder(mid).append('1').toString())
+                .movieId(new StringBuilder(movieId).append('1').toString())
                 .date(date.toString())
                 .time(time.toString())
                 .build());
@@ -68,7 +68,7 @@ public class TimetableServiceTest {
     public void registerScheduleTest() {
         for (int i = 0; i < 10; i++) {
             TimetableInputDTO testDTO = TimetableInputDTO.builder()
-                    .movieId(new StringBuilder(mid).append(i).toString())
+                    .movieId(new StringBuilder(movieId).append(i).toString())
                     .date(date.toString())
                     .time(time.plusMinutes(i).toString())
                     .build();
@@ -86,7 +86,7 @@ public class TimetableServiceTest {
     @Order(1)
     public void readScheduleTest() {
         TimetableInputDTO testDTO = TimetableInputDTO.builder()
-                .movieId(new StringBuilder(mid).append('1').toString())
+                .movieId(new StringBuilder(movieId).append('1').toString())
                 .date(date.toString())
                 .time(time.toString())
                 .build();
@@ -103,10 +103,10 @@ public class TimetableServiceTest {
     @Test
     @Order(2)
     public void readAllScheduleTest() {
-        String testMid = "TEST0001";
+        String testMovieId = "TEST0001";
 
-        when(timetableRepository.findByMovieIdOrderByStartTimeAsc(mid)).thenReturn(Collections.emptyList());
-        List<TimetableDTO> movieScheduleList = timetableService.getAllTimetable(testMid);
+        when(timetableRepository.findByMovieIdOrderByStartTimeAsc(movieId)).thenReturn(Collections.emptyList());
+        List<TimetableDTO> movieScheduleList = timetableService.getAllTimetableOfMovie(testMovieId);
 
         assertThat(Collections.emptyList(), is(movieScheduleList));
     }

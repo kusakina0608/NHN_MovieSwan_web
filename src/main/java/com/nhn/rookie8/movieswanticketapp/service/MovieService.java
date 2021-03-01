@@ -12,13 +12,13 @@ public interface MovieService {
 
     PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO, boolean current);
 
-    PageResultDTO<MovieDTO, Movie> getListByMid(PageRequestDTO requestDTO, List<String> midList);
+    PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList);
 
     List<MovieDTO> getAllList();
 
     List<MovieDTO> getReleaseList();
 
-    MovieDTO getMovie(String mid);
+    MovieDTO getMovie(String movieId);
 
     default Movie dtoToEntity(MovieDTO movieDTO) {
         return Movie.builder()

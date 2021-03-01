@@ -13,7 +13,7 @@
             <th:block th:each="review : ${result.dtoList}">
                 <div class="review_title">
                     <input type="hidden" th:value="${review.movieId}">
-                    <a class="title" th:href="@{/movie/detail(mid=${review.movieId})}"></a>
+                    <a class="title" th:href="@{/movie/detail(movieId=${review.movieId})}"></a>
                     <th:block th:replace="~{/fragment/review}"></th:block>
                 </div>
             </th:block>

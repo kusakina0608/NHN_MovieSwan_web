@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserResponseDTO {
+public class MemberResponseDTO {
     private Integer httpCode;
     private boolean error;
     private String message;

@@ -9,7 +9,7 @@ public interface ReservationService {
     ReservationDTO reserve(ReservationDTO dto);
     void delete(ReservationDTO dto);
 
-    PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String uid);
+    PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String memberId);
     ReservationDTO getReservation(String rid);
 
     String getReservationInfo(ReservationDTO reservation);

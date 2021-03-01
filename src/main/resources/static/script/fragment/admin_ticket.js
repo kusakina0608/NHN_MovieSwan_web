@@ -7,7 +7,7 @@ function movieSelectorOnChange() {
         baseURL: location.origin
     });
 
-    req = request.get(`/api/schedule/get?mid=5`);
+    req = request.get(`/api/schedule/get?movieId=5`);
 };
 
 (movieSelectorOnChange());

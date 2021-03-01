@@ -1,7 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.UserDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
 import com.nhn.rookie8.movieswanticketapp.service.SeatService;
 import com.nhn.rookie8.movieswanticketapp.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,21 +32,21 @@ public class SeatController {
             @RequestParam String timetableId,
             @RequestParam String seatCode) {
         HttpSession session = httpServletRequest.getSession(false);
-        UserDTO userDTO = userService.getUserInfoById((String) session.getAttribute("uid"));
-        log.info("{} 사용자의 좌석 선점 요청. 상영번호: {}, 좌석번호: {}", userDTO.getUid(), timetableId, seatCode);
+        MemberDTO memberDTO = userService.getUserInfoById((String) session.getAttribute("memberId"));
+        log.info("{} 사용자의 좌석 선점 요청. 상영번호: {}, 좌석번호: {}", memberDTO.getMemberId(), timetableId, seatCode);
         SeatDTO seatDTO = SeatDTO.builder()
                 .timetableId(timetableId)
                 .seatCode(seatCode)
-                .memberId(userDTO.getUid())
+                .memberId(memberDTO.getMemberId())
                 .reservationId(null)
                 .build();
         boolean result = false;
         try{
             result = seatService.preempt(seatDTO);
-            log.info("{} 사용자의 좌석 선점 성공. 상영번호: {}, 좌석번호: {}", userDTO.getUid(), timetableId, seatCode);
+            log.info("{} 사용자의 좌석 선점 성공. 상영번호: {}, 좌석번호: {}", memberDTO.getMemberId(), timetableId, seatCode);
         }
         catch(DataIntegrityViolationException e){
-            log.info("{} 사용자의 좌석 선점 실패. 상영번호: {}, 좌석번호: {}", userDTO.getUid(), timetableId, seatCode);
+            log.info("{} 사용자의 좌석 선점 실패. 상영번호: {}, 좌석번호: {}", memberDTO.getMemberId(), timetableId, seatCode);
             result = false;
         }
         return result;
@@ -58,11 +58,11 @@ public class SeatController {
         if (session == null) {
             return false;
         }
-        String uid = (String)session.getAttribute("uid");
+        String memberId = (String)session.getAttribute("memberId");
         SeatDTO seatDTO = SeatDTO.builder()
                 .timetableId(tid)
                 .seatCode(sid)
-                .memberId(uid)
+                .memberId(memberId)
                 .reservationId(null)
                 .build();
         boolean result = false;

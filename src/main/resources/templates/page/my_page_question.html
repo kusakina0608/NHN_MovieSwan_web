@@ -20,11 +20,11 @@
                 </thead>
                 <tbody>
                     <tr th:each="dto : ${result.dtoList}"
-                        th:onclick="'javascript:trClicked(\'' + ${dto.qid} + '\');'">
-                        <td class="tg-0lax" scope="row">[[${dto.qid}]]</td>
+                        th:onclick="'javascript:trClicked(\'' + ${dto.questionId} + '\');'">
+                        <td class="tg-0lax" scope="row">[[${dto.questionId}]]</td>
                         <td class="tg-0lax1">[[${dto.title}]]</td>
-                        <td class="tg-baqh">[[${dto.uid}]]</td>
-                        <td class="tg-lqy6">[[${#temporals.format(dto.regdate, 'yyyy/MM/dd')}]]</td>
+                        <td class="tg-baqh">[[${dto.memberId}]]</td>
+                        <td class="tg-lqy6">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
                     </tr>
                 </tbody>
             </table>
@@ -42,7 +42,7 @@
                 </li>
             </div>
             <buttoncontrol id="button_control">
-                <button id="question_button" onclick="location.href='/movie/mypage/question/register'">
+                <button id="question_button" onclick="location.href='/mypage/question/register'">
                     <span class="material-icons">help_outline</span>
                     1:1 문의하기
                 </button>

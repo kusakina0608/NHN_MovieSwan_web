@@ -28,19 +28,19 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public String register(MovieDTO movieDTO) {
-        String mid = movieDTO.getMovieId();
+        String movieId = movieDTO.getMovieId();
 
         Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         QMovie qMovie = QMovie.movie;
-        BooleanExpression expression = qMovie.movieId.startsWith(mid);
+        BooleanExpression expression = qMovie.movieId.startsWith(movieId);
         booleanBuilder.and(expression);
 
         long moviesWithSameCode = repository.findAll(booleanBuilder, pageable).stream().count() + 1;
-        mid += String.format("%03d", moviesWithSameCode);
+        movieId += String.format("%03d", moviesWithSameCode);
 
-        movieDTO.setMovieId(mid);
+        movieDTO.setMovieId(movieId);
 
         Movie movie = dtoToEntity(movieDTO);
 
@@ -69,16 +69,16 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public PageResultDTO<MovieDTO, Movie> getListByMid(PageRequestDTO requestDTO, List<String> midList) {
+    public PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList) {
         Pageable pageable = requestDTO.getPageable(Sort.by("startDate").descending());
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
-        if(midList.isEmpty()) {
+        if(movieIdList.isEmpty()) {
             BooleanExpression expression = qMovie.movieId.eq("");
             booleanBuilder.and(expression);
         }
-        for(String mid : midList) {
-            BooleanExpression expression = qMovie.movieId.eq(mid);
+        for(String movieId : movieIdList) {
+            BooleanExpression expression = qMovie.movieId.eq(movieId);
             booleanBuilder.or(expression);
         }
 
@@ -113,8 +113,8 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public MovieDTO getMovie(String mid) {
-        Optional<Movie> result = repository.findById(mid);
+    public MovieDTO getMovie(String movieId) {
+        Optional<Movie> result = repository.findById(movieId);
 
         return result.isPresent() ? entityToDTO(result.get()) : null;
     }

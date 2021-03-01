@@ -121,8 +121,8 @@ public class MovieController {
 
     @ResponseBody
     @GetMapping("/getMovieInfo")
-    public MovieDTO getMovieInfo(String mid) {
-        return service.getMovie(mid);
+    public MovieDTO getMovieInfo(String movieId) {
+        return service.getMovie(movieId);
     }
 
     private String makeFolder() {

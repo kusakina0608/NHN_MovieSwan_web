@@ -22,7 +22,7 @@ public class ReviewController {
             return "redirect:/user/login";
         service.register(reviewDTO);
 
-        redirectAttributes.addAttribute("mid", reviewDTO.getMovieId());
+        redirectAttributes.addAttribute("movieId", reviewDTO.getMovieId());
 
         return "redirect:/movie/detail";
     }
@@ -32,22 +32,22 @@ public class ReviewController {
         log.info(reviewDTO);
         service.modify(reviewDTO);
 
-        redirectAttributes.addAttribute("mid", reviewDTO.getMovieId());
+        redirectAttributes.addAttribute("movieId", reviewDTO.getMovieId());
         return "redirect:/movie/detail";
     }
 
     @DeleteMapping("/delete")
-    public String removeReview(@RequestParam("rid") String rid, @RequestParam("mid") String mid,
+    public String removeReview(@RequestParam("rid") String rid, @RequestParam("movieId") String movieId,
                                RedirectAttributes redirectAttributes) {
         service.remove(rid);
 
-        redirectAttributes.addAttribute("mid", mid);
+        redirectAttributes.addAttribute("movieId", movieId);
         return "redirect:/movie/detail";
     }
 
     @ResponseBody
-    @GetMapping("/getGrade")
-    public float calculateGrade(String mid) {
-        return service.getGradeByMid(mid);
+    @GetMapping("/getRating")
+    public float calculateRating(String movieId) {
+        return service.getRatingByMovieId(movieId);
     }
 }

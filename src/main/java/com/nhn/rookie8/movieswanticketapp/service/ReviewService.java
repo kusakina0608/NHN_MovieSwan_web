@@ -8,17 +8,17 @@ import com.nhn.rookie8.movieswanticketapp.entity.Review;
 public interface ReviewService {
     String register(ReviewDTO reviewDTO);
 
-    PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String mid);
+    PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String movieId);
 
-    ReviewDTO findMyReviewByMid(String mid, String uid);
+    ReviewDTO findMyReviewByMovieId(String movieId, String memberId);
 
-    PageResultDTO<ReviewDTO, Review> findMyReviews(PageRequestDTO pageRequestDTO, String uid);
+    PageResultDTO<ReviewDTO, Review> findMyReviews(PageRequestDTO pageRequestDTO, String memberId);
 
-    float getGradeByMid(String mid);
+    float getRatingByMovieId(String movieId);
 
     void modify(ReviewDTO reviewDTO);
 
-    void remove(String rid);
+    void remove(String reviewId);
 
     default Review dtoToEntity(ReviewDTO reviewDTO) {
         return Review.builder()

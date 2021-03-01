@@ -31,22 +31,22 @@ public class SeatServiceTests {
     private SeatDTO seatDTO;
     private String tid;
     private String rid;
-    private String uid1;
+    private String memberId1;
     private String sid;
-    private String uid2;
+    private String memberId2;
 
     @BeforeAll
     void beforeAllTest() {
         log.info("before all");
         tid = "aaa20210225";
         rid = "A924-A924-A924-A924";
-        uid1 = "saddummy";
-        uid2 = "hyerin9177";
+        memberId1 = "saddummy";
+        memberId2 = "hyerin9177";
         sid = "A01";
         seatDTO = SeatDTO.builder()
                 .timetableId(tid)
                 .reservationId(rid)
-                .memberId(uid1)
+                .memberId(memberId1)
                 .seatCode(sid)
                 .build();
     }
@@ -82,7 +82,7 @@ public class SeatServiceTests {
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
-        when(seat.getMemberId()).thenReturn(uid1);
+        when(seat.getMemberId()).thenReturn(memberId1);
         Assertions.assertEquals(true, seatService.preempt(seatDTO));
     }
 
@@ -93,7 +93,7 @@ public class SeatServiceTests {
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
-        when(seat.getMemberId()).thenReturn(uid2);
+        when(seat.getMemberId()).thenReturn(memberId2);
         Assertions.assertEquals(false, seatService.preempt(seatDTO));
     }
 
@@ -114,7 +114,7 @@ public class SeatServiceTests {
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
-        when(seat.getMemberId()).thenReturn(uid1);
+        when(seat.getMemberId()).thenReturn(memberId1);
         Assertions.assertEquals(true, seatService.remove(seatDTO));
     }
 
@@ -125,7 +125,7 @@ public class SeatServiceTests {
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
-        when(seat.getMemberId()).thenReturn(uid2);
+        when(seat.getMemberId()).thenReturn(memberId2);
         Assertions.assertEquals(false, seatService.remove(seatDTO));
     }
 

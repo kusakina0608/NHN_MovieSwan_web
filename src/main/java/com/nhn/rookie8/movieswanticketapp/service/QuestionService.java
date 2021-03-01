@@ -6,9 +6,9 @@ import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Question;
 
 public interface QuestionService {
-    void registerQuestion(QuestionDTO dto);
-    QuestionDTO readQuestion(Integer qid);
-    PageResultDTO<QuestionDTO, Question> getMyQuestionList(PageRequestDTO requestDTO, String uid);
+    Integer registerQuestion(QuestionDTO dto);
+    QuestionDTO readQuestion(Integer questionId);
+    PageResultDTO<QuestionDTO, Question> getMyQuestionList(PageRequestDTO requestDTO, String memberId);
     PageResultDTO<QuestionDTO, Question> getAllQuestionList(PageRequestDTO requestDTO);
 
     default Question dtoToEntity(QuestionDTO questionDTO) {

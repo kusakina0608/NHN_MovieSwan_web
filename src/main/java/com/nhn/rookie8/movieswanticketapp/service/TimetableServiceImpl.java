@@ -17,15 +17,15 @@ import java.util.Optional;
 @Log4j2
 @RequiredArgsConstructor
 public class TimetableServiceImpl implements TimetableService {
-    private final TimetableRepository repository;
+    private final TimetableRepository timetableRepository;
 
     @Override
     public String registerTimetable(TimetableInputDTO timetableInputDTO) {
         try {
-            Timetable entity = dtoToEntity(timetableInputDTO);
-            log.info("Entity : {}", entity);
-            repository.save(entity);
-            return entity.getTimetableId();
+            Timetable timetable = dtoToEntity(timetableInputDTO);
+            timetableRepository.save(timetable);
+            log.info("Registered Entity : {}", timetable);
+            return timetable.getTimetableId();
         } catch (Exception e) {
             log.error(e);
             return "";
@@ -35,8 +35,8 @@ public class TimetableServiceImpl implements TimetableService {
     @Override
     public String deleteTimetable(String timeTableId) {
         try {
-            log.info("Deleted tid : {}", timeTableId);
-            repository.deleteById(timeTableId);
+            timetableRepository.deleteById(timeTableId);
+            log.info("Deleted TimetableID : {}", timeTableId);
             return timeTableId;
         } catch (Exception e) {
             log.error(e);
@@ -47,7 +47,8 @@ public class TimetableServiceImpl implements TimetableService {
     @Override
     public TimetableDTO getTimetable(String timeTableId) {
         try {
-            Optional<Timetable> result = repository.findById(timeTableId);
+            Optional<Timetable> result = timetableRepository.findById(timeTableId);
+            log.info("Search Result : {}", result.isPresent() ? result : "No Result");
             return result.isPresent() ? entityToDTO(result.get()) : null;
         } catch (Exception e) {
             log.error(e);
@@ -56,11 +57,11 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
-    public List<TimetableDTO> getAllTimetable(String mid) {
+    public List<TimetableDTO> getAllTimetableOfMovie(String movieId) {
         try {
-            List<Timetable> result = repository.findByMovieIdOrderByStartTimeAsc(mid);
+            List<Timetable> result = timetableRepository.findByMovieIdOrderByStartTimeAsc(movieId);
             List<TimetableDTO> schedulesList = new ArrayList<>();
-
+            log.info("Search Results : {}", result);
             result.forEach(e -> schedulesList.add(entityToDTO(e)));
             return schedulesList;
         } catch (Exception e) {

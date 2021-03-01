@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -71,8 +70,8 @@ public class ReservationController {
             Model model
     ) {
         HttpSession session = httpServletRequest.getSession(false);
-        UserDTO userDTO = userService.getUserInfoById((String) session.getAttribute("uid"));
-        reservationDTO.setMemberId(userDTO.getUid());
+        MemberDTO memberDTO = userService.getUserInfoById((String) session.getAttribute("memberId"));
+        reservationDTO.setMemberId(memberDTO.getMemberId());
         movieDTO = movieService.getMovie(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
 
@@ -103,8 +102,8 @@ public class ReservationController {
             Model model
     ) {
         HttpSession session = httpServletRequest.getSession(false);
-        UserDTO userDTO = userService.getUserInfoById((String) session.getAttribute("uid"));
-        reservationDTO.setMemberId(userDTO.getUid());
+        MemberDTO memberDTO = userService.getUserInfoById((String) session.getAttribute("memberId"));
+        reservationDTO.setMemberId(memberDTO.getMemberId());
         movieDTO = movieService.getMovie(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
 
@@ -119,7 +118,7 @@ public class ReservationController {
         log.debug("reservationDTO: {}", reservationDTO);
         seatService.confirmSeat(
                 timetableDTO.getTimetableId(),
-                userDTO.getUid(),
+                memberDTO.getMemberId(),
                 reservationDTO.getReservationId(),
                 seats
         );

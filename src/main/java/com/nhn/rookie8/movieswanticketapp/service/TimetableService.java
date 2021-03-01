@@ -12,10 +12,10 @@ import java.util.List;
 
 public interface TimetableService {
     String registerTimetable(TimetableInputDTO dto);
-    String deleteTimetable(String tid);
+    String deleteTimetable(String timetableId);
 
-    TimetableDTO getTimetable(String tid);
-    List<TimetableDTO> getAllTimetable(String mid);
+    TimetableDTO getTimetable(String timetableId);
+    List<TimetableDTO> getAllTimetableOfMovie(String movieId);
 
     default Timetable dtoToEntity(TimetableInputDTO timetableInputDTO) {
         LocalDate date = LocalDate.parse(timetableInputDTO.getDate());
