@@ -8,7 +8,6 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,10 +44,10 @@ public class SeatServiceTests {
         uid2 = "hyerin9177";
         sid = "A01";
         seatDTO = SeatDTO.builder()
-                .tid(tid)
-                .rid(rid)
-                .uid(uid1)
-                .sid(sid)
+                .timetableId(tid)
+                .reservationId(rid)
+                .memberId(uid1)
+                .seatCode(sid)
                 .build();
     }
 
@@ -69,7 +68,7 @@ public class SeatServiceTests {
     @Test
     @Order(2)
     void preemptTest1(){ // 좌석이 선점되지 않은 경우
-        SeatId seatId = SeatId.builder().tid(tid).sid(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.empty();
         when(seatRepository.findById(seatId)).thenReturn(result);
@@ -79,29 +78,29 @@ public class SeatServiceTests {
     @Test
     @Order(3)
     void preemptTest2(){ // 내가 선점하고 있는 좌석인 경우
-        SeatId seatId = SeatId.builder().tid(tid).sid(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
-        when(seat.getUid()).thenReturn(uid1);
+        when(seat.getMemberId()).thenReturn(uid1);
         Assertions.assertEquals(true, seatService.preempt(seatDTO));
     }
 
     @Test
     @Order(4)
     void preemptTest3(){ // 다른 사람이 선점하고 있는 좌석인 경우
-        SeatId seatId = SeatId.builder().tid(tid).sid(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
-        when(seat.getUid()).thenReturn(uid2);
+        when(seat.getMemberId()).thenReturn(uid2);
         Assertions.assertEquals(false, seatService.preempt(seatDTO));
     }
 
     @Test
     @Order(5)
     void removeTest1(){ // 예약 또는 선점되지 않은 좌석인 경우
-        SeatId seatId = SeatId.builder().tid(tid).sid(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.empty();
         when(seatRepository.findById(seatId)).thenReturn(result);
@@ -111,22 +110,22 @@ public class SeatServiceTests {
     @Test
     @Order(6)
     void removeTest2(){ // 내가 소유한 좌석인 경우
-        SeatId seatId = SeatId.builder().tid(tid).sid(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
-        when(seat.getUid()).thenReturn(uid1);
+        when(seat.getMemberId()).thenReturn(uid1);
         Assertions.assertEquals(true, seatService.remove(seatDTO));
     }
 
     @Test
     @Order(7)
     void removeTest3(){ // 다른 사람이 소유한 좌석인 경우
-        SeatId seatId = SeatId.builder().tid(tid).sid(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
-        when(seat.getUid()).thenReturn(uid2);
+        when(seat.getMemberId()).thenReturn(uid2);
         Assertions.assertEquals(false, seatService.remove(seatDTO));
     }
 

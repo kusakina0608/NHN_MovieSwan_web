@@ -21,7 +21,6 @@ import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -68,15 +67,15 @@ class MovieServiceTest {
 
         String mid = service.register(service.entityToDTO(movie));
 
-        assertThat(mid, is(movie.getMid() + "001"));
+        assertThat(mid, is(movie.getMovieId() + "001"));
     }
 
     @Test
     void movieReadTest() {
-        String mid = movie.getMid();
+        String mid = movie.getMovieId();
         when(repository.findById(mid)).thenReturn(Optional.of(movie));
 
-        MovieDTO returnMovie = service.read(mid);
+        MovieDTO returnMovie = service.getMovie(mid);
 
         assertThat(returnMovie, is(service.entityToDTO(movie)));
     }
@@ -129,7 +128,7 @@ class MovieServiceTest {
         List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
         List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
         Page<Movie> moviePage = mock(Page.class);
-        List<String> midList = movieList.stream().map(movie -> movie.getMid()).collect(Collectors.toList());
+        List<String> midList = movieList.stream().map(movie -> movie.getMovieId()).collect(Collectors.toList());
 
         when(moviePage.getPageable()).thenReturn(PageRequest.of(0, 10));
         when(moviePage.stream()).thenReturn(movieList.stream());
