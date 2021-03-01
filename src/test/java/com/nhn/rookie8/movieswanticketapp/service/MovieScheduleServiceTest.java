@@ -54,9 +54,9 @@ public class MovieScheduleServiceTest {
         time = dateTime.toLocalTime();
 
         testEntity = movieScheduleService.dtoToEntity(MovieScheduleInputDTO.builder()
-                .mid(new StringBuilder(mid).append('1').toString())
-                .date(date.toString())
-                .time(time.toString())
+                .movieId(new StringBuilder(mid).append('1').toString())
+                .startDate(date.toString())
+                .startTime(time.toString())
                 .build());
     }
 
@@ -68,9 +68,9 @@ public class MovieScheduleServiceTest {
     public void registerScheduleTest() {
         for (int i = 0; i < 10; i++) {
             MovieScheduleInputDTO testDTO = MovieScheduleInputDTO.builder()
-                    .mid(new StringBuilder(mid).append(i).toString())
-                    .date(date.toString())
-                    .time(time.plusMinutes(i).toString())
+                    .movieId(new StringBuilder(mid).append(i).toString())
+                    .startDate(date.toString())
+                    .startTime(time.plusMinutes(i).toString())
                     .build();
 
             StringBuilder builder = new StringBuilder();
@@ -86,9 +86,9 @@ public class MovieScheduleServiceTest {
     @Order(1)
     public void readScheduleTest() {
         MovieScheduleInputDTO testDTO = MovieScheduleInputDTO.builder()
-                .mid(new StringBuilder(mid).append('1').toString())
-                .date(date.toString())
-                .time(time.toString())
+                .movieId(new StringBuilder(mid).append('1').toString())
+                .startDate(date.toString())
+                .startTime(time.toString())
                 .build();
 
         StringBuilder builder = new StringBuilder();
@@ -97,7 +97,7 @@ public class MovieScheduleServiceTest {
 
         when(movieScheduleRepository.findById(tid)).thenReturn(Optional.of(movieScheduleService.dtoToEntity(testDTO)));
         MovieScheduleDTO result = movieScheduleService.getASchedule(tid);
-        assertThat(tid, is(result.getTid()));
+        assertThat(tid, is(result.getTimetableId()));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class MovieScheduleServiceTest {
     public void readAllScheduleTest() {
         String testMid = "TEST0001";
 
-        when(movieScheduleRepository.findByMidOrderByTimeAsc(mid)).thenReturn(Collections.emptyList());
+        when(movieScheduleRepository.findByMovieIdOrderByStartTimeAsc(mid)).thenReturn(Collections.emptyList());
         List<MovieScheduleDTO> movieScheduleList = movieScheduleService.getAllSchedulesOfMovie(testMid);
 
         assertThat(Collections.emptyList(), is(movieScheduleList));
