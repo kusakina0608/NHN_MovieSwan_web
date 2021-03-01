@@ -13,35 +13,35 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Movie{
+public class Movie extends BaseEntity{
     @Id
-    @Column(length = 10, nullable = false)
-    private String mid;
+    @Column(name="movie_id", length=10, nullable=false)
+    private String movieId;
 
-    @Column(length = 50, nullable = false)
-    private String name;
+    @Column(name="title", length=50, nullable=false)
+    private String title;
 
-    @Column(length = 50, nullable = false)
-    private String poster;
-
-    @Column(length = 20, nullable = false)
+    @Column(name="director", length=20, nullable=false)
     private String director;
 
-    @Column(length = 50, nullable = false)
+    @Column(name="actor", length=50, nullable=false)
     private String actor;
 
-    @Column(nullable = false)
+    @Column(name="runtime", nullable=false)
     private Integer runtime;
 
-    @Column(length = 20, nullable = false)
+    @Column(name="genre", length=20, nullable=false)
     private String genre;
 
-    @Column(length = 1500, nullable = false)
+    @Column(name="story", length=1500, nullable=false)
     private String story;
 
-    @Column(nullable = false)
-    private LocalDate startdate;
+    @Column(name="poster_file_name", length=50, nullable=false)
+    private String poster;
 
-    @Column(nullable = false)
-    private LocalDate enddate;
+    @Column(name="start_date", nullable=false)
+    private LocalDate startDate;
+
+    @Column(name="end_date", nullable=false)
+    private LocalDate endDate;
 }

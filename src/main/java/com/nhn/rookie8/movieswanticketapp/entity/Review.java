@@ -17,34 +17,26 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@EntityListeners(value = {AuditingEntityListener.class})
-public class Review {
+@EntityListeners(value={AuditingEntityListener.class})
+public class Review extends BaseEntity{
     @Id
-    @Column(name = "rid", length = 15, nullable = false)
-    private String rid;
+    @Column(name="review_id", length=15, nullable=false)
+    private String reviewId;
 
-    @Column(name = "mid", length = 10, nullable = false)
-    private String mid;
+    @Column(name="movie_id", length=10, nullable=false)
+    private String movieId;
 
-    @Column(name = "uid", length = 21, nullable = false)
-    private String uid;
+    @Column(name="member_id", length=21, nullable=false)
+    private String memberId;
 
-    @Column(name = "grade", nullable = false)
-    private int grade;
+    @Column(name="rating", nullable=false)
+    private int rating;
 
-    @Column(name = "content", length = 500, nullable = false)
+    @Column(name="content", length=500, nullable=false)
     private String content;
 
-    @CreatedDate
-    @Column(name = "regdate", updatable = false)
-    private LocalDateTime regdate;
-
-    @LastModifiedDate
-    @Column(name = "moddate")
-    private LocalDateTime moddate;
-
     public void changeGrade(int grade) {
-        this.grade = grade;
+        this.rating = grade;
     }
 
     public void changeContent(String content) {
