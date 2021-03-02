@@ -15,7 +15,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class UserServiceImpl implements UserService{
+public class MemberServiceImpl implements MemberService {
 
     @Value("${accountURL}")
     private String accountUrl;
@@ -47,5 +47,10 @@ public class UserServiceImpl implements UserService{
             log.error(e);
             return new MemberDTO();
         }
+    }
+
+    @Override
+    public boolean checkResponse(MemberResponseDTO response){
+        return response != null && !response.isError();
     }
 }

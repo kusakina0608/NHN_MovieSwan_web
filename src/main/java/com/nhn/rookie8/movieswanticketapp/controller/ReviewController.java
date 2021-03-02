@@ -19,7 +19,7 @@ public class ReviewController {
     public String registerReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
         log.info(reviewDTO);
         if(reviewDTO.getMemberId().equals(""))
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         service.register(reviewDTO);
 
         redirectAttributes.addAttribute("movieId", reviewDTO.getMovieId());

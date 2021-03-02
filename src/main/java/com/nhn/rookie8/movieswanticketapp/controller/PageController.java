@@ -29,7 +29,7 @@ public class PageController {
     private final ReviewService reviewService;
     private final QuestionService questionService;
     private final FavoriteService favoriteService;
-    private final UserService userService;
+    private final MemberService memberService;
 
     @Value("${accountURL}")
     private String accountUrl;
@@ -38,9 +38,10 @@ public class PageController {
     public String mainPage(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
 
-        if (!(session == null || session.getAttribute("memberId") == null)) {
-            model.addAttribute("memberId", session.getAttribute("memberId"));
-            model.addAttribute("name", session.getAttribute("name"));
+        if (!(session == null || session.getAttribute("member") == null)) {
+            log.info(session.getAttribute("member"));
+
+            model.addAttribute("member", session.getAttribute("member"));
         }
         return "page/main_page";
     }
@@ -111,7 +112,7 @@ public class PageController {
     @GetMapping("/mypage/userinfo")
     public String myPageUserinfo(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = userService.getUserInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getUserInfoById((String) session.getAttribute("memberId"));
 
         model.addAttribute("regDate", memberDTO.getRegDate().toString().split("T")[0]);
         model.addAttribute("memberId", memberDTO.getMemberId());
