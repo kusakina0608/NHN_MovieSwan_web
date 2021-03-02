@@ -24,7 +24,9 @@ public class TimetableServiceImpl implements TimetableService {
         try {
             Timetable timetable = dtoToEntity(timetableInputDTO);
             timetableRepository.save(timetable);
+
             log.info("Registered Entity : {}", timetable);
+
             return timetable.getTimetableId();
         } catch (Exception e) {
             log.error(e);
@@ -36,7 +38,9 @@ public class TimetableServiceImpl implements TimetableService {
     public String deleteTimetable(String timeTableId) {
         try {
             timetableRepository.deleteById(timeTableId);
+
             log.info("Deleted TimetableID : {}", timeTableId);
+
             return timeTableId;
         } catch (Exception e) {
             log.error(e);
@@ -48,7 +52,9 @@ public class TimetableServiceImpl implements TimetableService {
     public TimetableDTO getTimetable(String timeTableId) {
         try {
             Optional<Timetable> result = timetableRepository.findById(timeTableId);
+
             log.info("Search Result : {}", result.isPresent() ? result : "No Result");
+
             return result.isPresent() ? entityToDTO(result.get()) : null;
         } catch (Exception e) {
             log.error(e);
@@ -61,7 +67,9 @@ public class TimetableServiceImpl implements TimetableService {
         try {
             List<Timetable> result = timetableRepository.findByMovieIdOrderByStartTimeAsc(movieId);
             List<TimetableDTO> schedulesList = new ArrayList<>();
+
             log.info("Search Results : {}", result);
+
             result.forEach(e -> schedulesList.add(entityToDTO(e)));
             return schedulesList;
         } catch (Exception e) {

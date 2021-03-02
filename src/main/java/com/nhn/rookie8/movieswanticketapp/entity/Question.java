@@ -13,19 +13,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@EntityListeners(value={AuditingEntityListener.class})
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Question extends BaseEntity {
     @Id
-    @Column(name="question_id", nullable=false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "question_id", length = 11, nullable = false)
     private Integer questionId;
 
-    @Column(name="member_id", length=21, nullable=false)
+    @Column(name = "member_id", length = 21, nullable = false)
     private String memberId;
 
-    @Column(name="title", length=50, nullable=false)
+    @Column(name = "title", length = 50, nullable = false)
     private String title;
 
-    @Column(name="content", length =1500, nullable=false)
+    @Column(name = "content", length = 1500, nullable = false)
     private String content;
 }

@@ -55,8 +55,8 @@ public class TimetableServiceTest {
 
         testEntity = timetableService.dtoToEntity(TimetableInputDTO.builder()
                 .movieId(new StringBuilder(movieId).append('1').toString())
-                .date(date.toString())
-                .time(time.toString())
+                .startDate(date.toString())
+                .startTime(time.toString())
                 .build());
     }
 
@@ -69,8 +69,8 @@ public class TimetableServiceTest {
         for (int i = 0; i < 10; i++) {
             TimetableInputDTO testDTO = TimetableInputDTO.builder()
                     .movieId(new StringBuilder(movieId).append(i).toString())
-                    .date(date.toString())
-                    .time(time.plusMinutes(i).toString())
+                    .startDate(date.toString())
+                    .startTime(time.plusMinutes(i).toString())
                     .build();
 
             StringBuilder builder = new StringBuilder();
@@ -87,8 +87,8 @@ public class TimetableServiceTest {
     public void readScheduleTest() {
         TimetableInputDTO testDTO = TimetableInputDTO.builder()
                 .movieId(new StringBuilder(movieId).append('1').toString())
-                .date(date.toString())
-                .time(time.toString())
+                .startDate(date.toString())
+                .startTime(time.toString())
                 .build();
 
         StringBuilder builder = new StringBuilder();

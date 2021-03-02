@@ -16,5 +16,6 @@ public class QuestionDTO {
     private String memberId;
     private String title;
     private String content;
-    private LocalDateTime regDate, modDate;
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
 }

@@ -24,8 +24,10 @@ public class TimetableController {
     @PostMapping("/register")
     public String registerMovieSchedule(TimetableInputDTO timetableInputDTO) {
         try {
-            log.info("Request Input DTO : {}", timetableInputDTO);
             service.registerTimetable(timetableInputDTO);
+
+            log.info("Request Input DTO : {}", timetableInputDTO);
+
             return "redirect:/admin";
         } catch (Exception e) {
             log.error(e);
@@ -36,8 +38,10 @@ public class TimetableController {
     @DeleteMapping("/delete")
     public String deleteMovieSchedule(String timetableId) {
         try {
-            log.info("Request TID : {}", timetableId);
             service.deleteTimetable(timetableId);
+
+            log.info("Request TimeTableID : {}", timetableId);
+
             return "redirect:/admin";
         } catch (Exception e) {
             log.error(e);
@@ -49,8 +53,9 @@ public class TimetableController {
     @ResponseBody
     public TimetableDTO getSchedule(@RequestParam String timetableId) {
         try {
-            log.info("Request TimeTableID : {}", timetableId);
             TimetableDTO result = service.getTimetable(timetableId);
+
+            log.info("Request TimeTableID : {}", timetableId);
 
             if (result == null)
                 throw new Exception("No results were found for your search.");

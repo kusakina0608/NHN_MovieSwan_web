@@ -1,9 +1,9 @@
 (function() {
-    const writer = document.querySelector("#memberId");
-    const memberId = document.querySelector("#memberId_hidden");
+    const writer = document.querySelector("#member_id");
+    const uid = document.querySelector("#member_id_hidden");
 
-    writer.innerHTML = localStorage.getItem("memberId");
-    memberId.value = localStorage.getItem("memberId");
+    writer.innerHTML = localStorage.getItem("member_id");
+    uid.value = localStorage.getItem("member_id");
 } ());
 
 (function() {

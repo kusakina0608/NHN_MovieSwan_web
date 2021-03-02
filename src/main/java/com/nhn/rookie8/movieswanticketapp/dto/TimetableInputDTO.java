@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TimetableInputDTO {
-    private String timetableId;
     private String movieId;
-    private String date;
-    private String time;
+    private String startDate;
+    private String startTime;
 }

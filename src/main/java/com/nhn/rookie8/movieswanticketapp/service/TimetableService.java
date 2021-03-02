@@ -18,8 +18,8 @@ public interface TimetableService {
     List<TimetableDTO> getAllTimetableOfMovie(String movieId);
 
     default Timetable dtoToEntity(TimetableInputDTO timetableInputDTO) {
-        LocalDate date = LocalDate.parse(timetableInputDTO.getDate());
-        LocalTime time = LocalTime.parse(timetableInputDTO.getTime());
+        LocalDate date = LocalDate.parse(timetableInputDTO.getStartDate());
+        LocalTime time = LocalTime.parse(timetableInputDTO.getStartTime());
         LocalDateTime datetime = LocalDateTime.of(date, time);
 
         StringBuilder builder = new StringBuilder();
