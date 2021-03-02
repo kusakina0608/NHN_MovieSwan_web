@@ -31,27 +31,27 @@ public class FavoriteServiceImpl implements FavoriteService{
     }
 
     @Override
-    public List<String> getFavoriteList(String uid) {
+    public List<String> getFavoriteList(String memberId) {
         Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QFavorite qFavorite = QFavorite.favorite;
-        BooleanExpression expression = qFavorite.uid.eq(uid);
+        BooleanExpression expression = qFavorite.memberId.eq(memberId);
         booleanBuilder.and(expression);
 
         Page<Favorite> result = repository.findAll(booleanBuilder, pageable);
 
-        List<String> midList = new ArrayList<>();
+        List<String> movieIdList = new ArrayList<>();
         for(Favorite fav : result)
-            midList.add(fav.getMovieId());
+            movieIdList.add(fav.getMovieId());
 
-        return midList;
+        return movieIdList;
     }
 
     @Override
-    public boolean isFavorite(String uid, String mid) {
+    public boolean isFavorite(String memberId, String movieId) {
         FavoriteId favoriteId = FavoriteId.builder()
-                .userId(uid)
-                .movieId(mid)
+                .memberId(memberId)
+                .movieId(movieId)
                 .build();
 
         Optional<Favorite> result = repository.findById(favoriteId);
@@ -62,7 +62,7 @@ public class FavoriteServiceImpl implements FavoriteService{
     @Override
     public void removeFavorite(FavoriteDTO favoriteDTO) {
         FavoriteId favoriteId = FavoriteId.builder()
-                .userId(favoriteDTO.getUserId())
+                .memberId(favoriteDTO.getMemberId())
                 .movieId(favoriteDTO.getMovieId())
                 .build();
 

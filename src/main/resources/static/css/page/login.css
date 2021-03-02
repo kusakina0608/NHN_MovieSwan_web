@@ -22,14 +22,14 @@
 }
 
 
-#uid,#password {
+#memberId,#password {
     flex: 1;
     border: none;
     padding: 10px;
     font-size: 20px;
 }
 
-#uid:focus,#password:focus {
+#memberId:focus,#password:focus {
     outline: none;
 }
 

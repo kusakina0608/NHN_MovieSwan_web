@@ -54,21 +54,25 @@ public class MovieController {
     }
 
     @GetMapping("/detail")
-    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        MovieDTO movieDTO = movieService.getMovieDetail(mid);
+    public String movieDetail(String movieId, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+        MovieDTO movieDTO = movieService.getMovieDetail(movieId);
 
         HttpSession session = httpServletRequest.getSession(false);
-        String uid = session.getAttribute("uid").toString();
+        String memberId;
+        if(session.getAttribute("memberId") == null)
+            memberId = "";
+        else
+            memberId = session.getAttribute("memberId").toString();
 
         model.addAttribute("dto", movieDTO);
-        model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, mid));
-        model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
+        model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, movieId));
+        model.addAttribute("my_review", reviewService.findMyReviewByMovieId(movieId, memberId));
         return "/page/movie_detail";
     }
 
     @PostMapping("/register")
     public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile) {
-        log.info(movieDTO.getMovieTitle());
+        log.info(movieDTO.getTitle());
         log.info(uploadFile.getName());
         String posterPath;
 
@@ -98,7 +102,7 @@ public class MovieController {
             log.error("잘못된 파일 이름입니다.");
             return "redirect:/admin";
         }
-        posterPath = makeFolder() + File.separator + uuid + extensionName;
+        posterPath = uuid + extensionName;
         log.info(posterPath);
         String saveName = uploadPath + File.separator + posterPath;
         savePath = Paths.get(saveName);
@@ -142,8 +146,8 @@ public class MovieController {
 
     @ResponseBody
     @GetMapping("/getMovieInfo")
-    public MovieDTO getMovieInfo(String mid) {
-        return movieService.getMovieDetail(mid);
+    public MovieDTO getMovieInfo(String movieId) {
+        return movieService.getMovieDetail(movieId);
     }
 
     private String makeFolder() {

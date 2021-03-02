@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,13 +39,17 @@ public class SeatServiceImpl implements SeatService{
 
         repository.save(entity);
 
-        return entity.getSid();
+        return entity.getSeatCode();
     }
 
     @Override
     @Transactional
-    public void modify(List<SeatDTO> dtoList, String rid) {
-        dtoList.forEach(dto -> repository.updateRid(rid, dto.getTid(), dto.getSid(), dto.getUid()));
+    public void confirmSeat(String timetableId, String memberId, String reservationId, String seats) {
+        String[] seatCodes = seats.split(",");
+        for (String seatCode : seatCodes) {
+            repository.updateRid(reservationId, timetableId, seatCode, memberId);
+        }
+
     }
 
     @Override
@@ -55,7 +60,7 @@ public class SeatServiceImpl implements SeatService{
         List<String> seatIdList = new ArrayList<>();
         seatList.forEach(el -> {
             log.debug("seat: {}", el);
-            seatIdList.add(el.getSid());
+            seatIdList.add(el.getSeatCode());
         });
         return seatIdList;
     }
@@ -66,14 +71,14 @@ public class SeatServiceImpl implements SeatService{
         Pageable pageable = PageRequest.of(0, 1000);
         List<Seat> seatList = repository.findAll(booleanBuilder, pageable).toList();
         List<String> seatIdList = new ArrayList<>();
-        seatList.forEach(el -> seatIdList.add(el.getSid()));
+        seatList.forEach(el -> seatIdList.add(el.getSeatCode()));
         return seatIdList;
     }
 
     private BooleanBuilder getReservedSeat(String tid) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QSeat qSeat = QSeat.seat;
-        BooleanExpression expression = qSeat.tid.eq(tid);
+        BooleanExpression expression = qSeat.timetableId.eq(tid);
         booleanBuilder.and(expression);
         return booleanBuilder;
     }
@@ -81,7 +86,7 @@ public class SeatServiceImpl implements SeatService{
     private BooleanBuilder getMySeat(String rid) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QSeat qSeat = QSeat.seat;
-        BooleanExpression expression = qSeat.rid.eq(rid);
+        BooleanExpression expression = qSeat.reservationId.eq(rid);
         booleanBuilder.and(expression);
         return booleanBuilder;
     }
@@ -89,9 +94,9 @@ public class SeatServiceImpl implements SeatService{
     @Override
     @Transactional(rollbackOn = {DataIntegrityViolationException.class})
     public Boolean preempt(SeatDTO dto) {
-        SeatId seatId = SeatId.builder().tid(dto.getTid()).sid(dto.getSid()).build();
+        SeatId seatId = SeatId.builder().timetableId(dto.getTimetableId()).seatCode(dto.getSeatCode()).build();
         Optional<Seat> result = repository.findById(seatId);
-        if(result.isPresent() && !(result.get().getUid().equals(dto.getUid()))){
+        if(result.isPresent() && !(result.get().getMemberId().equals(dto.getMemberId()))){
             return false;
         }
         repository.save(dtoToEntity(dto));
@@ -100,9 +105,9 @@ public class SeatServiceImpl implements SeatService{
 
     @Override
     public Boolean remove(SeatDTO dto) {
-        SeatId seatId = SeatId.builder().tid(dto.getTid()).sid(dto.getSid()).build();
+        SeatId seatId = SeatId.builder().timetableId(dto.getTimetableId()).seatCode(dto.getSeatCode()).build();
         Optional<Seat> result = repository.findById(seatId);
-        if(result.isPresent() && result.get().getUid().equals(dto.getUid())) {
+        if(result.isPresent() && result.get().getMemberId().equals(dto.getMemberId())) {
             List<Seat> deleteList = new ArrayList<>();
             deleteList.add(dtoToEntity(dto));
             repository.deleteInBatch(deleteList);
@@ -113,12 +118,12 @@ public class SeatServiceImpl implements SeatService{
         }
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 300000)
     public void cancelPreemption(){
         BooleanBuilder booleanBuilder = getExpiredSeat();
         Pageable pageable = PageRequest.of(0, 1000);
         List<Seat> list = repository.findAll(booleanBuilder, pageable).toList();
-        list.forEach(e -> log.info("{} 사용자의 좌석 선점 만료. 상영번호: {}, 좌석번호: {}", e.getUid(), e.getTid(), e.getSid()));
+        list.forEach(e -> log.info("{} 사용자의 좌석 선점 만료. 상영번호: {}, 좌석번호: {}", e.getMemberId(), e.getTimetableId(), e.getSeatCode()));
         repository.deleteInBatch(list);
     }
 
@@ -126,7 +131,7 @@ public class SeatServiceImpl implements SeatService{
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QSeat qSeat = QSeat.seat;
         BooleanExpression expression1 = qSeat.regDate.lt(LocalDateTime.now().minusMinutes(5));
-        BooleanExpression expression2 = qSeat.rid.isNull();
+        BooleanExpression expression2 = qSeat.reservationId.isNull();
         booleanBuilder.and(expression1);
         booleanBuilder.and(expression2);
         return booleanBuilder;

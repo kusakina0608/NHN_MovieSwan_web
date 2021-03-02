@@ -8,11 +8,11 @@
     const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
 
-    const timetableId = document.querySelector("#main-container > form > input[type=hidden]:nth-child(4)").value;
+    const timetableId = document.querySelector("#timetableId").value;
 
     var adultCount = 0;
-    var childCount = 0;
-    var otherCount = 0;
+    var youngCount = 0;
+    var elderCount = 0;
     var totalCount = 0;
 
     var selected = 0;
@@ -23,11 +23,11 @@
 
     // 상영시간표 API에 요청
     const seatAPI = {
-        preemptSeat: (tid, sid) => {
-            return requestTicketAPI.post(`/api/seat/preempt?tid=${tid}&sid=${sid}`);
+        preemptSeat: (timetableId, seatCode) => {
+            return requestTicketAPI.post(`/api/seat/preempt?timetableId=${timetableId}&seatCode=${seatCode}`);
         },
-        cancelSeat: (tid, sid) => {
-            return requestTicketAPI.delete(`/api/seat/preempt?tid=${tid}&sid=${sid}`);
+        cancelSeat: (timetableId, seatCode) => {
+            return requestTicketAPI.delete(`/api/seat/preempt?timetableId=${timetableId}&seatCode=${seatCode}`);
         }
     }
 
@@ -49,6 +49,7 @@
             }
             else{ // 선택되어 있지 않은 좌석인 경우
                 if(selected < totalCount){
+                    console.log(`timetableId: ${timetableId}, seatId: ${seatId}`);
                     var res = await seatAPI.preemptSeat(timetableId, seatId);
                     if(res.data){
                         e.target.classList.add("selected");
@@ -81,10 +82,10 @@
 
     var refreshCount = function() {
         adultCount = parseInt(document.querySelector("#adultCount").value);
-        childCount = parseInt(document.querySelector("#childCount").value);
-        otherCount = parseInt(document.querySelector("#otherCount").value);
-        totalCount = adultCount + childCount + otherCount;
-        totalPrice.innerHTML = adultCount * adultPrice + childCount * childPrice + otherCount * otherPrice;
+        youngCount = parseInt(document.querySelector("#youngCount").value);
+        elderCount = parseInt(document.querySelector("#elderCount").value);
+        totalCount = adultCount + youngCount + elderCount;
+        totalPrice.innerHTML = adultCount * adultPrice + youngCount * childPrice + elderCount * otherPrice;
     }
 
     document.querySelectorAll('.minus').forEach(el => {
@@ -119,7 +120,7 @@
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
-        form.setAttribute("action", "/booking/pay");
+        form.setAttribute("action", "/reserve/pay");
 
         if(selected === totalCount){
             let selectedSeatList = [];
@@ -127,33 +128,27 @@
                 selectedSeatList.push(el.innerHTML);
             });
 
-            let seatInput = document.createElement("input");
-            seatInput.setAttribute("type", "hidden");
-            seatInput.setAttribute("name", "seats");
-            seatInput.setAttribute("value", selectedSeatList);
-            form.appendChild(seatInput);
-
-            let childInput = document.createElement("input");
-            childInput.setAttribute("type", "hidden");
-            childInput.setAttribute("name", "childnum");
-            childInput.setAttribute("value", childCount);
-            form.appendChild(childInput);
+            let youngInput = document.createElement("input");
+            youngInput.setAttribute("type", "hidden");
+            youngInput.setAttribute("name", "youngNum");
+            youngInput.setAttribute("value", youngCount);
+            form.appendChild(youngInput);
 
             let adultInput = document.createElement("input");
             adultInput.setAttribute("type", "hidden");
-            adultInput.setAttribute("name", "adultnum");
+            adultInput.setAttribute("name", "adultNum");
             adultInput.setAttribute("value", adultCount);
             form.appendChild(adultInput);
 
-            let otherInput = document.createElement("input");
-            otherInput.setAttribute("type", "hidden");
-            otherInput.setAttribute("name", "oldnum");
-            otherInput.setAttribute("value", otherCount);
-            form.appendChild(otherInput);
+            let elderInput = document.createElement("input");
+            elderInput.setAttribute("type", "hidden");
+            elderInput.setAttribute("name", "elderNum");
+            elderInput.setAttribute("value", elderCount);
+            form.appendChild(elderInput);
 
             let totalInput = document.createElement("input");
             totalInput.setAttribute("type", "hidden");
-            totalInput.setAttribute("name", "totalnum");
+            totalInput.setAttribute("name", "totalNum");
             totalInput.setAttribute("value", totalCount);
             form.appendChild(totalInput);
 
@@ -162,6 +157,13 @@
             priceInput.setAttribute("name", "price");
             priceInput.setAttribute("value", Number.parseInt(totalPrice.innerHTML));
             form.appendChild(priceInput);
+
+            let seatInput = document.createElement("input");
+            seatInput.setAttribute("type", "hidden");
+            seatInput.setAttribute("name", "seats");
+            seatInput.setAttribute("value", selectedSeatList);
+            form.appendChild(seatInput);
+
             form.submit();
         }
         else{

@@ -1,8 +1,9 @@
 (function() {
-    const writer = document.querySelector("#uid");
-    const val = document.querySelector("#uid_hidden")
-    writer.innerHTML = localStorage.getItem("uid");
-    val.value = localStorage.getItem("uid");
+    const writer = document.querySelector("#member_id");
+    const uid = document.querySelector("#member_id_hidden");
+
+    writer.innerHTML = localStorage.getItem("member_id");
+    uid.value = localStorage.getItem("member_id");
 } ());
 
 (function() {

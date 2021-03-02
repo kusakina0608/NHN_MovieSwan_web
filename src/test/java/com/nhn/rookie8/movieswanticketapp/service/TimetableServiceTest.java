@@ -1,9 +1,9 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MovieScheduleInputDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.MovieSchedule;
-import com.nhn.rookie8.movieswanticketapp.repository.MovieScheduleRepository;
+import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.Timetable;
+import com.nhn.rookie8.movieswanticketapp.repository.TimetableRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,31 +32,31 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Log4j2
-public class MovieScheduleServiceTest {
+public class TimetableServiceTest {
     @Mock
-    MovieScheduleRepository movieScheduleRepository = mock(MovieScheduleRepository.class);
+    TimetableRepository timetableRepository = mock(TimetableRepository.class);
 
     @InjectMocks
-    MovieScheduleService movieScheduleService = new MovieScheduleServiceImpl(movieScheduleRepository);
+    TimetableService timetableService = new TimetableServiceImpl(timetableRepository);
 
-    private String mid;
+    private String movieId;
     private LocalDate date;
     private LocalTime time;
     private LocalDateTime dateTime;
-    private MovieSchedule testEntity;
+    private Timetable testEntity;
 
     @BeforeAll
     public void beforeAllTest() {
         log.info("--- Before All Test ---");
-        mid = "TEST000";
+        movieId = "TEST000";
         dateTime = LocalDateTime.now();
         date = dateTime.toLocalDate();
         time = dateTime.toLocalTime();
 
-        testEntity = movieScheduleService.dtoToEntity(MovieScheduleInputDTO.builder()
-                .mid(new StringBuilder(mid).append('1').toString())
-                .date(date.toString())
-                .time(time.toString())
+        testEntity = timetableService.dtoToEntity(TimetableInputDTO.builder()
+                .movieId(new StringBuilder(movieId).append('1').toString())
+                .startDate(date.toString())
+                .startTime(time.toString())
                 .build());
     }
 
@@ -67,17 +67,17 @@ public class MovieScheduleServiceTest {
     @Order(0)
     public void registerScheduleTest() {
         for (int i = 0; i < 10; i++) {
-            MovieScheduleInputDTO testDTO = MovieScheduleInputDTO.builder()
-                    .mid(new StringBuilder(mid).append(i).toString())
-                    .date(date.toString())
-                    .time(time.plusMinutes(i).toString())
+            TimetableInputDTO testDTO = TimetableInputDTO.builder()
+                    .movieId(new StringBuilder(movieId).append(i).toString())
+                    .startDate(date.toString())
+                    .startTime(time.plusMinutes(i).toString())
                     .build();
 
             StringBuilder builder = new StringBuilder();
             builder.append("aaa").append(dateTime.plusMinutes(i).format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
             String tid = builder.toString();
 
-            assertThat(tid, is(movieScheduleService.registerMovieSchedule(testDTO)));
+            assertThat(tid, is(timetableService.registerTimetable(testDTO)));
         }
 //        verify(movieScheduleRepository, times(10)).save(any());
     }
@@ -85,28 +85,28 @@ public class MovieScheduleServiceTest {
     @Test
     @Order(1)
     public void readScheduleTest() {
-        MovieScheduleInputDTO testDTO = MovieScheduleInputDTO.builder()
-                .mid(new StringBuilder(mid).append('1').toString())
-                .date(date.toString())
-                .time(time.toString())
+        TimetableInputDTO testDTO = TimetableInputDTO.builder()
+                .movieId(new StringBuilder(movieId).append('1').toString())
+                .startDate(date.toString())
+                .startTime(time.toString())
                 .build();
 
         StringBuilder builder = new StringBuilder();
         builder.append("aaa").append(dateTime.format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
         String tid = builder.toString();
 
-        when(movieScheduleRepository.findById(tid)).thenReturn(Optional.of(movieScheduleService.dtoToEntity(testDTO)));
-        MovieScheduleDTO result = movieScheduleService.getASchedule(tid);
-        assertThat(tid, is(result.getTid()));
+        when(timetableRepository.findById(tid)).thenReturn(Optional.of(timetableService.dtoToEntity(testDTO)));
+        TimetableDTO result = timetableService.getTimetable(tid);
+        assertThat(tid, is(result.getTimetableId()));
     }
 
     @Test
     @Order(2)
     public void readAllScheduleTest() {
-        String testMid = "TEST0001";
+        String testMovieId = "TEST0001";
 
-        when(movieScheduleRepository.findByMidOrderByTimeAsc(mid)).thenReturn(Collections.emptyList());
-        List<MovieScheduleDTO> movieScheduleList = movieScheduleService.getAllSchedulesOfMovie(testMid);
+        when(timetableRepository.findByMovieIdOrderByStartTimeAsc(movieId)).thenReturn(Collections.emptyList());
+        List<TimetableDTO> movieScheduleList = timetableService.getAllTimetableOfMovie(testMovieId);
 
         assertThat(Collections.emptyList(), is(movieScheduleList));
     }
@@ -118,7 +118,7 @@ public class MovieScheduleServiceTest {
         builder.append("aaa").append(dateTime.format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
         String tid = builder.toString();
 
-        assertThat(tid, is(movieScheduleService.deleteMovieSchedule(tid)));
+        assertThat(tid, is(timetableService.deleteTimetable(tid)));
     }
 
     @AfterEach

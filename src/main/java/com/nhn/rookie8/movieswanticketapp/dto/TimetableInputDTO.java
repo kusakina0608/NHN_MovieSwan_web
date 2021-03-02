@@ -5,17 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class UserResponseDTO {
-
-    private Integer httpCode;
-
-    private boolean error;
-
-    private String message;
-
-    private Object content;
+public class TimetableInputDTO {
+    private String movieId;
+    private String startDate;
+    private String startTime;
 }

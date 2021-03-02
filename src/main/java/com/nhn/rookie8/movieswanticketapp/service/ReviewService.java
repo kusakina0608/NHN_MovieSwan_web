@@ -8,37 +8,37 @@ import com.nhn.rookie8.movieswanticketapp.entity.Review;
 public interface ReviewService {
     String registerReview(ReviewDTO reviewDTO);
 
-    PageResultDTO<ReviewDTO, Review> getReviewPage(PageRequestDTO pageRequestDTO, String mid);
+    PageResultDTO<ReviewDTO, Review> getReviewPage(PageRequestDTO pageRequestDTO, String movieId);
 
-    ReviewDTO findMyReviewByMid(String mid, String uid);
+    ReviewDTO findMyReviewByMovieId(String movieId, String memberId);
 
-    PageResultDTO<ReviewDTO, Review> findMyReviews(PageRequestDTO pageRequestDTO, String uid);
+    PageResultDTO<ReviewDTO, Review> findMyReviews(PageRequestDTO pageRequestDTO, String memberId);
 
-    float getGradeByMid(String mid);
+    float getRatingByMovieId(String movieId);
 
     void editReview(ReviewDTO reviewDTO);
 
-    void deleteReview(String rid);
-
-    default ReviewDTO entityToDTO(Review review) {
-        return ReviewDTO.builder()
-                .reviewId(review.getReviewId())
-                .movieId(review.getMovieId())
-                .userId(review.getUserId())
-                .rating(review.getRating())
-                .reviewContent(review.getReviewContent())
-                .regdate(review.getRegdate())
-                .moddate(review.getModdate())
-                .build();
-    }
+    void deleteReview(String reviewId);
 
     default Review dtoToEntity(ReviewDTO reviewDTO) {
         return Review.builder()
                 .reviewId(reviewDTO.getReviewId())
                 .movieId(reviewDTO.getMovieId())
-                .userId(reviewDTO.getUserId())
+                .memberId(reviewDTO.getMemberId())
                 .rating(reviewDTO.getRating())
-                .reviewContent(reviewDTO.getReviewContent())
+                .content(reviewDTO.getContent())
+                .build();
+    }
+
+    default ReviewDTO entityToDTO(Review review) {
+        return ReviewDTO.builder()
+                .reviewId(review.getReviewId())
+                .movieId(review.getMovieId())
+                .memberId(review.getMemberId())
+                .rating(review.getRating())
+                .content(review.getContent())
+                .regDate(review.getRegDate())
+                .modDate(review.getModDate())
                 .build();
     }
 }

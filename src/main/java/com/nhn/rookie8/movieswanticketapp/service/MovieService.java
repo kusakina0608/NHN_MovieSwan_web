@@ -12,18 +12,18 @@ public interface MovieService {
 
     PageResultDTO<MovieDTO, Movie> getMoviePage(PageRequestDTO pageRequestDTO, boolean current);
 
-    PageResultDTO<MovieDTO, Movie> getPageByMids(PageRequestDTO requestDTO, List<String> midList);
+    PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList);
 
     List<MovieDTO> getAllMovieList();
 
     List<MovieDTO> getCurrentMovieList();
 
-    MovieDTO getMovieDetail(String mid);
+    MovieDTO getMovieDetail(String movieId);
 
     default Movie dtoToEntity(MovieDTO movieDTO) {
         return Movie.builder()
                 .movieId(movieDTO.getMovieId())
-                .movieTitle(movieDTO.getMovieTitle())
+                .title(movieDTO.getTitle())
                 .poster(movieDTO.getPoster())
                 .director(movieDTO.getDirector())
                 .actor(movieDTO.getActor())
@@ -38,7 +38,7 @@ public interface MovieService {
     default MovieDTO entityToDTO(Movie movie) {
         return MovieDTO.builder()
                 .movieId(movie.getMovieId())
-                .movieTitle(movie.getMovieTitle())
+                .title(movie.getTitle())
                 .poster(movie.getPoster())
                 .director(movie.getDirector())
                 .actor(movie.getActor())
@@ -47,6 +47,8 @@ public interface MovieService {
                 .story(movie.getStory())
                 .startDate(movie.getStartDate())
                 .endDate(movie.getEndDate())
+                .regDate(movie.getRegDate())
+                .modDate(movie.getModDate())
                 .build();
     }
 }

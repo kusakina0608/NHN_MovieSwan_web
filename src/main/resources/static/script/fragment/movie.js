@@ -7,30 +7,30 @@
     });
 
     const favoriteAPI = {
-        registerFavorite: (uid, mid) => {
-            return requestTicketAPI.post(`/api/favorite/register?uid=${uid}&mid=${mid}`);
+        registerFavorite: (memberId, movieId) => {
+            return requestTicketAPI.post(`/api/favorite/register?memberId=${memberId}&movieId=${movieId}`);
         },
-        deleteFavorite: (uid, mid) => {
-            return requestTicketAPI.delete(`/api/favorite/delete?uid=${uid}&mid=${mid}`);
+        deleteFavorite: (memberId, movieId) => {
+            return requestTicketAPI.delete(`/api/favorite/delete?memberId=${memberId}&movieId=${movieId}`);
         },
-        isFavorite: (uid, mid) => {
-            return requestTicketAPI.get(`/api/favorite/isFavorite?uid=${uid}&mid=${mid}`);
+        isFavorite: (memberId, movieId) => {
+            return requestTicketAPI.get(`/api/favorite/isFavorite?memberId=${memberId}&movieId=${movieId}`);
         }
     }
 
     const reviewAPI = {
-        calculateGrade: (mid) => {
-            return requestTicketAPI.get(`/api/review/getGrade?mid=${mid}`)
+        calculateRating: (movieId) => {
+            return requestTicketAPI.get(`/api/review/getRating?movieId=${movieId}`)
         }
     }
 
     var favBtns = document.querySelectorAll(".favorite");
     var uidInput = localStorage.getItem("uid");
     favBtns.forEach(btn => {
-        let mid = btn.querySelector("input").value;
+        let movieId = btn.querySelector("input").value;
 
         //찜한 영화라면 꽉찬 하트로 바꾸기
-        favoriteAPI.isFavorite(uidInput, mid).then(response => {
+        favoriteAPI.isFavorite(memberIdInput, movieId).then(response => {
             if(response.data) {
                 btn.classList.add("clicked");
                 btn.querySelector(".material-icons").innerText = "favorite";
@@ -38,16 +38,16 @@
         });
 
         btn.addEventListener("click", async (e) => {
-            if(uidInput != "") {
+            if(memberIdInput != "") {
                 // 찜 영화 등록 과정
                 if(!btn.classList.contains("clicked")){
-                    await favoriteAPI.registerFavorite(uidInput, mid);
+                    await favoriteAPI.registerFavorite(memberIdInput, movieId);
                     btn.classList.add("clicked");
                     btn.querySelector(".material-icons").innerText = "favorite";
                 }
                 //찜 영화 삭제 과정
                 else {
-                    await favoriteAPI.deleteFavorite(uidInput, mid);
+                    await favoriteAPI.deleteFavorite(memberIdInput, movieId);
                     btn.classList.remove("clicked");
                     btn.querySelector(".material-icons").innerText = "favorite_border";
                 }
@@ -56,12 +56,12 @@
     });
 
     //평균 평점 계산
-    var grades = document.querySelectorAll(".grade");
-    grades.forEach(grade => {
-        let mid = grade.querySelector("input").value;
+    var ratings = document.querySelectorAll(".rating");
+    ratings.forEach(rating => {
+        let movieId = rating.querySelector("input").value;
 
-        reviewAPI.calculateGrade(mid).then(response => {
-            grade.querySelector(".grade-num").innerText = (response.data).toFixed(1);
+        reviewAPI.calculateRating(movieId).then(response => {
+            rating.querySelector(".rating-num").innerText = (response.data).toFixed(1);
         })
     })
 

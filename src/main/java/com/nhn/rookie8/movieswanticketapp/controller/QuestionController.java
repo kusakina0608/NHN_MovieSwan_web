@@ -27,7 +27,7 @@ public class QuestionController {
     public String registerQuestion(QuestionDTO questionDTO, Model model) {
         try {
             service.registerQuestion(questionDTO);
-            return "redirect:/question";
+            return "redirect:/mypage/question";
         } catch (Exception e){
             log.error(e);
             return null;

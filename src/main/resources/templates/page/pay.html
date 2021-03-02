@@ -25,45 +25,55 @@
         </section>
         <section class="pay-container">
             <form>
-                <input type="hidden" name="title" th:value="${title}">
-                <input type="hidden" name="poster" th:value="${poster}">
-                <input type="hidden" name="theater" th:value="${theater}">
-                <input type="hidden" name="date" th:value="${date}">
-                <input type="hidden" name="time" th:value="${time}">
-                <input type="hidden" name="discount" th:value="${discount}">
-                <input type="hidden" name="tid" th:value="${tid}">
-                <input type="hidden" name="seats" th:value="${seats}">
-                <input type="hidden" name="childnum" th:value="${childnum}">
-                <input type="hidden" name="adultnum" th:value="${adultnum}">
-                <input type="hidden" name="oldnum" th:value="${oldnum}">
-                <input type="hidden" name="totalnum" th:value="${totalnum}">
-                <input type="hidden" name="price" th:value="${price}">
+                <input id="movieId" type="hidden" name="movieId" th:value="${movieDTO.getMovieId()}">
+                <input id="title" type="hidden" name="title" th:value="${movieDTO.getTitle()}">
+                <input id="director" type="hidden" name="director" th:value="${movieDTO.getDirector()}">
+                <input id="actor" type="hidden" name="actor" th:value="${movieDTO.getActor()}">
+                <input id="runtime" type="hidden" name="runtime" th:value="${movieDTO.getRuntime()}">
+                <input id="genre" type="hidden" name="genre" th:value="${movieDTO.getGenre()}">
+                <input id="story" type="hidden" name="story" th:value="${movieDTO.getStory()}">
+                <input id="poster" type="hidden" name="poster" th:value="${movieDTO.getPoster()}">
+
+                <input id="timetableId" type="hidden" name="timetableId" th:value="${timetableDTO.getTimetableId()}">
+
+                <input id="discountRatio" type="hidden" name="discountRatio" th:value="${discountDTO.getDiscountRatio()}">
+                <input id="discountType" type="hidden" name="discountType" th:value="${discountDTO.getDiscountType()}">
+
+                <input id="youngNum" type="hidden" name="youngNum" th:value="${reservationDTO.getYoungNum()}">
+                <input id="adultNum" type="hidden" name="adultNum" th:value="${reservationDTO.getAdultNum()}">
+                <input id="elderNum" type="hidden" name="elderNum" th:value="${reservationDTO.getElderNum()}">
+                <input id="totalNum" type="hidden" name="totalNum" th:value="${reservationDTO.getTotalNum()}">
+                <input id="price" type="hidden" name="price" th:value="${reservationDTO.getPrice()}">
+
+                <input id="theater" type="hidden" name="theater" th:value="${theater}">
+
+                <input id="seats" type="hidden" name="seats" th:value="${seats}">
             </form>
             <section class="inner-container">
                 <section class="inner-left-container">
-                    <img th:src="|/movie/display?fileName=${poster}|" alt="영화 포스터">
+                    <img th:src="|/movie/display?fileName=${movieDTO.getPoster()}|" alt="영화 포스터">
                 </section>
                 <section class="inner-right-container">
-                    <h2>[[${title}]]</h2>
+                    <h2>[[${movieDTO.getTitle()}]]</h2>
                     <section class="reservation-info debug">
                         <h2>[[${theater}]]</h2>
-                        <div>상영일: [[${date}]]</div>
-                        <div>상영 시간: [[${time}]]</div>
+                        <div>상영일: [[${timetableDTO.getScheduleString()}]]</div>
+                        <div>상영 시간: [[${movieDTO.getRuntime()}]]</div>
                         <div>좌석: [[${seats}]]</div>
                     </section>
                     <section class="people-info debug">
                         <h2>관람 인원</h2>
-                        <div>성인: [[${adultnum}]]</div>
-                        <div>청소년: [[${childnum}]]</div>
-                        <div>우대: [[${othernum}]]</div>
+                        <div>성인: [[${reservationDTO.getAdultNum()}]]</div>
+                        <div>청소년: [[${reservationDTO.getYoungNum()}]]</div>
+                        <div>우대: [[${reservationDTO.getElderNum()}]]</div>
                     </section>
                     <section class="discount-info debug">
                         <h2>할인</h2>
-                        <div>[[${discount}]]</div>
+                        <div>[[${discountDTO.getDiscountType()}]]</div>
                     </section>
                     <section class="price-info debug">
                         <h2>총 결제 금액</h2>
-                        <div>[[${price}]] 원</div>
+                        <div>[[${reservationDTO.getPrice()}]] 원</div>
                     </section>
                 </section>
             </section>

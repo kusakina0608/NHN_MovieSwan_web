@@ -7,13 +7,15 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovieScheduleDTO {
-    private String tid;
-    private String mid;
-    private LocalDateTime time;
+@Data
+public class MemberDTO {
+    private String memberId;
+    private String password;
+    private String name;
+    private String email;
+    private String url;
+    private LocalDateTime regDate, modDate;
 }
-

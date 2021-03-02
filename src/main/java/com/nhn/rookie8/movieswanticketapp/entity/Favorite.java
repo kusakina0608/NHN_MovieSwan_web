@@ -14,12 +14,11 @@ import javax.persistence.IdClass;
 @NoArgsConstructor
 @ToString
 @IdClass(FavoriteId.class)
-public class Favorite {
+public class Favorite extends BaseEntity{
     @Id
-    @Column(name = "user_id", length = 21, nullable = false)
-    private String userId;
-
-    @Id
-    @Column(name = "movie_id", length = 10, nullable = false)
+    @Column(name="movie_id", length=10, nullable=false)
     private String movieId;
+    @Id
+    @Column(name="member_id", length=21, nullable=false)
+    private String memberId;
 }

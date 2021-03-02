@@ -20,12 +20,12 @@
                 </thead>
                 <tbody>
                 <tr th:each="dto : ${result.dtoList}"
-                    th:onclick='javascript:trClicked([[${dto.rid}]]);'>
-                        <td class="tg-0lax" scope="row">[[${dto.rid}]]</td>
+                    th:onclick='javascript:trClicked([[${dto.reservationId}]]);'>
+                        <td class="tg-0lax" scope="row">[[${dto.reservationId}]]</td>
                         <td class="tg-baqh"></td>
                         <td class="tg-baqh"></td>
                         <td class="tg-baqh">[[${#temporals.format(dto.regDate, 'MM/dd HH:mm:ss')}]]</td>
-                        <td class="tid" style="display: none;">[[${dto.tid}]]</td>
+                        <td class="tid" style="display: none;">[[${dto.timetableId}]]</td>
                     </a>
                 </tr>
                 </tbody>

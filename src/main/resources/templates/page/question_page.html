@@ -14,11 +14,11 @@
         </header>
         <form id="question_contents" th:action="@{/api/question/register}" th:method="post">
             <formgroup class="form_group">
-                <input type="hidden" class="form_control" id="uid_hidden" name="uid">
+                <input type="hidden" class="form_control" id="memberId_hidden" name="memberId">
             </formgroup>
             <formgroup class="form_group">
                 <formlabel class="form_label">작성자 :</formlabel>
-                <label class="form_control" id="uid"></label>
+                <label class="form_control" id="memberId"></label>
             </formgroup>
             <formgroup class="form_group">
                 <formlabel class="form_label">제목 :</formlabel>

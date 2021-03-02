@@ -15,26 +15,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @IdClass(SeatId.class)
-@EntityListeners(value = {AuditingEntityListener.class})
-public class Seat implements Persistable<SeatId> {
+@EntityListeners(value={AuditingEntityListener.class})
+public class Seat extends BaseEntity implements Persistable<SeatId> {
     @Id
-    @Column(name="tid", length = 15, nullable = false)
-    private String tid;
+    @Column(name="timetable_id", length=15, nullable=false)
+    private String timetableId;
     @Id
-    @Column(name="sid", length = 4, nullable = false)
-    private String sid;
-    @Column(name="uid", length = 20, nullable = false)
-    private String uid;
-    @Column(name="rid", length = 20, nullable = true)
-    private String rid;
-    @CreatedDate
-    @Column(name="regdate", updatable = false)
-    private LocalDateTime regDate;
+    @Column(name="seat_code", length=4, nullable=false)
+    private String seatCode;
+    @Column(name="member_id", length=20, nullable=false)
+    private String memberId;
+    @Column(name="reservation_id", length=20, nullable=true)
+    private String reservationId;
 
     @Transient
     @Override
     public SeatId getId() {
-        return SeatId.builder().tid(tid).sid(sid).build();
+        return SeatId.builder()
+                .timetableId(timetableId)
+                .seatCode(seatCode)
+                .build();
     }
 
     private @Transient boolean isNew = true;
@@ -50,7 +50,7 @@ public class Seat implements Persistable<SeatId> {
         isNew = false;
     }
 
-    public void changeRid(String rid){
-        this.rid = rid;
+    public void changeRid(String reservationId){
+        this.reservationId = reservationId;
     }
 }

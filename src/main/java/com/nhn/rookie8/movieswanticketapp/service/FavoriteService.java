@@ -7,21 +7,23 @@ import java.util.List;
 
 public interface FavoriteService {
     String registerFavorite(FavoriteDTO favoriteDTO);
-    List<String> getFavoriteList(String uid);
-    boolean isFavorite(String uid, String mid);
+    List<String> getFavoriteList(String memberId);
+    boolean isFavorite(String memberId, String movieId);
     void removeFavorite(FavoriteDTO favoriteDTO);
 
     default Favorite dtoToEntity(FavoriteDTO favoriteDTO) {
         return Favorite.builder()
-                .userId(favoriteDTO.getUserId())
+                .memberId(favoriteDTO.getMemberId())
                 .movieId(favoriteDTO.getMovieId())
                 .build();
     }
 
     default FavoriteDTO entityToDto(Favorite favorite) {
         return FavoriteDTO.builder()
-                .userId(favorite.getUserId())
+                .memberId(favorite.getMemberId())
                 .movieId(favorite.getMovieId())
+                .regDate(favorite.getRegDate())
+                .modDate(favorite.getModDate())
                 .build();
     }
 }

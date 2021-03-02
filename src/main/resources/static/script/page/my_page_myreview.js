@@ -9,17 +9,17 @@
     });
 
     const movieAPI = {
-        getTitle: (mid) => {
-            return requestTicketAPI.get(`/movie/getMovieInfo?mid=${mid}`);
+        getTitle: (movieId) => {
+            return requestTicketAPI.get(`/movie/getMovieInfo?movieId=${movieId}`);
         }
     }
 
     var reviews = document.querySelectorAll(".review_title");
     reviews.forEach(review => {
-        var mid = review.querySelector("input").value;
-        movieAPI.getTitle(mid).then(response => {
+        var movieId = review.querySelector("input").value;
+        movieAPI.getTitle(movieId).then(response => {
             console.log(response.data);
-            review.querySelector(".title").innerText = response.data.name;
+            review.querySelector(".title").innerText = response.data.title;
         })
     })
 } ());

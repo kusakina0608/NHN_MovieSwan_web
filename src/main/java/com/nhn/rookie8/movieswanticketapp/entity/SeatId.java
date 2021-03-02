@@ -7,15 +7,15 @@ import java.util.Objects;
 
 @Builder
 public class SeatId implements Serializable {
-    private String tid;
-    private String sid;
+    private String timetableId;
+    private String seatCode;
 
     public SeatId() {
     }
 
-    public SeatId(String tid, String sid) {
-        this.tid = tid;
-        this.sid = sid;
+    public SeatId(String timetableId, String seatCode) {
+        this.timetableId = timetableId;
+        this.seatCode = seatCode;
     }
 
     @Override
@@ -23,11 +23,11 @@ public class SeatId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SeatId seatId = (SeatId) o;
-        return Objects.equals(tid, seatId.tid) && Objects.equals(sid, seatId.sid);
+        return Objects.equals(timetableId, seatId.timetableId) && Objects.equals(seatCode, seatId.seatCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tid, sid);
+        return Objects.hash(timetableId, seatCode);
     }
 }

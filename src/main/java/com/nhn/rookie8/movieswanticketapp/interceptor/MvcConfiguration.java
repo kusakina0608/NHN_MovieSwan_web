@@ -13,7 +13,7 @@ import java.util.List;
 public class MvcConfiguration implements WebMvcConfigurer {
 
     // Pattern 추가로 검사할 영역을 지정할 수 있습니다.
-    private final List<String> pattern = new ArrayList<>(Arrays.asList("/mypage/**"));
+    private final List<String> pattern = new ArrayList<>(Arrays.asList("/mypage/**", "/reserve/**", "/api/seat/**"));
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

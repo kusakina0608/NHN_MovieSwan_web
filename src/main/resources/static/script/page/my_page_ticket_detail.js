@@ -1,7 +1,7 @@
 'use strict';
 
-// const onButtonClick = function(rid) {
-//     location.href = "/mypage/ticket/delete?rid=" + rid;
+// const onButtonClick = function(reservationId) {
+//     location.href = "/mypage/ticket/delete?reservationId=" + reservationId;
 // }
 
 (function () {
@@ -18,21 +18,21 @@
     });
 
     const scheduleAPI = {
-        getScheduleInfo: (tid) => {
-            return requestTicketAPI.get(`/api/schedule/get?tid=${tid}`);
+        getScheduleInfo: (timetableId) => {
+            return requestTicketAPI.get(`/api/schedule/get?timetableId=${timetableId}`);
         }
     }
 
     const movieAPI = {
-        getMovieInfo: (mid) => {
-            return requestTicketAPI.get(`/movie/getMovieInfo?mid=${mid}`);
+        getMovieInfo: (movieId) => {
+            return requestTicketAPI.get(`/movie/getMovieInfo?movieId=${movieId}`);
         }
     }
 
-    const tid = document.querySelector("#tid");
+    const timetableId = document.querySelector("#timetableId");
 
-    if (!!tid) {
-        scheduleAPI.getScheduleInfo(tid.innerText).then(res => {
+    if (!!timetableId) {
+        scheduleAPI.getScheduleInfo(timetableId.innerText).then(res => {
             const date = new Date(res.data.time);
 
             var yy = date.getFullYear();
@@ -47,12 +47,12 @@
             const ticketMovieTime = document.querySelector("#ticket_movie_time");
             ticketMovieTime.innerText = [yy, "년 ", MM, "월 ", dd, "일, ", HH, ':', mm].join('');
 
-            movieAPI.getMovieInfo(res.data.mid).then(res => {
+            movieAPI.getMovieInfo(res.data.movieId).then(res => {
                 const ticketPoster = document.querySelector("#ticket_movie_poster");
                 const ticketMovieId = document.querySelector("#ticket_movie_id");
 
                 ticketPoster.src = res.data.poster;
-                ticketMovieId.innerText = res.data.mid;
+                ticketMovieId.innerText = res.data.movieId;
             })
         })
     }

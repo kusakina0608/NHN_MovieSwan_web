@@ -14,9 +14,8 @@ import java.time.LocalDateTime;
 public class ReviewDTO {
     private String reviewId;
     private String movieId;
-    private String userId;
+    private String memberId;
     private int rating;
-    private String reviewContent;
-    private LocalDateTime regdate;
-    private LocalDateTime moddate;
+    private String content;
+    private LocalDateTime regDate, modDate;
 }
