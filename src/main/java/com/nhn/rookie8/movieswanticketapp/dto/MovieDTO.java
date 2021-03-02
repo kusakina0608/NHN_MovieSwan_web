@@ -7,23 +7,24 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieDTO {
-    private String mid;
-    private String name;
-    private String poster;
+    private String movieId;
+    private String title;
     private String director;
     private String actor;
     private int runtime;
     private String genre;
     private String story;
-
+    private String poster;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startdate;
+    private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate enddate;
+    private LocalDate endDate;
+    private LocalDateTime regDate, modDate;
 }

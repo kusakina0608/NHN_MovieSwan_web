@@ -106,19 +106,19 @@ main > div {
     border: 2px solid black;
 }
 
-.myreview .grade {
+.myreview .rating {
     flex: none;
     float: right;
     
     padding: 20px 20px 20px;
 }
 
-.myreview .grade:not(:checked) > input {
+.myreview .rating:not(:checked) > input {
     display: none;
     clip:rect(0,0,0,0);
 }
 
-.myreview .grade:not(:checked) > label {
+.myreview .rating:not(:checked) > label {
     float:right;
     overflow:hidden;
     white-space:nowrap;
@@ -126,19 +126,19 @@ main > div {
     color: black;
 }
 
-.myreview .grade:not(:checked) > .selected {
+.myreview .rating:not(:checked) > .selected {
     display: none;
 }
 
-.myreview .grade > input:checked ~ label:not(.selected) {
+.myreview .rating > input:checked ~ label:not(.selected) {
     display: none;
 }
 
-.myreview .grade > input:checked ~ .selected {
+.myreview .rating > input:checked ~ .selected {
     display: inline;
 }
 
-.myreview .grade > label:active {
+.myreview .rating > label:active {
     position:relative;
     top:2px;
     left:2px;
@@ -186,7 +186,7 @@ main > div {
     padding: 0 15px 0;
 }
 
-.myreview-view .grade {
+.myreview-view .rating {
     display: flex;
     justify-content: center;
     align-items: center;

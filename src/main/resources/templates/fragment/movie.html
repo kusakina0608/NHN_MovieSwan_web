@@ -4,15 +4,15 @@
 
 <div class="movie">
     <!---영화 포스터 및 제목--->
-    <a class="movieLink" th:href="@{/movie/detail(mid=${dto.mid})}">
+    <a class="movieLink" th:href="@{/movie/detail(movieId=${dto.movieId})}">
         <img class="poster" th:src="|/api/movie/display?fileName=${dto.poster}|">
-        <div class="title">[[${dto.name}]]</div>
+        <div class="title">[[${dto.title}]]</div>
         <div class="story">[[${dto.story}]]</div>
     </a>
 
     <!---찜 버튼--->
     <button th:class="favorite">
-        <input type="hidden" name="mid" th:value="${dto.mid}">
+        <input type="hidden" name="movieId" th:value="${dto.movieId}">
         <span class="material-icons">favorite_border</span>
     </button>
 
@@ -20,15 +20,15 @@
     <div class="movieDescription">
         <div>
             <span class="director">감독 : [[${dto.director}]]</span>
-            <span class="grade">
-                <input type="hidden" name="mid" th:value="${dto.mid}">
+            <span class="rating">
+                <input type="hidden" name="movieId" th:value="${dto.movieId}">
                 <span class="material-icons star">star_rate</span>
-                <span class="grade-num"></span>
+                <span class="rating-num"></span>
             </span>
         </div>
         <div>
             <span class="actor">주연 : [[${dto.actor}]]</span>
-            <button class="btn" th:onclick=" 'location.href = \'' + @{/booking} + '\' '">
+            <button class="btn" th:onclick=" 'location.href = \'' + @{/reserve} + '\' '">
                 <span class="material-icons booking">local_activity</span>
                 <span>예매</span>
             </button>

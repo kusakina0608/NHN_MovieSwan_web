@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>결제 페이지</title>
-    <link th:href="@{/css/page/booking_result.css}" rel="stylesheet" />
+    <link th:href="@{/css/page/reservation_result.css}" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
 </head>
@@ -27,12 +27,12 @@
         <section class="result-container">
             <section class="inner-container">
                 <section class="result-info">
-                    <img class="movie-poster" th:src="|/api/movie/display?fileName=${poster}|" alt="영화 포스터">
+                    <img class="movie-poster" th:src="|/api/movie/display?fileName=${movieDTO.getPoster()}|" alt="영화 포스터">
                     <div>
-                        <h2>[[${title}]]</h2>
+                        <h2>[[${movieDTO.getTitle()}]]</h2>
                         <br>
                         <h2>[[${theater}]]</h2>
-                        <div>[[${date}]][[${time}]]</div>
+                        <div>[[${timetableDTO.getScheduleString()}]]</div>
                         <br>
                         <div>선택 좌석: [[${seats}]]</div>
                     </div>
@@ -47,13 +47,13 @@
     </main>
 </th:block>
 <script>
-    var movie_title = "[[${title}]]";
-    var movie_date = "[[${date}]]";
-    var movie_time = "[[${time}]]";
+    var movie_title = "[[${movieDTO.getTitle()}]]";
+    var movie_date = "[[${timetableDTO.getScheduleString()}]]";
+    var movie_time = "[[${timetableDTO.getScheduleString()}]]";
     var movie_theater = "[[${theater}]]";
     var user_name = "[[${user}]]";
     var user_url = "[[${dooray_url}]]";
 </script>
-<script th:src="@{/script/page/booking_result.js}"></script>
+<script th:src="@{/script/page/reservation_result.js}"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@
 })();
 
 // const logoutOnClick = function () {
-//     localStorage.setItem("uid", "null");
+//     localStorage.setItem("memberId", "null");
 //     localStorage.setItem("name", "null");
 
 // //    (function (name) {

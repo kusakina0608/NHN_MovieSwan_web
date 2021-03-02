@@ -6,40 +6,41 @@ import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 
 public interface ReservationService {
-    String createReservationId();
-    String register(ReservationDTO dto);
+    ReservationDTO reserve(ReservationDTO dto);
     void delete(ReservationDTO dto);
 
-    PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String uid);
+    PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String memberId);
     ReservationDTO getReservation(String rid);
 
     String getReservationInfo(ReservationDTO reservation);
     String getReservationDetail(ReservationDTO reservation);
 
-    default Reservation dtoToEntity(ReservationDTO dto){
+    default Reservation dtoToEntity(ReservationDTO reservationDTO){
         return Reservation.builder()
-                .rid(dto.getRid())
-                .tid(dto.getTid())
-                .uid(dto.getUid())
-                .childNum(dto.getChildNum())
-                .adultNum(dto.getAdultNum())
-                .oldNum(dto.getOldNum())
-                .totalNum(dto.getTotalNum())
-                .price(dto.getPrice())
+                .reservationId(reservationDTO.getReservationId())
+                .timetableId(reservationDTO.getTimetableId())
+                .memberId(reservationDTO.getMemberId())
+                .youngNum(reservationDTO.getYoungNum())
+                .adultNum(reservationDTO.getAdultNum())
+                .elderNum(reservationDTO.getElderNum())
+                .totalNum(reservationDTO.getTotalNum())
+                .price(reservationDTO.getPrice())
                 .build();
     }
 
-    default ReservationDTO entityToDto(Reservation entity){
+    default ReservationDTO entityToDto(Reservation reservation){
         return ReservationDTO.builder()
-                .rid(entity.getRid())
-                .tid(entity.getTid())
-                .uid(entity.getUid())
-                .childNum(entity.getChildNum())
-                .adultNum(entity.getAdultNum())
-                .oldNum(entity.getOldNum())
-                .totalNum(entity.getTotalNum())
-                .price(entity.getPrice())
-                .regDate(entity.getRegDate())
+                .reservationId(reservation.getReservationId())
+                .timetableId(reservation.getTimetableId())
+                .memberId(reservation.getMemberId())
+                .youngNum(reservation.getYoungNum())
+                .adultNum(reservation.getAdultNum())
+                .elderNum(reservation.getElderNum())
+                .totalNum(reservation.getTotalNum())
+                .price(reservation.getPrice())
+                .payDate(reservation.getRegDate())
+                .regDate(reservation.getRegDate())
+                .modDate(reservation.getModDate())
                 .build();
     }
 }

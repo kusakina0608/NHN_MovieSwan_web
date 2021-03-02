@@ -1,7 +1,7 @@
 'use strict';
 
 function trClicked(value) {
-    location.href = "/mypage/ticket/detail?rid=" + value;
+    location.href = "/mypage/ticket/detail?reservationId=" + value;
 }
 
 (function () {
@@ -15,26 +15,26 @@ function trClicked(value) {
     });
 
     const scheduleAPI = {
-        getMid: (tid) => {
-            return requestTicketAPI.get(`/api/schedule/get?tid=${tid}`);
+        getMovieId: (timetableId) => {
+            return requestTicketAPI.get(`/api/schedule/get?timetableId=${timetableId}`);
         }
     }
 
     const movieAPI = {
-        getMovieInfo: (mid) => {
-            return requestTicketAPI.get(`/api/movie/getMovieInfo?mid=${mid}`);
+        getMovieInfo: (movieId) => {
+            return requestTicketAPI.get(`/api/movie/getMovieInfo?movieId=${movieId}`);
         }
     }
 
     const tableRow = document.querySelectorAll("tr");
 
     tableRow.forEach(tr => {
-        const row = tr.querySelector(".tid");
+        const row = tr.querySelector(".timetableId");
         if (!!row) {
-            const tid = row.innerText;
+            const timetableId = row.innerText;
             const td = tr.querySelectorAll("td");
 
-            scheduleAPI.getMid(tid).then(res => {
+            scheduleAPI.getMovieId(timetableId).then(res => {
                 const date = new Date(res.data.time);
                 var MM = date.getMonth() + 1;
                 var dd = date.getDate();
@@ -48,7 +48,7 @@ function trClicked(value) {
 
                 td[2].innerText = [MM, '/', dd, ' ', HH, ':', mm].join('');
 
-                movieAPI.getMovieInfo(res.data.mid).then(res => {
+                movieAPI.getMovieInfo(res.data.movieId).then(res => {
                     td[1].innerText = res.data.name;
                 })
             })

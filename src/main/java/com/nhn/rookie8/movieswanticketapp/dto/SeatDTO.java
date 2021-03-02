@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class SeatDTO {
-    private String tid;
-    private String sid;
-    private String uid;
-    private String rid;
-    private LocalDateTime regDate;
+    private String timetableId;
+    private String seatCode;
+    private String memberId;
+    private String reservationId;
+    private LocalDateTime regDate, modDate;
 }

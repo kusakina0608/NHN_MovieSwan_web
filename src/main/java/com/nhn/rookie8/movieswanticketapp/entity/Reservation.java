@@ -16,26 +16,26 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@EntityListeners(value = {AuditingEntityListener.class})
-public class Reservation {
+@EntityListeners(value={AuditingEntityListener.class})
+public class Reservation extends BaseEntity{
     @Id
-    @Column(name="rid", length = 20, nullable = false)
-    private String rid;
-    @Column(name="tid", length = 15, nullable = false)
-    private String tid;
-    @Column(name="uid", length = 21, nullable = false)
-    private String uid;
-    @Column(name="childnum", nullable = false)
-    private int childNum;
-    @Column(name="adultnum", nullable = false)
+    @Column(name="reservation_id", length=20, nullable=false)
+    private String reservationId;
+    @Column(name="timetable_id", length=15, nullable=false)
+    private String timetableId;
+    @Column(name="member_id", length=21, nullable=false)
+    private String memberId;
+    @Column(name="young_num", nullable=false)
+    private int youngNum;
+    @Column(name="adult_num", nullable=false)
     private int adultNum;
-    @Column(name="oldnum", nullable = false)
-    private int oldNum;
-    @Column(name="totalnum", nullable = false)
+    @Column(name="elder_num", nullable=false)
+    private int elderNum;
+    @Column(name="total_num", nullable=false)
     private int totalNum;
-    @Column(name="price", nullable = false)
+    @Column(name="price", nullable=false)
     private int price;
     @CreatedDate
-    @Column(name="regdate", updatable = false)
-    private LocalDateTime regDate;
+    @Column(name="pay_date", updatable=false)
+    private LocalDateTime payDate;
 }

@@ -28,36 +28,36 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public String register(MovieDTO movieDTO) {
-        String mid = movieDTO.getMid();
+        String movieId = movieDTO.getMovieId();
 
         Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         QMovie qMovie = QMovie.movie;
-        BooleanExpression expression = qMovie.mid.startsWith(mid);
+        BooleanExpression expression = qMovie.movieId.startsWith(movieId);
         booleanBuilder.and(expression);
 
         long moviesWithSameCode = repository.findAll(booleanBuilder, pageable).stream().count() + 1;
-        mid += String.format("%03d", moviesWithSameCode);
+        movieId += String.format("%03d", moviesWithSameCode);
 
-        movieDTO.setMid(mid);
+        movieDTO.setMovieId(movieId);
 
         Movie movie = dtoToEntity(movieDTO);
 
         repository.save(movie);
 
-        return movie.getMid();
+        return movie.getMovieId();
     }
 
     @Override
     public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO, boolean current) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("startdate").descending());
+        Pageable pageable = requestDTO.getPageable(Sort.by("startDate").descending());
         BooleanBuilder booleanBuilder = current ? getReleaseMovies() : getExpectedMovies();
         QMovie qMovie = QMovie.movie;
         String keyword = requestDTO.getKeyword();
 
         if(keyword != null) {
-            BooleanExpression expression = qMovie.name.contains(keyword);
+            BooleanExpression expression = qMovie.title.contains(keyword);
             booleanBuilder.and(expression);
         }
 
@@ -69,16 +69,16 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public PageResultDTO<MovieDTO, Movie> getListByMid(PageRequestDTO requestDTO, List<String> midList) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("startdate").descending());
+    public PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList) {
+        Pageable pageable = requestDTO.getPageable(Sort.by("startDate").descending());
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
-        if(midList.isEmpty()) {
-            BooleanExpression expression = qMovie.mid.eq("");
+        if(movieIdList.isEmpty()) {
+            BooleanExpression expression = qMovie.movieId.eq("");
             booleanBuilder.and(expression);
         }
-        for(String mid : midList) {
-            BooleanExpression expression = qMovie.mid.eq(mid);
+        for(String movieId : movieIdList) {
+            BooleanExpression expression = qMovie.movieId.eq(movieId);
             booleanBuilder.or(expression);
         }
 
@@ -113,8 +113,8 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public MovieDTO read(String mid) {
-        Optional<Movie> result = repository.findById(mid);
+    public MovieDTO getMovie(String movieId) {
+        Optional<Movie> result = repository.findById(movieId);
 
         return result.isPresent() ? entityToDTO(result.get()) : null;
     }
@@ -122,9 +122,9 @@ public class MovieServiceImpl implements MovieService{
     private BooleanBuilder getReleaseMovies() {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
-        BooleanExpression expression1 = qMovie.startdate.before(LocalDate.now());
+        BooleanExpression expression1 = qMovie.startDate.before(LocalDate.now());
         booleanBuilder.and(expression1);
-        BooleanExpression expression2 = qMovie.enddate.after(LocalDate.now());
+        BooleanExpression expression2 = qMovie.endDate.after(LocalDate.now());
         booleanBuilder.and(expression2);
         return booleanBuilder;
     }
@@ -132,7 +132,7 @@ public class MovieServiceImpl implements MovieService{
     private BooleanBuilder getExpectedMovies() {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
-        BooleanExpression expression = qMovie.startdate.after(LocalDate.now());
+        BooleanExpression expression = qMovie.startDate.after(LocalDate.now());
         booleanBuilder.and(expression);
         return booleanBuilder;
     }

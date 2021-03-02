@@ -12,41 +12,43 @@ public interface MovieService {
 
     PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO, boolean current);
 
-    PageResultDTO<MovieDTO, Movie> getListByMid(PageRequestDTO requestDTO, List<String> midList);
+    PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList);
 
     List<MovieDTO> getAllList();
 
     List<MovieDTO> getReleaseList();
 
-    MovieDTO read(String mid);
+    MovieDTO getMovie(String movieId);
 
     default Movie dtoToEntity(MovieDTO movieDTO) {
         return Movie.builder()
-                .mid(movieDTO.getMid())
-                .name(movieDTO.getName())
+                .movieId(movieDTO.getMovieId())
+                .title(movieDTO.getTitle())
                 .poster(movieDTO.getPoster())
                 .director(movieDTO.getDirector())
                 .actor(movieDTO.getActor())
                 .genre(movieDTO.getGenre())
                 .runtime(movieDTO.getRuntime())
                 .story(movieDTO.getStory())
-                .startdate(movieDTO.getStartdate())
-                .enddate(movieDTO.getEnddate())
+                .startDate(movieDTO.getStartDate())
+                .endDate(movieDTO.getEndDate())
                 .build();
     }
 
     default MovieDTO entityToDTO(Movie movie) {
         return MovieDTO.builder()
-                .mid(movie.getMid())
-                .name(movie.getName())
+                .movieId(movie.getMovieId())
+                .title(movie.getTitle())
                 .poster(movie.getPoster())
                 .director(movie.getDirector())
                 .actor(movie.getActor())
                 .genre(movie.getGenre())
                 .runtime(movie.getRuntime())
                 .story(movie.getStory())
-                .startdate(movie.getStartdate())
-                .enddate(movie.getEnddate())
+                .startDate(movie.getStartDate())
+                .endDate(movie.getEndDate())
+                .regDate(movie.getRegDate())
+                .modDate(movie.getModDate())
                 .build();
     }
 }

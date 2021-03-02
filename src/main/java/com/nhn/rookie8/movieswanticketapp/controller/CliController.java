@@ -18,9 +18,9 @@ public class CliController {
     private final ReservationService service;
 
     @ShellMethod("예매내역 조회")
-    public String rsvs(@ShellOption String uid) {
+    public String rsvs(@ShellOption String memberId) {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
-        PageResultDTO<ReservationDTO, Reservation> result = service.getMyReservationList(pageRequestDTO, uid);
+        PageResultDTO<ReservationDTO, Reservation> result = service.getMyReservationList(pageRequestDTO, memberId);
         StringBuilder message = new StringBuilder();
 
         if(result.getDtoList().isEmpty())
@@ -34,12 +34,12 @@ public class CliController {
     }
 
     @ShellMethod("예매내역 상세조회")
-    public String dtl(@ShellOption String uid, @ShellOption String rid) {
+    public String dtl(@ShellOption String memberId, @ShellOption String rid) {
         ReservationDTO reservationDTO = service.getReservation(rid);
 
-        if(reservationDTO == null || !reservationDTO.getUid().equals(uid)) {
+        if(reservationDTO == null || !reservationDTO.getMemberId().equals(memberId)) {
             log.warn("reservation : {}", reservationDTO);
-            log.warn("uid : {}", uid);
+            log.warn("memberId : {}", memberId);
             return "잘못된 예약 번호입니다.";
         }
 

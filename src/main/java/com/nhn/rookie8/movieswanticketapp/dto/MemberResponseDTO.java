@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovieScheduleInputDTO {
-    private String mid;
-    private String date;
-    private String time;
+@Data
+public class MemberResponseDTO {
+    private Integer httpCode;
+    private boolean error;
+    private String message;
+    private Object content;
 }

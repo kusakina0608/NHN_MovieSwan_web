@@ -10,15 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @Log4j2
@@ -41,8 +38,8 @@ public class PageController {
     public String mainPage(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
 
-        if (!(session == null || session.getAttribute("uid") == null)) {
-            model.addAttribute("uid", session.getAttribute("uid"));
+        if (!(session == null || session.getAttribute("memberId") == null)) {
+            model.addAttribute("memberId", session.getAttribute("memberId"));
             model.addAttribute("name", session.getAttribute("name"));
         }
         return "page/main_page";
@@ -65,8 +62,8 @@ public class PageController {
         PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, true);
 
         HttpSession session = httpServletRequest.getSession(false);
-        if (!(session == null || session.getAttribute("uid") == null))
-            model.addAttribute("uid", session.getAttribute("uid"));
+        if (!(session == null || session.getAttribute("memberId") == null))
+            model.addAttribute("memberId", session.getAttribute("memberId"));
 
         model.addAttribute("result", resultDTO);
         model.addAttribute("current", true);
@@ -78,8 +75,8 @@ public class PageController {
         PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, false);
 
         HttpSession session = httpServletRequest.getSession(false);
-        if (!(session == null || session.getAttribute("uid") == null))
-            model.addAttribute("uid", session.getAttribute("uid"));
+        if (!(session == null || session.getAttribute("memberId") == null))
+            model.addAttribute("memberId", session.getAttribute("memberId"));
 
         model.addAttribute("result", resultDTO);
         model.addAttribute("current", false);
@@ -87,123 +84,22 @@ public class PageController {
     }
 
     @GetMapping("/movie/detail")
-    public String movieDetail(String mid, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        MovieDTO movieDTO = movieService.read(mid);
+    public String movieDetail(PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, String movieId, Model model) {
+        MovieDTO movieDTO = movieService.getMovie(movieId);
 
         HttpSession session = httpServletRequest.getSession(false);
-        String uid;
-        if (!(session == null || session.getAttribute("uid") == null)) {
-            model.addAttribute("uid", session.getAttribute("uid"));
-            uid = session.getAttribute("uid").toString();
+        String memberId;
+        if (!(session == null || session.getAttribute("memberId") == null)) {
+            model.addAttribute("memberId", session.getAttribute("memberId"));
+            memberId = session.getAttribute("memberId").toString();
         }
         else
-            uid = "";
+            memberId = "";
         
         model.addAttribute("dto", movieDTO);
-        model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, mid));
-        model.addAttribute("my_review", reviewService.findMyReviewByMid(mid, uid));
+        model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, movieId));
+        model.addAttribute("my_review", reviewService.findMyReviewByMovieId(movieId, memberId));
         return "/page/movie_detail";
-    }
-
-    @GetMapping("/booking")
-    public String booking(Model model) {
-        List<MovieDTO> movieList = movieService.getReleaseList();
-        model.addAttribute("movieList", movieList);
-        return "page/booking";
-    }
-
-    @PostMapping("/booking/seat")
-    public String seat(HttpServletRequest httpServletRequest, @RequestParam("mid") String mid, @RequestParam("date") String date, @RequestParam("time") String time, @RequestParam("tid") String tid, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null) {
-            return "redirect:/user/login";
-        }
-        log.debug("mid: {}", mid);
-        log.debug("date: {}", date);
-        log.debug("time: {}", time);
-        log.debug("tid: {}", tid);
-
-        MovieDTO movieDTO = movieService.read(mid);
-        model.addAttribute("title", movieDTO.getName());
-        model.addAttribute("poster", movieDTO.getPoster());
-        model.addAttribute("theater", "무비스완 판교점");
-        model.addAttribute("tid", tid);
-        model.addAttribute("date", date);
-        model.addAttribute("time", time);
-        if(Integer.parseInt(time.split(":")[0]) < 9){
-            model.addAttribute("discount", "조조 할인(오전 09:00 이전)");
-        }
-        else{
-            model.addAttribute("discount", "없음");
-        }
-        model.addAttribute("seatlist", seatService.getReservedSeatList(tid));
-        return "page/seat";
-    }
-
-    @PostMapping("/booking/pay")
-    public String pay(HttpServletRequest httpServletRequest, @RequestParam Map<String,String> params, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null) {
-            return "redirect:/user/login";
-        }
-        params.keySet().forEach(key -> model.addAttribute(key, params.get(key)));
-        return "page/pay";
-    }
-
-    @PostMapping("/booking/result")
-    public String bookingResult(HttpServletRequest httpServletRequest, @RequestParam Map<String,String> params, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null) {
-            return "redirect:/user/login";
-        }
-        params.keySet().forEach(key -> {
-            model.addAttribute(key, params.get(key));
-            log.debug("{}: {}", key, params.get(key));
-        });
-        String uid = (String)session.getAttribute("uid");
-        UserDTO userDTO = userService.getUserInfoById(uid);
-        model.addAttribute("user", userDTO.getName());
-        model.addAttribute("dooray_url", userDTO.getUrl());
-
-        String randomId = reservationService.createReservationId();
-        log.debug("생성된 랜덤 아이디: {}", randomId);
-        ReservationDTO reservationDTO = ReservationDTO.builder()
-                .rid(randomId)
-                .tid(params.get("tid"))
-                .uid((String) session.getAttribute("uid"))
-                .childNum(Integer.parseInt(params.get("childnum")))
-                .adultNum(Integer.parseInt(params.get("adultnum")))
-                .oldNum(Integer.parseInt(params.get("oldnum")))
-                .totalNum(Integer.parseInt(params.get("totalnum")))
-                .price(Integer.parseInt(params.get("price")))
-                .build();
-
-        reservationService.register(reservationDTO);
-
-        List<SeatDTO> dtoList= new ArrayList<>();
-        String[] seatList = params.get("seats").split(",");
-        for (String seat : seatList) {
-            dtoList.add(SeatDTO.builder()
-                    .tid(params.get("tid"))
-                    .sid(seat)
-                    .rid(randomId)
-                    .uid((String) session.getAttribute("uid"))
-                    .build());
-        }
-        seatService.modify(dtoList, randomId);
-
-        return "page/booking_result";
-    }
-
-    @GetMapping("/mypage/question/register")
-    public String questionPage(HttpServletRequest httpServletRequest, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("uid") == null) {
-            return "redirect:/user/login";
-        } else {
-            model.addAttribute("uid", session.getAttribute("uid"));
-            return "page/question_page";
-        }
     }
 
     // 여기부터 전부 마이페이지 입니다...
@@ -215,13 +111,13 @@ public class PageController {
     @GetMapping("/mypage/userinfo")
     public String myPageUserinfo(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        UserDTO userDTO = userService.getUserInfoById((String) session.getAttribute("uid"));
+        MemberDTO memberDTO = userService.getUserInfoById((String) session.getAttribute("memberId"));
 
-        model.addAttribute("regDate", userDTO.getRegDate().toString().split("T")[0]);
-        model.addAttribute("uid", userDTO.getUid());
-        model.addAttribute("name", userDTO.getName());
-        model.addAttribute("email", userDTO.getEmail());
-        model.addAttribute("url", userDTO.getUrl());
+        model.addAttribute("regDate", memberDTO.getRegDate().toString().split("T")[0]);
+        model.addAttribute("memberId", memberDTO.getMemberId());
+        model.addAttribute("name", memberDTO.getName());
+        model.addAttribute("email", memberDTO.getEmail());
+        model.addAttribute("url", memberDTO.getUrl());
         return "page/my_page_userinfo";
     }
 
@@ -229,25 +125,25 @@ public class PageController {
     public String myTicketPage(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
 
-        model.addAttribute("result", reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("uid")));
+        model.addAttribute("result", reservationService.getMyReservationList(pageRequestDTO, (String) session.getAttribute("memberId")));
         return "page/my_page_ticket";
     }
 
     @GetMapping("/mypage/ticket/detail")
-    public String myTicketDetailPage(@RequestParam String rid, Model model) {
-        List<String> result = seatService.getMySeatList(rid);
+    public String myTicketDetailPage(@RequestParam String reservationId, Model model) {
+        List<String> result = seatService.getMySeatList(reservationId);
         StringBuilder seat = new StringBuilder();
         result.forEach(s -> seat.append(s).append(' '));
 
         model.addAttribute("seat", seat.toString());
-        model.addAttribute("result", reservationService.getReservation(rid));
+        model.addAttribute("result", reservationService.getReservation(reservationId));
         return "page/my_page_ticket_detail";
     }
 
     @GetMapping("/mypage/ticket/delete")
     public String myPageTicketDelete(@RequestParam String rid) {
         ReservationDTO reservationDTO = ReservationDTO.builder()
-                .rid(rid)
+                .reservationId(rid)
                 .build();
         reservationService.delete(reservationDTO);
         return "redirect:/mypage/ticket";
@@ -256,9 +152,9 @@ public class PageController {
     @GetMapping("/mypage/movie")
     public String myPageMyMovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        String uid = session.getAttribute("uid").toString();
-        List<String> midList = favoriteService.getList(uid);
-        PageResultDTO<MovieDTO, Movie> result = movieService.getListByMid(pageRequestDTO, midList);
+        String memberId = session.getAttribute("memberId").toString();
+        List<String> movieIdList = favoriteService.getList(memberId);
+        PageResultDTO<MovieDTO, Movie> result = movieService.getListByMovieId(pageRequestDTO, movieIdList);
 
         model.addAttribute("result", result);
         return "page/my_page_mymovie";
@@ -267,8 +163,8 @@ public class PageController {
     @GetMapping("/mypage/review")
     public String myPageMyReview(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        String uid = session.getAttribute("uid").toString();
-        PageResultDTO<ReviewDTO, Review> resultDTO = reviewService.findMyReviews(pageRequestDTO, uid);
+        String memberId = session.getAttribute("memberId").toString();
+        PageResultDTO<ReviewDTO, Review> resultDTO = reviewService.findMyReviews(pageRequestDTO, memberId);
 
         model.addAttribute("result", resultDTO);
         return "page/my_page_myreview";
@@ -277,15 +173,20 @@ public class PageController {
     @GetMapping("/mypage/question")
     public String myPageQuestion(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        String uid = (String) session.getAttribute("uid");
+        String memberId = (String) session.getAttribute("memberId");
 
-        model.addAttribute("result", questionService.getMyQuestionList(pageRequestDTO, uid));
+        model.addAttribute("result", questionService.getMyQuestionList(pageRequestDTO, memberId));
         return "page/my_page_question";
     }
 
+    @GetMapping("/mypage/question/register")
+    public String questionPage(HttpServletRequest httpServletRequest, Model model) {
+        return "page/question_page";
+    }
+
     @GetMapping("/mypage/question/post")
-    public String myPageReadQuestion(@RequestParam("qid") Integer qid, Model model) {
-        model.addAttribute("dto", questionService.readQuestion(qid));
+    public String myPageReadQuestion(@RequestParam("questionId") Integer questionId, Model model) {
+        model.addAttribute("dto", questionService.readQuestion(questionId));
         return "page/my_page_read_question";
     }
 }

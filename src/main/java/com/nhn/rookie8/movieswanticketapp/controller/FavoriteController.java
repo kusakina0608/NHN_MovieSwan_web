@@ -22,7 +22,7 @@ public class FavoriteController {
     }
 
     @GetMapping("/isFavorite")
-    public boolean isFavorite(String uid, String mid) {
-        return service.isFavorite(uid, mid);
+    public boolean isFavorite(String memberId, String movieId) {
+        return service.isFavorite(memberId, movieId);
     }
 }

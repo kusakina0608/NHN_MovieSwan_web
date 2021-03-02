@@ -11,19 +11,19 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FavoriteId implements Serializable {
-    private String uid;
-    private String mid;
+    private String movieId;
+    private String memberId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FavoriteId favoriteId = (FavoriteId) o;
-        return Objects.equals(uid, favoriteId.uid) && Objects.equals(mid, favoriteId.mid);
+        return Objects.equals(movieId, favoriteId.movieId) && Objects.equals(memberId, favoriteId.memberId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uid, mid);
+        return Objects.hash(movieId, memberId);
     }
 }

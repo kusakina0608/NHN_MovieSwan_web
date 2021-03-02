@@ -1,7 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.UserDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.UserResponseDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/user")
 @Log4j2
 @RequiredArgsConstructor
-public class UserController {
+public class MemberController {
 
     @Value("${accountURL}")
     private String accountUrl;
@@ -34,25 +34,25 @@ public class UserController {
 
     @PostMapping("/register_process")
     public String registerProcess(HttpServletRequest request){
-        String uid = request.getParameter("uid");
+        String memberId = request.getParameter("memberId");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String url = request.getParameter("url");
 
-        UserDTO userDTO = UserDTO.builder()
-                .uid(uid)
+        MemberDTO memberDTO = MemberDTO.builder()
+                .memberId(memberId)
                 .password(password)
                 .name(name)
                 .email(email)
                 .url(url)
                 .build();
 
-        log.info(userDTO.toString());
+        log.info(memberDTO.toString());
         RestTemplate template = new RestTemplate();
-        UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/register",userDTO, UserResponseDTO.class);
+        MemberResponseDTO memberResponseDTO = template.postForObject(accountUrl+"/api/register", memberDTO, MemberResponseDTO.class);
 
-        log.info(userResponseDTO);
+        log.info(memberResponseDTO);
         return "page/main_page";
     }
 
@@ -65,25 +65,24 @@ public class UserController {
     @PostMapping("/login_process")
     public String loginProcess(HttpServletRequest request){
 
-        String uid = request.getParameter("uid");
+        String memberId = request.getParameter("memberId");
         String password = request.getParameter("password");
 
-        UserDTO userDTO = UserDTO.builder()
-                .uid(uid)
+        MemberDTO memberDTO = MemberDTO.builder()
+                .memberId(memberId)
                 .password(password)
                 .build();
 
         RestTemplate template = new RestTemplate();
+        log.info("{}/api/login", accountUrl);
+        log.info("memberDTO: {}", memberDTO);
+        MemberResponseDTO memberResponseDTO = template.postForObject(accountUrl+"/api/login", memberDTO, MemberResponseDTO.class);
 
-        UserResponseDTO userResponseDTO = template.postForObject(accountUrl+"/api/login", userDTO, UserResponseDTO.class);
-
-
-
-        if(userResponseDTO == null || userResponseDTO.isError()){
+        if(memberResponseDTO == null || memberResponseDTO.isError()){
             return "redirect:/user/login?err=1";
         }
 
-        UserResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", userDTO, UserResponseDTO.class);
+        MemberResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", memberDTO, MemberResponseDTO.class);
 
         if (userInfo == null) {
             return "redirect:/user/login?err=1";
@@ -91,7 +90,7 @@ public class UserController {
 
         HttpSession session = request.getSession();
         Map<String,String> content = (HashMap<String,String>) userInfo.getContent();
-        session.setAttribute("uid", uid);
+        session.setAttribute("memberId", memberId);
         session.setAttribute("name", content.get("name"));
 
         return "redirect:/main";

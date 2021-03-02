@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class ReservationDTO {
-    private String rid;
-    private String tid;
-    private String uid;
-    private int childNum;
+    private String reservationId;
+    private String timetableId;
+    private String memberId;
+    private int youngNum;
     private int adultNum;
-    private int oldNum;
+    private int elderNum;
     private int totalNum;
     private int price;
-    private LocalDateTime regDate;
+    private LocalDateTime payDate, regDate, modDate;
 }

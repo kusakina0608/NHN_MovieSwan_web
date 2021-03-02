@@ -22,8 +22,8 @@
 
     // 상영시간표 API에 요청
     const scheduleAPI = {
-        getSchedules: (mid) => {
-            return requestTicketAPI.get(`/api/schedule/getall?mid=${mid}`);
+        getSchedules: (movieId) => {
+            return requestTicketAPI.get(`/api/schedule/getall?movieId=${movieId}`);
         }
     }
 
@@ -64,7 +64,7 @@
                     let newLink = document.createElement("a");
                     newLink.appendChild(newListElement);
                     newLink.classList.add("list-element-link");
-                    newLink.href = "/booking/";
+                    newLink.href = "/reserve/";
                     timeList.appendChild(newLink);
                 })
                 // 추가된 시간 요소들을 갱신
@@ -99,16 +99,18 @@
                 timeList.innerHTML = '';
                 
                 // API로부터 전달받은 영화의 상영시간표를 저장
-                movieSchedule = res.data[0];
+                movieSchedule = res.data.scheduleData[0];
+                console.log(movieSchedule);
                 // 일자를 추가
                 for(var key in movieSchedule){
+                    console.log(key);
                     let newListElement = document.createElement("li");
                     newListElement.classList.add("list-element");
                     newListElement.innerHTML = key;
                     let newLink = document.createElement("a");
                     newLink.appendChild(newListElement);
                     newLink.classList.add("list-element-link");
-                    newLink.href = "/booking/";
+                    newLink.href = "/reserve/";
                     dayList.appendChild(newLink);
                 }
                 // 추가된 일자 요소들을 갱신
@@ -130,7 +132,7 @@
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
-        form.setAttribute("action", "/booking/seat");
+        form.setAttribute("action", "/reserve/seat");
         
         let selectedMovie = movieList.querySelector(".selected");
         let selectedDay = dayList.querySelector(".selected");
@@ -139,7 +141,7 @@
         if(selectedMovie && selectedDay && selectedTime){
             let movieInput = document.createElement("input");
             movieInput.setAttribute("type", "hidden");
-            movieInput.setAttribute("name", "mid");
+            movieInput.setAttribute("name", "movieId");
             movieInput.setAttribute("value", selectedMovie.querySelector("div").innerHTML);
             form.appendChild(movieInput);
 
@@ -157,7 +159,7 @@
 
             let tidInput = document.createElement("input");
             tidInput.setAttribute("type", "hidden");
-            tidInput.setAttribute("name", "tid");
+            tidInput.setAttribute("name", "timetableId");
             tidInput.setAttribute("value", selectedTime.children[0].innerText);
             form.appendChild(tidInput);
 

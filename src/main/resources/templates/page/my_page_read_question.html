@@ -12,7 +12,7 @@
         <questionform id="question_contents">
             <formgroup class="form_group">
                 <formlabel class="form_label">작성자 :</formlabel>
-                <input type="text" class="form_control" name="uid" th:value="${dto.uid}" disabled>
+                <input type="text" class="form_control" name="memberId" th:value="${dto.memberId}" disabled>
             </formgroup>
             <formgroup class="form_group">
                 <formlabel class="form_label">제목 :</formlabel>
@@ -20,7 +20,7 @@
             </formgroup>
             <formgroup class="form_group">
                 <formlabel class="form_label">작성 시간 :</formlabel>
-                <input type="text" class="form_control" name="regdate" th:value="${#temporals.format(dto.regdate, 'yyyy/MM/dd HH:mm:ss')}" disabled>
+                <input type="text" class="form_control" name="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" disabled>
             </formgroup>
             <formgroup class="form_group">
                 <formlabel class="form_label">문의 내용 :</formlabel>

@@ -1,7 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.nhn.rookie8.movieswanticketapp.dto.UserDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.UserResponseDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,22 +21,22 @@ public class UserServiceImpl implements UserService{
     private String accountUrl;
 
     @Override
-    public UserDTO getUserInfoById(String uid) {
+    public MemberDTO getUserInfoById(String memberId) {
         try {
-            UserDTO requestDTO = UserDTO.builder()
-                    .uid(uid)
+            MemberDTO requestDTO = MemberDTO.builder()
+                    .memberId(memberId)
                     .build();
 
             RestTemplate template = new RestTemplate();
-            UserResponseDTO userInfo = template.postForObject(accountUrl + "/api/getUserInfo", requestDTO, UserResponseDTO.class);
+            MemberResponseDTO userInfo = template.postForObject(accountUrl + "/api/getUserInfo", requestDTO, MemberResponseDTO.class);
 
             if (userInfo == null)
                 throw new NullPointerException();
 
             Map<String, String> content = (HashMap<String, String>) userInfo.getContent();
 
-            return UserDTO.builder()
-                    .uid(content.get("uid"))
+            return MemberDTO.builder()
+                    .memberId(content.get("memberId"))
                     .name(content.get("name"))
                     .email(content.get("email"))
                     .url(content.get("url"))
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService{
                     .build();
         } catch (Exception e) {
             log.error(e);
-            return new UserDTO();
+            return new MemberDTO();
         }
     }
 }

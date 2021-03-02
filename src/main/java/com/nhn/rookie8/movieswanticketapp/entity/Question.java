@@ -14,23 +14,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @EntityListeners(value = {AuditingEntityListener.class})
-public class Question {
+public class Question extends BaseEntity {
     @Id
-    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer qid;
+    @Column(name = "question_id", length = 11, nullable = false)
+    private Integer questionId;
 
-    @Column(length = 21, nullable = false)
-    private String uid;
+    @Column(name = "member_id", length = 21, nullable = false)
+    private String memberId;
 
-    @Column(length = 50, nullable = false)
+    @Column(name = "title", length = 50, nullable = false)
     private String title;
 
-    @Column(length = 1500, nullable = false)
+    @Column(name = "content", length = 1500, nullable = false)
     private String content;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime regdate;
-
 }

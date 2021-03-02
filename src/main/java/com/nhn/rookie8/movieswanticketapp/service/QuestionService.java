@@ -6,28 +6,28 @@ import com.nhn.rookie8.movieswanticketapp.dto.QuestionDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Question;
 
 public interface QuestionService {
-    void registerQuestion(QuestionDTO dto);
-    QuestionDTO readQuestion(Integer qid);
-    PageResultDTO<QuestionDTO, Question> getMyQuestionList(PageRequestDTO requestDTO, String uid);
+    Integer registerQuestion(QuestionDTO dto);
+    QuestionDTO readQuestion(Integer questionId);
+    PageResultDTO<QuestionDTO, Question> getMyQuestionList(PageRequestDTO requestDTO, String memberId);
     PageResultDTO<QuestionDTO, Question> getAllQuestionList(PageRequestDTO requestDTO);
 
-    default Question dtoToEntity(QuestionDTO dto) {
+    default Question dtoToEntity(QuestionDTO questionDTO) {
         return Question.builder()
-                .qid(dto.getQid())
-                .uid(dto.getUid())
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .regdate(dto.getRegdate())
+                .questionId(questionDTO.getQuestionId())
+                .memberId(questionDTO.getMemberId())
+                .title(questionDTO.getTitle())
+                .content(questionDTO.getContent())
                 .build();
     }
 
-    default QuestionDTO entityToDTO(Question entity) {
+    default QuestionDTO entityToDTO(Question question) {
         return QuestionDTO.builder()
-                .qid(entity.getQid())
-                .uid(entity.getUid())
-                .title(entity.getTitle())
-                .content(entity.getContent())
-                .regdate(entity.getRegdate())
+                .questionId(question.getQuestionId())
+                .memberId(question.getMemberId())
+                .title(question.getTitle())
+                .content(question.getContent())
+                .regDate(question.getRegDate())
+                .modDate(question.getModDate())
                 .build();
     }
 }

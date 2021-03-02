@@ -46,7 +46,7 @@ public class MovieController {
     @PostMapping("/register")
     public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile,
                               HttpServletRequest request) throws IOException  {
-        log.info(movieDTO.getName());
+        log.info(movieDTO.getTitle());
         log.info(uploadFile.getName());
         String posterPath;
 
@@ -121,8 +121,8 @@ public class MovieController {
 
     @ResponseBody
     @GetMapping("/getMovieInfo")
-    public MovieDTO getMovieInfo(String mid) {
-        return service.read(mid);
+    public MovieDTO getMovieInfo(String movieId) {
+        return service.getMovie(movieId);
     }
 
     private String makeFolder() {
