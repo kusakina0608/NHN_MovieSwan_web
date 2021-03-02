@@ -1,4 +1,4 @@
-package com.nhn.rookie8.movieswanticketapp.interceptor;
+package com.nhn.rookie8.movieswanticketapp.configuration;
 
 import com.nhn.rookie8.movieswanticketapp.interceptor.UserAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
