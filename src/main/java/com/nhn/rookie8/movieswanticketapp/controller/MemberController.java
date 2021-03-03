@@ -32,11 +32,8 @@ public class MemberController {
     private String accountUrl;
 
     @Autowired
-    private final MemberService memberService;
+    MemberService memberService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    private final RestTemplate template = new RestTemplate();
 
     @GetMapping("/register")
     public String register(){
@@ -46,11 +43,8 @@ public class MemberController {
     @PostMapping("/register_process")
     public String registerProcess(HttpServletRequest request){
 
-        MemberRegisterDTO memberRegisterDTO = objectMapper.convertValue(request.getParameterMap(), MemberRegisterDTO.class);
+        memberService.register(request.getParameterMap());
 
-        MemberResponseDTO memberResponseDTO = template.postForObject(accountUrl+"/api/register", memberRegisterDTO, MemberResponseDTO.class);
-
-        log.info(memberResponseDTO);
         return "page/main_page";
     }
 
@@ -63,35 +57,25 @@ public class MemberController {
     @PostMapping("/login_process")
     public String loginProcess(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
 
-        //request.getParameterMap() : Map<String,String[]>
-
-        MemberAuthDTO memberAuthDTO = objectMapper.convertValue(request.getParameterMap().entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0])), MemberAuthDTO.class);
-
-        MemberResponseDTO memberResponseDTO = template.postForObject(accountUrl+"/api/auth", memberAuthDTO, MemberResponseDTO.class);
+        MemberResponseDTO memberResponseDTO = memberService.auth(request.getParameterMap());
 
         if(!memberService.checkResponse(memberResponseDTO)){
             redirectAttributes.addFlashAttribute("message","ID 또는 Password가 잘못 입력 되었습니다.");
             return "redirect:/member/login";
         }
 
-        MemberIdNameDTO memberIdNameDTO = objectMapper.convertValue(memberResponseDTO.getContent(), MemberIdNameDTO.class);
-
-
         HttpSession session = request.getSession();
-        session.setAttribute("member", objectMapper.convertValue(memberIdNameDTO, new TypeReference<Map<String,String>>() {}));
-
+        session.setAttribute("member", memberService.responseToMemberIdNameMap(memberResponseDTO));
         redirectAttributes.addFlashAttribute("member", session.getAttribute("member"));
+
         return "redirect:/main";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if(session != null) {
-            session.invalidate();
-        }
+    public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
+        HttpSession session = request.getSession(false);
+        if(session != null) {session.invalidate();}
         redirectAttributes.addFlashAttribute("member", MemberIdNameDTO.builder().build());
         return "redirect:/main";
     }
