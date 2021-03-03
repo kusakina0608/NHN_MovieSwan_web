@@ -81,16 +81,18 @@ public class MemberController {
         HttpSession session = request.getSession();
         session.setAttribute("member", objectMapper.convertValue(memberIdNameDTO, new TypeReference<Map<String,String>>() {}));
 
-
+        redirectAttributes.addFlashAttribute("member", session.getAttribute("member"));
         return "redirect:/main";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest httpServletRequest) {
+    public String logout(HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes) {
         HttpSession session = httpServletRequest.getSession(false);
         if(session != null) {
             session.invalidate();
         }
+
+        redirectAttributes.addFlashAttribute("member", MemberIdNameDTO.builder().build());
         return "redirect:/main";
     }
 
