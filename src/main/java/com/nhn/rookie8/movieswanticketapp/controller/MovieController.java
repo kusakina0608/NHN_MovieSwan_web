@@ -29,17 +29,17 @@ public class MovieController {
     private final MovieService movieService;
     private final ReviewService reviewService;
 
-    @Value("{nhn.cloud.storageUrl}")
+    @Value("${nhn.cloud.storageUrl}")
     private String storageUrl;
-    @Value("{nhn.cloud.containerName}")
+    @Value("${nhn.cloud.containerName}")
     private String containerName;
-    @Value("{nhn.cloud.authUrl}")
+    @Value("${nhn.cloud.authUrl}")
     private String authUrl;
-    @Value("{nhn.cloud.tenantId}")
+    @Value("${nhn.cloud.tenantId}")
     private String tenantId;
-    @Value("{nhn.cloud.username}")
+    @Value("${nhn.cloud.username}")
     private String username;
-    @Value("{nhn.cloud.password}")
+    @Value("${nhn.cloud.password}")
     private String password;
 
     @GetMapping({"", "/"})
