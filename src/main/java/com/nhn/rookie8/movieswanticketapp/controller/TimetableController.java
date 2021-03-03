@@ -102,14 +102,4 @@ public class TimetableController {
             return null;
         }
     }
-
-    @GetMapping("/exist")
-    public boolean isExistTimetable(@RequestParam String movieId) {
-        try {
-            return service.isExistTimetable(movieId);
-        } catch (Exception e) {
-            log.error(e);
-            return false;
-        }
-    }
 }

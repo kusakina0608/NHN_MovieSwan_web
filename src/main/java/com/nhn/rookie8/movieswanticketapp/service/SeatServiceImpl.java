@@ -46,7 +46,7 @@ public class SeatServiceImpl implements SeatService{
     public void confirmSeat(String timetableId, String memberId, String reservationId, String seats) {
         String[] seatCodes = seats.split(",");
         for (String seatCode : seatCodes) {
-            seatRepository.updateRid(reservationId, timetableId, seatCode, memberId);
+            seatRepository.updateReservationId(reservationId, timetableId, seatCode, memberId);
         }
 
     }

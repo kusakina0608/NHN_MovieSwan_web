@@ -34,8 +34,8 @@ public class ReviewServiceImpl implements ReviewService{
         Optional<Review> lastReview = repository.findAll(booleanBuilder, pageable).stream().findFirst();
         String reservationId;
         if(lastReview.isPresent()) {
-            String lastRid = lastReview.get().getReviewId();
-            int num = Integer.parseInt(lastRid.substring(lastRid.lastIndexOf('-') + 1));
+            String lastReviewId = lastReview.get().getReviewId();
+            int num = Integer.parseInt(lastReviewId.substring(lastReviewId.lastIndexOf('-') + 1));
             reservationId = movieId + "-" + String.format("%05d", num + 1);
         }
         else

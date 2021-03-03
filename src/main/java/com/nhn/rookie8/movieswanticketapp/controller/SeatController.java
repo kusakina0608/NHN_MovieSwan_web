@@ -52,11 +52,11 @@ public class SeatController {
     }
 
     @DeleteMapping("/preempt")
-    public boolean cancelSeat(HttpServletRequest request, @RequestParam String timetableId, @RequestParam String sid) {
+    public boolean cancelSeat(HttpServletRequest request, @RequestParam String timetableId, @RequestParam String seatCode) {
         MemberDTO memberDTO = memberService.getMemberInfoById((String)request.getAttribute("memberId"));
         SeatDTO seatDTO = SeatDTO.builder()
                 .timetableId(timetableId)
-                .seatCode(sid)
+                .seatCode(seatCode)
                 .memberId(memberDTO.getMemberId())
                 .reservationId(null)
                 .build();
