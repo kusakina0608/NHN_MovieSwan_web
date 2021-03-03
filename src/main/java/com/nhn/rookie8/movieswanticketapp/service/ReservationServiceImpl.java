@@ -56,14 +56,14 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationId.toString();
     }
 
-    private boolean checkExist(String rid) {
-        return repository.findById(rid).isPresent();
+    private boolean checkExist(String reservationId) {
+        return repository.findById(reservationId).isPresent();
     }
 
     @Override
     public void delete(ReservationDTO dto) {
-        String rid = dto.getReservationId();
-        repository.deleteById(rid);
+        String reservationId = dto.getReservationId();
+        repository.deleteById(reservationId);
     }
 
     @Override

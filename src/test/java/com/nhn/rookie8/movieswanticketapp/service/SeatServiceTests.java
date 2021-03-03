@@ -29,8 +29,8 @@ public class SeatServiceTests {
     private SeatService seatService = new SeatServiceImpl(seatRepository);
 
     private SeatDTO seatDTO;
-    private String tid;
-    private String rid;
+    private String timetableId;
+    private String reservationId;
     private String memberId1;
     private String sid;
     private String memberId2;
@@ -38,14 +38,14 @@ public class SeatServiceTests {
     @BeforeAll
     void beforeAllTest() {
         log.info("before all");
-        tid = "aaa20210225";
-        rid = "A924-A924-A924-A924";
+        timetableId = "aaa20210225";
+        reservationId = "A924-A924-A924-A924";
         memberId1 = "saddummy";
         memberId2 = "hyerin9177";
         sid = "A01";
         seatDTO = SeatDTO.builder()
-                .timetableId(tid)
-                .reservationId(rid)
+                .timetableId(timetableId)
+                .reservationId(reservationId)
                 .memberId(memberId1)
                 .seatCode(sid)
                 .build();
@@ -68,7 +68,7 @@ public class SeatServiceTests {
     @Test
     @Order(2)
     void preemptTest1(){ // 좌석이 선점되지 않은 경우
-        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.empty();
         when(seatRepository.findById(seatId)).thenReturn(result);
@@ -78,7 +78,7 @@ public class SeatServiceTests {
     @Test
     @Order(3)
     void preemptTest2(){ // 내가 선점하고 있는 좌석인 경우
-        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
@@ -89,7 +89,7 @@ public class SeatServiceTests {
     @Test
     @Order(4)
     void preemptTest3(){ // 다른 사람이 선점하고 있는 좌석인 경우
-        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
@@ -100,7 +100,7 @@ public class SeatServiceTests {
     @Test
     @Order(5)
     void removeTest1(){ // 예약 또는 선점되지 않은 좌석인 경우
-        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.empty();
         when(seatRepository.findById(seatId)).thenReturn(result);
@@ -110,7 +110,7 @@ public class SeatServiceTests {
     @Test
     @Order(6)
     void removeTest2(){ // 내가 소유한 좌석인 경우
-        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
@@ -121,7 +121,7 @@ public class SeatServiceTests {
     @Test
     @Order(7)
     void removeTest3(){ // 다른 사람이 소유한 좌석인 경우
-        SeatId seatId = SeatId.builder().timetableId(tid).seatCode(sid).build();
+        SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(sid).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);

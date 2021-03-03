@@ -81,10 +81,4 @@ public class TimetableServiceImpl implements TimetableService {
         }
     }
 
-
-    @Override
-    public boolean isExistTimetable(String movieId) {
-        List<Timetable> result = timetableRepository.findByMovieIdOrderByStartTimeAsc(movieId);
-        return result.size() > 0;
-    }
 }

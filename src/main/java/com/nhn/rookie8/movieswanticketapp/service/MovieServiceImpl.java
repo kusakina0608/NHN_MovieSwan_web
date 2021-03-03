@@ -6,6 +6,7 @@ import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.entity.QMovie;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
+import com.nhn.rookie8.movieswanticketapp.repository.TimetableRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService{
-    private final MovieRepository repository;
+    private final MovieRepository movieRepository;
+    private final TimetableRepository timetableRepository;
 
     @Override
     public String registerMovie(MovieDTO movieDTO) {
@@ -37,14 +40,14 @@ public class MovieServiceImpl implements MovieService{
         BooleanExpression expression = qMovie.movieId.startsWith(movieId);
         booleanBuilder.and(expression);
 
-        long moviesWithSameCode = repository.findAll(booleanBuilder, pageable).stream().count() + 1;
+        long moviesWithSameCode = movieRepository.findAll(booleanBuilder, pageable).stream().count() + 1;
         movieId += String.format("%03d", moviesWithSameCode);
 
         movieDTO.setMovieId(movieId);
 
         Movie movie = dtoToEntity(movieDTO);
 
-        repository.save(movie);
+        movieRepository.save(movie);
 
         return movie.getMovieId();
     }
@@ -61,7 +64,7 @@ public class MovieServiceImpl implements MovieService{
             booleanBuilder.and(expression);
         }
 
-        Page<Movie> result = repository.findAll(booleanBuilder, pageable);
+        Page<Movie> result = movieRepository.findAll(booleanBuilder, pageable);
 
         Function<Movie, MovieDTO> fn = (entity -> entityToDTO(entity));
 
@@ -82,7 +85,7 @@ public class MovieServiceImpl implements MovieService{
             booleanBuilder.or(expression);
         }
 
-        Page<Movie> result = repository.findAll(booleanBuilder, pageable);
+        Page<Movie> result = movieRepository.findAll(booleanBuilder, pageable);
 
         Function<Movie, MovieDTO> fn = (entity -> entityToDTO(entity));
 
@@ -91,7 +94,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public List<MovieDTO> getAllMovieList() {
-        List<Movie> movieList = repository.findAll();
+        List<Movie> movieList = movieRepository.findAll();
         List<MovieDTO> movieDTOList = new ArrayList<>();
 
         for (Movie movie: movieList)
@@ -104,7 +107,7 @@ public class MovieServiceImpl implements MovieService{
     public List<MovieDTO> getCurrentMovieList() {
         BooleanBuilder booleanBuilder = currentMoviesBuilder();
         Pageable pageable = PageRequest.of(0, 1000);
-        List<Movie> movieList = repository.findAll(booleanBuilder, pageable).toList();
+        List<Movie> movieList = movieRepository.findAll(booleanBuilder, pageable).toList();
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for (Movie movie: movieList)
             movieDTOList.add(entityToDTO(movie));
@@ -113,8 +116,16 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
+    public List<MovieDTO> getScheduledMovieList() {
+        return getCurrentMovieList()
+                .stream()
+                .filter(e -> timetableRepository.existsByMovieId(e.getMovieId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public MovieDTO getMovieDetail(String movieId) {
-        Optional<Movie> result = repository.findById(movieId);
+        Optional<Movie> result = movieRepository.findById(movieId);
 
         return result.isPresent() ? entityToDTO(result.get()) : null;
     }

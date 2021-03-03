@@ -22,17 +22,16 @@ public class SeatController {
     private final MemberService memberService;
 
     @GetMapping("/list")
-    public List<String> getReservedSeatList(String tid) {
-        return seatService.getReservedSeatList(tid);
+    public List<String> getReservedSeatList(String timetableId) {
+        return seatService.getReservedSeatList(timetableId);
     }
 
     @PostMapping("/preempt")
     public boolean preemptSeat(
-            HttpServletRequest httpServletRequest,
+            HttpServletRequest request,
             @RequestParam String timetableId,
             @RequestParam String seatCode) {
-        HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getMemberInfoById((String)request.getAttribute("memberId"));
         log.info("{} 사용자의 좌석 선점 요청. 상영번호: {}, 좌석번호: {}", memberDTO.getMemberId(), timetableId, seatCode);
         SeatDTO seatDTO = SeatDTO.builder()
                 .timetableId(timetableId)
@@ -53,16 +52,12 @@ public class SeatController {
     }
 
     @DeleteMapping("/preempt")
-    public boolean cancelSeat(HttpServletRequest httpServletRequest, @RequestParam String tid, @RequestParam String sid) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null) {
-            return false;
-        }
-        String memberId = (String)session.getAttribute("memberId");
+    public boolean cancelSeat(HttpServletRequest request, @RequestParam String timetableId, @RequestParam String sid) {
+        MemberDTO memberDTO = memberService.getMemberInfoById((String)request.getAttribute("memberId"));
         SeatDTO seatDTO = SeatDTO.builder()
-                .timetableId(tid)
+                .timetableId(timetableId)
                 .seatCode(sid)
-                .memberId(memberId)
+                .memberId(memberDTO.getMemberId())
                 .reservationId(null)
                 .build();
         boolean result = false;

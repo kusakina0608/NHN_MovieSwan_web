@@ -18,6 +18,8 @@ public interface MovieService {
 
     List<MovieDTO> getCurrentMovieList();
 
+    List<MovieDTO> getScheduledMovieList();
+
     MovieDTO getMovieDetail(String movieId);
 
     default Movie dtoToEntity(MovieDTO movieDTO) {
