@@ -14,5 +14,5 @@ public interface SeatRepository extends JpaRepository<Seat, SeatId>, QuerydslPre
     @Transactional
     @Modifying
     @Query("update Seat s set s.reservationId = :reservationId where s.timetableId = :timetableId AND s.seatCode = :seatCode AND s.memberId = :memberId")
-    int updateRid(@Param("reservationId") String reservationId, @Param("timetableId") String timetableId, @Param("seatCode") String seatCode, @Param("memberId") String memberId);
+    int updateReservationId(@Param("reservationId") String reservationId, @Param("timetableId") String timetableId, @Param("seatCode") String seatCode, @Param("memberId") String memberId);
 }

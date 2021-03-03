@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -26,7 +25,7 @@ public class ReservationController {
 
     @GetMapping("")
     public String reserve(Model model) {
-        List<MovieDTO> movieList = movieService.getCurrentMovieList();
+        List<MovieDTO> movieList = movieService.getScheduledMovieList();
         model.addAttribute("movieList", movieList);
         return "page/reservation";
     }
@@ -61,7 +60,7 @@ public class ReservationController {
 
     @PostMapping("/pay")
     public String pay(
-            HttpServletRequest httpServletRequest,
+            HttpServletRequest request,
             @ModelAttribute MovieDTO movieDTO,
             @ModelAttribute TimetableDTO timetableDTO,
             @ModelAttribute DiscountDTO discountDTO,
@@ -69,8 +68,7 @@ public class ReservationController {
             @RequestParam String seats,
             Model model
     ) {
-        HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getMemberInfoById((String)request.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
         movieDTO = movieService.getMovieDetail(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
@@ -93,7 +91,7 @@ public class ReservationController {
 
     @PostMapping("/result")
     public String reservationResult(
-            HttpServletRequest httpServletRequest,
+            HttpServletRequest request,
             @ModelAttribute MovieDTO movieDTO,
             @ModelAttribute TimetableDTO timetableDTO,
             @ModelAttribute DiscountDTO discountDTO,
@@ -101,8 +99,7 @@ public class ReservationController {
             @RequestParam String seats,
             Model model
     ) {
-        HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getMemberInfoById((String)request.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
         movieDTO = movieService.getMovieDetail(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());

@@ -75,9 +75,9 @@ public class TimetableServiceTest {
 
             StringBuilder builder = new StringBuilder();
             builder.append("aaa").append(dateTime.plusMinutes(i).format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
-            String tid = builder.toString();
+            String timetableId = builder.toString();
 
-            assertThat(tid, is(timetableService.registerTimetable(testDTO)));
+            assertThat(timetableId, is(timetableService.registerTimetable(testDTO)));
         }
 //        verify(movieScheduleRepository, times(10)).save(any());
     }
@@ -93,11 +93,11 @@ public class TimetableServiceTest {
 
         StringBuilder builder = new StringBuilder();
         builder.append("aaa").append(dateTime.format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
-        String tid = builder.toString();
+        String timetableId = builder.toString();
 
-        when(timetableRepository.findById(tid)).thenReturn(Optional.of(timetableService.dtoToEntity(testDTO)));
-        TimetableDTO result = timetableService.getTimetable(tid);
-        assertThat(tid, is(result.getTimetableId()));
+        when(timetableRepository.findById(timetableId)).thenReturn(Optional.of(timetableService.dtoToEntity(testDTO)));
+        TimetableDTO result = timetableService.getTimetable(timetableId);
+        assertThat(timetableId, is(result.getTimetableId()));
     }
 
     @Test
@@ -116,9 +116,9 @@ public class TimetableServiceTest {
     public void deleteScheduleTest() {
         StringBuilder builder = new StringBuilder();
         builder.append("aaa").append(dateTime.format(DateTimeFormatter.ofPattern("yyMMddHHmm")));
-        String tid = builder.toString();
+        String timetableId = builder.toString();
 
-        assertThat(tid, is(timetableService.deleteTimetable(tid)));
+        assertThat(timetableId, is(timetableService.deleteTimetable(timetableId)));
     }
 
     @AfterEach

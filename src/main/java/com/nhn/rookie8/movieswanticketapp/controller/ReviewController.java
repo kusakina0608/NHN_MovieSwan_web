@@ -37,9 +37,9 @@ public class ReviewController {
     }
 
     @DeleteMapping("/delete")
-    public String removeReview(@RequestParam("rid") String rid, @RequestParam("movieId") String movieId,
+    public String removeReview(@RequestParam("reservationId") String reservationId, @RequestParam("movieId") String movieId,
                                RedirectAttributes redirectAttributes) {
-        service.deleteReview(rid);
+        service.deleteReview(reservationId);
 
         redirectAttributes.addAttribute("movieId", movieId);
         return "redirect:/movie/detail";

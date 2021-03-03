@@ -50,7 +50,7 @@ public class Seat extends BaseEntity implements Persistable<SeatId> {
         isNew = false;
     }
 
-    public void changeRid(String reservationId){
+    public void changeReservationId(String reservationId){
         this.reservationId = reservationId;
     }
 }

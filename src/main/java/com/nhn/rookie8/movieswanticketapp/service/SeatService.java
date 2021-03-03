@@ -8,8 +8,8 @@ import java.util.List;
 public interface SeatService {
     String register(SeatDTO dto);
     void confirmSeat(String timetableId, String memberId, String reservationId, String seatCode);
-    List<String> getReservedSeatList(String tid);
-    List<String> getMySeatList(String rid);
+    List<String> getReservedSeatList(String timetableId);
+    List<String> getMySeatList(String reservationId);
     Boolean preempt(SeatDTO dto);
     Boolean remove(SeatDTO dto);
 
