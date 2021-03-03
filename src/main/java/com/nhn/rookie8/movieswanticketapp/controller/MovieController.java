@@ -10,37 +10,37 @@ import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.net.URLDecoder;
-import java.nio.file.Files;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/movie")
+@Component
 @Log4j2
 public class MovieController {
     private final MovieService movieService;
     private final ReviewService reviewService;
 
-    final String storageUrl = "https://api-storage.cloud.toast.com/v1/AUTH_444cc4c997a54c939f2e34c5b4572193";
-    final String containerName = "poster";
-
-    final String authUrl = "https://api-identity.infrastructure.cloud.toast.com/v2.0";
-    final String tenantId = "444cc4c997a54c939f2e34c5b4572193";
-    final String username = "pkw1012@nhn.com";
-    final String password = "fnzlqorwh";
-
-    private String uploadPath = System.getProperty("user.dir") + "/images";
+    @Value("{nhn.cloud.storageUrl}")
+    private String storageUrl;
+    @Value("{nhn.cloud.containerName}")
+    private String containerName;
+    @Value("{nhn.cloud.authUrl}")
+    private String authUrl;
+    @Value("{nhn.cloud.tenantId}")
+    private String tenantId;
+    @Value("{nhn.cloud.username}")
+    private String username;
+    @Value("{nhn.cloud.password}")
+    private String password;
 
     @GetMapping({"", "/"})
     public String moviePage() {
@@ -77,8 +77,6 @@ public class MovieController {
         ImageService imageService = new ImageService(storageUrl, token);
         String posterName;
 
-        log.info(uploadPath);
-
         try {
             posterName = imageService.uploadImage(containerName, uploadFile);
             log.info("파일 업로드 성공 {}", uploadFile.getOriginalFilename());
@@ -101,9 +99,7 @@ public class MovieController {
         log.info(token);
 
         ImageService imageService = new ImageService(storageUrl, token);
-        ResponseEntity<byte[]> result = imageService.displayImage(containerName, fileName);
-
-        return result;
+        return imageService.displayImage(containerName, fileName);
     }
 
     @ResponseBody
