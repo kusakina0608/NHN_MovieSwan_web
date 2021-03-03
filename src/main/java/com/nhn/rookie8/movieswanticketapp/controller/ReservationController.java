@@ -70,7 +70,7 @@ public class ReservationController {
             Model model
     ) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = memberService.getUserInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
         movieDTO = movieService.getMovie(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
@@ -102,7 +102,7 @@ public class ReservationController {
             Model model
     ) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = memberService.getUserInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
         movieDTO = movieService.getMovie(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());

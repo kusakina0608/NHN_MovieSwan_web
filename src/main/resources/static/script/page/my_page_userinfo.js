@@ -1,6 +1,6 @@
 'use strict';
 
 (function() {
-    const menu = document.getElementById("menu_userinfo");
+    const menu = document.getElementById("menu_memberinfo");
     menu.className = "active";
 } ());

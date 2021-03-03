@@ -70,7 +70,7 @@ public class ReservationServiceImpl implements ReservationService {
     public PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String memberId) {
         try {
             Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
-            BooleanBuilder booleanBuilder = getUserInfo(memberId);
+            BooleanBuilder booleanBuilder = getMemberInfo(memberId);
             Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
             Function<Reservation, ReservationDTO> fn = (this::entityToDto);
             return new PageResultDTO<>(result, fn);
@@ -128,7 +128,7 @@ public class ReservationServiceImpl implements ReservationService {
         return detail.toString();
     }
 
-    private BooleanBuilder getUserInfo(String memberId) {
+    private BooleanBuilder getMemberInfo(String memberId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QReservation qReservation = QReservation.reservation;
 

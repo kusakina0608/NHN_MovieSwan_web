@@ -2,15 +2,15 @@
     const loggedin = document.getElementById("loggedin");
     const notloggedin = document.getElementById("notloggedin");
 
-    if (localStorage.getItem("name") == "null") {
+    if (localStorage.getItem("name") == "undefined") {
         loggedin.style.display = "none"
         notloggedin.style.display = "block"
     } else {
         loggedin.style.display = "block"
         notloggedin.style.display = "none"
 
-        const username = document.getElementById("user_name");
-        username.innerText = localStorage.getItem("name");
+        const membername = document.getElementById("member_name");
+        membername.innerText = localStorage.getItem("name");
     }
 })();
 

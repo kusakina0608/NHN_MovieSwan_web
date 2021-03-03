@@ -21,19 +21,19 @@ public class MemberServiceImpl implements MemberService {
     private String accountUrl;
 
     @Override
-    public MemberDTO getUserInfoById(String memberId) {
+    public MemberDTO getMemberInfoById(String memberId) {
         try {
             MemberDTO requestDTO = MemberDTO.builder()
                     .memberId(memberId)
                     .build();
 
             RestTemplate template = new RestTemplate();
-            MemberResponseDTO userInfo = template.postForObject(accountUrl + "/api/getUserInfo", requestDTO, MemberResponseDTO.class);
+            MemberResponseDTO memberInfo = template.postForObject(accountUrl + "/api/getMemberInfo", requestDTO, MemberResponseDTO.class);
 
-            if (userInfo == null)
+            if (memberInfo == null)
                 throw new NullPointerException();
 
-            Map<String, String> content = (HashMap<String, String>) userInfo.getContent();
+            Map<String, String> content = (HashMap<String, String>) memberInfo.getContent();
 
             return MemberDTO.builder()
                     .memberId(content.get("memberId"))

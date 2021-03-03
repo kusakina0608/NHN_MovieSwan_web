@@ -106,20 +106,20 @@ public class PageController {
     // 여기부터 전부 마이페이지 입니다...
     @GetMapping("/mypage")
     public String myPage() {
-        return "redirect:/mypage/userinfo";
+        return "redirect:/mypage/memberinfo";
     }
 
-    @GetMapping("/mypage/userinfo")
-    public String myPageUserinfo(HttpServletRequest httpServletRequest, Model model) {
+    @GetMapping("/mypage/memberinfo")
+    public String myPageMemberinfo(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = memberService.getUserInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
 
         model.addAttribute("regDate", memberDTO.getRegDate().toString().split("T")[0]);
         model.addAttribute("memberId", memberDTO.getMemberId());
         model.addAttribute("name", memberDTO.getName());
         model.addAttribute("email", memberDTO.getEmail());
         model.addAttribute("url", memberDTO.getUrl());
-        return "page/my_page_userinfo";
+        return "page/my_page_memberinfo";
     }
 
     @GetMapping("/mypage/ticket")

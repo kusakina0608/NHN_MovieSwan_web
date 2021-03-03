@@ -32,7 +32,7 @@ public class SeatController {
             @RequestParam String timetableId,
             @RequestParam String seatCode) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = memberService.getUserInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
         log.info("{} 사용자의 좌석 선점 요청. 상영번호: {}, 좌석번호: {}", memberDTO.getMemberId(), timetableId, seatCode);
         SeatDTO seatDTO = SeatDTO.builder()
                 .timetableId(timetableId)
