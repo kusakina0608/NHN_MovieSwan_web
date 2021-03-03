@@ -57,12 +57,7 @@ public class MovieController {
     public String movieDetail(String movieId, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         MovieDTO movieDTO = movieService.getMovieDetail(movieId);
 
-        HttpSession session = httpServletRequest.getSession(false);
-        String memberId;
-        if(session.getAttribute("memberId") == null)
-            memberId = "";
-        else
-            memberId = session.getAttribute("memberId").toString();
+        String memberId = (String) httpServletRequest.getAttribute("memberId");
 
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, movieId));
