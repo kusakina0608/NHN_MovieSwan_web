@@ -11,7 +11,7 @@
         <main id="main">
             <img id="header_logo" th:src="@{/asset/image/logo2.png}" onclick="location.href='/'" />
             <div id="login_title">로그인</div>
-            <form id="login_form" th:action="@{/user/login_process}" method="post">
+            <form id="login_form" th:action="@{/member/login_process}" method="post">
                 <div class="input_form">
                     <span id="person" class="material-icons">person</span>
                     <input id="memberId" type="text" name="memberId" placeholder="ID">
@@ -22,7 +22,7 @@
                     <span id="visibility" class="material-icons">visibility</span>
                     <span id="visibility_off" class="material-icons">visibility_off</span>
                 </div>
-                <div id="err" th:if="${param.err}">ID 또는 Password가 잘못 입력 되었습니다.</div>
+                <div id="err">[[${message}]]</div>
                 <div id="div_submit" class="input_form">
                     <input id="submit" type="submit" value="Movieswan 로그인">
                 </div>

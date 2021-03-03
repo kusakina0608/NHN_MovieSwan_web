@@ -15,14 +15,15 @@
     <link th:href="@{/css/page/main_page.css}" rel="stylesheet" />
     <body>
         <mainpage id="main_page">
+
             <th:block th:replace="~{/fragment/main_header}"></th:block>
             <th:block th:replace="~{/fragment/carousel}"></th:block>
         </mainpage>
     </body>
     <script th:inline="javascript">
         (function() {
-            const memberId = [[${memberId}]];
-            const name = [[${name}]];
+            const memberId = [[${member.memberId}]];
+            const name = [[${member.name}]];
 
             localStorage.setItem("memberId", memberId);
             localStorage.setItem("name", name);

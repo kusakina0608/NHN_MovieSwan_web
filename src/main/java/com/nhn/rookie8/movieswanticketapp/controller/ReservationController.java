@@ -22,7 +22,7 @@ public class ReservationController {
     private final TimetableService timetableService;
     private final ReservationService reservationService;
     private final SeatService seatService;
-    private final UserService userService;
+    private final MemberService memberService;
 
     @GetMapping("")
     public String reserve(Model model) {
@@ -70,7 +70,7 @@ public class ReservationController {
             Model model
     ) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = userService.getUserInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getUserInfoById((String) session.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
         movieDTO = movieService.getMovieDetail(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
@@ -102,7 +102,7 @@ public class ReservationController {
             Model model
     ) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = userService.getUserInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getUserInfoById((String) session.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
         movieDTO = movieService.getMovieDetail(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());

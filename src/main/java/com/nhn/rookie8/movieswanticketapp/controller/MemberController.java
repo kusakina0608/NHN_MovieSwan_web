@@ -1,9 +1,12 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhn.rookie8.movieswanticketapp.dto.*;
+import com.nhn.rookie8.movieswanticketapp.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,14 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/member")
 @Log4j2
 @RequiredArgsConstructor
 public class MemberController {
@@ -26,6 +31,12 @@ public class MemberController {
     @Value("${accountURL}")
     private String accountUrl;
 
+    @Autowired
+    private final MemberService memberService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final RestTemplate template = new RestTemplate();
 
     @GetMapping("/register")
     public String register(){
@@ -34,23 +45,10 @@ public class MemberController {
 
     @PostMapping("/register_process")
     public String registerProcess(HttpServletRequest request){
-        String memberId = request.getParameter("memberId");
-        String password = request.getParameter("password");
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String url = request.getParameter("url");
 
-        MemberDTO memberDTO = MemberDTO.builder()
-                .memberId(memberId)
-                .password(password)
-                .name(name)
-                .email(email)
-                .url(url)
-                .build();
+        MemberRegisterDTO memberRegisterDTO = objectMapper.convertValue(request.getParameterMap(), MemberRegisterDTO.class);
 
-        log.info(memberDTO.toString());
-        RestTemplate template = new RestTemplate();
-        MemberResponseDTO memberResponseDTO = template.postForObject(accountUrl+"/api/register", memberDTO, MemberResponseDTO.class);
+        MemberResponseDTO memberResponseDTO = template.postForObject(accountUrl+"/api/register", memberRegisterDTO, MemberResponseDTO.class);
 
         log.info(memberResponseDTO);
         return "page/main_page";
@@ -63,35 +61,26 @@ public class MemberController {
 
 
     @PostMapping("/login_process")
-    public String loginProcess(HttpServletRequest request){
+    public String loginProcess(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
 
-        String memberId = request.getParameter("memberId");
-        String password = request.getParameter("password");
+        //request.getParameterMap() : Map<String,String[]>
 
-        MemberDTO memberDTO = MemberDTO.builder()
-                .memberId(memberId)
-                .password(password)
-                .build();
+        MemberAuthDTO memberAuthDTO = objectMapper.convertValue(request.getParameterMap().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0])), MemberAuthDTO.class);
 
-        RestTemplate template = new RestTemplate();
-        log.info("{}/api/login", accountUrl);
-        log.info("memberDTO: {}", memberDTO);
-        MemberResponseDTO memberResponseDTO = template.postForObject(accountUrl+"/api/login", memberDTO, MemberResponseDTO.class);
+        MemberResponseDTO memberResponseDTO = template.postForObject(accountUrl+"/api/auth", memberAuthDTO, MemberResponseDTO.class);
 
-        if(memberResponseDTO == null || memberResponseDTO.isError()){
-            return "redirect:/user/login?err=1";
+        if(!memberService.checkResponse(memberResponseDTO)){
+            redirectAttributes.addFlashAttribute("message","ID 또는 Password가 잘못 입력 되었습니다.");
+            return "redirect:/member/login";
         }
 
-        MemberResponseDTO userInfo = template.postForObject(accountUrl+"/api/getUserInfo", memberDTO, MemberResponseDTO.class);
+        MemberIdNameDTO memberIdNameDTO = objectMapper.convertValue(memberResponseDTO.getContent(), MemberIdNameDTO.class);
 
-        if (userInfo == null) {
-            return "redirect:/user/login?err=1";
-        }
 
         HttpSession session = request.getSession();
-        Map<String,String> content = (HashMap<String,String>) userInfo.getContent();
-        session.setAttribute("memberId", memberId);
-        session.setAttribute("name", content.get("name"));
+        session.setAttribute("member", objectMapper.convertValue(memberIdNameDTO, new TypeReference<Map<String,String>>() {}));
+
 
         return "redirect:/main";
     }

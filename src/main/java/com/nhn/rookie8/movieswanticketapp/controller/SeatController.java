@@ -3,7 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
 import com.nhn.rookie8.movieswanticketapp.service.SeatService;
-import com.nhn.rookie8.movieswanticketapp.service.UserService;
+import com.nhn.rookie8.movieswanticketapp.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 public class SeatController {
     private final SeatService seatService;
-    private final UserService userService;
+    private final MemberService memberService;
 
     @GetMapping("/list")
     public List<String> getReservedSeatList(String tid) {
@@ -32,7 +32,7 @@ public class SeatController {
             @RequestParam String timetableId,
             @RequestParam String seatCode) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = userService.getUserInfoById((String) session.getAttribute("memberId"));
+        MemberDTO memberDTO = memberService.getUserInfoById((String) session.getAttribute("memberId"));
         log.info("{} 사용자의 좌석 선점 요청. 상영번호: {}, 좌석번호: {}", memberDTO.getMemberId(), timetableId, seatCode);
         SeatDTO seatDTO = SeatDTO.builder()
                 .timetableId(timetableId)
