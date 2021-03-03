@@ -32,7 +32,7 @@ public class MemberController {
     private String accountUrl;
 
     @Autowired
-    MemberService memberService;
+    private final MemberService memberService;
 
 
     @GetMapping("/register")
