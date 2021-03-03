@@ -32,15 +32,15 @@ public class ReviewServiceImpl implements ReviewService{
         BooleanBuilder booleanBuilder = getReviewsByMovieId(movieId);
 
         Optional<Review> lastReview = repository.findAll(booleanBuilder, pageable).stream().findFirst();
-        String rid;
+        String reservationId;
         if(lastReview.isPresent()) {
-            String lastRid = lastReview.get().getReviewId();
-            int num = Integer.parseInt(lastRid.substring(lastRid.lastIndexOf('-') + 1));
-            rid = movieId + "-" + String.format("%05d", num + 1);
+            String lastReviewId = lastReview.get().getReviewId();
+            int num = Integer.parseInt(lastReviewId.substring(lastReviewId.lastIndexOf('-') + 1));
+            reservationId = movieId + "-" + String.format("%05d", num + 1);
         }
         else
-            rid = movieId + "-00001";
-        reviewDTO.setReviewId(rid);
+            reservationId = movieId + "-00001";
+        reviewDTO.setReviewId(reservationId);
 
         Review review = dtoToEntity(reviewDTO);
 

@@ -54,13 +54,13 @@
                 // 일자가 선택되었으므로, 시간을 초기화
                 timeList.innerHTML = '';
                 movieSchedule[e.target.innerHTML].forEach(item => {
-                    let tidElement = document.createElement("div");
-                    tidElement.style.display = "none";
-                    tidElement.innerHTML = item.split(" ")[1];
+                    let timetableIdElement = document.createElement("div");
+                    timetableIdElement.style.display = "none";
+                    timetableIdElement.innerHTML = item.split(" ")[1];
                     let newListElement = document.createElement("li");
                     newListElement.classList.add("list-element");
                     newListElement.innerHTML = item.split(" ")[0];
-                    newListElement.appendChild(tidElement);
+                    newListElement.appendChild(timetableIdElement);
                     let newLink = document.createElement("a");
                     newLink.appendChild(newListElement);
                     newLink.classList.add("list-element-link");
@@ -99,6 +99,7 @@
                 timeList.innerHTML = '';
                 
                 // API로부터 전달받은 영화의 상영시간표를 저장
+                console.log(res.data);
                 movieSchedule = res.data.scheduleData[0];
                 console.log(movieSchedule);
                 // 일자를 추가
@@ -157,11 +158,11 @@
             timeInput.setAttribute("value", selectedTime.innerText);
             form.appendChild(timeInput);
 
-            let tidInput = document.createElement("input");
-            tidInput.setAttribute("type", "hidden");
-            tidInput.setAttribute("name", "timetableId");
-            tidInput.setAttribute("value", selectedTime.children[0].innerText);
-            form.appendChild(tidInput);
+            let timetableIdInput = document.createElement("input");
+            timetableIdInput.setAttribute("type", "hidden");
+            timetableIdInput.setAttribute("name", "timetableId");
+            timetableIdInput.setAttribute("value", selectedTime.children[0].innerText);
+            form.appendChild(timetableIdInput);
 
             document.body.appendChild(form);
             form.submit();

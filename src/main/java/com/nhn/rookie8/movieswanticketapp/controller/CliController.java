@@ -34,8 +34,8 @@ public class CliController {
     }
 
     @ShellMethod("예매내역 상세조회")
-    public String dtl(@ShellOption String memberId, @ShellOption String rid) {
-        ReservationDTO reservationDTO = service.getReservation(rid);
+    public String dtl(@ShellOption String memberId, @ShellOption String reservationId) {
+        ReservationDTO reservationDTO = service.getReservation(reservationId);
 
         if(reservationDTO == null || !reservationDTO.getMemberId().equals(memberId)) {
             log.warn("reservation : {}", reservationDTO);
