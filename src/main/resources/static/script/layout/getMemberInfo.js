@@ -2,12 +2,14 @@
     const loggedin = document.getElementById("loggedin");
     const notloggedin = document.getElementById("notloggedin");
 
-    if (localStorage.getItem("name") == "undefined") {
-        loggedin.style.display = "none"
-        notloggedin.style.display = "block"
+    const name = localStorage.getItem("name");
+
+    if (name == "undefined" || name == "null") {
+        loggedin.style.display = "none";
+        notloggedin.style.display = "block";
     } else {
-        loggedin.style.display = "block"
-        notloggedin.style.display = "none"
+        loggedin.style.display = "block";
+        notloggedin.style.display = "none";
 
         const membername = document.getElementById("member_name");
         membername.innerText = localStorage.getItem("name");
