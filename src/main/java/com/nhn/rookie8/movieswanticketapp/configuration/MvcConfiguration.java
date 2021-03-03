@@ -1,4 +1,4 @@
-package com.nhn.rookie8.movieswanticketapp.interceptor;
+package com.nhn.rookie8.movieswanticketapp.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
