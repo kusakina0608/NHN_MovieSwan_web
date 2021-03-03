@@ -6,7 +6,7 @@ import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 
 public interface MemberService {
 
-    MemberDTO getUserInfoById(String memberId);
+    MemberDTO getMemberInfoById(String memberId);
 
     boolean checkResponse(MemberResponseDTO response);
 }

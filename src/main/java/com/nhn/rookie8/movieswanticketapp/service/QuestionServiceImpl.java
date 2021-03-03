@@ -57,7 +57,7 @@ public class QuestionServiceImpl implements QuestionService {
     public PageResultDTO<QuestionDTO, Question> getMyQuestionList(PageRequestDTO requestDTO, String memberId) {
         try {
             Pageable pageable = requestDTO.getPageable(Sort.by("questionId").descending());
-            BooleanBuilder booleanBuilder = getUserInfo(memberId);
+            BooleanBuilder booleanBuilder = getMemberInfo(memberId);
             Page<Question> result = repository.findAll(booleanBuilder, pageable);
 
             log.info("Search Results : {}", result);
@@ -83,7 +83,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
-    private BooleanBuilder getUserInfo(String memberId) {
+    private BooleanBuilder getMemberInfo(String memberId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QQuestion qQuestion = QQuestion.question;
 

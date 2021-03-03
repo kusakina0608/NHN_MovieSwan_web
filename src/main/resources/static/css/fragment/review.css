@@ -20,7 +20,7 @@
     padding: 0 15px 0;
 }
 
-.review .user {
+.review .member {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -29,7 +29,7 @@
     flex: 2;
 }
 
-.review .user .material-icons {
+.review .member .material-icons {
     font-size: 48px;
 }
 

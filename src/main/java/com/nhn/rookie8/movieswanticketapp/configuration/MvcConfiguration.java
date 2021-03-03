@@ -1,6 +1,5 @@
 package com.nhn.rookie8.movieswanticketapp.configuration;
 
-import com.nhn.rookie8.movieswanticketapp.interceptor.UserAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,7 +16,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new UserAuthInterceptor())
+        registry.addInterceptor(new MemberAuthInterceptor())
                 .addPathPatterns(pattern);
     }
 }

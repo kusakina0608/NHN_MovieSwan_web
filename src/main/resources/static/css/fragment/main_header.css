@@ -23,14 +23,14 @@
     flex: 1;
 }
 
-/* userlogin */
-#userlogin {
+/* memberlogin */
+#memberlogin {
     display: flex;
     justify-content: flex-end;
     margin-right: 20px;
 }
 
-#userlogin a {
+#memberlogin a {
     font-size: 15px;
     font-weight: bold;
     color: khaki;
@@ -42,11 +42,11 @@
     opacity: 0.8;
 }
 
-#userlogin span {
+#memberlogin span {
     color: ivory;
 }
 
-#userlogin a:hover {
+#memberlogin a:hover {
     color: yellowgreen;
     opacity: 1;
 }
@@ -63,11 +63,11 @@
     cursor: pointer;
 }
 
-#userlogin #loggedin {
+#memberlogin #loggedin {
     display: none;
 }
 
-#userlogin #notloggedin {
+#memberlogin #notloggedin {
     display: block;
 }
 

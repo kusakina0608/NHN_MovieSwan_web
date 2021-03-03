@@ -22,21 +22,15 @@
     </body>
     <script th:inline="javascript">
         (function() {
-            console.log(typeof([[${member}]]));
-            if ([[${member}]]) {
-                const memberId = [[${member.memberId}]];
-                const name = [[${member.name}]];
-                console.log("yes");
+            const member = [[${member}]];
+            const memberId = member?.memberId;
+            const name = member?.name;
 
-                localStorage.setItem("memberId", memberId);
-                localStorage.setItem("name", name);
-            } else {
-                console.log("no");
-                localStorage.removeItem("memberId");
-                localStorage.removeItem("name");
-            }
+            localStorage.setItem("memberId", memberId);
+            localStorage.setItem("name", name);
+
         } ());
     </script>
-    <script th:src="@{/script/layout/getUserInfo.js}"></script>
+    <script th:src="@{/script/layout/getMemberInfo.js}"></script>
 </th:block>
 </html>
