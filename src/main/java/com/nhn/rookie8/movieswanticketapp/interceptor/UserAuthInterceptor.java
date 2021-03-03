@@ -15,7 +15,7 @@ public class UserAuthInterceptor extends HandlerInterceptorAdapter {
         throws Exception {
         HttpSession session = request.getSession();
 
-        if (session != null && session.getAttribute("memberId") != null)
+        if (session != null && session.getAttribute("member") != null)
             return true;
 
         response.sendRedirect("/member/login");
