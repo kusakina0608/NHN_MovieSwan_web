@@ -1,6 +1,5 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhn.rookie8.movieswanticketapp.dto.*;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -8,7 +7,6 @@ import com.nhn.rookie8.movieswanticketapp.entity.Review;
 import com.nhn.rookie8.movieswanticketapp.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,51 +16,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @Log4j2
-@RequestMapping("/")
+@RequestMapping("/mypage")
 @RequiredArgsConstructor
-public class PageController {
+public class MyPageController {
 
-    private final MovieService movieService;
     private final ReservationService reservationService;
-    private final SeatService seatService;
-    private final ReviewService reviewService;
     private final QuestionService questionService;
-    private final FavoriteService favoriteService;
     private final MemberService memberService;
+    private final ReviewService reviewService;
+    private final FavoriteService favoriteService;
+    private final MovieService movieService;
+    private final SeatService seatService;
 
-    @Value("${accountURL}")
-    private String accountUrl;
-
-    @GetMapping({"/", "/main"})
-    public String mainPage(HttpServletRequest httpServletRequest, Model model) {
-        HttpSession session = httpServletRequest.getSession(false);
-
-        if (!(session == null || session.getAttribute("member") == null)) {
-            log.info(session.getAttribute("member"));
-
-            model.addAttribute("member", session.getAttribute("member"));
-        }
-        return "page/main_page";
-    }
-
-    @GetMapping("/admin")
-    public String adminPage(Model model) {
-        List<MovieDTO> movieList = movieService.getCurrentMovieList();
-        model.addAttribute("movieList", movieList);
-        return "page/admin_page";
-    }
-
-    // 여기부터 전부 마이페이지 입니다...
-    @GetMapping("/mypage")
+    @GetMapping({"/", ""})
     public String myPage() {
         return "redirect:/mypage/memberinfo";
     }
 
-    @GetMapping("/mypage/memberinfo")
+    @GetMapping("/memberinfo")
     public String myPageMemberinfo(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         Object obj = session.getAttribute("member");
@@ -79,7 +53,7 @@ public class PageController {
         return "page/my_page_memberinfo";
     }
 
-    @GetMapping("/mypage/ticket")
+    @GetMapping("/ticket")
     public String myTicketPage(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
 
@@ -87,7 +61,7 @@ public class PageController {
         return "page/my_page_ticket";
     }
 
-    @GetMapping("/mypage/ticket/detail")
+    @GetMapping("/ticket/detail")
     public String myTicketDetailPage(@RequestParam String reservationId, Model model) {
         List<String> result = seatService.getMySeatList(reservationId);
         StringBuilder seat = new StringBuilder();
@@ -98,7 +72,7 @@ public class PageController {
         return "page/my_page_ticket_detail";
     }
 
-    @GetMapping("/mypage/ticket/delete")
+    @GetMapping("/ticket/delete")
     public String myPageTicketDelete(@RequestParam String rid) {
         ReservationDTO reservationDTO = ReservationDTO.builder()
                 .reservationId(rid)
@@ -107,7 +81,7 @@ public class PageController {
         return "redirect:/mypage/ticket";
     }
 
-    @GetMapping("/mypage/movie")
+    @GetMapping("/movie")
     public String myPageMyMovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         String memberId = session.getAttribute("memberId").toString();
@@ -118,7 +92,7 @@ public class PageController {
         return "page/my_page_mymovie";
     }
 
-    @GetMapping("/mypage/review")
+    @GetMapping("/review")
     public String myPageMyReview(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         String memberId = session.getAttribute("memberId").toString();
@@ -128,7 +102,7 @@ public class PageController {
         return "page/my_page_myreview";
     }
 
-    @GetMapping("/mypage/question")
+    @GetMapping("/question")
     public String myPageQuestion(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         String memberId = (String) session.getAttribute("memberId");
@@ -137,12 +111,12 @@ public class PageController {
         return "page/my_page_question";
     }
 
-    @GetMapping("/mypage/question/register")
+    @GetMapping("/question/register")
     public String questionPage(HttpServletRequest httpServletRequest, Model model) {
         return "page/question_page";
     }
 
-    @GetMapping("/mypage/question/post")
+    @GetMapping("/question/post")
     public String myPageReadQuestion(@RequestParam("questionId") Integer questionId, Model model) {
         model.addAttribute("dto", questionService.readQuestion(questionId));
         return "page/my_page_read_question";
