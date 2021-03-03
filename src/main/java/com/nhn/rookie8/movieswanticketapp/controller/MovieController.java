@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -97,25 +96,13 @@ public class MovieController {
     @ResponseBody
     @GetMapping("/display")
     public ResponseEntity<byte[]> getFile(String fileName) {
-        ResponseEntity<byte[]> result = null;
+        AuthService authService = new AuthService(authUrl, tenantId, username, password);
+        String token = authService.requestToken();
+        log.info(token);
 
-        try {
-            String srcFileName = URLDecoder.decode(fileName, "UTF-8");
+        ImageService imageService = new ImageService(storageUrl, token);
+        ResponseEntity<byte[]> result = imageService.displayImage(containerName, fileName);
 
-            log.info("fileName: " + srcFileName);
-
-            File file = new File(uploadPath + File.separator + srcFileName);
-
-            log.info("file: " + file);
-
-            HttpHeaders header = new HttpHeaders();
-
-            header.add("Content-Type", Files.probeContentType(file.toPath()));
-            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("이미지를 띄우는데 문제가 발생했습니다.", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
         return result;
     }
 
