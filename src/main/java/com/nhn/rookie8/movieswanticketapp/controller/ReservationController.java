@@ -26,14 +26,14 @@ public class ReservationController {
 
     @GetMapping("")
     public String reserve(Model model) {
-        List<MovieDTO> movieList = movieService.getReleaseList();
+        List<MovieDTO> movieList = movieService.getCurrentMovieList();
         model.addAttribute("movieList", movieList);
         return "page/reservation";
     }
 
     @PostMapping("/seat")
     public String seat(@RequestParam String movieId, @RequestParam String timetableId, Model model) {
-        MovieDTO movieDTO = movieService.getMovie(movieId);
+        MovieDTO movieDTO = movieService.getMovieDetail(movieId);
         TimetableDTO timetableDTO = timetableService.getTimetable(timetableId);
         List<String> reservedSeatList = seatService.getReservedSeatList(timetableDTO.getTimetableId());
 
@@ -72,7 +72,7 @@ public class ReservationController {
         HttpSession session = httpServletRequest.getSession(false);
         MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
-        movieDTO = movieService.getMovie(movieDTO.getMovieId());
+        movieDTO = movieService.getMovieDetail(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
 
         log.debug("결제 페이지입니다.");
@@ -104,7 +104,7 @@ public class ReservationController {
         HttpSession session = httpServletRequest.getSession(false);
         MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
-        movieDTO = movieService.getMovie(movieDTO.getMovieId());
+        movieDTO = movieService.getMovieDetail(movieDTO.getMovieId());
         timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
 
         log.debug("예매 완료 페이지입니다.");

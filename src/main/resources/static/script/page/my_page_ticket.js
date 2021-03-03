@@ -22,7 +22,7 @@ function trClicked(value) {
 
     const movieAPI = {
         getMovieInfo: (movieId) => {
-            return requestTicketAPI.get(`/api/movie/getMovieInfo?movieId=${movieId}`);
+            return requestTicketAPI.get(`/movie/getMovieInfo?movieId=${movieId}`);
         }
     }
 

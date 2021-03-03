@@ -18,10 +18,10 @@ public class ReviewController {
     @PostMapping("/register")
     public String registerReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
         log.info(reviewDTO);
+
         if(reviewDTO.getMemberId().equals(""))
             return "redirect:/member/login";
-        service.register(reviewDTO);
-
+        service.registerReview(reviewDTO);
         redirectAttributes.addAttribute("movieId", reviewDTO.getMovieId());
 
         return "redirect:/movie/detail";
@@ -30,7 +30,7 @@ public class ReviewController {
     @PostMapping("/modify")
     public String modifyReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
         log.info(reviewDTO);
-        service.modify(reviewDTO);
+        service.editReview(reviewDTO);
 
         redirectAttributes.addAttribute("movieId", reviewDTO.getMovieId());
         return "redirect:/movie/detail";
@@ -39,7 +39,7 @@ public class ReviewController {
     @DeleteMapping("/delete")
     public String removeReview(@RequestParam("rid") String rid, @RequestParam("movieId") String movieId,
                                RedirectAttributes redirectAttributes) {
-        service.remove(rid);
+        service.deleteReview(rid);
 
         redirectAttributes.addAttribute("movieId", movieId);
         return "redirect:/movie/detail";

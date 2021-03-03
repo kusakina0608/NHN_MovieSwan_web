@@ -8,17 +8,17 @@ import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import java.util.List;
 
 public interface MovieService {
-    String register(MovieDTO movieDTO);
+    String registerMovie(MovieDTO movieDTO);
 
-    PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO pageRequestDTO, boolean current);
+    PageResultDTO<MovieDTO, Movie> getMoviePage(PageRequestDTO pageRequestDTO, boolean current);
 
     PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList);
 
-    List<MovieDTO> getAllList();
+    List<MovieDTO> getAllMovieList();
 
-    List<MovieDTO> getReleaseList();
+    List<MovieDTO> getCurrentMovieList();
 
-    MovieDTO getMovie(String movieId);
+    MovieDTO getMovieDetail(String movieId);
 
     default Movie dtoToEntity(MovieDTO movieDTO) {
         return Movie.builder()

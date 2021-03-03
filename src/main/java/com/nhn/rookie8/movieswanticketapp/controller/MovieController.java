@@ -1,18 +1,24 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
+import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
+import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -25,27 +31,47 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/movie")
+@RequestMapping("/movie")
 @Log4j2
 public class MovieController {
-    private final MovieService service;
+    private final MovieService movieService;
+    private final ReviewService reviewService;
 
     private String uploadPath = System.getProperty("user.dir") + "/images";
 
-    static final char[] digits = {
-            '0', '1', '2', '3', '4', '5', '6', '7',
-            '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
-            'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-            'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-            'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
-            'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-            'U', 'V', 'W', 'X', 'Y', 'Z', '_', '*'
-    };
+    @GetMapping({"", "/"})
+    public String moviePage() {
+        return "redirect:/movie/list?current=true";
+    }
+
+    @GetMapping("/list")
+    public String currentMovieList(PageRequestDTO pageRequestDTO, boolean current, Model model) {
+        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getMoviePage(pageRequestDTO, current);
+
+        model.addAttribute("result", resultDTO);
+        model.addAttribute("current", current);
+        return "/page/movie_list";
+    }
+
+    @GetMapping("/detail")
+    public String movieDetail(String movieId, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
+        MovieDTO movieDTO = movieService.getMovieDetail(movieId);
+
+        HttpSession session = httpServletRequest.getSession(false);
+        String memberId;
+        if(session.getAttribute("memberId") == null)
+            memberId = "";
+        else
+            memberId = session.getAttribute("memberId").toString();
+
+        model.addAttribute("dto", movieDTO);
+        model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, movieId));
+        model.addAttribute("my_review", reviewService.findMyReviewByMovieId(movieId, memberId));
+        return "/page/movie_detail";
+    }
 
     @PostMapping("/register")
-    public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile,
-                              HttpServletRequest request) throws IOException  {
+    public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile) {
         log.info(movieDTO.getTitle());
         log.info(uploadFile.getName());
         String posterPath;
@@ -60,13 +86,12 @@ public class MovieController {
             if (!contentType.startsWith("image"))
                 throw new Exception("이미지 타입의 파일이 아닙니다.");
         } catch (Exception e) {
-            log.error("uploadfile type : {}", uploadFile.getContentType(), e);
+            log.error("upload file type : {}", uploadFile.getContentType(), e);
             return "redirect:/admin";
         }
 
         log.info(uploadPath);
-        UUID uuid = UUID.randomUUID();
-        String uuidStr = toUnsignedString(uuid.getMostSignificantBits(), 6) + toUnsignedString(uuid.getLeastSignificantBits(), 6);
+        String uuid = UUID.randomUUID().toString();
         String originalName = uploadFile.getOriginalFilename();
         String extensionName;
         try {
@@ -77,7 +102,7 @@ public class MovieController {
             log.error("잘못된 파일 이름입니다.");
             return "redirect:/admin";
         }
-        posterPath = makeFolder() + File.separator + uuidStr + extensionName;
+        posterPath = uuid + extensionName;
         log.info(posterPath);
         String saveName = uploadPath + File.separator + posterPath;
         savePath = Paths.get(saveName);
@@ -89,7 +114,7 @@ public class MovieController {
         }
 
         movieDTO.setPoster(posterPath);
-        service.register(movieDTO);
+        movieService.registerMovie(movieDTO);
 
         return "redirect:/admin";
     }
@@ -122,7 +147,7 @@ public class MovieController {
     @ResponseBody
     @GetMapping("/getMovieInfo")
     public MovieDTO getMovieInfo(String movieId) {
-        return service.getMovie(movieId);
+        return movieService.getMovieDetail(movieId);
     }
 
     private String makeFolder() {
@@ -137,19 +162,4 @@ public class MovieController {
 
         return folderPath;
     }
-
-    private static String toUnsignedString(long i, int shift) {
-        char[] buf = new char[64];
-        int charPos = 64;
-        int radix = 1 << shift;
-        long mask = (long)radix - 1;
-        long number = i;
-        do {
-            buf[--charPos] = digits[(int) (number & mask)];
-            number >>>= shift;
-        } while (number != 0);
-        return new String(buf, charPos, (64 - charPos));
-    }
-
-
 }

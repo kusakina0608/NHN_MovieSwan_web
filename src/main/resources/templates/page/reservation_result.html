@@ -27,7 +27,7 @@
         <section class="result-container">
             <section class="inner-container">
                 <section class="result-info">
-                    <img class="movie-poster" th:src="|/api/movie/display?fileName=${movieDTO.getPoster()}|" alt="영화 포스터">
+                    <img class="movie-poster" th:src="|/movie/display?fileName=${movieDTO.getPoster()}|" alt="영화 포스터">
                     <div>
                         <h2>[[${movieDTO.getTitle()}]]</h2>
                         <br>

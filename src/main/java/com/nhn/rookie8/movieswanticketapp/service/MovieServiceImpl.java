@@ -27,7 +27,7 @@ public class MovieServiceImpl implements MovieService{
     private final MovieRepository repository;
 
     @Override
-    public String register(MovieDTO movieDTO) {
+    public String registerMovie(MovieDTO movieDTO) {
         String movieId = movieDTO.getMovieId();
 
         Pageable pageable = PageRequest.of(0, 1000);
@@ -50,9 +50,9 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public PageResultDTO<MovieDTO, Movie> getList(PageRequestDTO requestDTO, boolean current) {
+    public PageResultDTO<MovieDTO, Movie> getMoviePage(PageRequestDTO requestDTO, boolean current) {
         Pageable pageable = requestDTO.getPageable(Sort.by("startDate").descending());
-        BooleanBuilder booleanBuilder = current ? getReleaseMovies() : getExpectedMovies();
+        BooleanBuilder booleanBuilder = current ? currentMoviesBuilder() : expectedMoviesBuilder();
         QMovie qMovie = QMovie.movie;
         String keyword = requestDTO.getKeyword();
 
@@ -90,7 +90,7 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public List<MovieDTO> getAllList() {
+    public List<MovieDTO> getAllMovieList() {
         List<Movie> movieList = repository.findAll();
         List<MovieDTO> movieDTOList = new ArrayList<>();
 
@@ -101,8 +101,8 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public List<MovieDTO> getReleaseList() {
-        BooleanBuilder booleanBuilder = getReleaseMovies();
+    public List<MovieDTO> getCurrentMovieList() {
+        BooleanBuilder booleanBuilder = currentMoviesBuilder();
         Pageable pageable = PageRequest.of(0, 1000);
         List<Movie> movieList = repository.findAll(booleanBuilder, pageable).toList();
         List<MovieDTO> movieDTOList = new ArrayList<>();
@@ -113,13 +113,13 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public MovieDTO getMovie(String movieId) {
+    public MovieDTO getMovieDetail(String movieId) {
         Optional<Movie> result = repository.findById(movieId);
 
         return result.isPresent() ? entityToDTO(result.get()) : null;
     }
 
-    private BooleanBuilder getReleaseMovies() {
+    private BooleanBuilder currentMoviesBuilder() {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
         BooleanExpression expression1 = qMovie.startDate.before(LocalDate.now());
@@ -129,7 +129,7 @@ public class MovieServiceImpl implements MovieService{
         return booleanBuilder;
     }
 
-    private BooleanBuilder getExpectedMovies() {
+    private BooleanBuilder expectedMoviesBuilder() {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
         BooleanExpression expression = qMovie.startDate.after(LocalDate.now());

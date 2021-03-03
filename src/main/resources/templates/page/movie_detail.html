@@ -13,7 +13,7 @@
 <th:block th:fragment="contents">
     <main>
         <div class="info">
-            <img class="poster" th:src="|/api/movie/display?fileName=${dto.poster}|">
+            <img class="poster" th:src="|/movie/display?fileName=${dto.poster}|">
             <div>
                 <h1 class="title">[[${dto.title}]]</h1>
                 <div class="detail"> 
@@ -128,7 +128,6 @@
     <script>
         var movieIdInput = "[[${dto.movieId}]]";
         var myReview = "[[${my_review}]]";
-        var memberIdInput = "[[${memberId}]]";
     </script>
     <script th:src="@{/script/page/movie_detail.js}"></script>
 </th:block>

@@ -6,9 +6,9 @@ import com.nhn.rookie8.movieswanticketapp.dto.ReviewDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
 
 public interface ReviewService {
-    String register(ReviewDTO reviewDTO);
+    String registerReview(ReviewDTO reviewDTO);
 
-    PageResultDTO<ReviewDTO, Review> getList(PageRequestDTO pageRequestDTO, String movieId);
+    PageResultDTO<ReviewDTO, Review> getReviewPage(PageRequestDTO pageRequestDTO, String movieId);
 
     ReviewDTO findMyReviewByMovieId(String movieId, String memberId);
 
@@ -16,9 +16,9 @@ public interface ReviewService {
 
     float getRatingByMovieId(String movieId);
 
-    void modify(ReviewDTO reviewDTO);
+    void editReview(ReviewDTO reviewDTO);
 
-    void remove(String reviewId);
+    void deleteReview(String reviewId);
 
     default Review dtoToEntity(ReviewDTO reviewDTO) {
         return Review.builder()

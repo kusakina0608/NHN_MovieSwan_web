@@ -65,7 +65,7 @@ class MovieServiceTest {
         when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class)))
                 .thenReturn(page);
 
-        String movieId = service.register(service.entityToDTO(movie));
+        String movieId = service.registerMovie(service.entityToDTO(movie));
 
         assertThat(movieId, is(movie.getMovieId() + "001"));
     }
@@ -75,7 +75,7 @@ class MovieServiceTest {
         String movieId = movie.getMovieId();
         when(repository.findById(movieId)).thenReturn(Optional.of(movie));
 
-        MovieDTO returnMovie = service.getMovie(movieId);
+        MovieDTO returnMovie = service.getMovieDetail(movieId);
 
         assertThat(returnMovie, is(service.entityToDTO(movie)));
     }
@@ -87,7 +87,7 @@ class MovieServiceTest {
 
         when(repository.findAll()).thenReturn(movieList);
 
-        List<MovieDTO> returnList = service.getAllList();
+        List<MovieDTO> returnList = service.getAllMovieList();
 
         assertThat(returnList, is(movieDTOList));
     }
@@ -100,7 +100,7 @@ class MovieServiceTest {
 
         when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
 
-        List<MovieDTO> returnList = service.getReleaseList();
+        List<MovieDTO> returnList = service.getCurrentMovieList();
 
         assertThat(returnList, is(movieDTOList));
     }
@@ -117,7 +117,7 @@ class MovieServiceTest {
 
         when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
 
-        PageResultDTO<MovieDTO, Movie> resultDTO = service.getList(requestDTO, false);
+        PageResultDTO<MovieDTO, Movie> resultDTO = service.getMoviePage(requestDTO, false);
         List<MovieDTO> returnDTOList = resultDTO.getDtoList();
 
         assertThat(returnDTOList, is(movieDTOList));

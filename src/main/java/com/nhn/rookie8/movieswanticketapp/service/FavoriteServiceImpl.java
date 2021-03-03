@@ -23,7 +23,7 @@ public class FavoriteServiceImpl implements FavoriteService{
     private final FavoriteRepository repository;
 
     @Override
-    public String register(FavoriteDTO favoriteDTO) {
+    public String addFavorite(FavoriteDTO favoriteDTO) {
         Favorite favorite = dtoToEntity(favoriteDTO);
         repository.save(favorite);
 
@@ -31,7 +31,7 @@ public class FavoriteServiceImpl implements FavoriteService{
     }
 
     @Override
-    public List<String> getList(String memberId) {
+    public List<String> getFavoriteList(String memberId) {
         Pageable pageable = PageRequest.of(0, 1000);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QFavorite qFavorite = QFavorite.favorite;
@@ -60,7 +60,7 @@ public class FavoriteServiceImpl implements FavoriteService{
     }
 
     @Override
-    public void remove(FavoriteDTO favoriteDTO) {
+    public void removeFavorite(FavoriteDTO favoriteDTO) {
         FavoriteId favoriteId = FavoriteId.builder()
                 .memberId(favoriteDTO.getMemberId())
                 .movieId(favoriteDTO.getMovieId())

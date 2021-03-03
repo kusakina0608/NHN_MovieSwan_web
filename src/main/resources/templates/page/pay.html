@@ -51,7 +51,7 @@
             </form>
             <section class="inner-container">
                 <section class="inner-left-container">
-                    <img th:src="|/api/movie/display?fileName=${movieDTO.getPoster()}|" alt="영화 포스터">
+                    <img th:src="|/movie/display?fileName=${movieDTO.getPoster()}|" alt="영화 포스터">
                 </section>
                 <section class="inner-right-container">
                     <h2>[[${movieDTO.getTitle()}]]</h2>

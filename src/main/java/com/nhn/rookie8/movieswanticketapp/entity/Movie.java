@@ -33,7 +33,7 @@ public class Movie extends BaseEntity{
     @Column(name="genre", length=20, nullable=false)
     private String genre;
 
-    @Column(name="story", length=1500, nullable=false)
+    @Column(name="story", length=1500)
     private String story;
 
     @Column(name="poster_file_name", length=50, nullable=false)

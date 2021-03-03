@@ -48,59 +48,9 @@ public class PageController {
 
     @GetMapping("/admin")
     public String adminPage(Model model) {
-        List<MovieDTO> movieList = movieService.getReleaseList();
+        List<MovieDTO> movieList = movieService.getCurrentMovieList();
         model.addAttribute("movieList", movieList);
         return "page/admin_page";
-    }
-
-    @GetMapping("/movie")
-    public String moviePage() {
-        return "redirect:/movie/current/list";
-    }
-
-    @GetMapping("/movie/current/list")
-    public String currentMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, true);
-
-        HttpSession session = httpServletRequest.getSession(false);
-        if (!(session == null || session.getAttribute("memberId") == null))
-            model.addAttribute("memberId", session.getAttribute("memberId"));
-
-        model.addAttribute("result", resultDTO);
-        model.addAttribute("current", true);
-        return "/page/movie_list";
-    }
-
-    @GetMapping("/movie/expected/list")
-    public String expectedMovieList(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
-        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getList(pageRequestDTO, false);
-
-        HttpSession session = httpServletRequest.getSession(false);
-        if (!(session == null || session.getAttribute("memberId") == null))
-            model.addAttribute("memberId", session.getAttribute("memberId"));
-
-        model.addAttribute("result", resultDTO);
-        model.addAttribute("current", false);
-        return "/page/movie_list";
-    }
-
-    @GetMapping("/movie/detail")
-    public String movieDetail(PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, String movieId, Model model) {
-        MovieDTO movieDTO = movieService.getMovie(movieId);
-
-        HttpSession session = httpServletRequest.getSession(false);
-        String memberId;
-        if (!(session == null || session.getAttribute("memberId") == null)) {
-            model.addAttribute("memberId", session.getAttribute("memberId"));
-            memberId = session.getAttribute("memberId").toString();
-        }
-        else
-            memberId = "";
-        
-        model.addAttribute("dto", movieDTO);
-        model.addAttribute("reviews", reviewService.getList(reviewRequestDTO, movieId));
-        model.addAttribute("my_review", reviewService.findMyReviewByMovieId(movieId, memberId));
-        return "/page/movie_detail";
     }
 
     // 여기부터 전부 마이페이지 입니다...
@@ -154,7 +104,7 @@ public class PageController {
     public String myPageMyMovie(PageRequestDTO pageRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         String memberId = session.getAttribute("memberId").toString();
-        List<String> movieIdList = favoriteService.getList(memberId);
+        List<String> movieIdList = favoriteService.getFavoriteList(memberId);
         PageResultDTO<MovieDTO, Movie> result = movieService.getListByMovieId(pageRequestDTO, movieIdList);
 
         model.addAttribute("result", result);

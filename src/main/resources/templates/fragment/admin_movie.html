@@ -2,11 +2,11 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <link th:href="@{/css/fragment/admin_ticket.css}" rel="stylesheet">
 
-    <form th:action="@{/api/movie/register}" th:method="post" enctype="multipart/form-data">
+    <form th:action="@{/movie/register}" th:method="post" enctype="multipart/form-data">
         <h3>영화 등록</h3>
             <div class="form_ticket">
                 <label class="label_ticket">영화 제목</label>
-                <input class="input_ticket" type="text" name="name" required>
+                <input class="input_ticket" type="text" name="title" required>
                 
                 <label class="label_ticket">영화 코드</label>
                 <input class="input_ticket" type="text" name="movieId" required>
@@ -40,10 +40,10 @@
 
             <div class="form_ticket">
                 <label class="label_ticket">개봉일</label>
-                <input class="input_ticket" type="date" name="startdate" required>
+                <input class="input_ticket" type="date" name="startDate" required>
 
                 <label class="label_ticket">종영일</label>
-                <input class="input_ticket" type="date" name="enddate" required>
+                <input class="input_ticket" type="date" name="endDate" required>
             </div>
 
         <button type="submit" class="form_ticket_btn">영화 등록</button>

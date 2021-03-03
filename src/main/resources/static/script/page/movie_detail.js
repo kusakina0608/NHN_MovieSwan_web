@@ -20,6 +20,7 @@
 
     var favBtn = document.querySelector(".favorite");
     let movieId = favBtn.querySelector("input").value;
+    let memberIdInput = localStorage.getItem("memberId");
 
     //찜한 영화라면 꽉찬 하트로 바꾸기
     favoriteAPI.isFavorite(memberIdInput, movieId).then(response => {
@@ -88,7 +89,7 @@
         let memberId = document.createElement("input");
         memberId.setAttribute("type", "hidden");
         memberId.setAttribute("name", "memberId");
-        memberId.setAttribute("value", memberIdInput);
+        memberId.setAttribute("value", localStorage.getItem("memberId"));
         form.appendChild(memberId);
 
         let rating = document.createElement("input");

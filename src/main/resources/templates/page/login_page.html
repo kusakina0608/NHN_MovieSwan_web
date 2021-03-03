@@ -9,7 +9,7 @@
 <th:block th:replace="~{/layout/login_common_page:: setContents(~{this:: #login_page} )}">
     <loginPage id="login_page">
         <main id="main">
-            <img id="header_logo" th:src="@{/asset/image/logo2.png}" onclick="location.href='/movie/'" />
+            <img id="header_logo" th:src="@{/asset/image/logo2.png}" onclick="location.href='/'" />
             <div id="login_title">로그인</div>
             <form id="login_form" th:action="@{/member/login_process}" method="post">
                 <div class="input_form">

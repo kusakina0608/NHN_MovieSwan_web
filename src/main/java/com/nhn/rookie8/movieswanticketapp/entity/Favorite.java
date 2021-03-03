@@ -21,5 +21,4 @@ public class Favorite extends BaseEntity{
     @Id
     @Column(name="member_id", length=21, nullable=false)
     private String memberId;
-
 }
