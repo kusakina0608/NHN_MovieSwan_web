@@ -25,7 +25,7 @@
     }
 
     var favBtns = document.querySelectorAll(".favorite");
-    var uidInput = localStorage.getItem("uid");
+    var memberIdInput = localStorage.getItem("memberId");
     favBtns.forEach(btn => {
         let movieId = btn.querySelector("input").value;
 
