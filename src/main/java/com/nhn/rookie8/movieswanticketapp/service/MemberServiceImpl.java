@@ -1,7 +1,8 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhn.rookie8.movieswanticketapp.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Value("${accountURL}")
     private String accountUrl;
+
+    ObjectMapper objectMapper;
+
+    RestTemplate template;
 
     @Override
     public MemberDTO getMemberInfoById(String memberId) {
@@ -52,5 +58,41 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean checkResponse(MemberResponseDTO response){
         return response != null && !response.isError();
+    }
+
+    @Override
+    public MemberResponseDTO register(Map<String, String[]> requestMap){
+
+        objectMapper = new ObjectMapper();
+        template = new RestTemplate();
+
+        MemberRegisterDTO memberRegisterDTO = objectMapper.convertValue(requestMap.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0])), MemberRegisterDTO.class);
+
+        return template.postForObject(accountUrl+"/api/register", memberRegisterDTO, MemberResponseDTO.class);
+
+    }
+
+    @Override
+    public MemberResponseDTO auth(Map<String, String[]> requestMap){
+
+        objectMapper = new ObjectMapper();
+        template = new RestTemplate();
+
+        MemberAuthDTO memberAuthDTO = objectMapper.convertValue(requestMap.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0])), MemberAuthDTO.class);
+
+        return template.postForObject(accountUrl+"/api/auth", memberAuthDTO, MemberResponseDTO.class);
+
+    }
+
+    @Override
+    public Map<String,String> responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO){
+        objectMapper = new ObjectMapper();
+
+        return objectMapper.convertValue(
+                objectMapper.convertValue(memberResponseDTO.getContent(), MemberIdNameDTO.class),
+                new TypeReference<Map<String,String>>() {}
+                );
     }
 }

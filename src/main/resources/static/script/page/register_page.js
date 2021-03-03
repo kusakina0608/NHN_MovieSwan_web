@@ -24,12 +24,12 @@
     };
 
 
-    const isVaildId = axios.create({
+    const isExistId = axios.create({
         baseURL: location.origin + "/account/"
     });
 
-    const isVaild = (memberId) => {
-        return isVaildId.get(`/api/isValidId?memberId=${memberId}`);
+    const isExistId = (memberId) => {
+        return isExistId.get(`/api/isExistId?memberId=${memberId}`);
     }
 
     const memberId = document.querySelector("#memberId");
