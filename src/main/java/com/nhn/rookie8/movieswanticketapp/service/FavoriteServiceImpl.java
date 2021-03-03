@@ -23,7 +23,7 @@ public class FavoriteServiceImpl implements FavoriteService{
     private final FavoriteRepository repository;
 
     @Override
-    public String registerFavorite(FavoriteDTO favoriteDTO) {
+    public String addFavorite(FavoriteDTO favoriteDTO) {
         Favorite favorite = dtoToEntity(favoriteDTO);
         repository.save(favorite);
 

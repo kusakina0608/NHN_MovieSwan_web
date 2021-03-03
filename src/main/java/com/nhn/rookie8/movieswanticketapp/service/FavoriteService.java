@@ -6,7 +6,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Favorite;
 import java.util.List;
 
 public interface FavoriteService {
-    String registerFavorite(FavoriteDTO favoriteDTO);
+    String addFavorite(FavoriteDTO favoriteDTO);
     List<String> getFavoriteList(String memberId);
     boolean isFavorite(String memberId, String movieId);
     void removeFavorite(FavoriteDTO favoriteDTO);

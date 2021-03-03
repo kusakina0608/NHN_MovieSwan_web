@@ -13,7 +13,7 @@ public class FavoriteController {
 
     @PostMapping("/register")
     public void registerFavorite(FavoriteDTO favoriteDTO) {
-        service.registerFavorite(favoriteDTO);
+        service.addFavorite(favoriteDTO);
     }
 
     @DeleteMapping("/delete")
