@@ -1,5 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.configuration;
 
+import com.nhn.rookie8.movieswanticketapp.interceptor.MemberAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

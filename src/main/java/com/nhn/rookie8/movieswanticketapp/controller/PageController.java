@@ -1,5 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhn.rookie8.movieswanticketapp.dto.*;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Log4j2
@@ -112,7 +115,11 @@ public class PageController {
     @GetMapping("/mypage/memberinfo")
     public String myPageMemberinfo(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
-        MemberDTO memberDTO = memberService.getMemberInfoById((String) session.getAttribute("memberId"));
+        Object obj = session.getAttribute("member");
+        ObjectMapper objectMapper = new ObjectMapper();
+        MemberIdNameDTO memberIdNameDTO = objectMapper.convertValue(obj, MemberIdNameDTO.class);
+
+        MemberDTO memberDTO = memberService.getMemberInfoById(memberIdNameDTO.getMemberId());
 
         model.addAttribute("regDate", memberDTO.getRegDate().toString().split("T")[0]);
         model.addAttribute("memberId", memberDTO.getMemberId());
