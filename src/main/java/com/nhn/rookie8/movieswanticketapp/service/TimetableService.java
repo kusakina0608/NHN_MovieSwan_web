@@ -17,6 +17,9 @@ public interface TimetableService {
     TimetableDTO getTimetable(String timetableId);
     List<TimetableDTO> getAllTimetableOfMovie(String movieId);
 
+    boolean isExistTimetable(String movieId);
+
+
     default Timetable dtoToEntity(TimetableInputDTO timetableInputDTO) {
         LocalDate date = LocalDate.parse(timetableInputDTO.getStartDate());
         LocalTime time = LocalTime.parse(timetableInputDTO.getStartTime());
