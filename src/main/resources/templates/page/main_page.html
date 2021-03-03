@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>영화 예매는 MovieSwan 에서!!!</title>
@@ -7,30 +8,32 @@
 <th:block th:fragment="setContents(contents)">
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-<!--    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">-->
+    <!--    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">-->
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <!-- Icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- CSS -->
     <link th:href="@{/css/page/main_page.css}" rel="stylesheet" />
+
     <body>
         <mainpage id="main_page">
-
             <th:block th:replace="~{/fragment/main_header}"></th:block>
             <th:block th:replace="~{/fragment/carousel}"></th:block>
         </mainpage>
     </body>
     <script th:inline="javascript">
-        (function() {
-            const member = [[${member}]];
+        (function () {
+            const member = [[${ member }]];
             const memberId = member?.memberId;
             const name = member?.name;
 
-            localStorage.setItem("memberId", memberId);
-            localStorage.setItem("name", name);
-
-        } ());
+            if (member) {
+                localStorage.setItem("memberId", memberId);
+                localStorage.setItem("name", name);
+            };
+        }());
     </script>
     <script th:src="@{/script/layout/getMemberInfo.js}"></script>
 </th:block>
+
 </html>
