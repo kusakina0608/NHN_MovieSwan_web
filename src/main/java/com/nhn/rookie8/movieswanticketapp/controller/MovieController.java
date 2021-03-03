@@ -4,6 +4,8 @@ import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
+import com.nhn.rookie8.movieswanticketapp.service.AuthService;
+import com.nhn.rookie8.movieswanticketapp.service.ImageService;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,6 +32,14 @@ import java.util.UUID;
 public class MovieController {
     private final MovieService movieService;
     private final ReviewService reviewService;
+
+    final String storageUrl = "https://api-storage.cloud.toast.com/v1/AUTH_444cc4c997a54c939f2e34c5b4572193";
+    final String containerName = "poster";
+
+    final String authUrl = "https://api-identity.infrastructure.cloud.toast.com/v2.0";
+    final String tenantId = "444cc4c997a54c939f2e34c5b4572193";
+    final String username = "pkw1012@nhn.com";
+    final String password = "fnzlqorwh";
 
     private String uploadPath = System.getProperty("user.dir") + "/images";
 
@@ -72,48 +76,24 @@ public class MovieController {
 
     @PostMapping("/register")
     public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile) {
-        log.info(movieDTO.getTitle());
-        log.info(uploadFile.getName());
-        String posterPath;
+        AuthService authService = new AuthService(authUrl, tenantId, username, password);
+        String token = authService.requestToken();
+        log.info(token);
 
-        Path savePath;
-
-        try {
-            String contentType = uploadFile.getContentType();
-            if(contentType == null)
-                throw new NullPointerException();
-
-            if (!contentType.startsWith("image"))
-                throw new Exception("이미지 타입의 파일이 아닙니다.");
-        } catch (Exception e) {
-            log.error("upload file type : {}", uploadFile.getContentType(), e);
-            return "redirect:/admin";
-        }
+        ImageService imageService = new ImageService(storageUrl, token);
+        String posterName;
 
         log.info(uploadPath);
-        String uuid = UUID.randomUUID().toString();
-        String originalName = uploadFile.getOriginalFilename();
-        String extensionName;
+
         try {
-            if(originalName == null)
-                throw new NullPointerException();
-            extensionName = originalName.substring(originalName.lastIndexOf("."));
-        } catch (NullPointerException e) {
-            log.error("잘못된 파일 이름입니다.");
+            posterName = imageService.uploadImage(containerName, uploadFile);
+            log.info("파일 업로드 성공 {}", uploadFile.getOriginalFilename());
+        } catch (Exception e) {
+            log.warn("파일 업로드 실패 {}", uploadFile.getOriginalFilename(), e);
             return "redirect:/admin";
         }
-        posterPath = uuid + extensionName;
-        log.info(posterPath);
-        String saveName = uploadPath + File.separator + posterPath;
-        savePath = Paths.get(saveName);
 
-        try {
-            uploadFile.transferTo(savePath);
-        } catch (IOException e) {
-            log.error("파일 업로드에 문제가 발생했습니다. {}", uploadFile, e);
-        }
-
-        movieDTO.setPoster(posterPath);
+        movieDTO.setPoster(posterName);
         movieService.registerMovie(movieDTO);
 
         return "redirect:/admin";
@@ -148,18 +128,5 @@ public class MovieController {
     @GetMapping("/getMovieInfo")
     public MovieDTO getMovieInfo(String movieId) {
         return movieService.getMovieDetail(movieId);
-    }
-
-    private String makeFolder() {
-        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-
-        String folderPath = str.replace("//", File.separator);
-
-        File uploadPathFolder = new File(uploadPath, folderPath);
-
-        if(!uploadPathFolder.exists())
-            uploadPathFolder.mkdirs();
-
-        return folderPath;
     }
 }
