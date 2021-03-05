@@ -87,12 +87,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Map<String,String> responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO){
+    public MemberIdNameDTO responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO){
         objectMapper = new ObjectMapper();
 
-        return objectMapper.convertValue(
-                objectMapper.convertValue(memberResponseDTO.getContent(), MemberIdNameDTO.class),
-                new TypeReference<Map<String,String>>() {}
-                );
+        return objectMapper.convertValue(memberResponseDTO.getContent(), MemberIdNameDTO.class);
     }
 }

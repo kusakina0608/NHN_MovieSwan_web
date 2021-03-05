@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 
 import java.util.Map;
@@ -15,5 +16,5 @@ public interface MemberService {
 
     MemberResponseDTO auth(Map<String, String[]> requestMap);
 
-    Map<String,String> responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO);
+    MemberIdNameDTO responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO);
 }
