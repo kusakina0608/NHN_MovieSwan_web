@@ -31,7 +31,7 @@
     });
 
     favBtn.addEventListener("click", async (e) => {
-        if(memberIdInput != null) {
+        if(memberIdInput !== null) {
             // 찜 영화 등록 과정
             if(!favBtn.classList.contains("clicked")){
                 await favoriteAPI.registerFavorite(memberIdInput, movieIdInput);
