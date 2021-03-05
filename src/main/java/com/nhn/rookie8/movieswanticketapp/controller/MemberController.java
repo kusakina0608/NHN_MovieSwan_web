@@ -1,11 +1,12 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhn.rookie8.movieswanticketapp.dto.*;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
+import com.nhn.rookie8.movieswanticketapp.redis.RedisHandler;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,14 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/member")
@@ -34,6 +32,7 @@ public class MemberController {
     @Autowired
     private final MemberService memberService;
 
+    private final RedisHandler redisHandler;
 
     @GetMapping("/register")
     public String register(){
@@ -55,7 +54,7 @@ public class MemberController {
 
 
     @PostMapping("/login_process")
-    public String loginProcess(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
+    public String loginProcess(HttpServletRequest request, HttpServletResponse response, Model model, RedirectAttributes redirectAttributes){
 
         MemberResponseDTO memberResponseDTO = memberService.auth(request.getParameterMap());
 
@@ -64,20 +63,34 @@ public class MemberController {
             return "redirect:/member/login";
         }
 
-        HttpSession session = request.getSession();
-        session.setAttribute("member", memberService.responseToMemberIdNameMap(memberResponseDTO));
-        redirectAttributes.addFlashAttribute("member", session.getAttribute("member"));
+        String cookieValue = RandomStringUtils.randomAlphanumeric(32);
+        Cookie cookie = new Cookie("SWANAUTH", cookieValue);
+        cookie.setMaxAge(-1);
+        cookie.setPath("/");
 
+        response.addCookie(cookie);
+        redisHandler.saveMemberInfo(cookieValue, memberService.responseToMemberIdNameMap(memberResponseDTO));
+
+        redirectAttributes.addFlashAttribute("member", redisHandler.readMemberInfo(cookieValue));
         return "redirect:/main";
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        Cookie[] cookies = request.getCookies();
+        String authKey = new String();
 
-        HttpSession session = request.getSession(false);
-        if(session != null) {session.invalidate();}
+        if (cookies != null)
+            for (int i = 0; i < cookies.length; i++)
+                if (cookies[i].getName().equals("SWANAUTH")) {
+                    authKey = cookies[i].getValue();
+                    break;
+                }
+
+        if (redisHandler.validMemberInfo(authKey))
+            redisHandler.expireAuth(authKey);
+
         redirectAttributes.addFlashAttribute("member", MemberIdNameDTO.builder().build());
         return "redirect:/main";
     }
-
 }
