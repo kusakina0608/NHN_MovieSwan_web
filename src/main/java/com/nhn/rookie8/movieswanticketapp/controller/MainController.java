@@ -38,4 +38,9 @@ public class MainController {
         return "page/admin_page";
     }
 
+    @GetMapping("/monitor/l7check")
+    public String l7check(){
+        return "page/l7check";
+    }
+
 }
