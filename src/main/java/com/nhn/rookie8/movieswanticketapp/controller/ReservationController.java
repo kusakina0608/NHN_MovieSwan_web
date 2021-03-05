@@ -25,6 +25,10 @@ public class ReservationController {
     private final MemberService memberService;
     private final WebHook webHook;
 
+    private static final int NUMBER_OF_ROW = 13;
+    private static final int NUMBER_OF_COLUMN = 18;
+
+
     @GetMapping("")
     public String reserve(Model model) {
         List<MovieDTO> movieList = movieService.getScheduledMovieList();
@@ -44,7 +48,7 @@ public class ReservationController {
         model.addAttribute("timetableDTO", timetableDTO);
         model.addAttribute("movieDTO", movieDTO);
         model.addAttribute("discountDTO", discountDTO);
-        model.addAttribute("seats", seatService.getAllSeat(timetableId, 13, 18));
+        model.addAttribute("seats", seatService.getAllSeat(timetableId, NUMBER_OF_ROW, NUMBER_OF_COLUMN));
         model.addAttribute("theater", "무비스완 판교점");
         return "page/seat";
     }
