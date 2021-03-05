@@ -29,6 +29,21 @@ public class SeatServiceImpl implements SeatService{
     private final SeatRepository seatRepository;
 
     @Override
+    public List<List<String>> getAllSeat(int row, int col) {
+        List<List<String>> seats = new ArrayList<>();
+        for(char alpha = 'A'; alpha < 'A' + row; alpha++){
+            seats.add(new ArrayList<>());
+            for(int num = 1; num <= col; num++) {
+                StringBuilder seatCode = new StringBuilder();
+                seatCode.append(alpha);
+                seatCode.append(String.format("%02d", num));
+                seats.get(alpha - 'A').add(seatCode.toString());
+            }
+        }
+        return seats;
+    }
+
+    @Override
     public String register(SeatDTO dto) {
         log.debug("DTO: {}", dto);
 

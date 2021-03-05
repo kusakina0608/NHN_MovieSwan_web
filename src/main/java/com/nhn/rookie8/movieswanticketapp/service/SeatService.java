@@ -6,6 +6,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Seat;
 import java.util.List;
 
 public interface SeatService {
+    List<List<String>> getAllSeat(int row, int col);
     String register(SeatDTO dto);
     void confirmSeat(String timetableId, String memberId, String reservationId, String seatCode);
     List<String> getReservedSeatList(String timetableId);
