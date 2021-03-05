@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.SeatStateDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.QSeat;
 import com.nhn.rookie8.movieswanticketapp.entity.Seat;
 import com.nhn.rookie8.movieswanticketapp.entity.SeatId;
@@ -29,15 +30,18 @@ public class SeatServiceImpl implements SeatService{
     private final SeatRepository seatRepository;
 
     @Override
-    public List<List<String>> getAllSeat(int row, int col) {
-        List<List<String>> seats = new ArrayList<>();
+    public List<List<SeatStateDTO>> getAllSeat(String timetableId, int row, int col) {
+        List<String> reservedSeatList = getReservedSeatList(timetableId);
+        List<List<SeatStateDTO>> seats = new ArrayList<>();
         for(char alpha = 'A'; alpha < 'A' + row; alpha++){
             seats.add(new ArrayList<>());
             for(int num = 1; num <= col; num++) {
-                StringBuilder seatCode = new StringBuilder();
-                seatCode.append(alpha);
-                seatCode.append(String.format("%02d", num));
-                seats.get(alpha - 'A').add(seatCode.toString());
+                StringBuilder seatCodeBuilder = new StringBuilder();
+                seatCodeBuilder.append(alpha);
+                seatCodeBuilder.append(String.format("%02d", num));
+                String seatCode = seatCodeBuilder.toString();
+                boolean exist = reservedSeatList.contains(seatCode);
+                seats.get(alpha - 'A').add(new SeatStateDTO().builder().seatCode(seatCode).available(!exist).build());
             }
         }
         return seats;
