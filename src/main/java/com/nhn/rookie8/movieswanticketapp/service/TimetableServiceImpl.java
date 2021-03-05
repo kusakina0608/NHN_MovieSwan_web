@@ -2,11 +2,8 @@ package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.QQuestion;
 import com.nhn.rookie8.movieswanticketapp.entity.Timetable;
 import com.nhn.rookie8.movieswanticketapp.repository.TimetableRepository;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
