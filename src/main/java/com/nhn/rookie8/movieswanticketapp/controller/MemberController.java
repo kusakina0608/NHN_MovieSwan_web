@@ -64,15 +64,13 @@ public class MemberController {
             return "redirect:/member/login";
         }
 
-        HttpSession session = request.getSession();
-
         String cookieValue = RandomStringUtils.randomAlphanumeric(32);
         Cookie cookie = new Cookie("SWANAUTH", cookieValue);
         cookie.setMaxAge(-1);
         cookie.setPath("/");
 
         response.addCookie(cookie);
-        redisHandler.saveMemberInfo(cookieValue, (MemberIdNameDTO) memberService.responseToMemberIdNameMap(memberResponseDTO));
+        redisHandler.saveMemberInfo(cookieValue, memberService.responseToMemberIdNameMap(memberResponseDTO));
 
         redirectAttributes.addFlashAttribute("member", redisHandler.readMemberInfo(cookieValue));
         return "redirect:/main";
@@ -80,9 +78,6 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        HttpSession session = request.getSession(false);
-        if(session != null) { session.invalidate(); }
-
         Cookie[] cookies = request.getCookies();
         String authKey = new String();
 
