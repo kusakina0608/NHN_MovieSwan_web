@@ -12,7 +12,6 @@ import java.time.Duration;
 
 @Service
 @Log4j2
-@RequiredArgsConstructor
 public class RedisHandler {
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
