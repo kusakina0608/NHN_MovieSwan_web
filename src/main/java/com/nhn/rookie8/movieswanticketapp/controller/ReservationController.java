@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Controller
@@ -22,6 +23,11 @@ public class ReservationController {
     private final ReservationService reservationService;
     private final SeatService seatService;
     private final MemberService memberService;
+    private final WebHook webHook;
+
+    private static final int NUMBER_OF_ROW = 13;
+    private static final int NUMBER_OF_COLUMN = 18;
+
 
     @GetMapping("")
     public String reserve(Model model) {
@@ -31,29 +37,18 @@ public class ReservationController {
     }
 
     @PostMapping("/seat")
-    public String seat(@RequestParam String movieId, @RequestParam String timetableId, Model model) {
-        MovieDTO movieDTO = movieService.getMovieDetail(movieId);
+    public String seat(
+            @RequestParam String timetableId,
+            Model model
+    ) {
         TimetableDTO timetableDTO = timetableService.getTimetable(timetableId);
-        List<String> reservedSeatList = seatService.getReservedSeatList(timetableDTO.getTimetableId());
-
-        DiscountDTO discountDTO;
-        if(timetableDTO.getStartTime().getHour() < 9){
-            discountDTO = DiscountDTO.builder().discountRatio(0.25).discountType("조조 할인(오전 09:00 이전)").build();
-        }
-        else{
-            discountDTO = DiscountDTO.builder().discountRatio(0.0).discountType("없음").build();
-        }
-
-        log.debug("좌석 선택 페이지입니다.");
-        log.debug("movieDTO:\n{}\n", movieDTO.toString());
-        log.debug("timetableDTO:\n{}\n", timetableDTO.toString());
-        log.debug("discountDTO:\n{}\n", discountDTO.toString());
-        log.debug("reservedSeatList:\n{}\n", reservedSeatList.toString());
+        MovieDTO movieDTO = movieService.getMovieDetail(timetableDTO.getMovieId());
+        DiscountDTO discountDTO = new DiscountDTO(timetableDTO.getStartTime().getHour());
 
         model.addAttribute("timetableDTO", timetableDTO);
         model.addAttribute("movieDTO", movieDTO);
         model.addAttribute("discountDTO", discountDTO);
-        model.addAttribute("reservedSeatList", reservedSeatList);
+        model.addAttribute("seats", seatService.getAllSeat(timetableId, NUMBER_OF_ROW, NUMBER_OF_COLUMN));
         model.addAttribute("theater", "무비스완 판교점");
         return "page/seat";
     }
@@ -61,24 +56,15 @@ public class ReservationController {
     @PostMapping("/pay")
     public String pay(
             HttpServletRequest request,
-            @ModelAttribute MovieDTO movieDTO,
-            @ModelAttribute TimetableDTO timetableDTO,
-            @ModelAttribute DiscountDTO discountDTO,
             @ModelAttribute ReservationDTO reservationDTO,
             @RequestParam String seats,
             Model model
     ) {
         MemberDTO memberDTO = memberService.getMemberInfoById((String)request.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
-        movieDTO = movieService.getMovieDetail(movieDTO.getMovieId());
-        timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
-
-        log.debug("결제 페이지입니다.");
-        log.debug("movieDTO: {}", movieDTO);
-        log.debug("timetableDTO: {}", timetableDTO);
-        log.debug("discountDTO: {}", discountDTO);
-        log.debug("reservationDTO: {}", reservationDTO);
-        log.debug("seats: {}", seats);
+        TimetableDTO timetableDTO = timetableService.getTimetable(reservationDTO.getTimetableId());
+        MovieDTO movieDTO = movieService.getMovieDetail(timetableDTO.getMovieId());
+        DiscountDTO discountDTO = new DiscountDTO(timetableDTO.getStartTime().getHour());
 
         model.addAttribute("movieDTO", movieDTO);
         model.addAttribute("timetableDTO", timetableDTO);
@@ -89,30 +75,21 @@ public class ReservationController {
         return "page/pay";
     }
 
+    @Transactional
     @PostMapping("/result")
     public String reservationResult(
             HttpServletRequest request,
-            @ModelAttribute MovieDTO movieDTO,
-            @ModelAttribute TimetableDTO timetableDTO,
-            @ModelAttribute DiscountDTO discountDTO,
             @ModelAttribute ReservationDTO reservationDTO,
             @RequestParam String seats,
             Model model
     ) {
         MemberDTO memberDTO = memberService.getMemberInfoById((String)request.getAttribute("memberId"));
         reservationDTO.setMemberId(memberDTO.getMemberId());
-        movieDTO = movieService.getMovieDetail(movieDTO.getMovieId());
-        timetableDTO = timetableService.getTimetable(timetableDTO.getTimetableId());
-
-        log.debug("예매 완료 페이지입니다.");
-        log.debug("movieDTO: {}", movieDTO);
-        log.debug("timetableDTO: {}", timetableDTO);
-        log.debug("discountDTO: {}", discountDTO);
-        log.debug("reservationDTO: {}", reservationDTO);
-        log.debug("seats: {}", seats);
+        TimetableDTO timetableDTO = timetableService.getTimetable(reservationDTO.getTimetableId());
+        MovieDTO movieDTO = movieService.getMovieDetail(timetableDTO.getMovieId());
 
         reservationDTO = reservationService.reserve(reservationDTO);
-        log.debug("reservationDTO: {}", reservationDTO);
+
         seatService.confirmSeat(
                 timetableDTO.getTimetableId(),
                 memberDTO.getMemberId(),
@@ -120,13 +97,13 @@ public class ReservationController {
                 seats
         );
 
+        webHook.sendReservationSuccessMessage(memberDTO, movieDTO, reservationDTO);
+
         model.addAttribute("movieDTO", movieDTO);
         model.addAttribute("timetableDTO", timetableDTO);
-        model.addAttribute("discountDTO", discountDTO);
         model.addAttribute("reservationDTO", reservationDTO);
         model.addAttribute("theater", "무비스완 판교점");
         model.addAttribute("seats", seats);
-
         return "page/reservation_result";
     }
 }

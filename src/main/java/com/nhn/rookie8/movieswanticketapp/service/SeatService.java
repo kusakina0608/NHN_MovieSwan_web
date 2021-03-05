@@ -1,11 +1,13 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.SeatStateDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Seat;
 
 import java.util.List;
 
 public interface SeatService {
+    List<List<SeatStateDTO>> getAllSeat(String timetableId, int row, int col);
     String register(SeatDTO dto);
     void confirmSeat(String timetableId, String memberId, String reservationId, String seatCode);
     List<String> getReservedSeatList(String timetableId);

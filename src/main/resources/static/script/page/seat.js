@@ -8,8 +8,6 @@
     const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
 
-    const timetableId = document.querySelector("#timetableId").value;
-
     var adultCount = 0;
     var youngCount = 0;
     var elderCount = 0;
@@ -116,7 +114,7 @@
     nextButton.addEventListener("click", e => {
         e.preventDefault();
 
-        let form = document.querySelector("form");
+        let form = document.createElement("form");
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
@@ -127,6 +125,12 @@
             document.querySelectorAll(".seat-label").forEach(el => {
                 selectedSeatList.push(el.innerHTML);
             });
+
+            let timetableIdInput = document.createElement("input");
+            timetableIdInput.setAttribute("type", "hidden");
+            timetableIdInput.setAttribute("name", "timetableId");
+            timetableIdInput.setAttribute("value", timetableId);
+            form.appendChild(timetableIdInput);
 
             let youngInput = document.createElement("input");
             youngInput.setAttribute("type", "hidden");
@@ -164,6 +168,7 @@
             seatInput.setAttribute("value", selectedSeatList);
             form.appendChild(seatInput);
 
+            document.body.appendChild(form);
             form.submit();
         }
         else{
