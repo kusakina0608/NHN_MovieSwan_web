@@ -22,7 +22,6 @@ public class MainController {
 
     private final MovieService movieService;
 
-
     @Value("${accountURL}")
     private String accountUrl;
 
