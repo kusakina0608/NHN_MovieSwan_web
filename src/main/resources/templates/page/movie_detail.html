@@ -83,26 +83,16 @@
                 <textarea class="content" name="content" placeholder="리뷰를 입력하세요." required></textarea>
                 <button class="review_register">등록</button>
             </div>
-            <div class="myreview-view">
-                <th:block th:if="${my_review != null}">
-                    <div class="rating">
-                        <th:block th:each="num : ${#numbers.sequence(1,5)}">
-                            <span th:if="${num <= my_review.rating}" class="material-icons">star</span>
-                            <span th:unless="${num <= my_review.rating}" class="material-icons">star_outline</span>
-                        </th:block>
+            <div class="myreview-view">            
+                <div class="rating"></div>
+                <div class="content"></div>
+                <div class="links">
+                    <button class="review-modify">수정</button>
+                    <form class="review-delete" th:action="@{/api/review/delete}" th:method="delete">
+                        <input type="hidden" name="movieId" th:value="${dto.movieId}">
+                        <button type="submit" class="review-delete">삭제</button>
+                    </form>
                     </div>
-                    <div class="content">
-                        [[${my_review.content}]]
-                    </div>
-                    <div class="links">
-                        <button class="review-modify">수정</button>
-                        <form th:action="@{/api/review/delete}" th:method="delete">
-                            <input type="hidden" name="reviewId" th:value="${my_review.reviewId}">
-                            <input type="hidden" name="movieId" th:value="${dto.movieId}">
-                            <button type="submit" class="review-delete">삭제</button>
-                        </form>
-                    </div>
-                </th:block>
             </div>
             <!---리뷰 목록--->
             <ul class="review-list">
@@ -125,10 +115,6 @@
             </ul>
         </div>
     </main>
-    <script>
-        var movieIdInput = "[[${dto.movieId}]]";
-        var myReview = "[[${my_review}]]";
-    </script>
     <script th:src="@{/script/page/movie_detail.js}"></script>
 </th:block>
 </th:block>
