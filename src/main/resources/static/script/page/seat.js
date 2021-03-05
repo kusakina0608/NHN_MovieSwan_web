@@ -8,8 +8,6 @@
     const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
 
-    const timetableId = document.querySelector("#timetableId").value;
-
     var adultCount = 0;
     var youngCount = 0;
     var elderCount = 0;
@@ -120,10 +118,6 @@
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
-        form.setAttribute("action", "/reserve/seat");
-
-        form.setAttribute("charset", "UTF-8");
-        form.setAttribute("method", "Post");
         form.setAttribute("action", "/reserve/pay");
 
         if(selected === totalCount){
@@ -131,6 +125,12 @@
             document.querySelectorAll(".seat-label").forEach(el => {
                 selectedSeatList.push(el.innerHTML);
             });
+
+            let timetableIdInput = document.createElement("input");
+            timetableIdInput.setAttribute("type", "hidden");
+            timetableIdInput.setAttribute("name", "timetableId");
+            timetableIdInput.setAttribute("value", timetableId);
+            form.appendChild(timetableIdInput);
 
             let youngInput = document.createElement("input");
             youngInput.setAttribute("type", "hidden");
@@ -168,6 +168,7 @@
             seatInput.setAttribute("value", selectedSeatList);
             form.appendChild(seatInput);
 
+            document.body.appendChild(form);
             form.submit();
         }
         else{

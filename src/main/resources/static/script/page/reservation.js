@@ -140,24 +140,7 @@
         let selectedTime = timeList.querySelector(".selected");
 
         if(selectedMovie && selectedDay && selectedTime){
-            let movieInput = document.createElement("input");
-            movieInput.setAttribute("type", "hidden");
-            movieInput.setAttribute("name", "movieId");
-            movieInput.setAttribute("value", selectedMovie.querySelector("div").innerHTML);
-            form.appendChild(movieInput);
-
-            let dateInput = document.createElement("input");
-            dateInput.setAttribute("type", "hidden");
-            dateInput.setAttribute("name", "date");
-            dateInput.setAttribute("value", selectedDay.innerHTML);
-            form.appendChild(dateInput);
-
-            let timeInput = document.createElement("input");
-            timeInput.setAttribute("type", "hidden");
-            timeInput.setAttribute("name", "time");
-            timeInput.setAttribute("value", selectedTime.innerText);
-            form.appendChild(timeInput);
-
+            
             let timetableIdInput = document.createElement("input");
             timetableIdInput.setAttribute("type", "hidden");
             timetableIdInput.setAttribute("name", "timetableId");

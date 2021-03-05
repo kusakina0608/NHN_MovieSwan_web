@@ -82,17 +82,12 @@
                         <div> 좌 석 표 </div>
                         <section class="seat-table">
                             <div class="line" th:each="seat_row : ${seats}">
-                                <button th:each="seat : ${seat_row}"><input th:id="${seat}" type="hidden" th:value="${seat}"/></button>
+                                <button th:each="seat : ${seat_row}" th:classappend="${!seat.available} ? na-seat">
+                                    <input th:id="${seat.seatCode}" type="hidden" th:value="${seat.seatCode}"/>
+                                </button>
                             </div>
                             <script>
-                                var seatsList = "[[${reservedSeatList}]]".split("[")[1].split("]")[0].split(", ");
-                                if(seatsList.length !== 1 || seatsList[0] !== ""){
-                                    seatsList.forEach(seat => {
-                                        let naSeat = document.querySelector(`#${seat}`).parentElement;
-                                        naSeat.classList.add("na-seat");
-                                        naSeat.disabled = true;
-                                    });
-                                }
+                                const timetableId = "[[${timetableDTO.getTimetableId()}]]";
                             </script>
                         </section>
                     </section>
