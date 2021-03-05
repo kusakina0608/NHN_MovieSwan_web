@@ -19,11 +19,11 @@
     }
 
     var favBtn = document.querySelector(".favorite");
-    let movieId = favBtn.querySelector("input").value;
+    let movieIdInput = favBtn.querySelector("input").value;
     let memberIdInput = localStorage.getItem("memberId");
 
     //찜한 영화라면 꽉찬 하트로 바꾸기
-    favoriteAPI.isFavorite(memberIdInput, movieId).then(response => {
+    favoriteAPI.isFavorite(memberIdInput, movieIdInput).then(response => {
         if(response.data) {
             favBtn.classList.add("clicked");
             favBtn.querySelector(".material-icons").innerText = "favorite";
@@ -31,32 +31,71 @@
     });
 
     favBtn.addEventListener("click", async (e) => {
-        if(memberIdInput != "") {
+        if(memberIdInput != null) {
             // 찜 영화 등록 과정
             if(!favBtn.classList.contains("clicked")){
-                await favoriteAPI.registerFavorite(memberIdInput, movieId);
+                await favoriteAPI.registerFavorite(memberIdInput, movieIdInput);
                 favBtn.classList.add("clicked");   
                 favBtn.querySelector(".material-icons").innerText = "favorite";
             }
             //찜 영화 삭제 과정
             else {
-                await favoriteAPI.deleteFavorite(memberIdInput, movieId);
+                await favoriteAPI.deleteFavorite(memberIdInput, movieIdInput);
                 favBtn.classList.remove("clicked");
                 favBtn.querySelector(".material-icons").innerText = "favorite_border";
             }
         }
     });
 
-    if(myReview == "") {
-        var review = document.querySelector(".myreview-view");
-        review.className = "myreview-view hide";
-    }
-    else {
-        var review = document.querySelector(".myreview");
-        review.className = "myreview hide";
+    const reviewAPI = {
+        getMyReview: (memberId, movieId) => {
+            return requestTicketAPI.get(`/api/review/getMyReview?memberId=${memberId}&movieId=${movieId}`);
+        }
     }
 
+    reviewAPI.getMyReview(memberIdInput, movieIdInput).then(response => {
+        if(response.data == "") {
+            var review = document.querySelector(".myreview-view");
+            review.className = "myreview-view hide";
+            submitAction(response.data);
+        }
+        else {
+            var review = document.querySelector(".myreview");
+            review.className = "myreview hide";
+            var myReview = document.querySelector(".myreview-view");
+            myReview.querySelector(".content").innerText = response.data.content;
+            var ratingHTML = "";
+            for(var i=0; i<5; i++) {
+                if(i < response.data.rating)
+                    ratingHTML += `<span class="material-icons">star</span>`
+                else
+                    ratingHTML += `<span class="material-icons">star_outline</span>`
+            }
+            myReview.querySelector(".rating").innerHTML = ratingHTML;
+        }
+    })
 
+    var modify_review = document.querySelector(".review-modify");
+    
+    modify_review.addEventListener('click', function() {
+        document.querySelector(".myreview-view").className = "myreview-view hide";
+        document.querySelector(".myreview").className = "myreview";
+        reviewAPI.getMyReview(memberIdInput, movieIdInput).then(response => {
+            submitAction(response.data);
+        })
+    })
+
+    reviewAPI.getMyReview(memberIdInput, movieIdInput).then(response => {
+        let form = document.querySelector(".review-delete");
+        let reviewId = document.createElement("input");
+        reviewId.setAttribute("type", "hidden");
+        reviewId.setAttribute("name", "reviewId");
+        reviewId.setAttribute("value", response.data.reviewId);
+        form.appendChild(reviewId);
+    })
+})();
+
+function submitAction(myReview) {
     var submit = document.querySelector(".review_register");
     submit.addEventListener("click", function(e) {
         e.preventDefault();
@@ -73,10 +112,12 @@
             let reviewId = document.createElement("input");
             reviewId.setAttribute("type", "hidden");
             reviewId.setAttribute("name", "reviewId");
-            reviewId.setAttribute("value", myReview.substring(myReview.lastIndexOf("reviewId=")+4, myReview.lastIndexOf("movieId=")-2));
+            reviewId.setAttribute("value", myReview.reviewId);
             form.appendChild(reviewId);
         }
 
+        let movieIdInput = document.querySelector(".favorite").querySelector("input").value;
+        let memberIdInput = localStorage.getItem("memberId") === null ? "" : localStorage.getItem("memberId");
         let ratingInput = document.querySelector(".myreview").querySelector(".rating").querySelector("input:checked");
         let contentInput = document.querySelector(".myreview").querySelector(".content");
 
@@ -89,7 +130,7 @@
         let memberId = document.createElement("input");
         memberId.setAttribute("type", "hidden");
         memberId.setAttribute("name", "memberId");
-        memberId.setAttribute("value", localStorage.getItem("memberId"));
+        memberId.setAttribute("value", memberIdInput);
         form.appendChild(memberId);
 
         let rating = document.createElement("input");
@@ -107,11 +148,4 @@
         document.body.appendChild(form);
         form.submit();
     })
-
-    var modify_review = document.querySelector(".review-modify");
-    
-    modify_review.addEventListener('click', function() {
-        document.querySelector(".myreview-view").className = "myreview-view hide";
-        document.querySelector(".myreview").className = "myreview";
-    })
-})();
+}

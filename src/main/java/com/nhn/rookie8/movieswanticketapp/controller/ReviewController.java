@@ -37,9 +37,9 @@ public class ReviewController {
     }
 
     @DeleteMapping("/delete")
-    public String removeReview(@RequestParam("reservationId") String reservationId, @RequestParam("movieId") String movieId,
+    public String removeReview(@RequestParam("reviewId") String reviewId, @RequestParam("movieId") String movieId,
                                RedirectAttributes redirectAttributes) {
-        service.deleteReview(reservationId);
+        service.deleteReview(reviewId);
 
         redirectAttributes.addAttribute("movieId", movieId);
         return "redirect:/movie/detail";
@@ -49,5 +49,11 @@ public class ReviewController {
     @GetMapping("/getRating")
     public float calculateRating(String movieId) {
         return service.getRatingByMovieId(movieId);
+    }
+
+    @ResponseBody
+    @GetMapping("/getMyReview")
+    public ReviewDTO getMyReview(String memberId, String movieId) {
+        return service.findMyReviewByMovieId(movieId, memberId);
     }
 }

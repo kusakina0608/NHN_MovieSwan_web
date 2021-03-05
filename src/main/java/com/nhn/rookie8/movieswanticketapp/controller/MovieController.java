@@ -60,11 +60,8 @@ public class MovieController {
     public String movieDetail(String movieId, PageRequestDTO reviewRequestDTO, HttpServletRequest httpServletRequest, Model model) {
         MovieDTO movieDTO = movieService.getMovieDetail(movieId);
 
-        String memberId = (String) httpServletRequest.getAttribute("memberId");
-
         model.addAttribute("dto", movieDTO);
         model.addAttribute("reviews", reviewService.getReviewPage(reviewRequestDTO, movieId));
-        model.addAttribute("my_review", reviewService.findMyReviewByMovieId(movieId, memberId));
         return "/page/movie_detail";
     }
 
