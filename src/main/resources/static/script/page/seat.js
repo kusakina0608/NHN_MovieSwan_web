@@ -116,7 +116,11 @@
     nextButton.addEventListener("click", e => {
         e.preventDefault();
 
-        let form = document.querySelector("form");
+        let form = document.createElement("form");
+
+        form.setAttribute("charset", "UTF-8");
+        form.setAttribute("method", "Post");
+        form.setAttribute("action", "/reserve/seat");
 
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
