@@ -28,9 +28,15 @@
             const name = member?.name;
 
             if (member) {
-                localStorage.setItem("memberId", memberId);
-                localStorage.setItem("name", name);
-            };
+                if(memberId === null) {
+                    localStorage.removeItem("memberId");
+                    localStorage.removeItem("name");
+                }
+                else {
+                    localStorage.setItem("memberId", memberId);
+                    localStorage.setItem("name", name);
+                }
+            }
         }());
     </script>
     <script th:src="@{/script/layout/getMemberInfo.js}"></script>

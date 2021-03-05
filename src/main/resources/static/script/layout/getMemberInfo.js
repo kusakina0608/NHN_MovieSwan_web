@@ -4,7 +4,7 @@
 
     const name = localStorage.getItem("name");
 
-    if (name == "undefined" || name == "null") {
+    if (name == undefined || name == null) {
         loggedin.style.display = "none";
         notloggedin.style.display = "block";
     } else {

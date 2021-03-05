@@ -38,7 +38,7 @@
         });
 
         btn.addEventListener("click", async (e) => {
-            if(memberIdInput != "") {
+            if(memberIdInput !== null) {
                 // 찜 영화 등록 과정
                 if(!btn.classList.contains("clicked")){
                     await favoriteAPI.registerFavorite(memberIdInput, movieId);
