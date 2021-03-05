@@ -2,8 +2,7 @@
 
 (function() {
     
-    //emailjs 인증 ID
-    emailjs.init('user_HWJSjiu6Yqh1TaX3CYQHR');
+
 
 
     const enableSubmit = () =>{
@@ -28,7 +27,7 @@
         baseURL: location.origin + "/account/"
     });
 
-    const isExistId = (memberId) => {
+    const isValid = (memberId) => {
         return isExistId.get(`/api/isExistId?memberId=${memberId}`);
     }
 
@@ -49,7 +48,7 @@
             event.preventDefault();
         }
         else if(memberId_reg.test(memberId.value)){
-            isVaild(memberId.value).then(result=>{
+            isValid(memberId.value).then(result=>{
                 if(result.data.error){
                     ok_id.forEach(i=>{
                         i.style.display = "none";
@@ -323,6 +322,8 @@
     const ok_auth = document.querySelectorAll(".ok_auth");
     const no_auth = document.querySelectorAll(".no_auth");
 
+    const url_reg = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+
     url.addEventListener("keyup",(event)=>{
         var handle = false;
         if(event.keyCode == 16) handle = true;
@@ -334,7 +335,7 @@
         }
         else if(url.value === "fnzlqorwh"){
             document.querySelector("#div_url").value = 1;
-            url_hidden.value = "bfd952e955@nhnent.dooray.com";
+            url_hidden.value = "https://hook.dooray.com/services/1387695619080878080/2932504648890799956/Gb355alARUuFWBV3OvQQmg";
             url.disabled = true;
             ok_url.forEach(i=>{
                 i.style.display = "inline";
@@ -344,7 +345,7 @@
             });
             url_btn.disabled = true;
         }
-        else if(email_reg.test(url.value)){
+        else if(url_reg.test(url.value)){
 
             ok_url.forEach(i=>{
                 i.style.display = "inline";
@@ -392,18 +393,21 @@
         url.disabled = true;
         
         authString = Math.floor(Math.random()*1000000).toString().padStart(6,'0');
-        
-        var templateParams = {
-            message : authString,
-            email_to : url.value
-        }
 
-        emailjs.send('service_x131zev','template_si9tle9',templateParams)
-            .then(res=>{
-                console.log(res.text);
-            },err=>{
-                console.log("failed"+error);
-            })
+        axios.post(url.value, {
+            "botName": "MovieSwan",
+            "botIconImage": "https://translate.nhnent.com/icon/botimage.jpg",
+            "text": "MovieSwan 본인확인",
+            "attachments": 
+            [
+                {
+                    "title": "MovieSwan 본인확인",
+                    "titleLink": null,
+                    "text": `인증번호 [${authString}] 을 입력해주세요.`
+                }
+            ]
+        });
+
 
     }, false);
 
