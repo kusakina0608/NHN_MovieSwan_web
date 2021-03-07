@@ -2,11 +2,8 @@ package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.QQuestion;
 import com.nhn.rookie8.movieswanticketapp.entity.Timetable;
 import com.nhn.rookie8.movieswanticketapp.repository.TimetableRepository;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -56,7 +53,7 @@ public class TimetableServiceImpl implements TimetableService {
         try {
             Optional<Timetable> result = timetableRepository.findById(timeTableId);
 
-            log.info("Search Result : {}", result.isPresent() ? result : "No Result");
+            log.info("Search Result : {}", result.isPresent() ? result.get() : "No Result");
 
             return result.isPresent() ? entityToDTO(result.get()) : null;
         } catch (Exception e) {
@@ -80,5 +77,4 @@ public class TimetableServiceImpl implements TimetableService {
             return Collections.emptyList();
         }
     }
-
 }

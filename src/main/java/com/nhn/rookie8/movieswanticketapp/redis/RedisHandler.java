@@ -31,7 +31,7 @@ public class RedisHandler {
         return memberId;
     }
 
-    public boolean validMemberInfo (String key) {
+    public boolean validMemberInfo(String key) {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         return key != null && valueOperations.get(key) != null;
     }
