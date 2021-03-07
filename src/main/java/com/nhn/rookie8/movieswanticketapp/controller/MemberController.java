@@ -3,6 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 import com.nhn.rookie8.movieswanticketapp.redis.RedisHandler;
+import com.nhn.rookie8.movieswanticketapp.service.GiveMeNameService;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,6 +34,7 @@ public class MemberController {
     private final MemberService memberService;
 
     private final RedisHandler redisHandler;
+    private final GiveMeNameService giveMeNameService;
 
     @GetMapping("/register")
     public String register(){
@@ -70,6 +72,7 @@ public class MemberController {
 
         response.addCookie(cookie);
         redisHandler.saveMemberInfo(cookieValue, memberService.responseToMemberIdNameMap(memberResponseDTO));
+        giveMeNameService.saveMemberInfo(cookieValue, memberService.responseToMemberIdNameMap(memberResponseDTO));
 
         redirectAttributes.addFlashAttribute("member", redisHandler.readMemberInfo(cookieValue));
         return "redirect:/main";
@@ -87,8 +90,10 @@ public class MemberController {
                     break;
                 }
 
-        if (redisHandler.validMemberInfo(authKey))
+        if (redisHandler.validMemberInfo(authKey)) {
             redisHandler.expireAuth(authKey);
+            giveMeNameService.expireAuth(authKey);
+        }
 
         redirectAttributes.addFlashAttribute("member", MemberIdNameDTO.builder().build());
         return "redirect:/main";
