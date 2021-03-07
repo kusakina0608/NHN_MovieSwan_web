@@ -74,4 +74,28 @@ public class GiveMeNameServiceImpl implements GiveMeNameService {
             return false;
         }
     }
+
+    @Override
+    @Scheduled(fixedDelay = 300000)
+    public void deleteExpiredAuthKey(){
+        try {
+            BooleanBuilder booleanBuilder = getExpiredAuthKey();
+            Pageable pageable = PageRequest.of(0, 1000);
+
+            List<Auth> list = repository.findAll(booleanBuilder, pageable).toList();
+            list.forEach(e -> log.info("Expired AuthKey : {}", e));
+
+            repository.deleteInBatch(list);
+        } catch (Exception e) {
+            log.error(e);
+        }
+    }
+
+    private BooleanBuilder getExpiredAuthKey() {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QAuth qAuth = QAuth.auth;
+        BooleanExpression expression = qAuth.regDate.lt(LocalDateTime.now().minusMinutes(30));
+        booleanBuilder.and(expression);
+        return booleanBuilder;
+    }
 }
