@@ -2,13 +2,13 @@ package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
-import com.nhn.rookie8.movieswanticketapp.redis.RedisHandler;
-import com.nhn.rookie8.movieswanticketapp.service.GiveMeNameService;
+import com.nhn.rookie8.movieswanticketapp.service.AuthService;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,8 +33,9 @@ public class MemberController {
     @Autowired
     private final MemberService memberService;
 
-    private final RedisHandler redisHandler;
-    private final GiveMeNameService giveMeNameService;
+    @Autowired
+    @Qualifier("redis")
+    private AuthService authService;
 
     @GetMapping("/register")
     public String register(){
@@ -71,10 +72,9 @@ public class MemberController {
         cookie.setPath("/");
 
         response.addCookie(cookie);
-        redisHandler.saveMemberInfo(cookieValue, memberService.responseToMemberIdNameMap(memberResponseDTO));
-        giveMeNameService.saveMemberInfo(cookieValue, memberService.responseToMemberIdNameMap(memberResponseDTO));
+        authService.saveMemberInfo(cookieValue, memberService.responseToMemberIdNameMap(memberResponseDTO));
 
-        redirectAttributes.addFlashAttribute("member", redisHandler.readMemberInfo(cookieValue));
+        redirectAttributes.addFlashAttribute("member", authService.readMemberInfo(cookieValue));
         return "redirect:/main";
     }
 
@@ -90,10 +90,8 @@ public class MemberController {
                     break;
                 }
 
-        if (redisHandler.validMemberInfo(authKey)) {
-            redisHandler.expireAuth(authKey);
-            giveMeNameService.expireAuth(authKey);
-        }
+        if (authService.validMemberInfo(authKey))
+            authService.expireAuth(authKey);
 
         redirectAttributes.addFlashAttribute("member", MemberIdNameDTO.builder().build());
         return "redirect:/main";
