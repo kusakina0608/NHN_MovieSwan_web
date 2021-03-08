@@ -1,16 +1,15 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
-import com.nhn.rookie8.movieswanticketapp.service.SeatService;
+import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
+import com.nhn.rookie8.movieswanticketapp.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RequestMapping("/api/seat")
