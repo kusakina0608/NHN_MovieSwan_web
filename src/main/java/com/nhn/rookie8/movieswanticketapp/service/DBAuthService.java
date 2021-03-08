@@ -8,6 +8,9 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,11 +22,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-@Component("db")
 @Log4j2
+@Component
+@ConditionalOnProperty(name="auth", havingValue = "db")
 public class DBAuthService implements AuthService {
-    private final AuthRepository repository;
+    @Autowired
+    private AuthRepository repository;
 
     @Override
     public void saveMemberInfo(String authKey, MemberIdNameDTO member) {
