@@ -14,7 +14,6 @@ import java.time.Duration;
 
 @Service
 @Log4j2
-@Component
 @ConditionalOnProperty(name="auth", havingValue = "redis", matchIfMissing = true)
 public class RedisAuthService implements AuthService {
     @Autowired

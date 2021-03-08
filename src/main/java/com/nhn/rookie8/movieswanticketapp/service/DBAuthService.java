@@ -23,7 +23,6 @@ import java.util.Optional;
 
 @Service
 @Log4j2
-@Component
 @ConditionalOnProperty(name="auth", havingValue = "db")
 public class DBAuthService implements AuthService {
     @Autowired
