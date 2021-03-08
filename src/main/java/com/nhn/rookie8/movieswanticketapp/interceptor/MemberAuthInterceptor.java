@@ -1,6 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.interceptor;
 
-import com.nhn.rookie8.movieswanticketapp.redis.RedisHandler;
+import com.nhn.rookie8.movieswanticketapp.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 @Log4j2
 public class MemberAuthInterceptor extends HandlerInterceptorAdapter {
-    private final RedisHandler redisHandler;
+    private final AuthService authService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -29,12 +29,12 @@ public class MemberAuthInterceptor extends HandlerInterceptorAdapter {
                     break;
                 }
 
-        if (!redisHandler.validMemberInfo(authKey)){
+        if (!authService.validMemberInfo(authKey)){
             response.sendRedirect("/member/login");
             return false;
         }
 
-        request.setAttribute("memberId", redisHandler.readMemberInfo(authKey).getMemberId());
+        request.setAttribute("memberId", authService.readMemberInfo(authKey).getMemberId());
         return true;
     }
 

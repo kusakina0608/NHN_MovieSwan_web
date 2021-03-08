@@ -1,16 +1,18 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
+import com.nhn.rookie8.movieswanticketapp.dto.GetScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
 import com.nhn.rookie8.movieswanticketapp.service.TimetableService;
-import com.nhn.rookie8.movieswanticketapp.dto.GetScheduleDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 
 @Controller

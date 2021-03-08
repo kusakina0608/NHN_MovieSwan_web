@@ -4,7 +4,7 @@ import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
-import com.nhn.rookie8.movieswanticketapp.service.AuthService;
+import com.nhn.rookie8.movieswanticketapp.service.StorageService;
 import com.nhn.rookie8.movieswanticketapp.service.ImageService;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
@@ -67,8 +67,8 @@ public class MovieController {
 
     @PostMapping("/register")
     public String registerMovie(MovieDTO movieDTO, @RequestParam("uploadFile") MultipartFile uploadFile) {
-        AuthService authService = new AuthService(authUrl, tenantId, username, password);
-        String token = authService.requestToken();
+        StorageService storageService = new StorageService(authUrl, tenantId, username, password);
+        String token = storageService.requestToken();
         log.info(token);
 
         ImageService imageService = new ImageService(storageUrl, token);
@@ -91,8 +91,8 @@ public class MovieController {
     @ResponseBody
     @GetMapping("/display")
     public ResponseEntity<byte[]> getFile(String fileName) {
-        AuthService authService = new AuthService(authUrl, tenantId, username, password);
-        String token = authService.requestToken();
+        StorageService storageService = new StorageService(authUrl, tenantId, username, password);
+        String token = storageService.requestToken();
         log.info(token);
 
         ImageService imageService = new ImageService(storageUrl, token);

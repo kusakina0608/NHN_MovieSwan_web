@@ -2,15 +2,18 @@ package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.QQuestion;
+import com.nhn.rookie8.movieswanticketapp.entity.QTimetable;
 import com.nhn.rookie8.movieswanticketapp.entity.Timetable;
 import com.nhn.rookie8.movieswanticketapp.repository.TimetableRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +59,7 @@ public class TimetableServiceImpl implements TimetableService {
         try {
             Optional<Timetable> result = timetableRepository.findById(timeTableId);
 
-            log.info("Search Result : {}", result.isPresent() ? result : "No Result");
+            log.info("Search Result : {}", result.isPresent() ? result.get() : "No Result");
 
             return result.isPresent() ? entityToDTO(result.get()) : null;
         } catch (Exception e) {
@@ -68,7 +71,10 @@ public class TimetableServiceImpl implements TimetableService {
     @Override
     public List<TimetableDTO> getAllTimetableOfMovie(String movieId) {
         try {
-            List<Timetable> result = timetableRepository.findByMovieIdOrderByStartTimeAsc(movieId);
+            BooleanBuilder booleanBuilder = getUnScreened(movieId);
+            Pageable pageable = PageRequest.of(0, 1000, Sort.by("startTime").ascending());
+
+            List<Timetable> result = timetableRepository.findAll(booleanBuilder, pageable).toList();
             List<TimetableDTO> schedulesList = new ArrayList<>();
 
             log.info("Search Results : {}", result);
@@ -81,4 +87,13 @@ public class TimetableServiceImpl implements TimetableService {
         }
     }
 
+    private BooleanBuilder getUnScreened(String movieId) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QTimetable qTimetable = QTimetable.timetable;
+
+        booleanBuilder.and(qTimetable.movieId.eq(movieId));
+        booleanBuilder.and(qTimetable.startTime.gt(LocalDateTime.now()));
+
+        return booleanBuilder;
+    }
 }

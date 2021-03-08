@@ -44,7 +44,7 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             Optional<Question> result = repository.findById(questionId);
 
-            log.info("Search Result : {}", result.isPresent() ? result : "No Result");
+            log.info("Search Result : {}", result.isPresent() ? result.get() : "No Result");
 
             return result.isPresent() ? entityToDTO(result.get()) : null;
         } catch (Exception e) {
