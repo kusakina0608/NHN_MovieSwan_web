@@ -20,7 +20,6 @@ public class MainController {
 
     private final MovieService movieService;
 
-
     @Value("${accountURL}")
     private String accountUrl;
 
@@ -34,6 +33,11 @@ public class MainController {
         List<MovieDTO> movieList = movieService.getCurrentMovieList();
         model.addAttribute("movieList", movieList);
         return "page/admin_page";
+    }
+
+    @GetMapping("/monitor/l7check")
+    public String l7check(){
+        return "page/l7check";
     }
 
 }
