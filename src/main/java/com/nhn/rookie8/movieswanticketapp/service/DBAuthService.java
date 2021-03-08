@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,8 +20,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Component("db")
 @Log4j2
-public class GiveMeNameServiceImpl implements GiveMeNameService {
+public class DBAuthService implements AuthService {
     private final AuthRepository repository;
 
     @Override

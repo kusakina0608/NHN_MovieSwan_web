@@ -1,18 +1,20 @@
-package com.nhn.rookie8.movieswanticketapp.redis;
+package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
-import com.nhn.rookie8.movieswanticketapp.service.GiveMeNameService;
+import com.nhn.rookie8.movieswanticketapp.service.AuthService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
 @Service
+@Component("redis")
 @Log4j2
-public class RedisHandler implements GiveMeNameService {
+public class RedisAuthService implements AuthService {
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
 

@@ -3,7 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.service;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Auth;
 
-public interface GiveMeNameService {
+public interface AuthService {
 
     public void saveMemberInfo(String authKey, MemberIdNameDTO member);
 
