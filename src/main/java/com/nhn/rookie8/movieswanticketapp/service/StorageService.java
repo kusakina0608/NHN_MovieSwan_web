@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Data
 @Log4j2
-public class AuthService {
+public class StorageService {
     // Inner class for the request body
     @Data
     public class TokenRequest {
@@ -37,7 +37,7 @@ public class AuthService {
     private TokenRequest tokenRequest;
     private RestTemplate restTemplate;
 
-    public AuthService(String authUrl, String tenantId, String username, String password) {
+    public StorageService(String authUrl, String tenantId, String username, String password) {
         this.authUrl = authUrl;
 
         // 요청 본문 생성
