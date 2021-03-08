@@ -13,8 +13,6 @@ public interface GiveMeNameService {
 
     public boolean validMemberInfo(String authKey);
 
-    public void deleteExpiredAuthKey();
-
     default Auth toEntity(String key, MemberIdNameDTO member) {
         return Auth.builder()
                 .authKey(key)

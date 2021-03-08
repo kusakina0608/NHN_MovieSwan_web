@@ -75,7 +75,6 @@ public class GiveMeNameServiceImpl implements GiveMeNameService {
         }
     }
 
-    @Override
     @Scheduled(fixedDelay = 300000)
     public void deleteExpiredAuthKey(){
         try {
