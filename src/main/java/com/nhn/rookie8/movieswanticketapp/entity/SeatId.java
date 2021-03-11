@@ -1,22 +1,18 @@
 package com.nhn.rookie8.movieswanticketapp.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SeatId implements Serializable {
     private String timetableId;
     private String seatCode;
-
-    public SeatId() {
-    }
-
-    public SeatId(String timetableId, String seatCode) {
-        this.timetableId = timetableId;
-        this.seatCode = seatCode;
-    }
 
     @Override
     public boolean equals(Object o) {

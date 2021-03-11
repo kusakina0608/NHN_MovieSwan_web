@@ -8,12 +8,11 @@ import java.util.List;
 
 public interface SeatService {
     List<List<SeatStateDTO>> getAllSeat(String timetableId, int row, int col);
-    String register(SeatDTO dto);
     void confirmSeat(String timetableId, String memberId, String reservationId, String seatCode);
     List<String> getReservedSeatList(String timetableId);
     List<String> getMySeatList(String reservationId);
-    Boolean preempt(SeatDTO dto);
-    Boolean remove(SeatDTO dto);
+    Boolean preemptSeat(SeatDTO dto);
+    Boolean cancelSeat(SeatDTO dto);
 
     default Seat dtoToEntity(SeatDTO seatDTO){
         return Seat.builder()
