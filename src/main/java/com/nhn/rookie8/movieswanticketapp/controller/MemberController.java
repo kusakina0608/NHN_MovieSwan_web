@@ -1,6 +1,8 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
+import com.nhn.rookie8.movieswanticketapp.dto.MemberAuthDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberRegisterDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 import com.nhn.rookie8.movieswanticketapp.service.AuthService;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
@@ -9,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -35,9 +38,9 @@ public class MemberController {
     }
 
     @PostMapping("/register_process")
-    public String registerProcess(HttpServletRequest request){
+    public String registerProcess(@ModelAttribute MemberRegisterDTO request){
 
-        memberService.register(request.getParameterMap());
+        memberService.register(request);
 
         return "page/main_page";
     }
@@ -49,9 +52,10 @@ public class MemberController {
 
 
     @PostMapping("/login_process")
-    public String loginProcess(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes){
+    public String loginProcess(@ModelAttribute MemberAuthDTO memberAuthDTO,
+                               HttpServletResponse response, RedirectAttributes redirectAttributes){
 
-        MemberResponseDTO memberResponseDTO = memberService.auth(request.getParameterMap());
+        MemberResponseDTO memberResponseDTO = memberService.auth(memberAuthDTO);
 
         if(!memberService.checkResponse(memberResponseDTO)){
             redirectAttributes.addFlashAttribute("message","ID 또는 Password가 잘못 입력 되었습니다.");
