@@ -16,44 +16,38 @@ public class ReviewController {
     private final ReviewService service;
 
     @PostMapping("/register")
-    public String registerReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
+    public String registerReview(@ModelAttribute ReviewDTO reviewDTO) {
         log.info(reviewDTO);
 
         if(reviewDTO.getMemberId().equals(""))
             return "redirect:/member/login";
         service.registerReview(reviewDTO);
-        redirectAttributes.addAttribute("movieId", reviewDTO.getMovieId());
 
-        return "redirect:/movie/detail";
+        return "redirect:/movie/detail?movieId=" + reviewDTO.getMovieId();
     }
 
     @PostMapping("/modify")
-    public String modifyReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
+    public String modifyReview(@ModelAttribute ReviewDTO reviewDTO) {
         log.info(reviewDTO);
         service.editReview(reviewDTO);
-
-        redirectAttributes.addAttribute("movieId", reviewDTO.getMovieId());
-        return "redirect:/movie/detail";
+        return "redirect:/movie/detail?movieId=" + reviewDTO.getMovieId();
     }
 
     @DeleteMapping("/delete")
-    public String removeReview(@RequestParam("reviewId") String reviewId, @RequestParam("movieId") String movieId,
-                               RedirectAttributes redirectAttributes) {
+    public String removeReview(@RequestParam String reviewId, @RequestParam String movieId) {
         service.deleteReview(reviewId);
-
-        redirectAttributes.addAttribute("movieId", movieId);
-        return "redirect:/movie/detail";
+        return "redirect:/movie/detail?movieId=" + movieId;
     }
 
     @ResponseBody
     @GetMapping("/getRating")
-    public float calculateRating(String movieId) {
+    public double calculateRating(@RequestParam String movieId) {
         return service.getRatingByMovieId(movieId);
     }
 
     @ResponseBody
     @GetMapping("/getMyReview")
-    public ReviewDTO getMyReview(String memberId, String movieId) {
+    public ReviewDTO getMyReview(@RequestParam String memberId, @RequestParam String movieId) {
         return service.findMyReviewByMovieId(movieId, memberId);
     }
 }

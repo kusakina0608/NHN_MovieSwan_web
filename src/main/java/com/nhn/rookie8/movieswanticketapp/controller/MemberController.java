@@ -1,6 +1,8 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
+import com.nhn.rookie8.movieswanticketapp.dto.MemberAuthDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberRegisterDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 import com.nhn.rookie8.movieswanticketapp.service.AuthService;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,11 +32,8 @@ public class MemberController {
     @Value("${accountURL}")
     private String accountUrl;
 
-    @Autowired
     private final MemberService memberService;
-
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     @GetMapping("/register")
     public String register(){
@@ -41,23 +41,24 @@ public class MemberController {
     }
 
     @PostMapping("/register_process")
-    public String registerProcess(HttpServletRequest request){
+    public String registerProcess(@ModelAttribute MemberRegisterDTO request){
 
-        memberService.register(request.getParameterMap());
+        memberService.register(request);
 
         return "page/main_page";
     }
 
     @GetMapping("/login")
-    public String loginPage(Model model) {
+    public String loginPage() {
         return "page/login_page";
     }
 
 
     @PostMapping("/login_process")
-    public String loginProcess(HttpServletRequest request, HttpServletResponse response, Model model, RedirectAttributes redirectAttributes){
+    public String loginProcess(@ModelAttribute MemberAuthDTO memberAuthDTO,
+                               HttpServletResponse response, RedirectAttributes redirectAttributes){
 
-        MemberResponseDTO memberResponseDTO = memberService.auth(request.getParameterMap());
+        MemberResponseDTO memberResponseDTO = memberService.auth(memberAuthDTO);
 
         if(!memberService.checkResponse(memberResponseDTO)){
             redirectAttributes.addFlashAttribute("message","ID 또는 Password가 잘못 입력 되었습니다.");
