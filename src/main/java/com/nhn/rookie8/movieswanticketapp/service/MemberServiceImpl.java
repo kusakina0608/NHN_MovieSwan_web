@@ -3,12 +3,14 @@ package com.nhn.rookie8.movieswanticketapp.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhn.rookie8.movieswanticketapp.dto.*;
+import com.nhn.rookie8.movieswanticketapp.ticketexception.UserNotFoundErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,37 +24,21 @@ public class MemberServiceImpl implements MemberService {
     @Value("${accountURL}")
     private String accountUrl;
 
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
+    private RestTemplate template;
 
-    RestTemplate template;
+    @PostConstruct
+    public void initialize(){
+        objectMapper = new ObjectMapper();
+        template = new RestTemplate();
+    }
 
     @Override
     public MemberDTO getMemberInfoById(String memberId) {
-        try {
-            MemberDTO requestDTO = MemberDTO.builder()
-                    .memberId(memberId)
-                    .build();
+        MemberResponseDTO memberInfo = template.postForObject(accountUrl + "/api/getMemberInfo",
+                MemberDTO.builder().memberId(memberId).build(), MemberResponseDTO.class);
 
-            RestTemplate template = new RestTemplate();
-            MemberResponseDTO memberInfo = template.postForObject(accountUrl + "/api/getMemberInfo", requestDTO, MemberResponseDTO.class);
-
-            if (memberInfo == null)
-                throw new NullPointerException();
-
-            Map<String, String> content = (HashMap<String, String>) memberInfo.getContent();
-
-            return MemberDTO.builder()
-                    .memberId(content.get("memberId"))
-                    .name(content.get("name"))
-                    .email(content.get("email"))
-                    .url(content.get("url"))
-                    .regDate(LocalDateTime.parse(content.get("regDate")))
-                    .modDate(LocalDateTime.parse(content.get("modDate")))
-                    .build();
-        } catch (Exception e) {
-            log.error(e);
-            return new MemberDTO();
-        }
+        return objectMapper.convertValue(memberInfo.getContent(), MemberDTO.class);
     }
 
     @Override
@@ -61,35 +47,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResponseDTO register(Map<String, String[]> requestMap){
-
-        objectMapper = new ObjectMapper();
-        template = new RestTemplate();
-
-        MemberRegisterDTO memberRegisterDTO = objectMapper.convertValue(requestMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0])), MemberRegisterDTO.class);
-
-        return template.postForObject(accountUrl+"/api/register", memberRegisterDTO, MemberResponseDTO.class);
-
+    public MemberResponseDTO register(MemberRegisterDTO request){
+        return template.postForObject(accountUrl+"/api/register", request, MemberResponseDTO.class);
     }
 
     @Override
-    public MemberResponseDTO auth(Map<String, String[]> requestMap){
-
-        objectMapper = new ObjectMapper();
-        template = new RestTemplate();
-
-        MemberAuthDTO memberAuthDTO = objectMapper.convertValue(requestMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0])), MemberAuthDTO.class);
-
-        return template.postForObject(accountUrl+"/api/auth", memberAuthDTO, MemberResponseDTO.class);
-
+    public MemberResponseDTO auth(MemberAuthDTO request){
+        return template.postForObject(accountUrl+"/api/auth", request, MemberResponseDTO.class);
     }
 
     @Override
     public MemberIdNameDTO responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO){
-        objectMapper = new ObjectMapper();
-
         return objectMapper.convertValue(memberResponseDTO.getContent(), MemberIdNameDTO.class);
     }
 }

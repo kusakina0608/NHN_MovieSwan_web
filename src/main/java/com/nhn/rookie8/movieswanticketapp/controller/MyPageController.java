@@ -36,13 +36,9 @@ public class MyPageController {
 
 
     @GetMapping("/memberinfo")
-    public String myPageMemberinfo(HttpServletRequest request, Model model) {
+    public String myPageMemberinfo(@RequestParam String memberId, Model model) {
 
-        MemberDTO memberDTO = memberService
-                .getMemberInfoById(request.getAttribute("memberId").toString());
-
-        model.addAttribute("member", memberDTO);
-
+        model.addAttribute("member", memberService.getMemberInfoById(memberId));
         return "page/my_page_memberinfo";
     }
 
