@@ -1,6 +1,10 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
+import com.nhn.rookie8.movieswanticketapp.ticketexception.AlreadyExpiredOrNotExistKeyErrorException;
+import com.nhn.rookie8.movieswanticketapp.ticketexception.AlreadyKeyExistException;
+import com.nhn.rookie8.movieswanticketapp.ticketexception.InvalidAuthKeyErrorException;
+import com.nhn.rookie8.movieswanticketapp.ticketexception.SessionNotExistErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,48 +32,49 @@ public class RedisAuthService implements AuthService {
     }
 
     @Override
-    public void saveMemberInfo(String authKey, MemberIdNameDTO member) {
-        try {
-            valueOps.setIfAbsent(authKey, member, Duration.ofMinutes(30));
+    public boolean saveMemberInfo(String authKey, MemberIdNameDTO member) {
+        if (isKeyExist(authKey))
+            throw new AlreadyKeyExistException();
 
-            log.info("Registered AuthKey : {}", authKey);
-        } catch (Exception e) {
-            log.error(e);
-        }
+        valueOps.setIfAbsent(authKey, member, Duration.ofMinutes(30));
+
+        log.info("Registered AuthKey : {}", authKey);
+
+        return true;
     }
 
     @Override
-    public void expireAuth(String authKey) {
-        try {
-            valueOps.setIfPresent(authKey, null, Duration.ofMillis(1));
+    public boolean expireAuth(String authKey) {
+        if (!isKeyExist(authKey))
+            throw new AlreadyExpiredOrNotExistKeyErrorException();
 
-            log.info("Expired AuthKey : {}", authKey);
-        } catch (Exception e) {
-            log.error(e);
-        }
+        valueOps.setIfPresent(authKey, null, Duration.ofMillis(1));
+
+        log.info("Expired AuthKey : {}", authKey);
+
+        return true;
     }
 
     @Override
     public MemberIdNameDTO readMemberInfo(String authKey) {
-        try {
-            MemberIdNameDTO member = (MemberIdNameDTO) valueOps.get(authKey);
+        if (!isKeyExist(authKey))
+            throw new SessionNotExistErrorException();
 
-            log.info("Member Info : {}", member != null ? member : "No Result");
+        MemberIdNameDTO member = (MemberIdNameDTO) valueOps.get(authKey);
 
-            return member;
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+        log.info("Member Info : {}", member);
+
+        return member;
     }
 
     @Override
-    public boolean validMemberInfo(String authKey) {
-        try {
-            return authKey != null && valueOps.get(authKey) != null;
-        } catch (Exception e) {
-            log.error(e);
-            return false;
-        }
+    public boolean existSession(String authKey) {
+        return authKey != null && authKey.length() == 32
+                && isKeyExist(authKey);
+    }
+
+    @Override
+    public boolean isKeyExist(String authKey) {
+        return valueOps.get(authKey) != null;
     }
 }
