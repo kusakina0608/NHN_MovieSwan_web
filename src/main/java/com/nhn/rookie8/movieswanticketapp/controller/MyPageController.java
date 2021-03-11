@@ -104,7 +104,7 @@ public class MyPageController {
     }
 
     @GetMapping("/question/register")
-    public String questionPage(HttpServletRequest httpServletRequest, Model model) {
+    public String questionPage() {
         return "page/question_page";
     }
 
