@@ -6,6 +6,7 @@ import com.nhn.rookie8.movieswanticketapp.dto.MemberRegisterDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 import com.nhn.rookie8.movieswanticketapp.service.AuthService;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
+import com.nhn.rookie8.movieswanticketapp.ticketexception.AlreadyExpiredOrNotExistKeyErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,8 +75,9 @@ public class MemberController {
     public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String authKey = authService.getAuthKey(request.getCookies());
 
-        if (authService.validMemberInfo(authKey))
-            authService.expireAuth(authKey);
+        if (!authService.existSession(authKey))
+            throw new AlreadyExpiredOrNotExistKeyErrorException();
+        authService.expireAuth(authKey);
 
         redirectAttributes.addFlashAttribute("member", MemberIdNameDTO.builder().build());
         return "redirect:/main";
