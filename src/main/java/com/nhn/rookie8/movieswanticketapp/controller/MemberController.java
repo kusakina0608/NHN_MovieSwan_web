@@ -6,11 +6,8 @@ import com.nhn.rookie8.movieswanticketapp.service.AuthService;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,11 +26,8 @@ public class MemberController {
     @Value("${accountURL}")
     private String accountUrl;
 
-    @Autowired
     private final MemberService memberService;
-
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     @GetMapping("/register")
     public String register(){
@@ -49,13 +43,13 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String loginPage(Model model) {
+    public String loginPage() {
         return "page/login_page";
     }
 
 
     @PostMapping("/login_process")
-    public String loginProcess(HttpServletRequest request, HttpServletResponse response, Model model, RedirectAttributes redirectAttributes){
+    public String loginProcess(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes){
 
         MemberResponseDTO memberResponseDTO = memberService.auth(request.getParameterMap());
 
@@ -64,29 +58,17 @@ public class MemberController {
             return "redirect:/member/login";
         }
 
-        String cookieValue = RandomStringUtils.randomAlphanumeric(32);
-        Cookie cookie = new Cookie("SWANAUTH", cookieValue);
-        cookie.setMaxAge(-1);
-        cookie.setPath("/");
-
+        Cookie cookie = authService.createCookie();
         response.addCookie(cookie);
-        authService.saveMemberInfo(cookieValue, memberService.responseToMemberIdNameMap(memberResponseDTO));
 
-        redirectAttributes.addFlashAttribute("member", authService.readMemberInfo(cookieValue));
+        authService.saveMemberInfo(cookie.getValue(), memberService.responseToMemberIdNameMap(memberResponseDTO));
+        redirectAttributes.addFlashAttribute("member", authService.readMemberInfo(cookie.getValue()));
         return "redirect:/main";
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        Cookie[] cookies = request.getCookies();
-        String authKey = new String();
-
-        if (cookies != null)
-            for (int i = 0; i < cookies.length; i++)
-                if (cookies[i].getName().equals("SWANAUTH")) {
-                    authKey = cookies[i].getValue();
-                    break;
-                }
+        String authKey = authService.getAuthKey(request.getCookies());
 
         if (authService.validMemberInfo(authKey))
             authService.expireAuth(authKey);
