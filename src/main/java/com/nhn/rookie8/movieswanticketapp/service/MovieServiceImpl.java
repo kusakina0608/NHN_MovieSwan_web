@@ -31,22 +31,17 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public String registerMovie(MovieDTO movieDTO) {
-        String movieId = movieDTO.getMovieId();
+        String movieCode = movieDTO.getMovieId();
 
         Pageable pageable = PageRequest.of(0, 1000);
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-
-        QMovie qMovie = QMovie.movie;
-        BooleanExpression expression = qMovie.movieId.startsWith(movieId);
-        booleanBuilder.and(expression);
+        BooleanBuilder booleanBuilder = moviesWithSameCodeBuilder(movieCode);
 
         long moviesWithSameCode = movieRepository.findAll(booleanBuilder, pageable).stream().count() + 1;
-        movieId += String.format("%03d", moviesWithSameCode);
+        StringBuilder movieId = new StringBuilder();
+        movieId.append(movieCode).append(String.format("%03d", moviesWithSameCode));
 
-        movieDTO.setMovieId(movieId);
-
+        movieDTO.setMovieId(movieId.toString());
         Movie movie = dtoToEntity(movieDTO);
-
         movieRepository.save(movie);
 
         return movie.getMovieId();
@@ -55,64 +50,36 @@ public class MovieServiceImpl implements MovieService{
     @Override
     public PageResultDTO<MovieDTO, Movie> getMoviePage(PageRequestDTO requestDTO, boolean current) {
         Pageable pageable = requestDTO.getPageable(Sort.by("startDate").descending());
-        BooleanBuilder booleanBuilder = current ? currentMoviesBuilder() : expectedMoviesBuilder();
-        QMovie qMovie = QMovie.movie;
         String keyword = requestDTO.getKeyword();
-
-        if(keyword != null) {
-            BooleanExpression expression = qMovie.title.contains(keyword);
-            booleanBuilder.and(expression);
-        }
+        BooleanBuilder booleanBuilder = current ? currentMoviesBuilder(keyword) : expectedMoviesBuilder(keyword);
 
         Page<Movie> result = movieRepository.findAll(booleanBuilder, pageable);
 
-        Function<Movie, MovieDTO> fn = (entity -> entityToDTO(entity));
-
-        return new PageResultDTO<>(result, fn);
+        return new PageResultDTO<>(result, this::entityToDTO);
     }
 
     @Override
     public PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList) {
         Pageable pageable = requestDTO.getPageable(Sort.by("startDate").descending());
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QMovie qMovie = QMovie.movie;
-        if(movieIdList.isEmpty()) {
-            BooleanExpression expression = qMovie.movieId.eq("");
-            booleanBuilder.and(expression);
-        }
-        for(String movieId : movieIdList) {
-            BooleanExpression expression = qMovie.movieId.eq(movieId);
-            booleanBuilder.or(expression);
-        }
+        BooleanBuilder booleanBuilder = moviesByMovieIdBuilder(movieIdList);
 
         Page<Movie> result = movieRepository.findAll(booleanBuilder, pageable);
 
-        Function<Movie, MovieDTO> fn = (entity -> entityToDTO(entity));
-
-        return new PageResultDTO<>(result, fn);
+        return new PageResultDTO<>(result, this::entityToDTO);
     }
 
     @Override
     public List<MovieDTO> getAllMovieList() {
         List<Movie> movieList = movieRepository.findAll();
-        List<MovieDTO> movieDTOList = new ArrayList<>();
-
-        for (Movie movie: movieList)
-            movieDTOList.add(entityToDTO(movie));
-
-        return movieDTOList;
+        return movieList.stream().map(movie -> entityToDTO(movie)).collect(Collectors.toList());
     }
 
     @Override
     public List<MovieDTO> getCurrentMovieList() {
-        BooleanBuilder booleanBuilder = currentMoviesBuilder();
+        BooleanBuilder booleanBuilder = currentMoviesBuilder(null);
         Pageable pageable = PageRequest.of(0, 1000);
         List<Movie> movieList = movieRepository.findAll(booleanBuilder, pageable).toList();
-        List<MovieDTO> movieDTOList = new ArrayList<>();
-        for (Movie movie: movieList)
-            movieDTOList.add(entityToDTO(movie));
-
-        return movieDTOList;
+        return movieList.stream().map(movie -> entityToDTO(movie)).collect(Collectors.toList());
     }
 
     @Override
@@ -126,25 +93,43 @@ public class MovieServiceImpl implements MovieService{
     @Override
     public MovieDTO getMovieDetail(String movieId) {
         Optional<Movie> result = movieRepository.findById(movieId);
-
         return result.isPresent() ? entityToDTO(result.get()) : null;
     }
 
-    private BooleanBuilder currentMoviesBuilder() {
+    private BooleanBuilder moviesWithSameCodeBuilder(String movieId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
-        BooleanExpression expression1 = qMovie.startDate.before(LocalDate.now());
-        booleanBuilder.and(expression1);
-        BooleanExpression expression2 = qMovie.endDate.after(LocalDate.now());
-        booleanBuilder.and(expression2);
+        booleanBuilder.and(qMovie.movieId.startsWith(movieId));
         return booleanBuilder;
     }
 
-    private BooleanBuilder expectedMoviesBuilder() {
+    private BooleanBuilder currentMoviesBuilder(String keyword) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
-        BooleanExpression expression = qMovie.startDate.after(LocalDate.now());
-        booleanBuilder.and(expression);
+        booleanBuilder.and(qMovie.startDate.before(LocalDate.now()));
+        booleanBuilder.and(qMovie.endDate.after(LocalDate.now()));
+        if(keyword != null)
+            booleanBuilder.and(qMovie.title.contains(keyword));
+        return booleanBuilder;
+    }
+
+    private BooleanBuilder expectedMoviesBuilder(String keyword) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QMovie qMovie = QMovie.movie;
+        booleanBuilder.and(qMovie.startDate.after(LocalDate.now()));
+        if(keyword != null)
+            booleanBuilder.and(qMovie.title.contains(keyword));
+        return booleanBuilder;
+    }
+
+    private BooleanBuilder moviesByMovieIdBuilder(List<String> movieIdList) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QMovie qMovie = QMovie.movie;
+        if(movieIdList.isEmpty())
+            booleanBuilder.and(qMovie.movieId.eq(""));
+        for(String movieId : movieIdList)
+            booleanBuilder.or(qMovie.movieId.eq(movieId));
+
         return booleanBuilder;
     }
 }

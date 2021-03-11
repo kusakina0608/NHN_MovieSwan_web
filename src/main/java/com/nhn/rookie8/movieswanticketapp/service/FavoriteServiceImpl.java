@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,18 +34,11 @@ public class FavoriteServiceImpl implements FavoriteService{
     @Override
     public List<String> getFavoriteList(String memberId) {
         Pageable pageable = PageRequest.of(0, 1000);
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QFavorite qFavorite = QFavorite.favorite;
-        BooleanExpression expression = qFavorite.memberId.eq(memberId);
-        booleanBuilder.and(expression);
+        BooleanBuilder booleanBuilder = favoriteListBuilder(memberId);
 
         Page<Favorite> result = repository.findAll(booleanBuilder, pageable);
 
-        List<String> movieIdList = new ArrayList<>();
-        for(Favorite fav : result)
-            movieIdList.add(fav.getMovieId());
-
-        return movieIdList;
+        return result.stream().map(fav -> fav.getMovieId()).collect(Collectors.toList());
     }
 
     @Override
@@ -54,9 +48,7 @@ public class FavoriteServiceImpl implements FavoriteService{
                 .movieId(movieId)
                 .build();
 
-        Optional<Favorite> result = repository.findById(favoriteId);
-
-        return result.isPresent();
+        return repository.findById(favoriteId).isPresent();
     }
 
     @Override
@@ -67,5 +59,12 @@ public class FavoriteServiceImpl implements FavoriteService{
                 .build();
 
         repository.deleteById(favoriteId);
+    }
+
+    private BooleanBuilder favoriteListBuilder(String memberId) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QFavorite qFavorite = QFavorite.favorite;
+        booleanBuilder.and(qFavorite.memberId.eq(memberId));
+        return booleanBuilder;
     }
 }
