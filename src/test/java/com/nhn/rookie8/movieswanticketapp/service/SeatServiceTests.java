@@ -14,8 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Log4j2
 @SpringBootTest
@@ -58,75 +57,66 @@ public class SeatServiceTests {
 
     @Test
     @Order(1)
-    void registerTest(){
-        Seat entity = seatService.dtoToEntity(seatDTO);
-        when(seatRepository.save(entity)).thenReturn(entity);
-        Assertions.assertEquals("A01", seatService.register(seatDTO));
-        log.info("first");
-    }
-
-    @Test
-    @Order(2)
     void preemptTest1(){ // 좌석이 선점되지 않은 경우
         SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(seatCode).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.empty();
         when(seatRepository.findById(seatId)).thenReturn(result);
-        Assertions.assertEquals(true, seatService.preempt(seatDTO));
+//        Assertions.assertEquals(true, seatService.preemptSeat(seatDTO));
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     void preemptTest2(){ // 내가 선점하고 있는 좌석인 경우
         SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(seatCode).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
         when(seat.getMemberId()).thenReturn(memberId1);
-        Assertions.assertEquals(true, seatService.preempt(seatDTO));
+//        Assertions.assertEquals(true, seatService.preemptSeat(seatDTO));
     }
 
     @Test
-    @Order(4)
+    @Order(3)
     void preemptTest3(){ // 다른 사람이 선점하고 있는 좌석인 경우
         SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(seatCode).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
         when(seat.getMemberId()).thenReturn(memberId2);
-        Assertions.assertEquals(false, seatService.preempt(seatDTO));
+//        Assertions.assertEquals(false, seatService.preemptSeat(seatDTO));
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     void removeTest1(){ // 예약 또는 선점되지 않은 좌석인 경우
         SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(seatCode).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.empty();
         when(seatRepository.findById(seatId)).thenReturn(result);
-        Assertions.assertEquals(false, seatService.remove(seatDTO));
+        Assertions.assertEquals(false, seatService.cancelSeat(seatDTO));
     }
 
     @Test
-    @Order(6)
+    @Order(5)
     void removeTest2(){ // 내가 소유한 좌석인 경우
         SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(seatCode).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
         when(seat.getMemberId()).thenReturn(memberId1);
-        Assertions.assertEquals(true, seatService.remove(seatDTO));
+        Assertions.assertEquals(true, seatService.cancelSeat(seatDTO));
     }
 
     @Test
-    @Order(7)
+    @Order(6)
     void removeTest3(){ // 다른 사람이 소유한 좌석인 경우
         SeatId seatId = SeatId.builder().timetableId(timetableId).seatCode(seatCode).build();
         Seat seat = mock(Seat.class);
         Optional<Seat> result = Optional.of(seat);
         when(seatRepository.findById(seatId)).thenReturn(result);
         when(seat.getMemberId()).thenReturn(memberId2);
-        Assertions.assertEquals(false, seatService.remove(seatDTO));
+        Assertions.assertEquals(false, seatService.cancelSeat(seatDTO));
     }
 
     @AfterAll
