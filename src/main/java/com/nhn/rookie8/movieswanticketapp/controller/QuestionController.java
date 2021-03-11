@@ -8,7 +8,6 @@ import com.nhn.rookie8.movieswanticketapp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,33 +23,18 @@ public class QuestionController {
     private final QuestionService service;
 
     @PostMapping("/register")
-    public String registerQuestion(QuestionDTO questionDTO, Model model) {
-        try {
-            service.registerQuestion(questionDTO);
-            return "redirect:/mypage/question";
-        } catch (Exception e){
-            log.error(e);
-            return null;
-        }
+    public String registerQuestion(QuestionDTO questionDTO) {
+        service.registerQuestion(questionDTO);
+        return "redirect:/mypage/question";
     }
 
     @GetMapping("/post")
     public QuestionDTO readQuestion(@RequestParam Integer qid) {
-        try {
-            return service.readQuestion(qid);
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+        return service.readQuestion(qid);
     }
 
     @GetMapping("/getall")
-    public PageResultDTO<QuestionDTO, Question> getAllQuestionList(PageRequestDTO pageRequestDTO, Model model) {
-        try {
-            return service.getAllQuestionList(pageRequestDTO);
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+    public PageResultDTO<QuestionDTO, Question> getAllQuestionList(PageRequestDTO pageRequestDTO) {
+        return service.getAllQuestionList(pageRequestDTO);
     }
 }
