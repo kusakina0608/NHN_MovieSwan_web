@@ -6,15 +6,12 @@ import com.nhn.rookie8.movieswanticketapp.entity.QAuth;
 import com.nhn.rookie8.movieswanticketapp.repository.AuthRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,7 +31,7 @@ public class DBAuthService implements AuthService {
             Auth auth = toEntity(authKey, member);
             repository.save(auth);
 
-            log.info("Registerd AuthKey : {}", auth);
+            log.info("Registered AuthKey : {}", auth);
         } catch(Exception e) {
             log.error(e);
         }
@@ -45,7 +42,7 @@ public class DBAuthService implements AuthService {
         try {
             repository.deleteById(authKey);
 
-            log.info("Deleted AuthKey : {}", authKey);
+            log.info("Expired AuthKey : {}", authKey);
         } catch (Exception e) {
             log.error(e);
         }
@@ -101,5 +98,13 @@ public class DBAuthService implements AuthService {
         BooleanExpression expression = qAuth.regDate.lt(LocalDateTime.now().minusMinutes(30));
         booleanBuilder.and(expression);
         return booleanBuilder;
+    }
+
+    private Auth toEntity(String key, MemberIdNameDTO member) {
+        return Auth.builder()
+                .authKey(key)
+                .memberId(member.getMemberId())
+                .name(member.getName())
+                .build();
     }
 }

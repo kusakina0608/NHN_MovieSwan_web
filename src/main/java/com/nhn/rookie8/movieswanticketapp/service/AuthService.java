@@ -1,7 +1,9 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.Auth;
+import org.apache.commons.lang3.RandomStringUtils;
+
+import javax.servlet.http.Cookie;
 
 public interface AuthService {
 
@@ -13,11 +15,19 @@ public interface AuthService {
 
     public boolean validMemberInfo(String authKey);
 
-    default Auth toEntity(String key, MemberIdNameDTO member) {
-        return Auth.builder()
-                .authKey(key)
-                .memberId(member.getMemberId())
-                .name(member.getName())
-                .build();
+    default Cookie createCookie() {
+        String cookieValue = RandomStringUtils.randomAlphanumeric(32);
+        Cookie cookie = new Cookie("SWANAUTH", cookieValue);
+        cookie.setMaxAge(-1);
+        cookie.setPath("/");
+
+        return cookie;
+    }
+
+    default String getAuthKey(Cookie[] cookies) {
+        for (int i = 0; i < cookies.length; i++)
+            if (cookies[i].getName().equals("SWANAUTH"))
+                return cookies[i].getValue();
+        return null;
     }
 }
