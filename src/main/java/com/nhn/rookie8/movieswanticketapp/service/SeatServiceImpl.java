@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -54,26 +55,21 @@ public class SeatServiceImpl implements SeatService{
 
     @Override
     public List<String> getReservedSeatList(String timetableId) {
-        List<String> seatIdList = new ArrayList<>();
-        seatRepository.findAll(getReservedSeat(timetableId), PageRequest.of(0, 1000)).toList()
-                .forEach(el -> seatIdList.add(el.getSeatCode()));
-        return seatIdList;
+        return seatRepository.findAll(getReservedSeat(timetableId), PageRequest.of(0, 1000))
+                .stream().map(e -> e.getSeatCode()).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getMySeatList(String reservationId) {
-        List<String> seatIdList = new ArrayList<>();
-        seatRepository.findAll(getMySeat(reservationId), PageRequest.of(0, 1000)).toList()
-                .forEach(el -> seatIdList.add(el.getSeatCode()));
-        return seatIdList;
+        return seatRepository.findAll(getMySeat(reservationId), PageRequest.of(0, 1000))
+                .stream().map(e -> e.getSeatCode()).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(rollbackOn = {DataIntegrityViolationException.class, SQLException.class})
-    public Boolean preemptSeat(SeatDTO dto) {
+    public void preemptSeat(SeatDTO dto) {
         Seat seat = dtoToEntity(dto);
         seatRepository.save(seat);
-        return true;
     }
 
     @Override

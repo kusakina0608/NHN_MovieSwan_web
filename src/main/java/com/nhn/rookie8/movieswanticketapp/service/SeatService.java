@@ -11,7 +11,7 @@ public interface SeatService {
     void confirmSeat(String timetableId, String memberId, String reservationId, String seatCode);
     List<String> getReservedSeatList(String timetableId);
     List<String> getMySeatList(String reservationId);
-    Boolean preemptSeat(SeatDTO dto);
+    void preemptSeat(SeatDTO dto);
     Boolean cancelSeat(SeatDTO dto);
 
     default Seat dtoToEntity(SeatDTO seatDTO){

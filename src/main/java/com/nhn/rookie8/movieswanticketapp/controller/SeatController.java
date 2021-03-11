@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.List;
 
 @RequestMapping("/api/seat")
@@ -26,7 +27,7 @@ public class SeatController {
     }
 
     @PostMapping("/preempt")
-    public boolean preemptSeat(HttpServletRequest request, @ModelAttribute SeatDTO seatDTO) {
+    public boolean preemptSeat(HttpServletRequest request, @ModelAttribute SeatDTO seatDTO) throws SQLException{
         log.info("{} 사용자의 좌석 선점 요청. 상영번호: {}, 좌석번호: {}",
                 getMemberId(request),
                 seatDTO.getTimetableId(),
