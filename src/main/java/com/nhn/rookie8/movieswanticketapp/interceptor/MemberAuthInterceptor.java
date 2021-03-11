@@ -1,12 +1,12 @@
 package com.nhn.rookie8.movieswanticketapp.interceptor;
 
 import com.nhn.rookie8.movieswanticketapp.service.AuthService;
+import com.nhn.rookie8.movieswanticketapp.ticketexception.SessionNotExistErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,21 +18,10 @@ public class MemberAuthInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+        String authKey = authService.getAuthKey(request.getCookies());
 
-        Cookie[] cookies = request.getCookies();
-        String authKey = new String();
-
-        if (cookies != null)
-            for (int i = 0; i < cookies.length; i++)
-                if (cookies[i].getName().equals("SWANAUTH")) {
-                    authKey = cookies[i].getValue();
-                    break;
-                }
-
-        if (!authService.validMemberInfo(authKey)){
-            response.sendRedirect("/member/login");
-            return false;
-        }
+        if (!authService.existSession(authKey))
+            throw new SessionNotExistErrorException();
 
         request.setAttribute("memberId", authService.readMemberInfo(authKey).getMemberId());
         return true;

@@ -1,6 +1,5 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -9,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 @Log4j2
@@ -30,8 +27,7 @@ public class MainController {
 
     @GetMapping("/admin")
     public String adminPage(Model model) {
-        List<MovieDTO> movieList = movieService.getCurrentMovieList();
-        model.addAttribute("movieList", movieList);
+        model.addAttribute("movieList", movieService.getCurrentMovieList());
         return "page/admin_page";
     }
 
@@ -39,5 +35,4 @@ public class MainController {
     public String l7check(){
         return "page/l7check";
     }
-
 }

@@ -25,83 +25,57 @@ public class TimetableController {
 
     @PostMapping("/register")
     public String registerMovieSchedule(TimetableInputDTO timetableInputDTO) {
-        try {
-            service.registerTimetable(timetableInputDTO);
-
-            log.info("Request Input DTO : {}", timetableInputDTO);
-
-            return "redirect:/admin";
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+        service.registerTimetable(timetableInputDTO);
+        log.info("Request Input DTO : {}", timetableInputDTO);
+        return "redirect:/admin";
     }
 
     @DeleteMapping("/delete")
     public String deleteMovieSchedule(String timetableId) {
-        try {
-            service.deleteTimetable(timetableId);
+        service.deleteTimetable(timetableId);
 
-            log.info("Request TimeTableID : {}", timetableId);
+        log.info("Request TimeTableID : {}", timetableId);
 
-            return "redirect:/admin";
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+        return "redirect:/admin";
     }
 
     @GetMapping("/get")
     @ResponseBody
     public TimetableDTO getSchedule(@RequestParam String timetableId) {
-        try {
-            TimetableDTO result = service.getTimetable(timetableId);
+        TimetableDTO result = service.getTimetable(timetableId);
 
-            log.info("Request TimeTableID : {}", timetableId);
+        log.info("Request TimeTableID : {}", timetableId);
 
-            if (result == null)
-                throw new Exception("No results were found for your search.");
-            return service.getTimetable(timetableId);
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+        return service.getTimetable(timetableId);
     }
 
     @GetMapping("/getall")
     @ResponseBody
     public GetScheduleDTO getAllSchedulesOfMovie(@RequestParam String movieId) {
-        try {
-            log.info("Request MovieId : {}", movieId);
-            List<TimetableDTO> result = service.getAllTimetableOfMovie(movieId);
-            if (result.isEmpty())
-                throw new Exception("No results were found for your search.");
+        log.info("Request MovieId : {}", movieId);
+        List<TimetableDTO> result = service.getAllTimetableOfMovie(movieId);
 
-            List<LinkedHashMap<String, List<String>>> scheduleList = new ArrayList<>();
-            LinkedHashMap<String, List<String>> linkedHashMap = new LinkedHashMap<>();
+        List<LinkedHashMap<String, List<String>>> scheduleList = new ArrayList<>();
+        LinkedHashMap<String, List<String>> linkedHashMap = new LinkedHashMap<>();
 
-            result.forEach(e -> {
-                String[] datetime = e.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).split(" ");
-                String date = datetime[0];
-                String time = datetime[1];
+        result.forEach(e -> {
+            String[] datetime = e.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).split(" ");
+            String date = datetime[0];
+            String time = datetime[1];
 
-                if (!linkedHashMap.containsKey(date)) {
-                    List<String> list = new ArrayList<>();
-                    linkedHashMap.put(date, list);
-                }
+            if (!linkedHashMap.containsKey(date)) {
+                List<String> list = new ArrayList<>();
+                linkedHashMap.put(date, list);
+            }
 
-                StringBuilder str = new StringBuilder();
-                str.append(time).append(' ').append(e.getTimetableId());
-                linkedHashMap.get(date).add(str.toString());
-            });
-            scheduleList.add(linkedHashMap);
+            StringBuilder str = new StringBuilder();
+            str.append(time).append(' ').append(e.getTimetableId());
+            linkedHashMap.get(date).add(str.toString());
+        });
+        scheduleList.add(linkedHashMap);
 
-            return GetScheduleDTO.builder()
-                    .scheduleData(scheduleList)
-                    .build();
-        } catch (Exception e) {
-            log.error(e);
-            return null;
-        }
+        return GetScheduleDTO.builder()
+                .scheduleData(scheduleList)
+                .build();
     }
 }
