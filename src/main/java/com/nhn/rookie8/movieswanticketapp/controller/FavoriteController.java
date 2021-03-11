@@ -12,17 +12,17 @@ public class FavoriteController {
     private final FavoriteService service;
 
     @PostMapping("/register")
-    public void registerFavorite(FavoriteDTO favoriteDTO) {
+    public void registerFavorite(@ModelAttribute FavoriteDTO favoriteDTO) {
         service.addFavorite(favoriteDTO);
     }
 
     @DeleteMapping("/delete")
-    public void deleteFavorite(FavoriteDTO favoriteDTO) {
+    public void deleteFavorite(@ModelAttribute FavoriteDTO favoriteDTO) {
         service.removeFavorite(favoriteDTO);
     }
 
     @GetMapping("/isFavorite")
-    public boolean isFavorite(String memberId, String movieId) {
+    public boolean isFavorite(@RequestParam String memberId, @RequestParam String movieId) {
         return service.isFavorite(memberId, movieId);
     }
 }

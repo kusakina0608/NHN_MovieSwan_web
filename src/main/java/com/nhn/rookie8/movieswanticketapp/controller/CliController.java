@@ -18,14 +18,14 @@ public class CliController {
     private final ReservationService service;
 
     @ShellMethod("예매내역 조회")
-    public String rsvs(@ShellOption String memberId) {
+    public String reservationList(@ShellOption String memberId) {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
         PageResultDTO<ReservationDTO, Reservation> result = service.getMyReservationList(pageRequestDTO, memberId);
-        StringBuilder message = new StringBuilder();
 
         if(result.getDtoList().isEmpty())
             return "예매 내역이 없습니다.";
 
+        StringBuilder message = new StringBuilder();
         message.append("예매 번호\t\t영화 제목\t\t\t상영 일자\t예매 일자\n");
         for (ReservationDTO reservationDTO : result.getDtoList())
             message.append(service.getReservationInfo(reservationDTO));
@@ -34,15 +34,19 @@ public class CliController {
     }
 
     @ShellMethod("예매내역 상세조회")
-    public String dtl(@ShellOption String memberId, @ShellOption String reservationId) {
+    public String reservationDetail(@ShellOption String memberId, @ShellOption String reservationId) {
         ReservationDTO reservationDTO = service.getReservation(reservationId);
 
-        if(reservationDTO == null || !reservationDTO.getMemberId().equals(memberId)) {
+        if(isValidReservation(memberId, reservationDTO)) {
             log.warn("reservation : {}", reservationDTO);
             log.warn("memberId : {}", memberId);
             return "잘못된 예약 번호입니다.";
         }
 
         return service.getReservationDetail(reservationDTO);
+    }
+
+    private boolean isValidReservation(String memberId, ReservationDTO reservationDTO) {
+        return reservationDTO == null || !reservationDTO.getMemberId().equals(memberId);
     }
 }

@@ -7,7 +7,6 @@ import com.nhn.rookie8.movieswanticketapp.entity.QReview;
 import com.nhn.rookie8.movieswanticketapp.entity.Review;
 import com.nhn.rookie8.movieswanticketapp.repository.ReviewRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -32,18 +30,17 @@ public class ReviewServiceImpl implements ReviewService{
         BooleanBuilder booleanBuilder = getReviewsByMovieId(movieId);
 
         Optional<Review> lastReview = repository.findAll(booleanBuilder, pageable).stream().findFirst();
-        String reservationId;
+        StringBuilder reservationId = new StringBuilder();
         if(lastReview.isPresent()) {
             String lastReviewId = lastReview.get().getReviewId();
             int num = Integer.parseInt(lastReviewId.substring(lastReviewId.lastIndexOf('-') + 1));
-            reservationId = movieId + "-" + String.format("%05d", num + 1);
+            reservationId.append(movieId).append("-").append(String.format("%05d", num + 1));
         }
         else
-            reservationId = movieId + "-00001";
-        reviewDTO.setReviewId(reservationId);
+            reservationId.append(movieId).append("-00001");
+        reviewDTO.setReviewId(reservationId.toString());
 
         Review review = dtoToEntity(reviewDTO);
-
         repository.save(review);
 
         return review.getReviewId();
@@ -53,23 +50,15 @@ public class ReviewServiceImpl implements ReviewService{
     public PageResultDTO<ReviewDTO, Review> getReviewPage(PageRequestDTO pageRequestDTO, String movieId) {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("reviewId").descending());
         BooleanBuilder booleanBuilder = getReviewsByMovieId(movieId);
-
         Page<Review> result = repository.findAll(booleanBuilder, pageable);
 
-        Function<Review, ReviewDTO> fn = (entity -> entityToDTO(entity));
-
-        return new PageResultDTO<>(result, fn);
+        return new PageResultDTO<>(result, this::entityToDTO);
     }
 
     @Override
     public ReviewDTO findMyReviewByMovieId(String movieId, String memberId) {
         Pageable pageable = PageRequest.of(0, 10);
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QReview qReview = QReview.review;
-        BooleanExpression expression1 = qReview.movieId.eq(movieId);
-        booleanBuilder.and(expression1);
-        BooleanExpression expression2 = qReview.memberId.eq(memberId);
-        booleanBuilder.and(expression2);
+        BooleanBuilder booleanBuilder = myReviewByMovieIdBuilder(movieId, memberId);
 
         Optional<Review> result = repository.findAll(booleanBuilder, pageable).stream().findFirst();
 
@@ -79,36 +68,19 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public PageResultDTO<ReviewDTO, Review> findMyReviews(PageRequestDTO pageRequestDTO, String memberId) {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("modDate").descending());
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QReview qReview = QReview.review;
-        BooleanExpression expression = qReview.memberId.eq(memberId);
-        booleanBuilder.and(expression);
-
+        BooleanBuilder booleanBuilder = myReviewsBuilder(memberId);
         Page<Review> result = repository.findAll(booleanBuilder, pageable);
 
-        Function<Review, ReviewDTO> fn = (entity -> entityToDTO(entity));
-
-        return new PageResultDTO<>(result, fn);
+        return new PageResultDTO<>(result, this::entityToDTO);
     }
 
     @Override
-    public float getRatingByMovieId(String movieId) {
+    public double getRatingByMovieId(String movieId) {
         Pageable pageable = PageRequest.of(0, 1000);
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QReview qReview = QReview.review;
-        BooleanExpression expression = qReview.movieId.eq(movieId);
-        booleanBuilder.and(expression);
+        BooleanBuilder booleanBuilder = getReviewsByMovieId(movieId);
 
         List<Review> result = repository.findAll(booleanBuilder, pageable).toList();
-        if(result.isEmpty())
-            return 0;
-        else {
-            float sum = 0;
-            for (Review review : result)
-                sum += review.getRating();
-
-            return sum / result.size();
-        }
+        return result.stream().mapToDouble(Review::getRating).average().orElse(0);
     }
 
     @Override
@@ -133,9 +105,22 @@ public class ReviewServiceImpl implements ReviewService{
     private BooleanBuilder getReviewsByMovieId(String movieId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QReview qReview = QReview.review;
-        BooleanExpression expression = qReview.movieId.eq(movieId);
-        booleanBuilder.and(expression);
+        booleanBuilder.and(qReview.movieId.eq(movieId));
+        return booleanBuilder;
+    }
 
+    private BooleanBuilder myReviewByMovieIdBuilder(String movieId, String memberId) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReview qReview = QReview.review;
+        booleanBuilder.and(qReview.movieId.eq(movieId));
+        booleanBuilder.and(qReview.memberId.eq(memberId));
+        return booleanBuilder;
+    }
+
+    private BooleanBuilder myReviewsBuilder(String memberId) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QReview qReview = QReview.review;
+        booleanBuilder.and(qReview.memberId.eq(memberId));
         return booleanBuilder;
     }
 }
