@@ -2,6 +2,7 @@ package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhn.rookie8.movieswanticketapp.dto.*;
 import com.nhn.rookie8.movieswanticketapp.ticketexception.UserNotFoundErrorException;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
     @PostConstruct
     public void initialize(){
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         template = new RestTemplate();
     }
 
@@ -38,22 +40,24 @@ public class MemberServiceImpl implements MemberService {
         MemberResponseDTO memberInfo = template.postForObject(accountUrl + "/api/getMemberInfo",
                 MemberDTO.builder().memberId(memberId).build(), MemberResponseDTO.class);
 
+        MemberDTO memberDTO = objectMapper.convertValue(memberInfo.getContent(), MemberDTO.class);
+
         return objectMapper.convertValue(memberInfo.getContent(), MemberDTO.class);
     }
 
     @Override
-    public boolean checkResponse(MemberResponseDTO response){
-        return response != null && !response.isError();
+    public boolean checkResponse(MemberResponseDTO memberResponseDTO){
+        return memberResponseDTO != null && !memberResponseDTO.isError();
     }
 
     @Override
-    public MemberResponseDTO register(MemberRegisterDTO request){
-        return template.postForObject(accountUrl+"/api/register", request, MemberResponseDTO.class);
+    public MemberResponseDTO register(MemberRegisterDTO memberRegisterDTO){
+        return template.postForObject(accountUrl+"/api/register", memberRegisterDTO, MemberResponseDTO.class);
     }
 
     @Override
-    public MemberResponseDTO auth(MemberAuthDTO request){
-        return template.postForObject(accountUrl+"/api/auth", request, MemberResponseDTO.class);
+    public MemberResponseDTO auth(MemberAuthDTO memberAuthDTO){
+        return template.postForObject(accountUrl+"/api/auth", memberAuthDTO, MemberResponseDTO.class);
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -36,9 +37,13 @@ public class MyPageController {
 
 
     @GetMapping("/memberinfo")
-    public String myPageMemberinfo(@RequestParam String memberId, Model model) {
+    public String myPageMemberinfo(HttpServletRequest request, Model model) {
 
-        model.addAttribute("member", memberService.getMemberInfoById(memberId));
+        MemberDTO memberDTO = memberService
+                .getMemberInfoById(request.getAttribute("memberId").toString());
+
+        model.addAttribute("member", memberDTO);
+
         return "page/my_page_memberinfo";
     }
 

@@ -6,11 +6,11 @@ public interface MemberService {
 
     MemberDTO getMemberInfoById(String memberId);
 
-    boolean checkResponse(MemberResponseDTO response);
+    boolean checkResponse(MemberResponseDTO memberResponseDTO);
 
-    MemberResponseDTO register(MemberRegisterDTO request);
+    MemberResponseDTO register(MemberRegisterDTO memberRegisterDTO);
 
-    MemberResponseDTO auth(MemberAuthDTO request);
+    MemberResponseDTO auth(MemberAuthDTO memberAuthDTO);
 
     MemberIdNameDTO responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO);
 }

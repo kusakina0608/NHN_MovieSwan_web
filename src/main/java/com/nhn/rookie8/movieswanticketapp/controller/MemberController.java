@@ -55,9 +55,10 @@ public class MemberController {
 
 
     @PostMapping("/login_process")
-    public String loginProcess(@ModelAttribute MemberAuthDTO request, HttpServletResponse response, RedirectAttributes redirectAttributes){
+    public String loginProcess(@ModelAttribute MemberAuthDTO memberAuthDTO,
+                               HttpServletResponse response, RedirectAttributes redirectAttributes){
 
-        MemberResponseDTO memberResponseDTO = memberService.auth(request);
+        MemberResponseDTO memberResponseDTO = memberService.auth(memberAuthDTO);
 
         if(!memberService.checkResponse(memberResponseDTO)){
             redirectAttributes.addFlashAttribute("message","ID 또는 Password가 잘못 입력 되었습니다.");
