@@ -1,19 +1,14 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhn.rookie8.movieswanticketapp.dto.TokenDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TokenRequestDTO;
-import com.nhn.rookie8.movieswanticketapp.entity.Auth;
-import lombok.Data;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequest;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
@@ -28,6 +23,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 @Log4j2
 public class StorageService {
     @Value("${nhn.cloud.storageUrl}")
@@ -42,20 +38,18 @@ public class StorageService {
     private String username;
     @Value("${nhn.cloud.password}")
     private String password;
+
     private TokenRequestDTO tokenRequest;
     private TokenDTO token;
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @PostConstruct
     public void setTokenRequest() {
         TokenRequestDTO.PasswordCredentials passwordCredentials = new TokenRequestDTO.PasswordCredentials(username, password);
         TokenRequestDTO.Auth auth = new TokenRequestDTO.Auth(tenantId, passwordCredentials);
         tokenRequest = new TokenRequestDTO(auth);
-        restTemplate = new RestTemplate();
     }
 
-    //토큰은 만료 됐는지 확인한후 만료 됐을 때만 새로 받기
-    //objectmapper 바꾸기
     private TokenDTO requestToken(TokenRequestDTO tokenRequest) {
         String identityUrl = authUrl + "/tokens";
 
@@ -67,8 +61,7 @@ public class StorageService {
 
         // 토큰 요청
         ResponseEntity<TokenDTO> response
-                = this.restTemplate.exchange(identityUrl, HttpMethod.POST, httpEntity, TokenDTO.class);
-        log.info(response.getBody());
+                = restTemplate.exchange(identityUrl, HttpMethod.POST, httpEntity, TokenDTO.class);
         return response.getBody();
     }
 
@@ -97,11 +90,6 @@ public class StorageService {
             }
         };
 
-        // 오버라이드한 RequestCallback을 사용할 수 있도록 설정
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setBufferRequestBody(false);
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
-
         HttpMessageConverterExtractor<String> responseExtractor
                 = new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
 
@@ -123,7 +111,7 @@ public class StorageService {
         HttpEntity<String> requestHttpEntity = new HttpEntity<>(null, headers);
 
         // API 호출, 데이터를 바이트 배열로 받음
-        return this.restTemplate.exchange(url, HttpMethod.GET, requestHttpEntity, byte[].class);
+        return restTemplate.exchange(url, HttpMethod.GET, requestHttpEntity, byte[].class);
     }
 
     private String createFileName(MultipartFile file) {
@@ -143,6 +131,7 @@ public class StorageService {
     }
 
     private boolean isValidToken() {
-        return token != null || token.getAccess().getToken().getExpires().isAfter(LocalDateTime.now());
+        log.info(token != null);
+        return token != null && token.getAccess().getToken().getExpires().isAfter(LocalDateTime.now());
     }
 }
