@@ -3,6 +3,7 @@ package com.nhn.rookie8.movieswanticketapp.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhn.rookie8.movieswanticketapp.dto.TokenDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TokenRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Auth;
 import lombok.Data;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -41,6 +43,7 @@ public class StorageService {
     @Value("${nhn.cloud.password}")
     private String password;
     private TokenRequestDTO tokenRequest;
+    private TokenDTO token;
     private RestTemplate restTemplate;
 
     @PostConstruct
@@ -53,7 +56,7 @@ public class StorageService {
 
     //토큰은 만료 됐는지 확인한후 만료 됐을 때만 새로 받기
     //objectmapper 바꾸기
-    private String requestToken(TokenRequestDTO tokenRequest) {
+    private TokenDTO requestToken(TokenRequestDTO tokenRequest) {
         String identityUrl = authUrl + "/tokens";
 
         // 헤더 생성
@@ -63,19 +66,10 @@ public class StorageService {
         HttpEntity<TokenRequestDTO> httpEntity = new HttpEntity<>(tokenRequest, headers);
 
         // 토큰 요청
-        ResponseEntity<String> response
-                = this.restTemplate.exchange(identityUrl, HttpMethod.POST, httpEntity, String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonNode rootNode = objectMapper.readTree(response.getBody());
-            JsonNode accessNode = rootNode.path("access");
-            JsonNode tokenNode = accessNode.path("token");
-            return tokenNode.path("id").asText();
-        } catch (JsonProcessingException e) {
-            log.warn("파싱 실패");
-            return "";
-        }
+        ResponseEntity<TokenDTO> response
+                = this.restTemplate.exchange(identityUrl, HttpMethod.POST, httpEntity, TokenDTO.class);
+        log.info(response.getBody());
+        return response.getBody();
     }
 
     private String getUrl(@NonNull String containerName, @NonNull String objectName) {
@@ -92,12 +86,13 @@ public class StorageService {
         }
         String imageName = createFileName(file);
         String url = this.getUrl(containerName, imageName);
-        String tokenId = requestToken(tokenRequest);
+        if(!isValidToken())
+            token = requestToken(tokenRequest);
 
         // InputStream을 요청 본문에 추가할 수 있도록 RequestCallback 오버라이드
         final RequestCallback requestCallback = new RequestCallback() {
             public void doWithRequest(final ClientHttpRequest request) throws IOException {
-                request.getHeaders().add("X-Auth-Token", tokenId);
+                request.getHeaders().add("X-Auth-Token", token.getAccess().getToken().getId());
                 IOUtils.copy(inputStream, request.getBody());
             }
         };
@@ -108,7 +103,7 @@ public class StorageService {
         RestTemplate restTemplate = new RestTemplate(requestFactory);
 
         HttpMessageConverterExtractor<String> responseExtractor
-                = new HttpMessageConverterExtractor<String>(String.class, restTemplate.getMessageConverters());
+                = new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
 
         // API 호출
         restTemplate.execute(url, HttpMethod.PUT, requestCallback, responseExtractor);
@@ -118,11 +113,11 @@ public class StorageService {
 
     public ResponseEntity<byte[]> displayImage(String objectName) {
         String url = this.getUrl(containerName, objectName);
-        String tokenId = requestToken(tokenRequest);
-
+        if(!isValidToken())
+            token = requestToken(tokenRequest);
         // 헤더 생성
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Auth-Token", tokenId);
+        headers.add("X-Auth-Token", token.getAccess().getToken().getId());
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
         HttpEntity<String> requestHttpEntity = new HttpEntity<>(null, headers);
@@ -145,5 +140,9 @@ public class StorageService {
         }
 
         return uuid + extensionName;
+    }
+
+    private boolean isValidToken() {
+        return token != null || token.getAccess().getToken().getExpires().isAfter(LocalDateTime.now());
     }
 }
