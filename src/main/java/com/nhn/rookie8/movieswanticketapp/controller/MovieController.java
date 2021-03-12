@@ -4,21 +4,17 @@ import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
-import com.nhn.rookie8.movieswanticketapp.service.ImageService;
 import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import com.nhn.rookie8.movieswanticketapp.service.ReviewService;
 import com.nhn.rookie8.movieswanticketapp.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.annotation.PostConstruct;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,25 +24,7 @@ import javax.annotation.PostConstruct;
 public class MovieController {
     private final MovieService movieService;
     private final ReviewService reviewService;
-    private StorageService storageService;
-
-    @Value("${nhn.cloud.storageUrl}")
-    private String storageUrl;
-    @Value("${nhn.cloud.containerName}")
-    private String containerName;
-    @Value("${nhn.cloud.authUrl}")
-    private String authUrl;
-    @Value("${nhn.cloud.tenantId}")
-    private String tenantId;
-    @Value("${nhn.cloud.username}")
-    private String username;
-    @Value("${nhn.cloud.password}")
-    private String password;
-
-    @PostConstruct
-    public void setStorageService() {
-        storageService = new StorageService(authUrl, tenantId, username, password);
-    }
+    private final StorageService storageService;
     
     @GetMapping({"", "/"})
     public String moviePage() {
@@ -73,13 +51,8 @@ public class MovieController {
 
     @PostMapping("/register")
     public String registerMovie(@ModelAttribute MovieDTO movieDTO, @RequestParam MultipartFile uploadFile) {
-        String token = storageService.requestToken();
-        log.info(token);
-
-        ImageService imageService = new ImageService(storageUrl, token);
-
         try {
-            String posterName = imageService.uploadImage(containerName, uploadFile);
+            String posterName = storageService.uploadImage(uploadFile);
             movieDTO.setPoster(posterName);
             log.info("파일 업로드 성공 {}", uploadFile.getOriginalFilename());
         } catch (Exception e) {
@@ -95,11 +68,7 @@ public class MovieController {
     @ResponseBody
     @GetMapping("/display")
     public ResponseEntity<byte[]> getFile(@RequestParam String fileName) {
-        String token = storageService.requestToken();
-        log.info(token);
-
-        ImageService imageService = new ImageService(storageUrl, token);
-        return imageService.displayImage(containerName, fileName);
+        return storageService.displayImage(fileName);
     }
 
     @ResponseBody
