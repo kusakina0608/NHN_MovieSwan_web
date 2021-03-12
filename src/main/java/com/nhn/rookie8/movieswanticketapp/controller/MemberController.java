@@ -6,7 +6,6 @@ import com.nhn.rookie8.movieswanticketapp.dto.MemberRegisterDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 import com.nhn.rookie8.movieswanticketapp.service.AuthService;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.AlreadyExpiredOrNotExistKeyErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,21 +62,16 @@ public class MemberController {
             return "redirect:/member/login";
         }
 
-        Cookie cookie = authService.createCookie();
-        response.addCookie(cookie);
+        Cookie cookie = authService.setSession(memberService.responseToMemberIdNameMap(memberResponseDTO));
 
-        authService.saveMemberInfo(cookie.getValue(), memberService.responseToMemberIdNameMap(memberResponseDTO));
-        redirectAttributes.addFlashAttribute("member", authService.readMemberInfo(cookie.getValue()));
+        response.addCookie(cookie);
+        redirectAttributes.addFlashAttribute("member", authService.getMemberInfo(cookie.getValue()));
         return "redirect:/main";
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        String authKey = authService.getAuthKey(request.getCookies());
-
-        if (!authService.existSession(authKey))
-            throw new AlreadyExpiredOrNotExistKeyErrorException();
-        authService.expireAuth(authKey);
+        authService.expireSession(authService.getAuthKey(request.getCookies()));
 
         redirectAttributes.addFlashAttribute("member", MemberIdNameDTO.builder().build());
         return "redirect:/main";
