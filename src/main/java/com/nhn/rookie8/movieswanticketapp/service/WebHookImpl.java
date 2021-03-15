@@ -12,6 +12,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 @Log4j2
 public class WebHookImpl implements WebHook {
+    private final RestTemplate restTemplate;
 
     @Override
     public void sendReservationSuccessMessage(MemberDTO memberDTO, MovieDTO movieDTO, ReservationDTO reservationDTO){
@@ -40,7 +41,6 @@ public class WebHookImpl implements WebHook {
                         .color("blue")
                         .build()
         );
-        RestTemplate restTemplate = new RestTemplate();
         log.info("memberDTO.getUrl(): {}", memberDTO.getUrl());
         restTemplate.postForObject(memberDTO.getUrl(), reservationAlarmDTO, ReservationAlarmDTO.class);
     }

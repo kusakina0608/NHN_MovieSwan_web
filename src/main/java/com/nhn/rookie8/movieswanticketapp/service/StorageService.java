@@ -1,78 +1,142 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
+import com.nhn.rookie8.movieswanticketapp.dto.SecretDataDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.TokenDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.TokenRequestDTO;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.http.client.ClientHttpRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpMessageConverterExtractor;
+import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-@Data
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
 @Log4j2
 public class StorageService {
-    // Inner class for the request body
-    @Data
-    public class TokenRequest {
 
-        private Auth auth = new Auth();
+    private final SecretDataDTO secretDataDTO;
 
-        @Data
-        public class Auth {
-            private String tenantId;
-            private PasswordCredentials passwordCredentials = new PasswordCredentials();
-        }
-
-        @Data
-        public class PasswordCredentials {
-            private String username;
-            private String password;
-        }
-    }
-
+    @Value("${nhn.cloud.storageUrl}")
+    private String storageUrl;
+    @Value("${nhn.cloud.containerName}")
+    private String containerName;
+    @Value("${nhn.cloud.authUrl}")
     private String authUrl;
-    private TokenRequest tokenRequest;
-    private RestTemplate restTemplate;
+    private String tenantId;
+    private String username;
+    private String password;
 
-    public StorageService(String authUrl, String tenantId, String username, String password) {
-        this.authUrl = authUrl;
+    private TokenRequestDTO tokenRequest;
+    private TokenDTO token;
+    private final RestTemplate restTemplate;
 
-        // 요청 본문 생성
-        this.tokenRequest = new TokenRequest();
-        this.tokenRequest.getAuth().setTenantId(tenantId);
-        this.tokenRequest.getAuth().getPasswordCredentials().setUsername(username);
-        this.tokenRequest.getAuth().getPasswordCredentials().setPassword(password);
-
-        this.restTemplate = new RestTemplate();
+    @PostConstruct
+    public void setTokenRequest() {
+        tenantId = secretDataDTO.getTicket().getObjectStorage().getTenantId();
+        username = secretDataDTO.getTicket().getObjectStorage().getUsername();
+        password = secretDataDTO.getTicket().getObjectStorage().getPassword();
+        storageUrl += tenantId;
+        TokenRequestDTO.PasswordCredentials passwordCredentials = new TokenRequestDTO.PasswordCredentials(username, password);
+        TokenRequestDTO.Auth auth = new TokenRequestDTO.Auth(tenantId, passwordCredentials);
+        tokenRequest = new TokenRequestDTO(auth);
     }
 
-    public String requestToken() {
-        String identityUrl = this.authUrl + "/tokens";
+    private TokenDTO requestToken(TokenRequestDTO tokenRequest) {
+        String identityUrl = authUrl + "/tokens";
 
         // 헤더 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        HttpEntity<TokenRequest> httpEntity
-                = new HttpEntity<TokenRequest>(this.tokenRequest, headers);
+        HttpEntity<TokenRequestDTO> httpEntity = new HttpEntity<>(tokenRequest, headers);
 
         // 토큰 요청
-        ResponseEntity<String> response
-                = this.restTemplate.exchange(identityUrl, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<TokenDTO> response
+                = restTemplate.exchange(identityUrl, HttpMethod.POST, httpEntity, TokenDTO.class);
+        return response.getBody();
+    }
 
-        ObjectMapper objectMapper = new ObjectMapper();
+    private String getUrl(@NonNull String containerName, @NonNull String objectName) {
+        return storageUrl + "/" + containerName + "/" + objectName;
+    }
+
+    public String uploadImage(MultipartFile file) {
+        InputStream inputStream;
         try {
-            JsonNode rootNode = objectMapper.readTree(response.getBody());
-            JsonNode accessNode = rootNode.path("access");
-            JsonNode tokenNode = accessNode.path("token");
-            return tokenNode.path("id").asText();
-        } catch (JsonProcessingException e) {
-            log.warn("파싱 실패");
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            log.warn("input stream 생성 실패", e);
+            return "";
+        }
+        String imageName = createFileName(file);
+        String url = this.getUrl(containerName, imageName);
+        if(!isValidToken())
+            token = requestToken(tokenRequest);
+
+        // InputStream을 요청 본문에 추가할 수 있도록 RequestCallback 오버라이드
+        final RequestCallback requestCallback = new RequestCallback() {
+            public void doWithRequest(final ClientHttpRequest request) throws IOException {
+                request.getHeaders().add("X-Auth-Token", token.getAccess().getToken().getId());
+                IOUtils.copy(inputStream, request.getBody());
+            }
+        };
+
+        HttpMessageConverterExtractor<String> responseExtractor
+                = new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
+
+        // API 호출
+        restTemplate.execute(url, HttpMethod.PUT, requestCallback, responseExtractor);
+
+        return imageName;
+    }
+
+    public ResponseEntity<byte[]> displayImage(String objectName) {
+        String url = this.getUrl(containerName, objectName);
+        if(!isValidToken())
+            token = requestToken(tokenRequest);
+        // 헤더 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", token.getAccess().getToken().getId());
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+
+        HttpEntity<String> requestHttpEntity = new HttpEntity<>(null, headers);
+
+        // API 호출, 데이터를 바이트 배열로 받음
+        return restTemplate.exchange(url, HttpMethod.GET, requestHttpEntity, byte[].class);
+    }
+
+    private String createFileName(MultipartFile file) {
+        String uuid = UUID.randomUUID().toString();
+        String originalName = file.getOriginalFilename();
+        String extensionName;
+        try {
+            if(originalName == null)
+                throw new NullPointerException();
+            extensionName = originalName.substring(originalName.lastIndexOf("."));
+        } catch (NullPointerException e) {
+            log.error("잘못된 파일 이름입니다.");
             return "";
         }
 
+        return uuid + extensionName;
+    }
+
+    private boolean isValidToken() {
+        log.info(token != null);
+        return token != null && token.getAccess().getToken().getExpires().isAfter(LocalDateTime.now());
     }
 }

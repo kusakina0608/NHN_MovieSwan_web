@@ -25,7 +25,7 @@ public class MemberServiceImpl implements MemberService {
     private String accountUrl;
 
     private ObjectMapper objectMapper;
-    private RestTemplate template;
+    private final RestTemplate template;
 
     @Value("#{${external.login.url}}")
     private Map<String, String> externalLoginUrl;
@@ -35,7 +35,6 @@ public class MemberServiceImpl implements MemberService {
     public void initialize(){
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        template = new RestTemplate();
     }
 
     @Override
