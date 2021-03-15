@@ -16,6 +16,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Log4j2
+@Configuration
 @RequiredArgsConstructor
 @Import(MvcConfiguration.class)
 public class RedisConfiguration {
