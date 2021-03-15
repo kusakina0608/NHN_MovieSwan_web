@@ -29,8 +29,9 @@ public class CliController {
 
         StringBuilder message = new StringBuilder();
         message.append("예매 번호\t\t영화 제목\t상영 일자\t\t예매 일자\n");
-        for (ReservationDetailDTO reservationDTO : result.getDtoList())
-            message.append(reservationDTO.toSimpleString()).append("\n");
+        result.getDtoList().stream().forEach(reservation -> {
+            message.append(reservation.toSimpleString());
+        });
 
         return message.toString();
     }
