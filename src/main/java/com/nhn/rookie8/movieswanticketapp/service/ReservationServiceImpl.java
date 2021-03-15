@@ -47,8 +47,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void delete(ReservationDTO dto) {
-        repository.deleteById(dto.getReservationId());
+    public void delete(String reservationId) {
+        repository.deleteById(reservationId);
     }
 
     @Override
@@ -70,8 +70,7 @@ public class ReservationServiceImpl implements ReservationService {
     private ReservationDetailDTO entityToDetailDto(Reservation reservation) {
         return ReservationDetailDTO.builder()
                 .reservationId(reservation.getReservationId())
-                .memberId(reservation.getMemberId())
-                .poster(repository.getMoviePoster(reservation.getTimetableId()))
+                .memberId(reservation.getMemberId()).poster(repository.getMoviePoster(reservation.getTimetableId()))
                 .title(repository.getMovieName(reservation.getTimetableId()))
                 .youngNum(reservation.getYoungNum())
                 .adultNum(reservation.getAdultNum())
