@@ -20,13 +20,12 @@ public class MemberServiceImpl implements MemberService {
     private String accountUrl;
 
     private ObjectMapper objectMapper;
-    private RestTemplate template;
+    private final RestTemplate template;
 
     @PostConstruct
     public void initialize(){
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        template = new RestTemplate();
     }
 
     @Override
