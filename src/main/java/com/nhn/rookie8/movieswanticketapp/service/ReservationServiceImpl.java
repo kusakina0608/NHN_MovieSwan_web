@@ -10,6 +10,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
@@ -32,28 +34,17 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationDTO reserve(ReservationDTO dto) {
-        String reservationId = createReservationId();
-        dto.setReservationId(reservationId);
-        Reservation reservation = dtoToEntity(dto);
-        reservation = repository.save(reservation);
-        return entityToDto(reservation);
+        dto.setReservationId(createReservationId());
+        return entityToDto(repository.save(dtoToEntity(dto)));
     }
 
     public String createReservationId() {
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder reservationId = new StringBuilder();
-        do {
-            for(int i = 0; i < 4; i++){
-                StringBuilder salt = new StringBuilder();
-                while (salt.length() < 4) {
-                    int index = (int) (random.nextFloat() * alphabet.length());
-                    salt.append(alphabet.charAt(index));
-                }
-                reservationId.append(salt.toString());
-                if(i < 3) reservationId.append("-");
-            }
-        } while(checkExist(reservationId.toString()));
-        return reservationId.toString();
+        while(true){
+            String reservationId = RandomStringUtils.randomAlphanumeric(16).toUpperCase(Locale.ROOT)
+                    .replaceFirst("^(.{4})(.{4})(.{4})(.{4})$", "$1-$2-$3-$4");
+            if(!checkExist(reservationId))
+                return reservationId;
+        }
     }
 
     private boolean checkExist(String reservationId) {
@@ -62,18 +53,17 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void delete(ReservationDTO dto) {
-        String reservationId = dto.getReservationId();
-        repository.deleteById(reservationId);
+        repository.deleteById(dto.getReservationId());
     }
 
     @Override
     public PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String memberId) {
         try {
-            Pageable pageable = requestDTO.getPageable(Sort.by("regDate").descending());
-            BooleanBuilder booleanBuilder = getMemberInfo(memberId);
-            Page<Reservation> result = repository.findAll(booleanBuilder, pageable);
-            Function<Reservation, ReservationDTO> fn = (this::entityToDto);
-            return new PageResultDTO<>(result, fn);
+            Page<Reservation> result = repository.findAll(
+                    getMemberInfo(memberId),
+                    requestDTO.getPageable(Sort.by("regDate").descending())
+            );
+            return new PageResultDTO<>(result, this::entityToDto);
         } catch (Exception e) {
             log.error(e);
             return null;
@@ -129,11 +119,6 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private BooleanBuilder getMemberInfo(String memberId) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QReservation qReservation = QReservation.reservation;
-
-        BooleanExpression expression = qReservation.memberId.eq(memberId);
-        booleanBuilder.and(expression);
-        return booleanBuilder;
+        return new BooleanBuilder().and(QReservation.reservation.memberId.eq(memberId));
     }
 }
