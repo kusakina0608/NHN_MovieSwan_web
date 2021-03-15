@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>예매 페이지</title>
-    <link th:href="@{/css/page/login.css}" rel="stylesheet" />
+    <link th:href="@{/css/page/login_page.css}" rel="stylesheet" />
 </head>
 <body>
 <th:block th:replace="~{/layout/login_common_page:: setContents(~{this:: #login_page} )}">
@@ -11,10 +11,13 @@
         <main id="main">
             <img id="header_logo" th:src="@{/asset/image/logo2.png}" onclick="location.href='/'" />
             <div id="login_title">로그인</div>
-            <form id="login_form" th:action="@{/member/login_process}" method="post">
+            <form id="login_form" th:action="@{/member/login_service}" method="post">
                 <div class="input_form">
                     <span id="person" class="material-icons">person</span>
                     <input id="memberId" type="text" name="memberId" placeholder="ID">
+                    <span style="font-weight: bold; font-size: 20px">@</span>
+                    <select id="idDomain" name="idDomain" size="1"></select>
+                    <span style="font-weight: bold; font-size: 20px; margin-right: 15px">. com</span>
                 </div>
                 <div class="input_form">
                     <span id="lock" class="material-icons">lock</span>
@@ -31,8 +34,6 @@
                 <span>아직도 Movieswan 회원이 아니세요?</span>
                 <a th:href="@{/member/register}">회원가입</a>
             </div>
-
-
         </main>
     </loginPage>
 </th:block>

@@ -1,6 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MemberAuthDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MemberAuthDomainDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberRegisterDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
@@ -50,12 +47,24 @@ public class MemberController {
         return "page/login_page";
     }
 
+    @PostMapping("/login_service")
+    public String tokenProcess(@ModelAttribute MemberAuthDomainDTO memberAuthDomainDTO,
+                               RedirectAttributes redirectAttributes) {
+        String url = memberService.loginService(memberAuthDomainDTO).getUrl();
+        log.info(url);
 
-    @PostMapping("/login_process")
-    public String loginProcess(@ModelAttribute MemberAuthDTO memberAuthDTO,
+        if (url == null) {
+            redirectAttributes.addFlashAttribute("message", "ID 또는 Password가 잘못 입력 되었습니다.");
+            return "redirect:/member/login";
+        } else {
+            return "redirect:" + url;
+        }
+    }
+
+    @GetMapping("/login_process")
+    public String loginProcess(@RequestParam String token,
                                HttpServletResponse response, RedirectAttributes redirectAttributes){
-
-        MemberResponseDTO memberResponseDTO = memberService.auth(memberAuthDTO);
+        MemberResponseDTO memberResponseDTO = memberService.verifyToken(token);
 
         if(!memberService.checkResponse(memberResponseDTO)){
             redirectAttributes.addFlashAttribute("message","ID 또는 Password가 잘못 입력 되었습니다.");
