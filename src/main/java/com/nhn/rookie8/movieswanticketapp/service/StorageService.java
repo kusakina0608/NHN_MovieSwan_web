@@ -1,5 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
+import com.nhn.rookie8.movieswanticketapp.dto.SecretDataDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TokenDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TokenRequestDTO;
 import lombok.NonNull;
@@ -26,17 +27,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Log4j2
 public class StorageService {
+
+    private final SecretDataDTO secretDataDTO;
+
     @Value("${nhn.cloud.storageUrl}")
     private String storageUrl;
     @Value("${nhn.cloud.containerName}")
     private String containerName;
     @Value("${nhn.cloud.authUrl}")
     private String authUrl;
-    @Value("${nhn.cloud.tenantId}")
     private String tenantId;
-    @Value("${nhn.cloud.username}")
     private String username;
-    @Value("${nhn.cloud.password}")
     private String password;
 
     private TokenRequestDTO tokenRequest;
@@ -45,6 +46,10 @@ public class StorageService {
 
     @PostConstruct
     public void setTokenRequest() {
+        tenantId = secretDataDTO.getTicket().getObjectStorage().getTenantId();
+        username = secretDataDTO.getTicket().getObjectStorage().getUsername();
+        password = secretDataDTO.getTicket().getObjectStorage().getPassword();
+        storageUrl += tenantId;
         TokenRequestDTO.PasswordCredentials passwordCredentials = new TokenRequestDTO.PasswordCredentials(username, password);
         TokenRequestDTO.Auth auth = new TokenRequestDTO.Auth(tenantId, passwordCredentials);
         tokenRequest = new TokenRequestDTO(auth);
