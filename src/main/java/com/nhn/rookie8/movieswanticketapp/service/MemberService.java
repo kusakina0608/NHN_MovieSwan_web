@@ -16,5 +16,5 @@ public interface MemberService {
 
     MemberIdNameDTO responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO);
 
-    MemberAuthDTO domainToAuthDTO(MemberAuthDomainDTO memberAuthDomainDTO);
+    ExternalLoginDTO domainToExternalLoginDTO(MemberAuthDomainDTO memberAuthDomainDTO);
 }
