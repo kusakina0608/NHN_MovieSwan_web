@@ -10,7 +10,11 @@ public interface MemberService {
 
     MemberResponseDTO register(MemberRegisterDTO memberRegisterDTO);
 
-    MemberResponseDTO auth(MemberAuthDTO memberAuthDTO);
+    TokenResponseDTO loginService(MemberAuthDomainDTO memberAuthDomainDTO);
+
+    MemberResponseDTO verifyToken(String token);
 
     MemberIdNameDTO responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO);
+
+    MemberAuthDTO domainToAuthDTO(MemberAuthDomainDTO memberAuthDomainDTO);
 }

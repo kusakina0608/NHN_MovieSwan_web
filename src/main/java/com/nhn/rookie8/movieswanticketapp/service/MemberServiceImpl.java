@@ -6,10 +6,15 @@ import com.nhn.rookie8.movieswanticketapp.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +26,10 @@ public class MemberServiceImpl implements MemberService {
 
     private ObjectMapper objectMapper;
     private RestTemplate template;
+
+    @Value("#{${external.login.url}}")
+    private Map<String, String> externalLoginUrl;
+
 
     @PostConstruct
     public void initialize(){
@@ -50,12 +59,39 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResponseDTO auth(MemberAuthDTO memberAuthDTO){
-        return template.postForObject(accountUrl+"/api/auth", memberAuthDTO, MemberResponseDTO.class);
+    public TokenResponseDTO loginService(MemberAuthDomainDTO memberAuthDomainDTO) {
+        return template.postForObject(
+                externalLoginUrl.get(memberAuthDomainDTO.getIdDomain()),
+                domainToAuthDTO(memberAuthDomainDTO),
+                TokenResponseDTO.class
+        );
+    }
+
+    @Override
+    public MemberResponseDTO verifyToken(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", token);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        return template.exchange(
+                accountUrl + "/api/verifyToken",
+                HttpMethod.GET,
+                entity,
+                MemberResponseDTO.class
+        ).getBody();
     }
 
     @Override
     public MemberIdNameDTO responseToMemberIdNameMap(MemberResponseDTO memberResponseDTO){
         return objectMapper.convertValue(memberResponseDTO.getContent(), MemberIdNameDTO.class);
+    }
+
+    @Override
+    public MemberAuthDTO domainToAuthDTO(MemberAuthDomainDTO memberAuthDomainDTO) {
+        return MemberAuthDTO.builder()
+                .memberId(memberAuthDomainDTO.getMemberId())
+                .password(memberAuthDomainDTO.getPassword())
+                .build();
     }
 }
