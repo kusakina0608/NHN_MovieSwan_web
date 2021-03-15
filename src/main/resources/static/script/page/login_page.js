@@ -18,3 +18,13 @@
     }, false);
 
 }());
+
+(function() {
+    const id_domain = document.querySelector("#idDomain");
+    ["백조", "사슴", "기린", "여우", "판다", "하마", "오리", "사자", "토끼", "새콤", "달콤"]
+        .forEach(n => {
+            const child = document.createElement("option");
+            child.value = child.innerText = n;
+            id_domain.appendChild(child);
+        });
+} ()); 
