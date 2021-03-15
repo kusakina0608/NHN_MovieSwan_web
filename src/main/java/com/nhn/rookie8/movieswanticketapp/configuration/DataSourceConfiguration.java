@@ -20,6 +20,7 @@ public class DataSourceConfiguration {
     @Value("${spring.datasource.url}")
     private String url;
 
+
     private final SecretDataDTO secretDataDTO;
 
     @Bean
@@ -27,8 +28,8 @@ public class DataSourceConfiguration {
         return DataSourceBuilder.create()
                 .driverClassName(driverClassName)
                 .url(url)
-                .username(secretDataDTO.getAccount().getDatabase().getUsername())
-                .password(secretDataDTO.getAccount().getDatabase().getPassword())
+                .username(secretDataDTO.getTicket().getDatabase().getUsername())
+                .password(secretDataDTO.getTicket().getDatabase().getPassword())
                 .build();
     }
 }
