@@ -46,9 +46,6 @@ public class StorageService {
 
     @PostConstruct
     public void setTokenRequest() {
-        System.out.println("??");
-        System.out.println(secretDataDTO);
-        System.out.println("!!");
         tenantId = secretDataDTO.getTicket().getObjectStorage().getTenantId();
         username = secretDataDTO.getTicket().getObjectStorage().getUsername();
         password = secretDataDTO.getTicket().getObjectStorage().getPassword();

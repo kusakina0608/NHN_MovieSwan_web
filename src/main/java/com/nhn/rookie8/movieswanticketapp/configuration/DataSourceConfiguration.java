@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.configuration;
 
 import com.nhn.rookie8.movieswanticketapp.dto.SecretDataDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import javax.sql.DataSource;
 
 @Import(RedisConfiguration.class)
+@RequiredArgsConstructor
 public class DataSourceConfiguration {
 
     @Value("${spring.datasource.driver-class-name}")
@@ -18,8 +20,7 @@ public class DataSourceConfiguration {
     @Value("${spring.datasource.url}")
     private String url;
 
-    @Autowired
-    SecretDataDTO secretDataDTO;
+    private final SecretDataDTO secretDataDTO;
 
     @Bean
     public DataSource getDataSource(){
