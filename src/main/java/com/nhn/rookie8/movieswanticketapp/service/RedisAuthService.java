@@ -1,19 +1,13 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.AlreadyExpiredOrNotExistKeyErrorException;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.AlreadyKeyExistException;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.InvalidAuthKeyErrorException;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.SessionNotExistErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import java.time.Duration;
 
 @Service
@@ -21,60 +15,38 @@ import java.time.Duration;
 @RequiredArgsConstructor
 @ConditionalOnProperty(name="auth", havingValue = "redis", matchIfMissing = true)
 public class RedisAuthService implements AuthService {
-    @Autowired
-    RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redis;
 
-    private ValueOperations<String, Object> valueOps;
+    @Override
+    public Cookie setSession(MemberIdNameDTO member) {
+        Cookie cookie = this.createCookie();
+        if (isSessionExist(cookie.getValue()))
+            return null;
 
-    @PostConstruct
-    public void initValueOps() {
-        valueOps = redisTemplate.opsForValue();
+        redis.opsForValue().set(cookie.getValue(), member, Duration.ofMinutes(10));
+        return cookie;
     }
 
     @Override
-    public boolean saveMemberInfo(String authKey, MemberIdNameDTO member) {
-        if (isKeyExist(authKey))
-            throw new AlreadyKeyExistException();
-
-        valueOps.setIfAbsent(authKey, member, Duration.ofMinutes(30));
-
-        log.info("Registered AuthKey : {}", authKey);
-
-        return true;
+    public void updateSession(String authKey) {
+        redis.expire(authKey, Duration.ofMinutes(10));
     }
 
     @Override
-    public boolean expireAuth(String authKey) {
-        if (!isKeyExist(authKey))
-            throw new AlreadyExpiredOrNotExistKeyErrorException();
-
-        valueOps.setIfPresent(authKey, null, Duration.ofMillis(1));
-
-        log.info("Expired AuthKey : {}", authKey);
-
-        return true;
+    public void expireSession(String authKey) {
+        redis.delete(authKey);
     }
 
     @Override
-    public MemberIdNameDTO readMemberInfo(String authKey) {
-        if (!isKeyExist(authKey))
-            throw new SessionNotExistErrorException();
-
-        MemberIdNameDTO member = (MemberIdNameDTO) valueOps.get(authKey);
-
-        log.info("Member Info : {}", member);
-
-        return member;
+    public boolean isSessionExist(String authKey) {
+        return redis.opsForValue().size(authKey) != 0;
     }
 
     @Override
-    public boolean existSession(String authKey) {
-        return authKey != null && authKey.length() == 32
-                && isKeyExist(authKey);
-    }
+    public MemberIdNameDTO getMemberInfo(String authKey) {
+        if (!isSessionExist(authKey))
+            return MemberIdNameDTO.builder().build();
 
-    @Override
-    public boolean isKeyExist(String authKey) {
-        return valueOps.get(authKey) != null;
+        return (MemberIdNameDTO) redis.opsForValue().get(authKey);
     }
 }

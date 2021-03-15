@@ -4,23 +4,18 @@ import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Auth;
 import com.nhn.rookie8.movieswanticketapp.entity.QAuth;
 import com.nhn.rookie8.movieswanticketapp.repository.AuthRepository;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.AlreadyExpiredOrNotExistKeyErrorException;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.AlreadyKeyExistException;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.InvalidAuthKeyErrorException;
-import com.nhn.rookie8.movieswanticketapp.ticketexception.SessionNotExistErrorException;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Log4j2
@@ -30,63 +25,43 @@ public class DBAuthService implements AuthService {
     private AuthRepository authRepository;
 
     @Override
-    public boolean saveMemberInfo(String authKey, MemberIdNameDTO member) {
-        if (isKeyExist(authKey))
-            throw new AlreadyKeyExistException();
+    public Cookie setSession(MemberIdNameDTO member) {
+        Cookie cookie = this.createCookie();
+        if (isSessionExist(cookie.getValue()))
+            return null;
 
-        Auth auth = toEntity(authKey, member);
-        authRepository.save(auth);
-
-        log.info("Registered AuthKey : {}", authKey);
-
-        return true;
+        authRepository.save(toEntity(cookie.getValue(), member));
+        return cookie;
     }
 
     @Override
-    public boolean expireAuth(String authKey) {
-        if(!isKeyExist(authKey))
-            throw new AlreadyExpiredOrNotExistKeyErrorException();
-
-        authRepository.deleteById(authKey);
-
-        log.info("Expired AuthKey : {}", authKey);
-
-        return true;
+    public void updateSession(String authKey) {
+        authRepository.save(toEntity(authKey, getMemberInfo(authKey)));
     }
 
     @Override
-    public MemberIdNameDTO readMemberInfo(String authKey) {
-        if (!isKeyExist(authKey))
-            throw new SessionNotExistErrorException();
-
-        Optional<Auth> result = authRepository.findById(authKey);
-
-        log.info("Member Info : {}", result.get());
-
-        return MemberIdNameDTO.builder()
-                .memberId(result.get().getMemberId())
-                .name(result.get().getName())
-                .build();
+    public void expireSession(String authKey) {
+        if (authRepository.existsById(authKey))
+            authRepository.deleteById(authKey);
     }
 
     @Override
-    public boolean existSession(String authKey) {
-        return authKey != null && authKey.length() == 32
-                && isKeyExist(authKey);
+    public boolean isSessionExist(String authKey) {
+        return authRepository.existsById(authKey);
     }
 
     @Override
-    public boolean isKeyExist(String authKey) {
-        return authRepository.findById(authKey).isPresent();
+    public MemberIdNameDTO getMemberInfo(String authKey) {
+        if (!isSessionExist(authKey))
+            return MemberIdNameDTO.builder().build();
+
+        return entityToMemberIdNameDTO(authRepository.findById(authKey).get());
     }
 
     @Scheduled(fixedDelay = 300000)
     public void deleteExpiredAuthKey(){
-        BooleanBuilder booleanBuilder = getExpiredAuthKey();
-        Pageable pageable = PageRequest.of(0, 1000);
-
-        List<Auth> list = authRepository.findAll(booleanBuilder, pageable).toList();
-        list.forEach(e -> log.info("Expired AuthKey : {}", e));
+        List<Auth> list = authRepository.findAll(
+                getExpiredAuthKey(), PageRequest.of(0, 1000)).toList();
 
         authRepository.deleteInBatch(list);
     }
@@ -104,6 +79,13 @@ public class DBAuthService implements AuthService {
                 .authKey(key)
                 .memberId(member.getMemberId())
                 .name(member.getName())
+                .build();
+    }
+
+    private MemberIdNameDTO entityToMemberIdNameDTO(Auth entity) {
+        return MemberIdNameDTO.builder()
+                .memberId(entity.getMemberId())
+                .name(entity.getName())
                 .build();
     }
 }
