@@ -72,10 +72,7 @@ public class MyPageController {
 
     @GetMapping("/ticket/delete")
     public String myPageTicketDelete(@RequestParam String reservationId) {
-        ReservationDTO reservationDTO = ReservationDTO.builder()
-                .reservationId(reservationId)
-                .build();
-        reservationService.delete(reservationDTO);
+        reservationService.delete(reservationId);
         return "redirect:/mypage/ticket";
     }
 

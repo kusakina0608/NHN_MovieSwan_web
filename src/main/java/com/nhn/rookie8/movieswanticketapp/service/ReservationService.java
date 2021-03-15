@@ -3,17 +3,15 @@ package com.nhn.rookie8.movieswanticketapp.service;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.ReservationDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.ReservationDetailDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Reservation;
 
 public interface ReservationService {
     ReservationDTO reserve(ReservationDTO dto);
-    void delete(ReservationDTO dto);
+    void delete(String reservationId);
 
-    PageResultDTO<ReservationDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String memberId);
-    ReservationDTO getReservation(String reservationId);
-
-    String getReservationInfo(ReservationDTO reservation);
-    String getReservationDetail(ReservationDTO reservation);
+    PageResultDTO<ReservationDetailDTO, Reservation> getMyReservationList(PageRequestDTO requestDTO, String memberId);
+    ReservationDetailDTO getReservation(String reservationId);
 
     default Reservation dtoToEntity(ReservationDTO reservationDTO){
         return Reservation.builder()
