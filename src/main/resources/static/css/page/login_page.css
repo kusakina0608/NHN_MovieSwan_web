@@ -29,6 +29,10 @@
     font-size: 20px;
 }
 
+#memberId {
+    width: 150px;
+}
+
 #memberId:focus,#password:focus {
     outline: none;
 }
@@ -59,6 +63,19 @@
     flex: 1;
     font-size: 25px;
     padding: 10px;
+
+    background-color: black;
+    color: white;
+
+    border-radius: 10px;
+
+    transition: 0.25s;
+    cursor: pointer;
+}
+
+#submit:hover {
+    background-color: white;
+    color: black;
 }
 
 #err {
@@ -73,3 +90,28 @@ main > div {
 img {
     cursor: pointer;
 }
+
+#idDomain {
+    text-align-last: center;
+    padding: 0 10px;
+
+    height: 30px;
+
+    border: none;
+    font-size: 20px;
+    appearance: none;
+    
+    cursor: pointer;
+
+    transition: 0.5s;
+}
+
+#idDomain:focus {
+    outline: none;
+}
+
+
+#idDomain:hover {
+    font-weight: bold;
+}
+
