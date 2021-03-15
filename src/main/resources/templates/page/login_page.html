@@ -11,7 +11,7 @@
         <main id="main">
             <img id="header_logo" th:src="@{/asset/image/logo2.png}" onclick="location.href='/'" />
             <div id="login_title">로그인</div>
-            <form id="login_form" th:action="@{/member/login_process}" method="post">
+            <form id="login_form" th:action="@{/member/login_service}" method="post">
                 <div class="input_form">
                     <span id="person" class="material-icons">person</span>
                     <input id="memberId" type="text" name="memberId" placeholder="ID">

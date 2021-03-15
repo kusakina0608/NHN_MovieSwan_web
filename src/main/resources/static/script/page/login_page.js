@@ -21,10 +21,13 @@
 
 (function() {
     const id_domain = document.querySelector("#idDomain");
-    ["백조", "사슴", "기린", "여우", "판다", "하마", "오리", "사자", "토끼", "새콤", "달콤"]
+    [["백조", "swan"], ["사슴", "deer"], ["기린", "giraffe"], ["여우", "fox"],
+    ["판다", "panda"], ["하마", "hippo"], ["오리", "duck"], ["사자", "lion"],
+    ["토끼", "rabbit"], ["새콤", "sour"], ["달콤", "sweet"]]
         .forEach(n => {
             const child = document.createElement("option");
-            child.value = child.innerText = n;
+            child.innerText = n[0];
+            child.value = n[1];
             id_domain.appendChild(child);
         });
 } ()); 
