@@ -51,14 +51,12 @@ public class MemberController {
     public String tokenProcess(@ModelAttribute MemberAuthDomainDTO memberAuthDomainDTO,
                                RedirectAttributes redirectAttributes) {
         String url = memberService.loginService(memberAuthDomainDTO).getUrl();
-        log.info(url);
 
         if (url == null) {
             redirectAttributes.addFlashAttribute("message", "ID 또는 Password가 잘못 입력 되었습니다.");
             return "redirect:/member/login";
-        } else {
-            return "redirect:" + url;
         }
+        return "redirect:" + url;
     }
 
     @GetMapping("/login_process")

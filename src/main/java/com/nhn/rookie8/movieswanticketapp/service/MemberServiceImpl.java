@@ -50,9 +50,13 @@ public class MemberServiceImpl implements MemberService {
     public TokenResponseDTO loginService(MemberAuthDomainDTO memberAuthDomainDTO){
         HttpEntity<ExternalLoginDTO> entity =
                 new HttpEntity<ExternalLoginDTO>(domainToExternalLoginDTO(memberAuthDomainDTO));
+
+        String loginUrl = memberAuthDomainDTO.getIdDomain().equals("swan") ?
+                accountUrl + "/api/auth" : externalLoginUrl.get(memberAuthDomainDTO.getIdDomain());
+
         try {
             ResponseEntity<TokenResponseDTO> responseEntity = template.exchange(
-                    externalLoginUrl.get(memberAuthDomainDTO.getIdDomain()),
+                    loginUrl,
                     HttpMethod.POST,
                     entity,
                     TokenResponseDTO.class);
@@ -62,7 +66,6 @@ public class MemberServiceImpl implements MemberService {
         catch (RestClientException e){
             return TokenResponseDTO.builder().build();
         }
-
     }
 
     @Override
