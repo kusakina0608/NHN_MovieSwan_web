@@ -17,6 +17,7 @@
     <link th:href="@{/css/layout/common_page.css}" rel="stylesheet" />
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <body>
         <background id="default_bg">
             <!-- Page -->
@@ -31,8 +32,8 @@
             <th:block th:replace="~{/fragment/scroll_to_top_button}"></th:block>
         </background>
     </body>
+    <script th:src="@{/script/layout/sessionCheck.js}"></script>
     <script th:src="@{/script/fragment/scroll_to_top_button.js}"></script>
-    <script th:src="@{/script/layout/getMemberInfo.js}"></script>
 </th:block>
 
 </html>
