@@ -136,6 +136,10 @@ function submitAction(myReview) {
         let rating = document.createElement("input");
         rating.setAttribute("type", "hidden");
         rating.setAttribute("name", "rating");
+        if(ratingInput === null) {
+            alert("별점을 입력해주세요.");
+            return;
+        }
         rating.setAttribute("value", ratingInput.value);
         form.appendChild(rating);
 
