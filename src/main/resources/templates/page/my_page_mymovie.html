@@ -9,6 +9,7 @@
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_mymovie})}">
     <mymymovie id="my_mymovie" th:fragment="my_mymovie">
         <p id="mymovie_subject">My Movie</p>
+        <hr class="dotted">
         <ul class="movieList">
             <!---영화(fragment로 가져오기)--->
             <li th:each="dto : ${result.dtoList}">
@@ -31,6 +32,13 @@
                 <a th:href="@{/mypage/movie(page=${result.end + 1})}">Next</a>
             </li>
         </div>
+
+        <div id="no_movie" th:if="${result.dtoList.size() == 0}">
+            <span class="material-icons">local_movies</span>
+            찜한 영화가 없습니다...
+        </div>
+
+        <hr class="dotted">
     </mymymovie>
 </th:block>
 </body>

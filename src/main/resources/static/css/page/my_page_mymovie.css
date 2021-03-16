@@ -3,7 +3,7 @@
     justify-content: center;
 
     width: 100%;
-    min-height: 500px;
+    min-height: 300px;
 }
 
 #mymovie_subject {
@@ -61,4 +61,18 @@
 #pagination .now {
     color: red;
     background-color: black;
+}
+
+#no_movie {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 200px;
+    font-size: 50px;
+}
+
+#no_movie .material-icons {
+    margin-right: 20px;
+    font-size: 70px;
 }
