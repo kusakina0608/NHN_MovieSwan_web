@@ -19,7 +19,7 @@ public class MemberAuthInterceptor extends HandlerInterceptorAdapter {
             throws Exception {
         String authKey = authService.getAuthKey(request.getCookies());
 
-        if (!authService.isSessionExist(authKey)) {
+        if (authKey == null || !authService.isSessionExist(authKey)) {
             response.sendRedirect("/member/login");
             return false;
         }
