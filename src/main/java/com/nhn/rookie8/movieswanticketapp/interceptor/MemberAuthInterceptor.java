@@ -25,6 +25,8 @@ public class MemberAuthInterceptor extends HandlerInterceptorAdapter {
         }
 
         authService.updateSession(authKey);
+        response.addCookie(authService.updateCookie(authService.getCookie(request.getCookies())));
+
         request.setAttribute("memberId", authService.getMemberInfo(authKey).getMemberId());
         return true;
     }

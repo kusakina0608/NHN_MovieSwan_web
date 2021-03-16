@@ -28,14 +28,8 @@
             const name = member?.name;
 
             if (member) {
-                if(memberId === null) {
-                    localStorage.removeItem("memberId");
-                    localStorage.removeItem("name");
-                }
-                else {
-                    localStorage.setItem("memberId", memberId);
-                    localStorage.setItem("name", name);
-                }
+                localStorage.setItem("memberId", memberId);
+                localStorage.setItem("name", name);
             }
         }());
     </script>

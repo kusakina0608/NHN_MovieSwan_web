@@ -9,6 +9,8 @@ public interface AuthService {
 
     public static final String cookieName = "SWANAUTH";
 
+    public static final Integer cookieAge = 10 * 60;
+
     public Cookie setSession(MemberIdNameDTO member);
 
     public void updateSession(String authKey);
@@ -23,7 +25,31 @@ public interface AuthService {
         Cookie cookie = new Cookie(cookieName,
                 RandomStringUtils.randomAlphanumeric(32));
 
-        cookie.setMaxAge(-1);
+        cookie.setMaxAge(cookieAge);
+        cookie.setPath("/");
+
+        return cookie;
+    }
+
+    default Cookie getCookie(Cookie[] cookies) {
+        if (cookies == null) return null;
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals(cookieName))
+                return cookie;
+        return null;
+    }
+
+    default Cookie updateCookie(Cookie cookie) {
+        cookie.setMaxAge(cookieAge);
+        cookie.setPath("/");
+
+        return cookie;
+    }
+
+    default Cookie expireCookie() {
+        Cookie cookie = new Cookie(cookieName, null);
+
+        cookie.setMaxAge(0);
         cookie.setPath("/");
 
         return cookie;
