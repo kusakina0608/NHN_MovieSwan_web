@@ -9,8 +9,9 @@
     <th:block th:replace="~{/layout/my_page::setContents(~{this::my_question})}">
         <myquestion id="my_question" th:fragment="my_question">
             <p id="question_subject">내 문의내역</p>
+            <hr class="dotted">
             <table class="tg">
-                <thead>
+                <thead th:if="${result.dtoList.size() != 0}">
                     <tr>
                         <th class="tg-0lax">No.</th>
                         <th class="tg-baqh">제목</th>
@@ -40,6 +41,10 @@
                 <li th:if="${result.next}">
                     <a th:href="@{/mypage/question(page=${result.end + 1})}">Next</a>
                 </li>
+            </div>
+            <div id="no_question" th:if="${result.dtoList.size() == 0}">
+                <span class="material-icons">help_outline</span>
+                등록한 1:1 문의가 없습니다...
             </div>
             <buttoncontrol id="button_control">
                 <button id="question_button" onclick="location.href='/mypage/question/register'">

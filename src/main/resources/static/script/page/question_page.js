@@ -9,4 +9,10 @@
 (function() {
     const menu = document.getElementById("menu_question");
     menu.className = "active";
+
+    const cancle = document.getElementById("cancle_button");
+    cancle.addEventListener("click", function(event) {
+        event.preventDefault();
+        window.history.back();
+    }, false);
 } ());
