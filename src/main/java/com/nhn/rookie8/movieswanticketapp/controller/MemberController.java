@@ -73,14 +73,20 @@ public class MemberController {
 
         response.addCookie(cookie);
         redirectAttributes.addFlashAttribute("member", authService.getMemberInfo(cookie.getValue()));
+
         return "redirect:/main";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String logout(HttpServletRequest request, HttpServletResponse response,
+                         RedirectAttributes redirectAttributes) {
         authService.expireSession(authService.getAuthKey(request.getCookies()));
 
-        redirectAttributes.addFlashAttribute("member", MemberIdNameDTO.builder().build());
+        Cookie cookie = authService.getCookie(request.getCookies());
+
+        if (cookie != null)
+            response.addCookie(authService.expireCookie());
+
         return "redirect:/main";
     }
 }
