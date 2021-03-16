@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -25,11 +26,13 @@ public class MemberServiceImpl implements MemberService {
     private final ObjectMapper objectMapper;
     private final RestTemplate template;
 
+    //FIXME : memberDTO를 쓰면 id제외 모두 null 이므로 계정서버에서 올바르지 않은 요으로 간주함
+    //FIXME : memberIdDTO를 써야함.
     @Override
     public MemberDTO getMemberInfoById(String memberId) {
-        MemberResponseDTO memberInfo = template.postForObject(accountUrl + "/api/getMemberInfo",
-                MemberDTO.builder().memberId(memberId).build(), MemberResponseDTO.class);
 
+        MemberResponseDTO memberInfo = template.postForObject(accountUrl + "/api/getMemberInfo",
+                MemberIdDTO.builder().memberId(memberId).build(), MemberResponseDTO.class);
         return objectMapper.convertValue(memberInfo.getContent(), MemberDTO.class);
     }
 
@@ -44,18 +47,22 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public TokenResponseDTO loginService(MemberAuthDomainDTO memberAuthDomainDTO) {
+    public TokenResponseDTO loginService(MemberAuthDomainDTO memberAuthDomainDTO){
         HttpEntity<ExternalLoginDTO> entity =
                 new HttpEntity<ExternalLoginDTO>(domainToExternalLoginDTO(memberAuthDomainDTO));
+        try {
+            ResponseEntity<TokenResponseDTO> responseEntity = template.exchange(
+                    externalLoginUrl.get(memberAuthDomainDTO.getIdDomain()),
+                    HttpMethod.POST,
+                    entity,
+                    TokenResponseDTO.class);
 
-        //TODO : Status Code 에 따른 분기 처리
-        ResponseEntity<TokenResponseDTO> responseEntity = template.exchange(
-                externalLoginUrl.get(memberAuthDomainDTO.getIdDomain()),
-                HttpMethod.POST,
-                entity,
-                TokenResponseDTO.class);
+            return responseEntity.getBody();
+        }
+        catch (RestClientException e){
+            return TokenResponseDTO.builder().build();
+        }
 
-        return responseEntity.getBody();
     }
 
     @Override

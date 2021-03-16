@@ -20,6 +20,7 @@ public class DataSourceConfiguration {
     @Value("${spring.datasource.url}")
     private String url;
 
+
     private final SecretDataDTO secretDataDTO;
 
     @Bean
