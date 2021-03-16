@@ -139,7 +139,7 @@
         form.setAttribute("method", "Post");
         form.setAttribute("action", "/reserve/pay");
 
-        if(selected === totalCount){
+        if(totalCount > 0 && selected === totalCount){
             let selectedSeatList = [];
             document.querySelectorAll(".seat-label").forEach(el => {
                 selectedSeatList.push(el.innerHTML);
