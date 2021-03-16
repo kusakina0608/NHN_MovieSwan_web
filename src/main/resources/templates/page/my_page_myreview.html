@@ -9,6 +9,7 @@
 <th:block th:replace="~{/layout/my_page::setContents(~{this::my_myreview})}">
     <mymyreview id="my_myreview" th:fragment="my_myreview">
         <p id="myreview_subject">My Review</p>
+        <hr class="dotted">
         <ul id="reviews">
             <th:block th:each="review : ${result.dtoList}">
                 <div class="review_title">
@@ -33,6 +34,11 @@
                 <a th:href="@{/mypage/review(page=${result.end + 1})}">Next</a>
             </li>
         </div>
+        <div id="no_review" th:if="${result.dtoList.size() == 0}">
+            <span class="material-icons">insert_comment</span>
+            등록한 영화 리뷰가 없습니다...
+        </div>
+        <hr class="dotted">
     </mymyreview>
 </th:block>
 </body>
