@@ -24,7 +24,7 @@
 
 
     const isExistId = axios.create({
-        baseURL: location.origin + "/account/"
+        baseURL: location.origin.replace("8082","8081") + "/account/"
     });
 
     const isValid = (memberId) => {
@@ -382,12 +382,14 @@
 
     const div_auth = document.querySelector("#div_auth");
     const auth_send = document.querySelector("#auth_send");
+    const url_reset_btn = document.querySelector("#url_reset_btn");
     var authString = Math.floor(Math.random()*1000000).toString().padStart(6,'0');
 
     url_btn.addEventListener("click",()=>{
         auth_send.style.display = "block";
         div_auth.style.display = "block";
         url_btn.disabled = true;
+        url_reset_btn.disabled = false;
         url_hidden.value = url.value;
         
         url.disabled = true;
@@ -439,6 +441,27 @@
             });
 
         }
+
+        enableSubmit();
+    },false)
+
+
+    url_reset_btn.addEventListener("click",(event)=>{
+
+        url.disabled = false;
+        url_btn.disabled = false;
+        auth.disabled = false;
+        auth_btn.disabled = false;
+        auth.value = "";
+        auth_send.style.display = "none";
+        div_auth.style.display = "none";
+        ok_auth.forEach(i=>{
+            i.style.display = "none";
+        });
+        no_auth.forEach(i=>{
+            i.style.display = "none";
+        });
+        document.querySelector("#div_url").value = 0;
 
         enableSubmit();
     },false)
