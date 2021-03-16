@@ -42,7 +42,7 @@ public class ReservationController {
     ) {
         TimetableDTO timetableDTO = timetableService.getTimetable(timetableId);
         MovieDTO movieDTO = movieService.getMovieDetail(timetableDTO.getMovieId());
-        DiscountDTO discountDTO = new DiscountDTO(timetableDTO.getStartTime().getHour());
+        DiscountDTO discountDTO = timetableService.getDiscount(timetableDTO.getStartTime().getHour());
 
         model.addAttribute("timetableDTO", timetableDTO);
         model.addAttribute("movieDTO", movieDTO);
@@ -63,7 +63,7 @@ public class ReservationController {
         reservationDTO.setMemberId(memberDTO.getMemberId());
         TimetableDTO timetableDTO = timetableService.getTimetable(reservationDTO.getTimetableId());
         MovieDTO movieDTO = movieService.getMovieDetail(timetableDTO.getMovieId());
-        DiscountDTO discountDTO = new DiscountDTO(timetableDTO.getStartTime().getHour());
+        DiscountDTO discountDTO = timetableService.getDiscount(timetableDTO.getStartTime().getHour());
 
         model.addAttribute("movieDTO", movieDTO);
         model.addAttribute("timetableDTO", timetableDTO);
