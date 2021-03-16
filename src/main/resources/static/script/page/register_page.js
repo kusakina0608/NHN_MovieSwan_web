@@ -396,7 +396,7 @@
 
         axios.post(url.value, {
             "botName": "MovieSwan",
-            "botIconImage": "https://translate.nhnent.com/icon/botimage.jpg",
+            "botIconImage": "https://daejin-lee.github.io/assets/profile.png",
             "text": "MovieSwan 본인확인",
             "attachments": 
             [
