@@ -78,8 +78,7 @@ public class MemberController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response,
-                         RedirectAttributes redirectAttributes) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         authService.expireSession(authService.getAuthKey(request.getCookies()));
 
         Cookie cookie = authService.getCookie(request.getCookies());
