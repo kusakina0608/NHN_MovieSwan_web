@@ -63,25 +63,6 @@ main {
     border-radius: 5px;
 }
 
-.navigation {
-    width: 50%;
-    margin: 20px 0 20px;
-    background-color: bisque;
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    border-radius: 5px;
-}
-
-.navigation li {
-    padding: 10px 40px 10px;
-}
-
-.navigation li a {
-    text-decoration: none;
-    color: black;
-}
-
 main > div {
     margin: 20px 0 20px;
     width: 80%;
