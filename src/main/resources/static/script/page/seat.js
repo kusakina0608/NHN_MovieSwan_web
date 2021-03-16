@@ -68,15 +68,21 @@
                     alert("인원을 먼저 선택해 주세요");
                 }
                 else{
-                    alert("인원을 추가로 선택해 주세요");
+                    if(totalCount >= 10){
+                        alert("좌석은 한번에 10개까지 선택할 수 있습니다.");
+                    }
+                    else{
+                        alert("인원을 추가로 선택해 주세요");
+                    }
                 }
             }
         })
     })
 
-    const adultPrice = 16000;
-    const childPrice = 12000;
-    const otherPrice = 8000;
+    const adultPrice = parseInt(document.querySelector("#adultPrice").innerHTML);
+    const childPrice = parseInt(document.querySelector("#youngPrice").innerHTML);
+    const otherPrice = parseInt(document.querySelector("#elderPrice").innerHTML);
+    console.log(adultPrice);
 
     var refreshCount = function() {
         adultCount = parseInt(document.querySelector("#adultCount").value);
@@ -90,9 +96,13 @@
         el.addEventListener('click', e => {
             e.preventDefault();
             var input = e.target.parentNode.querySelector('input');
-            var count = parseInt(input.value) - 1;
-            count = count < 0 ? 0 : count;
-            input.value = count;
+
+            if(parseInt(input.value) > 0){
+                input.value = parseInt(input.value) - 1;
+            }
+            else{
+                input.value = 0;
+            }
             refreshCount();
         });
     });
@@ -101,7 +111,16 @@
         el.addEventListener('click', e => {
             e.preventDefault();
             var input = e.target.parentNode.querySelector('input');
-            input.value = parseInt(input.value) + 1;
+
+            if(totalCount >= 10){
+                alert("좌석은 한번에 10개까지 선택할 수 있습니다.");
+            }
+            else if(parseInt(input.value) >= 0){
+                input.value = parseInt(input.value) + 1;
+            }
+            else{
+                input.value = 0;
+            }
             refreshCount();
         });
     });
