@@ -3,7 +3,8 @@
     justify-content: center;
 
     width: 100%;
-    padding-bottom: 50px;
+
+    min-height: 350px;
 }
 
 .tg {
@@ -109,5 +110,19 @@
     font-size: 30px;
     font-weight: bold;
 
-    margin: 20px 0 0 20px;
+    margin: 20px 0 20px 20px;
+}
+
+#no_ticket {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 200px;
+    font-size: 50px;
+}
+
+#no_ticket .material-icons {
+    margin-right: 30px;
+    font-size: 70px;
 }
