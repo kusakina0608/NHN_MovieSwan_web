@@ -8,12 +8,17 @@
     const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
 
-    var adultCount = 0;
+    const adultCountElement = document.querySelector("#adultCount");
+    const youngCountElement = document.querySelector("#youngCount");
+    const elderCountElement = document.querySelector("#elderCount");
+
+    var adultCount = document.querySelectorAll(".selected").length;
     var youngCount = 0;
     var elderCount = 0;
-    var totalCount = 0;
+    var totalCount = adultCount + youngCount + elderCount;
+    var selected = totalCount;
 
-    var selected = 0;
+    adultCountElement.value = adultCount;
 
     const requestTicketAPI = axios.create({
         baseURL: location.origin
@@ -68,31 +73,48 @@
                     alert("인원을 먼저 선택해 주세요");
                 }
                 else{
-                    alert("인원을 추가로 선택해 주세요");
+                    if(totalCount >= 10){
+                        alert("좌석은 한번에 10개까지 선택할 수 있습니다.");
+                    }
+                    else{
+                        alert("인원을 추가로 선택해 주세요");
+                    }
                 }
             }
         })
     })
 
-    const adultPrice = 16000;
-    const childPrice = 12000;
-    const otherPrice = 8000;
+    const adultPrice = parseInt(document.querySelector("#adultPrice").innerHTML);
+    const childPrice = parseInt(document.querySelector("#youngPrice").innerHTML);
+    const otherPrice = parseInt(document.querySelector("#elderPrice").innerHTML);
+    console.log(adultPrice);
 
     var refreshCount = function() {
-        adultCount = parseInt(document.querySelector("#adultCount").value);
-        youngCount = parseInt(document.querySelector("#youngCount").value);
-        elderCount = parseInt(document.querySelector("#elderCount").value);
+        adultCount = parseInt(adultCountElement.value);
+        youngCount = parseInt(youngCountElement.value);
+        elderCount = parseInt(elderCountElement.value);
         totalCount = adultCount + youngCount + elderCount;
         totalPrice.innerHTML = adultCount * adultPrice + youngCount * childPrice + elderCount * otherPrice;
     }
+
+    refreshCount();
 
     document.querySelectorAll('.minus').forEach(el => {
         el.addEventListener('click', e => {
             e.preventDefault();
             var input = e.target.parentNode.querySelector('input');
-            var count = parseInt(input.value) - 1;
-            count = count < 0 ? 0 : count;
-            input.value = count;
+
+            if(parseInt(input.value) > 0){
+                if(parseInt(input.value) > selected){
+                    input.value = parseInt(input.value) - 1;
+                }
+                else{
+                    alert("선택된 좌석을 먼저 해제해 주세요.");
+                }
+            }
+            else{
+                input.value = 0;
+            }
             refreshCount();
         });
     });
@@ -101,7 +123,16 @@
         el.addEventListener('click', e => {
             e.preventDefault();
             var input = e.target.parentNode.querySelector('input');
-            input.value = parseInt(input.value) + 1;
+
+            if(totalCount >= 10){
+                alert("좌석은 한번에 10개까지 선택할 수 있습니다.");
+            }
+            else if(parseInt(input.value) >= 0){
+                input.value = parseInt(input.value) + 1;
+            }
+            else{
+                input.value = 0;
+            }
             refreshCount();
         });
     });
@@ -119,8 +150,8 @@
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
         form.setAttribute("action", "/reserve/pay");
-
-        if(selected === totalCount){
+        
+        if(totalCount > 0 && selected === totalCount){
             let selectedSeatList = [];
             document.querySelectorAll(".seat-label").forEach(el => {
                 selectedSeatList.push(el.innerHTML);

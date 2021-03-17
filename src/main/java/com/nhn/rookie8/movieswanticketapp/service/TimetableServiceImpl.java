@@ -1,7 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhn.rookie8.movieswanticketapp.dto.ScheduleDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.DiscountDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.QTimetable;
@@ -54,6 +53,22 @@ public class TimetableServiceImpl implements TimetableService {
         } catch (Exception e) {
             log.error(e);
             return "";
+        }
+    }
+
+    @Override
+    public DiscountDTO getDiscount(int hour){
+        if(hour < 9){
+            return DiscountDTO.builder()
+                    .discountType("조조 할인(오전 09:00 이전)")
+                    .discountRatio(0.25)
+                    .build();
+        }
+        else{
+            return DiscountDTO.builder()
+                    .discountType("없음")
+                    .discountRatio(0.0)
+                    .build();
         }
     }
 

@@ -1,6 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
-import com.nhn.rookie8.movieswanticketapp.dto.ScheduleDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.DiscountDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Timetable;
@@ -14,6 +14,7 @@ import java.util.List;
 public interface TimetableService {
     String registerTimetable(TimetableInputDTO dto);
     String deleteTimetable(String timetableId);
+    DiscountDTO getDiscount(int hour);
 
     TimetableDTO getTimetable(String timetableId);
     List<ScheduleDTO> getMovieScheduleDetail(List<TimetableDTO> result);

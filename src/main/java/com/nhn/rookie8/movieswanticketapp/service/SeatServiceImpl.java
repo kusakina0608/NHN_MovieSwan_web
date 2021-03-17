@@ -7,12 +7,10 @@ import com.nhn.rookie8.movieswanticketapp.entity.Seat;
 import com.nhn.rookie8.movieswanticketapp.entity.SeatId;
 import com.nhn.rookie8.movieswanticketapp.repository.SeatRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Log4j2
@@ -32,14 +31,24 @@ public class SeatServiceImpl implements SeatService{
     private final SeatRepository seatRepository;
 
     @Override
-    public List<List<SeatStateDTO>> getAllSeat(String timetableId, int row, int col) {
+    public List<List<SeatStateDTO>> getAllSeat(String timetableId, String memberId, int row, int col) {
+        List<String> seatList = getSeatListByTimetableId(timetableId);
+        List<String> mySeatList = seatRepository.findAll(myPreemptSeatsBuilder(timetableId, memberId),
+                PageRequest.of(0, 1000)).stream().map(e -> e.getSeatCode()).collect(Collectors.toList());
+        log.debug("seatList: {}", seatList);
+        log.debug("mySeatList: {}", mySeatList);
         List<List<SeatStateDTO>> seats = new ArrayList<>();
         for(char alpha = 'A'; alpha < 'A' + row; alpha++){
             seats.add(new ArrayList<>());
             for(int num = 1; num <= col; num++) {
                 String seatCode = new StringBuilder().append(alpha).append(String.format("%02d", num)).toString();
-                boolean exist = getReservedSeatList(timetableId).contains(seatCode);
-                seats.get(alpha - 'A').add(new SeatStateDTO().builder().seatCode(seatCode).available(!exist).build());
+                boolean exist = seatList.contains(seatCode);
+                boolean mySeat = mySeatList.contains(seatCode);
+                seats.get(alpha - 'A').add(new SeatStateDTO().builder()
+                        .seatCode(seatCode)
+                        .available(!exist)
+                        .mySeat(mySeat)
+                        .build());
             }
         }
         return seats;
@@ -54,14 +63,14 @@ public class SeatServiceImpl implements SeatService{
     }
 
     @Override
-    public List<String> getReservedSeatList(String timetableId) {
-        return seatRepository.findAll(getReservedSeat(timetableId), PageRequest.of(0, 1000))
+    public List<String> getSeatListByTimetableId(String timetableId) {
+        return seatRepository.findAll(seatsByTimetableIdBuilder(timetableId), PageRequest.of(0, 1000))
                 .stream().map(e -> e.getSeatCode()).collect(Collectors.toList());
     }
 
     @Override
-    public List<String> getMySeatList(String reservationId) {
-        return seatRepository.findAll(getMySeat(reservationId), PageRequest.of(0, 1000))
+    public List<String> getSeatListByReservationId(String reservationId) {
+        return seatRepository.findAll(seatsByReservationIdBuilder(reservationId), PageRequest.of(0, 1000))
                 .stream().map(e -> e.getSeatCode()).collect(Collectors.toList());
     }
 
@@ -93,14 +102,21 @@ public class SeatServiceImpl implements SeatService{
         seatRepository.deleteInBatch(list);
     }
 
-    private BooleanBuilder getReservedSeat(String timetableId) {
+    private BooleanBuilder seatsByTimetableIdBuilder(String timetableId) {
         return new BooleanBuilder()
                 .and(QSeat.seat.timetableId.eq(timetableId));
     }
 
-    private BooleanBuilder getMySeat(String reservationId) {
+    private BooleanBuilder seatsByReservationIdBuilder(String reservationId) {
         return new BooleanBuilder()
                 .and(QSeat.seat.reservationId.eq(reservationId));
+    }
+
+    private BooleanBuilder myPreemptSeatsBuilder(String timetableId, String memberId) {
+        return new BooleanBuilder()
+                .and(QSeat.seat.timetableId.eq(timetableId))
+                .and(QSeat.seat.reservationId.isNull())
+                .and(QSeat.seat.memberId.eq(memberId));
     }
 
     private BooleanBuilder getExpiredSeat() {

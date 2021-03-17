@@ -1,74 +1,74 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>영화 예매는 MovieSwan 에서!!! :: 마이페이지 :: 예매 내역 :: 예매 상세 내역</title>
     <link th:href="@{/css/page/my_page_ticket_detail.css}" type="text/css" rel="stylesheet" />
 </head>
+
 <body>
-<th:block th:replace="~{/layout/my_page::setContents(~{this::ticket_detail})}">
-    <ticket_detail id="ticket_detail" th:fragment="ticket_detail">
-        <p id="ticket_subject">상세 예매내역</p>
-        <ticket_content id="ticket_content">
-            <ticket_poster id="ticket_poster">
-                <img class="poster" th:src="|/movie/display?fileName=${result.poster}|">            </ticket_poster>
-            <ticket_content_detail id="ticket_content_detail">
-                <p id="ticket_moviename">[[${result.title}]]</p>
-                <item class="ticket_item">
-                    <vspan class="item">예약 번호 :</vspan>
-                    <span class="cont">[[${result.reservationId}]]</span>
-                </item>
-                <item class="ticket_item">
-                    <span class="item">영화 코드 :</span>
-                    <span class="cont" id="ticket_movie_id"></span>
-                </item>
-                <item class="ticket_item" id="reservation">
-                    <span class="item">상영 일자 :</span>
-                    <span class="cont">[[${#temporals.format(result.startTime, 'yyyy년 M월 d일, HH:mm')}]]</span>
-                    <div class="mark">
-                        <span class="alarm">꼭 기억해요</span>
-                        <span class="material-icons">favorite</span>
-                    </div>
-                </item>
-                <item class="ticket_item">
-                    <span class="item">예약 일자 :</span>
-                    <span class="cont">[[${#temporals.format(result.payDate, 'yyyy년 M월 d일, HH:mm:ss')}]]</span>
-                </item>
-                <item class="ticket_item" id="seat">
-                    <span class="item">좌석 정보 :</span>
-                    <span class="cont">[[${seat}]]</span>
-                    <div class="mark">
-                        <span class="alarm">꼭 기억해요</span>
-                        <span class="material-icons">favorite</span>
-                    </div>
-                </item>
-                <item class="ticket_item">
-                    <span class="item">결제 정보 :</span>
-                    <div>
-                        <p class="cont" style="font-weight: bold">결제 완료</p>
-                        <p class="cont" th:if="${-1 < result.adultNum}">성인 : [[${result.adultNum}]]명 x 16,000 원</p>
-                        <p class="cont" th:if="${-1 < result.youngNum}">청소년 : [[${result.youngNum}]]명 x 12,000 원</p>
-                        <p class="cont" th:if="${-1 < result.elderNum}">우대 : [[${result.elderNum}]]명 x 8,000 원</p>
-                    </div>
-                    <div class="totalprice">
-                        <p class="cont" th:if="${-1 < result.price}">총 금액 : [[${result.price}]] 원</p>
-                    </div>
-                </item>
-            </ticket_content_detail>
-        </ticket_content>
-        <hr>
-        <buttoncontrol id="button_control">
-            <button id="cancle_button" th:onclick='javascript:onButtonClick([[${result.reservationId}]]);'>
-                <span class="material-icons">clear</span>
-                예약 취소
-            </button>
-            <button id="ticket_button"  onclick="window.history.back()">
-                <span class="material-icons">format_list_bulleted</span>
-                목록으로
-            </button>
-        </buttoncontrol>
-    </ticket_detail>
-</th:block>
+    <th:block th:replace="~{/layout/my_page::setContents(~{this::ticket_detail})}">
+        <ticket_detail id="ticket_detail" th:fragment="ticket_detail">
+            <p id="ticket_subject">상세 예매내역</p>
+            <ticket_content id="ticket_content">
+                <ticket_poster id="ticket_poster">
+                    <img class="poster" th:src="|/movie/display?fileName=${result.poster}|">
+                </ticket_poster>
+                <ticket_content_detail id="ticket_content_detail">
+                    <p id="ticket_moviename">[[${result.title}]]</p>
+                    <item class="ticket_item">
+                        <vspan class="item">예약 번호 :</vspan>
+                        <span class="cont" id="reservationId">[[${result.reservationId}]]</span>
+                    </item>
+                    <item class="ticket_item" id="reservation">
+                        <span class="item">상영 일자 :</span>
+                        <span class="cont">[[${#temporals.format(result.startTime, 'yyyy년 M월 d일, HH:mm')}]]</span>
+                        <div class="mark">
+                            <span class="alarm">꼭 기억해요</span>
+                            <span class="material-icons">favorite</span>
+                        </div>
+                    </item>
+                    <item class="ticket_item">
+                        <span class="item">예약 일자 :</span>
+                        <span class="cont">[[${#temporals.format(result.payDate, 'yyyy년 M월 d일, HH:mm:ss')}]]</span>
+                    </item>
+                    <item class="ticket_item" id="seat">
+                        <span class="item">좌석 정보 :</span>
+                        <span class="cont">[[${seat}]]</span>
+                        <div class="mark">
+                            <span class="alarm">꼭 기억해요</span>
+                            <span class="material-icons">favorite</span>
+                        </div>
+                    </item>
+                    <item class="ticket_item">
+                        <span class="item">결제 정보 :</span>
+                        <div>
+                            <p class="cont" style="font-weight: bold">결제 완료</p>
+                            <p class="cont" th:if="${-1 < result.adultNum}">성인 : [[${result.adultNum}]]명 x 16,000 원</p>
+                            <p class="cont" th:if="${-1 < result.youngNum}">청소년 : [[${result.youngNum}]]명 x 12,000 원</p>
+                            <p class="cont" th:if="${-1 < result.elderNum}">우대 : [[${result.elderNum}]]명 x 8,000 원</p>
+                        </div>
+                        <div class="totalprice">
+                            <p class="cont" th:if="${-1 < result.price}">총 금액 : [[${result.price}]] 원</p>
+                        </div>
+                    </item>
+                </ticket_content_detail>
+            </ticket_content>
+            <hr>
+            <buttoncontrol id="button_control">
+                <button id="cancel_button" onclick="alertFunction()">
+                    <span class="material-icons">clear</span>
+                    예약 취소
+                </button>
+                <button id="ticket_button" onclick="window.history.back()">
+                    <span class="material-icons">format_list_bulleted</span>
+                    목록으로
+                </button>
+            </buttoncontrol>
+        </ticket_detail>
+    </th:block>
 </body>
 <script th:src="@{/script/page/my_page_ticket_detail.js}"></script>
+
 </html>
