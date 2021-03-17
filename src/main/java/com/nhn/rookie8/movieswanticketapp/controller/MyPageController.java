@@ -28,6 +28,7 @@ public class MyPageController {
     private final FavoriteService favoriteService;
     private final MovieService movieService;
     private final SeatService seatService;
+    private final WebHook webHook;
 
     @GetMapping({"/", ""})
     public String myPage() {
@@ -73,6 +74,11 @@ public class MyPageController {
     @GetMapping("/ticket/delete")
     public String myPageTicketDelete(@RequestParam String reservationId) {
         reservationService.delete(reservationId);
+
+        ReservationDetailDTO reservationDetailDTO = reservationService.getReservation(reservationId);
+        MemberDTO memberDTO = memberService.getMemberInfoById(reservationDetailDTO.getMemberId());
+
+        webHook.sendReservationCanceledMessage(memberDTO, reservationDetailDTO);
         return "redirect:/mypage/ticket";
     }
 
