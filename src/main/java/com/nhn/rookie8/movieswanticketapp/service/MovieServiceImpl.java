@@ -84,7 +84,7 @@ public class MovieServiceImpl implements MovieService{
     public List<MovieDTO> getScheduledMovieList() {
         return getCurrentMovieList()
                 .stream()
-                .filter(e -> timetableRepository.existsByMovieId(e.getMovieId()))
+                .filter(e -> timetableRepository.existsByMovieId(e.getMovieId(), LocalDateTime.now()))
                 .collect(Collectors.toList());
     }
 
