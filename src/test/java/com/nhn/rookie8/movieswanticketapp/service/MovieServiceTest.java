@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MovieDetailDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -107,24 +108,6 @@ class MovieServiceTest {
         List<MovieDTO> returnList = service.getCurrentMovieList();
 
         assertThat(returnList, is(movieDTOList));
-    }
-
-    @Test
-    void moviePageTest() {
-        List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
-        List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
-        Page<Movie> moviePage = mock(Page.class);
-
-        when(moviePage.getPageable()).thenReturn(PageRequest.of(0, 10));
-        when(moviePage.stream()).thenReturn(movieList.stream());
-        PageRequestDTO requestDTO = PageRequestDTO.builder().page(1).size(10).build();
-
-        when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
-
-        PageResultDTO<MovieDTO, Movie> resultDTO = service.getMoviePage(requestDTO, false);
-        List<MovieDTO> returnDTOList = resultDTO.getDtoList();
-
-        assertThat(returnDTOList, is(movieDTOList));
     }
 
     @Test

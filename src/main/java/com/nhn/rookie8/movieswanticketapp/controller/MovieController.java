@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MovieDetailDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -33,7 +34,9 @@ public class MovieController {
 
     @GetMapping("/list")
     public String currentMovieList(@ModelAttribute PageRequestDTO pageRequestDTO, @RequestParam boolean current, Model model) {
-        PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getMoviePage(pageRequestDTO, current);
+        PageResultDTO<MovieDetailDTO, Movie> resultDTO = movieService.getMoviePage(pageRequestDTO, current);
+        for(MovieDetailDTO dto : resultDTO.getDtoList())
+            log.info(dto);
 
         model.addAttribute("result", resultDTO);
         model.addAttribute("current", current);

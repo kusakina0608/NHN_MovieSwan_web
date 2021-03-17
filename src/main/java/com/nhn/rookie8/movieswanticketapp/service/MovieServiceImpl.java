@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MovieDetailDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,14 +50,14 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public PageResultDTO<MovieDTO, Movie> getMoviePage(PageRequestDTO requestDTO, boolean current) {
+    public PageResultDTO<MovieDetailDTO, Movie> getMoviePage(PageRequestDTO requestDTO, boolean current) {
         Pageable pageable = requestDTO.getPageable(Sort.by("startDate").descending());
         String keyword = requestDTO.getKeyword();
         BooleanBuilder booleanBuilder = current ? currentMoviesBuilder(keyword) : expectedMoviesBuilder(keyword);
 
         Page<Movie> result = movieRepository.findAll(booleanBuilder, pageable);
 
-        return new PageResultDTO<>(result, this::entityToDTO);
+        return new PageResultDTO<>(result, this::entityToMovieDetailDto);
     }
 
     @Override
@@ -131,5 +133,25 @@ public class MovieServiceImpl implements MovieService{
             booleanBuilder.or(qMovie.movieId.eq(movieId));
 
         return booleanBuilder;
+    }
+
+    private MovieDetailDTO entityToMovieDetailDto(Movie entity) {
+        Float rating = movieRepository.getAverageRating(entity.getMovieId());
+        Integer timetableNum = movieRepository.getTimetableNum(entity.getMovieId(), LocalDateTime.now());
+
+        return MovieDetailDTO.builder()
+                .movieId(entity.getMovieId())
+                .title(entity.getTitle())
+                .director(entity.getDirector())
+                .actor(entity.getActor())
+                .runtime(entity.getRuntime())
+                .rating(rating == null ? 0 : rating)
+                .reservationAvailable(timetableNum > 0)
+                .genre(entity.getGenre())
+                .story(entity.getStory())
+                .poster(entity.getPoster())
+                .startDate(entity.getStartDate())
+                .endDate(entity.getEndDate())
+                .build();
     }
 }

@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.MovieDetailDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -10,7 +11,7 @@ import java.util.List;
 public interface MovieService {
     String registerMovie(MovieDTO movieDTO);
 
-    PageResultDTO<MovieDTO, Movie> getMoviePage(PageRequestDTO pageRequestDTO, boolean current);
+    PageResultDTO<MovieDetailDTO, Movie> getMoviePage(PageRequestDTO pageRequestDTO, boolean current);
 
     PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList);
 
