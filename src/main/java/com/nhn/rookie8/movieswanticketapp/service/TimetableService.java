@@ -17,6 +17,7 @@ public interface TimetableService {
     DiscountDTO getDiscount(int hour);
 
     TimetableDTO getTimetable(String timetableId);
+    List<ScheduleDTO> getMovieScheduleDetail(List<TimetableDTO> result);
     List<TimetableDTO> getAllTimetableOfMovie(String movieId);
 
     default Timetable dtoToEntity(TimetableInputDTO timetableInputDTO) {

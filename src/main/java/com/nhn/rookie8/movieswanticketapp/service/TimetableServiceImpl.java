@@ -14,11 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -78,7 +79,8 @@ public class TimetableServiceImpl implements TimetableService {
 
             log.info("Search Result : {}", result.isPresent() ? result.get() : "No Result");
 
-            return result.isPresent() ? entityToDTO(result.get()) : null;
+            return result.map(this::entityToDTO).orElse(null);
+
         } catch (Exception e) {
             log.error(e);
             return null;
@@ -112,5 +114,28 @@ public class TimetableServiceImpl implements TimetableService {
         booleanBuilder.and(qTimetable.startTime.gt(LocalDateTime.now()));
 
         return booleanBuilder;
+    }
+
+    public List<ScheduleDTO> getMovieScheduleDetail(List<TimetableDTO> timetableDTOList){
+
+        //List<TimetableDTO> -> Map<String, List<ScheduleDTO.Detail>> -> List<ScheduleDTO>
+        return timetableDTOList.stream().collect(
+                Collectors.groupingBy(
+                        item->item.getStartTime().toLocalDate(),
+                        Collectors.mapping(item->
+                                        ScheduleDTO.Detail.builder()
+                                                .time(item.getStartTime().toLocalTime())
+                                                .timeTableId(item.getTimetableId())
+                                                .build()
+                                ,Collectors.toList()
+                        )
+                )
+        ).entrySet().stream().map(item->
+                ScheduleDTO.builder()
+                        .date(item.getKey())
+                        .detail(item.getValue())
+                        .build()
+        ).collect(Collectors.toList());
+
     }
 }
