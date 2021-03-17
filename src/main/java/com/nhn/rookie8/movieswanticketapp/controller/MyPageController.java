@@ -61,7 +61,7 @@ public class MyPageController {
 
     @GetMapping("/ticket/detail")
     public String myTicketDetailPage(@RequestParam String reservationId, Model model) {
-        List<String> result = seatService.getMySeatList(reservationId);
+        List<String> result = seatService.getSeatListByReservationId(reservationId);
         StringBuilder seat = new StringBuilder();
         result.forEach(s -> seat.append(s).append(' '));
 

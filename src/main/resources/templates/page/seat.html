@@ -82,7 +82,7 @@
                         <div> 좌 석 표 </div>
                         <section class="seat-table">
                             <div class="line" th:each="seat_row : ${seats}">
-                                <button th:each="seat : ${seat_row}" th:classappend="${!seat.available} ? na-seat">
+                                <button th:each="seat : ${seat_row}" th:classappend="${seat.mySeat?'selected':(!seat.available?'na-seat':'')}">
                                     <input th:id="${seat.seatCode}" type="hidden" th:value="${seat.seatCode}"/>
                                 </button>
                             </div>
@@ -93,7 +93,11 @@
                     </section>
                     <section class="lower-right-container">
                         <h2>선택한 좌석</h2>
-                        <div id="selected-seat"></div>
+                        <div id="selected-seat">
+                            <th:block th:each="seat_row : ${seats}">
+                                <div th:if="${seat.mySeat}" th:class="${seat.seatCode}" th:classappend="seat-label" th:each="seat : ${seat_row}">[[${seat.seatCode}]]</div>
+                            </block>
+                        </div>
                     </section>
                 </section>
             </section>

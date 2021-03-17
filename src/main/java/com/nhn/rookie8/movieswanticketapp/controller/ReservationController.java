@@ -37,9 +37,11 @@ public class ReservationController {
 
     @PostMapping("/seat")
     public String seat(
+            HttpServletRequest request,
             @RequestParam String timetableId,
             Model model
     ) {
+        MemberDTO memberDTO = memberService.getMemberInfoById((String)request.getAttribute("memberId"));
         TimetableDTO timetableDTO = timetableService.getTimetable(timetableId);
         MovieDTO movieDTO = movieService.getMovieDetail(timetableDTO.getMovieId());
         DiscountDTO discountDTO = timetableService.getDiscount(timetableDTO.getStartTime().getHour());
@@ -47,7 +49,7 @@ public class ReservationController {
         model.addAttribute("timetableDTO", timetableDTO);
         model.addAttribute("movieDTO", movieDTO);
         model.addAttribute("discountDTO", discountDTO);
-        model.addAttribute("seats", seatService.getAllSeat(timetableId, NUMBER_OF_ROW, NUMBER_OF_COLUMN));
+        model.addAttribute("seats", seatService.getAllSeat(timetableId, memberDTO.getMemberId(), NUMBER_OF_ROW, NUMBER_OF_COLUMN));
         model.addAttribute("theater", "무비스완 판교점");
         return "page/seat";
     }

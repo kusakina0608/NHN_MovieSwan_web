@@ -8,12 +8,17 @@
     const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
 
-    var adultCount = 0;
+    const adultCountElement = document.querySelector("#adultCount");
+    const youngCountElement = document.querySelector("#youngCount");
+    const elderCountElement = document.querySelector("#elderCount");
+
+    var adultCount = document.querySelectorAll(".selected").length;
     var youngCount = 0;
     var elderCount = 0;
-    var totalCount = 0;
+    var totalCount = adultCount + youngCount + elderCount;
+    var selected = totalCount;
 
-    var selected = 0;
+    adultCountElement.value = adultCount;
 
     const requestTicketAPI = axios.create({
         baseURL: location.origin
@@ -85,12 +90,14 @@
     console.log(adultPrice);
 
     var refreshCount = function() {
-        adultCount = parseInt(document.querySelector("#adultCount").value);
-        youngCount = parseInt(document.querySelector("#youngCount").value);
-        elderCount = parseInt(document.querySelector("#elderCount").value);
+        adultCount = parseInt(adultCountElement.value);
+        youngCount = parseInt(youngCountElement.value);
+        elderCount = parseInt(elderCountElement.value);
         totalCount = adultCount + youngCount + elderCount;
         totalPrice.innerHTML = adultCount * adultPrice + youngCount * childPrice + elderCount * otherPrice;
     }
+
+    refreshCount();
 
     document.querySelectorAll('.minus').forEach(el => {
         el.addEventListener('click', e => {
@@ -98,7 +105,12 @@
             var input = e.target.parentNode.querySelector('input');
 
             if(parseInt(input.value) > 0){
-                input.value = parseInt(input.value) - 1;
+                if(parseInt(input.value) > selected){
+                    input.value = parseInt(input.value) - 1;
+                }
+                else{
+                    alert("선택된 좌석을 먼저 해제해 주세요.");
+                }
             }
             else{
                 input.value = 0;
@@ -138,7 +150,7 @@
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");
         form.setAttribute("action", "/reserve/pay");
-
+        
         if(totalCount > 0 && selected === totalCount){
             let selectedSeatList = [];
             document.querySelectorAll(".seat-label").forEach(el => {
