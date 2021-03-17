@@ -73,11 +73,10 @@ public class MyPageController {
 
     @GetMapping("/ticket/delete")
     public String myPageTicketDelete(@RequestParam String reservationId) {
-        reservationService.delete(reservationId);
-
         ReservationDetailDTO reservationDetailDTO = reservationService.getReservation(reservationId);
         MemberDTO memberDTO = memberService.getMemberInfoById(reservationDetailDTO.getMemberId());
 
+        reservationService.delete(reservationId);
         webHook.sendReservationCanceledMessage(memberDTO, reservationDetailDTO);
         return "redirect:/mypage/ticket";
     }
