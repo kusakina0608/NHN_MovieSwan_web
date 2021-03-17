@@ -14,7 +14,6 @@ const cancelReservation = function (reservationId) {
 
 function alertFunction () {
     const reservationId = document.querySelector("#reservationId").innerText;
-    console.log(reservationId);
 
     if (confirm("정말로 예약을 취소하시겠습니까?")) {
         cancelReservation(reservationId);
