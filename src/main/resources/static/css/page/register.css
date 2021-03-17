@@ -38,8 +38,17 @@
 }
 
 .div #url_btn {
+    display: inline;
     width: 150px;
     font-size: 20px;
+    margin: 0 5px;
+}
+
+.div #url_reset_btn {
+    display: inline;
+    width: 70px;
+    font-size: 20px;
+    margin: 0 5px;
 }
 
 .div #auth_btn {
@@ -107,7 +116,7 @@
     padding: 10px;
     border: none;
     border-bottom: 1px solid;
-    width: 500px;
+    width: 600px;
 }
 
 
@@ -116,7 +125,7 @@
 }
 
 .div3 {
-    width: 500px;
+    width: 600px;
 }
 
 .div4 {
@@ -129,7 +138,7 @@
 }
 
 #url {
-    width: 300px;
+    width: 340px;
 }
 
 img {

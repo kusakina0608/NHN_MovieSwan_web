@@ -108,7 +108,7 @@
     font-size: 30px;
     font-weight: bold;
 
-    margin: 20px 0 0 20px;
+    margin: 20px 0 20px 20px;
 }
 
 #button_control {
@@ -123,13 +123,10 @@
     justify-content: center;
     align-items: center;
 
-    position: relative;
-    top: -45px;
-
     width: 150px;
     height: 35px;
 
-    margin: 0 20px 0 0;
+    margin: 0;
 
     border: none;
     border-radius: 5px;
@@ -146,4 +143,18 @@
 #question_button {
     background-color: green;
     border: none;
+}
+
+#no_question {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 200px;
+    font-size: 50px;
+}
+
+#no_question .material-icons {
+    margin-right: 20px;
+    font-size: 70px;
 }
