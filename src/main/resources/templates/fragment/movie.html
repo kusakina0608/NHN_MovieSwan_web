@@ -29,7 +29,7 @@
         <div>
             <span class="actor">주연 : [[${dto.actor}]]</span>
             <th:block th:if="${dto.reservationAvailable}">
-                <button class="reservation-btn" th:onclick=" 'location.href = \'' + @{/reserve} + '\' '">
+                <button class="reservation-btn" th:onclick=" 'location.href = \'' + @{/reserve(movieId=${dto.movieId})} + '\' '">
                     <span class="material-icons booking">local_activity</span>
                     <span>예매</span>
                 </button>

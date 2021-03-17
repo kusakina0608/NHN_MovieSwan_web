@@ -28,10 +28,18 @@
                 <h1>영화</h1>
                 <ul id="movie-list">
                     <a class="list-element-link" th:each="movie : ${movieList}" th:href="@{/reservation/}">
-                        <li class="list-element">
-                            [[${movie.title}]]
-                            <div class="movie-code">[[${movie.movieId}]]</div>
-                        </li>
+                        <th:block th:if="${movie.movieId == movieId}">
+                            <li class="list-element selected">
+                                [[${movie.title}]]
+                                <div class="movie-code">[[${movie.movieId}]]</div>
+                            </li>
+                        </th:block>
+                        <th:block th:unless="${movie.movieId == movieId}">
+                            <li class="list-element">
+                                [[${movie.title}]]
+                                <div class="movie-code">[[${movie.movieId}]]</div>
+                            </li>
+                        </th:block>
                     </a>
                 </ul>
             </section>
