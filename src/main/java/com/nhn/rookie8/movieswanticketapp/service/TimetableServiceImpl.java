@@ -1,6 +1,7 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.DiscountDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.ScheduleDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.TimetableInputDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.QTimetable;
@@ -14,11 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -119,7 +117,8 @@ public class TimetableServiceImpl implements TimetableService {
     public List<ScheduleDTO> getMovieScheduleDetail(List<TimetableDTO> timetableDTOList){
 
         //List<TimetableDTO> -> Map<String, List<ScheduleDTO.Detail>> -> List<ScheduleDTO>
-        return timetableDTOList.stream().collect(
+        return timetableDTOList.stream()
+                .collect(
                 Collectors.groupingBy(
                         item->item.getStartTime().toLocalDate(),
                         Collectors.mapping(item->
@@ -130,7 +129,9 @@ public class TimetableServiceImpl implements TimetableService {
                                 ,Collectors.toList()
                         )
                 )
-        ).entrySet().stream().map(item->
+        ).entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .map(item->
                 ScheduleDTO.builder()
                         .date(item.getKey())
                         .detail(item.getValue())
