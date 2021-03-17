@@ -1,6 +1,5 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
-import com.nhn.rookie8.movieswanticketapp.dto.MemberDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.SeatDTO;
 import com.nhn.rookie8.movieswanticketapp.service.MemberService;
 import com.nhn.rookie8.movieswanticketapp.service.SeatService;
@@ -23,7 +22,7 @@ public class SeatController {
 
     @GetMapping("/list")
     public List<String> getReservedSeatList(String timetableId) {
-        return seatService.getReservedSeatList(timetableId);
+        return seatService.getSeatListByTimetableId(timetableId);
     }
 
     @PostMapping("/preempt")

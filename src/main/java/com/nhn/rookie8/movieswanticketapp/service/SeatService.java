@@ -7,10 +7,10 @@ import com.nhn.rookie8.movieswanticketapp.entity.Seat;
 import java.util.List;
 
 public interface SeatService {
-    List<List<SeatStateDTO>> getAllSeat(String timetableId, int row, int col);
+    public List<List<SeatStateDTO>> getAllSeat(String timetableId, String memberId, int row, int col);
     void confirmSeat(String timetableId, String memberId, String reservationId, String seatCode);
-    List<String> getReservedSeatList(String timetableId);
-    List<String> getMySeatList(String reservationId);
+    List<String> getSeatListByTimetableId(String timetableId);
+    List<String> getSeatListByReservationId(String reservationId);
     void preemptSeat(SeatDTO dto);
     Boolean cancelSeat(SeatDTO dto);
 

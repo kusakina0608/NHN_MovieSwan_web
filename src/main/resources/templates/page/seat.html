@@ -40,33 +40,33 @@
                             <div class="people-type">성인: </div>
                             <div class="number">
                                 <span class="minus">-</span>
-                                <input id="adultCount" name="adultCount" type="text" value="0"/>
+                                <input id="adultCount" name="adultCount" type="text" value="0" readonly/>
                                 <span class="plus">+</span>
                             </div>
-                            <div class="price-label">× 16000</div>
+                            × <div id="adultPrice" class="price-label">[[${#numbers.formatInteger(16000 * (1 - discountDTO.discountRatio), 1)}]]</div>
                         </div>
                         <div>
                             <div class="people-type">청소년: </div>
                             <div class="number">
                                 <span class="minus">-</span>
-                                <input id="youngCount" name="youngCount" type="text" value="0"/>
+                                <input id="youngCount" name="youngCount" type="text" value="0" readonly/>
                                 <span class="plus">+</span>
                             </div>
-                            <div class="price-label">× 12000</div>
+                            × <div id="youngPrice" class="price-label">[[${#numbers.formatInteger(12000 * (1 - discountDTO.discountRatio), 1)}]]</div>
                         </div>
                         <div>
                             <div class="people-type">우대: </div>
                             <div class="number">
                                 <span class="minus">-</span>
-                                <input id="elderCount" name="elderCount" type="text" value="0"/>
+                                <input id="elderCount" name="elderCount" type="text" value="0" readonly/>
                                 <span class="plus">+</span>
                             </div>
-                            <div class="price-label">× 8000</div>
+                            × <div id="elderPrice" class="price-label">[[${#numbers.formatInteger(8000 * (1 - discountDTO.discountRatio), 1)}]]</div>
                         </div>
                     </section>
                     <section class="discount-info">
                         <h2>할인</h2>
-                        <div>[[${discount}]]</div>
+                        <div>[[${discountDTO.discountType}]]</div>
                     </section>
                     <section class="price-info">
                         <h2>총 결제 금액</h2>
@@ -82,7 +82,7 @@
                         <div> 좌 석 표 </div>
                         <section class="seat-table">
                             <div class="line" th:each="seat_row : ${seats}">
-                                <button th:each="seat : ${seat_row}" th:classappend="${!seat.available} ? na-seat">
+                                <button th:each="seat : ${seat_row}" th:classappend="${seat.mySeat?'selected':(!seat.available?'na-seat':'')}">
                                     <input th:id="${seat.seatCode}" type="hidden" th:value="${seat.seatCode}"/>
                                 </button>
                             </div>
@@ -93,7 +93,11 @@
                     </section>
                     <section class="lower-right-container">
                         <h2>선택한 좌석</h2>
-                        <div id="selected-seat"></div>
+                        <div id="selected-seat">
+                            <th:block th:each="seat_row : ${seats}">
+                                <div th:if="${seat.mySeat}" th:class="${seat.seatCode}" th:classappend="seat-label" th:each="seat : ${seat_row}">[[${seat.seatCode}]]</div>
+                            </block>
+                        </div>
                     </section>
                 </section>
             </section>
