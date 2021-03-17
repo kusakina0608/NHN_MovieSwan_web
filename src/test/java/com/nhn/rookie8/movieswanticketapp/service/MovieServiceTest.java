@@ -1,7 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MovieDetailDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -24,7 +23,6 @@ import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -73,16 +71,6 @@ class MovieServiceTest {
         String movieId = service.registerMovie(service.entityToDTO(movie));
 
         assertThat(movieId, is(movie.getMovieId() + "001"));
-    }
-
-    @Test
-    void movieReadTest() {
-        String movieId = movie.getMovieId();
-        when(repository.findById(movieId)).thenReturn(Optional.of(movie));
-
-        MovieDTO returnMovie = service.getMovieDetail(movieId);
-
-        assertThat(returnMovie, is(service.entityToDTO(movie)));
     }
 
     @Test

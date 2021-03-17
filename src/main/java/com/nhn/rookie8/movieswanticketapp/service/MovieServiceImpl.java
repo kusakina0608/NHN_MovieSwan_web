@@ -1,7 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MovieDetailDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -9,7 +8,6 @@ import com.nhn.rookie8.movieswanticketapp.entity.QMovie;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
 import com.nhn.rookie8.movieswanticketapp.repository.TimetableRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,14 +46,14 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public PageResultDTO<MovieDetailDTO, Movie> getMoviePage(PageRequestDTO requestDTO, boolean current) {
+    public PageResultDTO<MovieDTO, Movie> getMoviePage(PageRequestDTO requestDTO, boolean current) {
         Pageable pageable = requestDTO.getPageable(Sort.by("startDate").descending());
         String keyword = requestDTO.getKeyword();
         BooleanBuilder booleanBuilder = current ? currentMoviesBuilder(keyword) : expectedMoviesBuilder(keyword);
 
         Page<Movie> result = movieRepository.findAll(booleanBuilder, pageable);
 
-        return new PageResultDTO<>(result, this::entityToMovieDetailDto);
+        return new PageResultDTO<>(result, this::entityToDTO);
     }
 
     @Override
@@ -98,6 +94,27 @@ public class MovieServiceImpl implements MovieService{
         return result.isPresent() ? entityToDTO(result.get()) : null;
     }
 
+    @Override
+    public MovieDTO entityToDTO(Movie entity) {
+        Float rating = movieRepository.getAverageRating(entity.getMovieId());
+        Integer timetableNum = movieRepository.getTimetableNum(entity.getMovieId(), LocalDateTime.now());
+
+        return MovieDTO.builder()
+                .movieId(entity.getMovieId())
+                .title(entity.getTitle())
+                .director(entity.getDirector())
+                .actor(entity.getActor())
+                .runtime(entity.getRuntime())
+                .rating(rating == null ? 0 : rating)
+                .reservationAvailable(timetableNum > 0)
+                .genre(entity.getGenre())
+                .story(entity.getStory())
+                .poster(entity.getPoster())
+                .startDate(entity.getStartDate())
+                .endDate(entity.getEndDate())
+                .build();
+    }
+
     private BooleanBuilder moviesWithSameCodeBuilder(String movieId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMovie qMovie = QMovie.movie;
@@ -133,25 +150,5 @@ public class MovieServiceImpl implements MovieService{
             booleanBuilder.or(qMovie.movieId.eq(movieId));
 
         return booleanBuilder;
-    }
-
-    private MovieDetailDTO entityToMovieDetailDto(Movie entity) {
-        Float rating = movieRepository.getAverageRating(entity.getMovieId());
-        Integer timetableNum = movieRepository.getTimetableNum(entity.getMovieId(), LocalDateTime.now());
-
-        return MovieDetailDTO.builder()
-                .movieId(entity.getMovieId())
-                .title(entity.getTitle())
-                .director(entity.getDirector())
-                .actor(entity.getActor())
-                .runtime(entity.getRuntime())
-                .rating(rating == null ? 0 : rating)
-                .reservationAvailable(timetableNum > 0)
-                .genre(entity.getGenre())
-                .story(entity.getStory())
-                .poster(entity.getPoster())
-                .startDate(entity.getStartDate())
-                .endDate(entity.getEndDate())
-                .build();
     }
 }

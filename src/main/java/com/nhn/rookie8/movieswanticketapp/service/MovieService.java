@@ -1,7 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MovieDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MovieDetailDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageRequestDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.PageResultDTO;
 import com.nhn.rookie8.movieswanticketapp.entity.Movie;
@@ -11,7 +10,7 @@ import java.util.List;
 public interface MovieService {
     String registerMovie(MovieDTO movieDTO);
 
-    PageResultDTO<MovieDetailDTO, Movie> getMoviePage(PageRequestDTO pageRequestDTO, boolean current);
+    PageResultDTO<MovieDTO, Movie> getMoviePage(PageRequestDTO pageRequestDTO, boolean current);
 
     PageResultDTO<MovieDTO, Movie> getListByMovieId(PageRequestDTO requestDTO, List<String> movieIdList);
 
@@ -22,6 +21,8 @@ public interface MovieService {
     List<MovieDTO> getScheduledMovieList();
 
     MovieDTO getMovieDetail(String movieId);
+
+    MovieDTO entityToDTO(Movie movie);
 
     default Movie dtoToEntity(MovieDTO movieDTO) {
         return Movie.builder()
@@ -35,23 +36,6 @@ public interface MovieService {
                 .story(movieDTO.getStory())
                 .startDate(movieDTO.getStartDate())
                 .endDate(movieDTO.getEndDate())
-                .build();
-    }
-
-    default MovieDTO entityToDTO(Movie movie) {
-        return MovieDTO.builder()
-                .movieId(movie.getMovieId())
-                .title(movie.getTitle())
-                .poster(movie.getPoster())
-                .director(movie.getDirector())
-                .actor(movie.getActor())
-                .genre(movie.getGenre())
-                .runtime(movie.getRuntime())
-                .story(movie.getStory())
-                .startDate(movie.getStartDate())
-                .endDate(movie.getEndDate())
-                .regDate(movie.getRegDate())
-                .modDate(movie.getModDate())
                 .build();
     }
 }
