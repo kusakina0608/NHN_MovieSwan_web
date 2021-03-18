@@ -1,0 +1,100 @@
+#error_page {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+}
+
+.error_page_logo {
+    width: 150px;
+
+    margin-right: 10px;
+
+    cursor: pointer;
+}
+
+#error_img {
+    width: 500px;
+
+    margin-right: 30px;
+}
+
+#error_message {
+    display: flex;
+    
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 30px;
+}
+
+.subject {
+    font-size: 70px;
+    margin-bottom: 30px;
+}
+
+.message {
+    font-size: 55px;
+}
+
+#error_button {
+    display: flex;
+    justify-content: center;
+}
+
+#go_to_back {
+    display: flex;
+    
+    align-items: center;
+
+    padding: 10px 50px;
+    margin-left: 50px;
+    margin-right: 30px;
+
+    border: none;
+    border-radius: 10px;
+
+    color: white;
+    background-color: red;
+
+    cursor: pointer;
+}
+
+#go_to_home {
+    display: flex;
+    
+    align-items: center;
+
+    padding: 10px 30px;
+
+    border: none;
+    border-radius: 10px;
+
+    color: white;
+    background-color: black;
+
+    cursor: pointer;
+}
+
+#go_to_back, #go_to_home {
+    transition: 1s;
+}
+
+#go_to_back span {
+    font-size: 30px;
+}
+
+#go_to_home span {
+    font-size: 30px;
+}
+
+#go_to_back:hover {
+    background-color: lightcoral;
+}
+
+#go_to_home:hover {
+    background-color: grey;
+}

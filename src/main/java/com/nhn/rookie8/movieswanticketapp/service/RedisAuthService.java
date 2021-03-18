@@ -29,11 +29,13 @@ public class RedisAuthService implements AuthService {
 
     @Override
     public void updateSession(String authKey) {
+        if (authKey == null) return;
         redis.expire(authKey, Duration.ofMinutes(10));
     }
 
     @Override
     public void expireSession(String authKey) {
+        if (authKey == null) return;
         redis.delete(authKey);
     }
 
