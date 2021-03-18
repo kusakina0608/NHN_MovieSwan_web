@@ -7,19 +7,26 @@ import javax.servlet.http.Cookie;
 
 public interface AuthService {
 
-    public static final String cookieName = "SWANAUTH";
+    String cookieName = "SWANAUTH";
 
-    public static final Integer cookieAge = 10 * 60;
+    Integer cookieAge = 10 * 60;
 
-    public Cookie setSession(MemberIdNameDTO member);
+    Cookie setSession(MemberIdNameDTO member);
 
-    public void updateSession(String authKey);
+    void updateSessionByAuthKey(String authKey);
 
-    public void expireSession(String authKey);
 
-    public boolean isSessionExist(String authKey);
+    void expireSessionByAuthKey(String authKey);
 
-    public MemberIdNameDTO getMemberInfo(String authKey);
+    void expireSessionByMemberId(String memberId);
+
+    boolean isAuthSessionExist(String authKey);
+
+    boolean isAuthCheckSessionExist(String memberId);
+
+    MemberIdNameDTO getMemberInfoByAuthKey(String authKey);
+
+    String getAuthKeyByMemberId(String memberId);
 
     default Cookie createCookie() {
         Cookie cookie = new Cookie(cookieName,

@@ -14,20 +14,21 @@ import javax.servlet.http.HttpServletResponse;
 public class MemberAuthInterceptor extends HandlerInterceptorAdapter {
     private final AuthService authService;
 
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         String authKey = authService.getAuthKey(request.getCookies());
 
-        if (authKey == null || !authService.isSessionExist(authKey)) {
+        if (authKey == null || !authService.isAuthSessionExist(authKey)) {
             response.sendRedirect("/member/login");
             return false;
         }
 
-        authService.updateSession(authKey);
+        authService.updateSessionByAuthKey(authKey);
         response.addCookie(authService.updateCookie(authService.getCookie(request.getCookies())));
 
-        request.setAttribute("memberId", authService.getMemberInfo(authKey).getMemberId());
+        request.setAttribute("memberId", authService.getMemberInfoByAuthKey(authKey).getMemberId());
         return true;
     }
 
