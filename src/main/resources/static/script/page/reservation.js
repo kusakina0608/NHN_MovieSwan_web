@@ -93,40 +93,42 @@
             el.addEventListener("click", async (e) => {
                 e.preventDefault();
                 let res = await handler(e.target.querySelector("div").innerHTML);
-
-                // 영화가 선택되었으므로 일자, 시간을 초기화
-                dayList.innerHTML = '';
-                timeList.innerHTML = '';
-                movieSchedule = {};
-                res.data.forEach(item=>{
-                    movieSchedule[item.date] = item.detail;
-                });
-                // API로부터 전달받은 영화의 상영시간표를 저장
-                console.log(res.data);
-                console.log(movieSchedule);
-                // 일자를 추가
-                for(var key in movieSchedule){
-                    console.log(key);
-                    let newListElement = document.createElement("li");
-                    newListElement.classList.add("list-element");
-                    newListElement.innerHTML = key;
-                    let newLink = document.createElement("a");
-                    newLink.appendChild(newListElement);
-                    newLink.classList.add("list-element-link");
-                    newLink.href = "/reserve/";
-                    dayList.appendChild(newLink);
-                }
-                // 추가된 일자 요소들을 갱신
-                dayLinkList = dayList.querySelectorAll(".list-element-link");
-                // 추가된 일자 요소들의 콜백 함수를 지정
-                onDateClicked(dayLinkList);
+                loadSchedule(res);
                 // 영화 선택이 변경되었으므로, 기존 선택을 취소
                 clearSelectedElement(links);
-                // 새롭게 선택된 요소에 selected 클래스 추가
                 e.target.classList.add("selected");
             })
         })
     };
+
+    function loadSchedule(res) {
+        // 영화가 선택되었으므로 일자, 시간을 초기화
+        dayList.innerHTML = '';
+        timeList.innerHTML = '';
+        movieSchedule = {};
+        res.data.forEach(item=>{
+            movieSchedule[item.date] = item.detail;
+        });
+        // API로부터 전달받은 영화의 상영시간표를 저장
+        console.log(res.data);
+        console.log(movieSchedule);
+        // 일자를 추가
+        for(var key in movieSchedule){
+            console.log(key);
+            let newListElement = document.createElement("li");
+            newListElement.classList.add("list-element");
+            newListElement.innerHTML = key;
+            let newLink = document.createElement("a");
+            newLink.appendChild(newListElement);
+            newLink.classList.add("list-element-link");
+            newLink.href = "/reserve/";
+            dayList.appendChild(newLink);
+        }
+        // 추가된 일자 요소들을 갱신
+        dayLinkList = dayList.querySelectorAll(".list-element-link");
+        // 추가된 일자 요소들의 콜백 함수를 지정
+        onDateClicked(dayLinkList);
+    }
 
     nextButton.addEventListener("click", e => {
         e.preventDefault();
@@ -156,6 +158,13 @@
             alert("영화, 극장, 시간, 날짜를 모두 선택해 주세요.");
         }
     })
+
+    let selectedMovie = movieList.querySelector(".selected");
+    if(selectedMovie !== null) {
+        scheduleAPI.getSchedules(selectedMovie.querySelector("div").innerHTML).then(response => {
+            loadSchedule(response);
+        });
+    }
 
     onMovieClicked(movieLinkList, scheduleAPI.getSchedules);
     onTheaterClicked(theaterLinkList);

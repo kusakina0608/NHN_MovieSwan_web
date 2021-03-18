@@ -18,12 +18,6 @@
         }
     }
 
-    const reviewAPI = {
-        calculateRating: (movieId) => {
-            return requestTicketAPI.get(`/api/review/getRating?movieId=${movieId}`)
-        }
-    }
-
     var favBtns = document.querySelectorAll(".favorite");
     var memberIdInput = localStorage.getItem("memberId");
     favBtns.forEach(btn => {
@@ -54,16 +48,6 @@
             }
         })
     });
-
-    //평균 평점 계산
-    var ratings = document.querySelectorAll(".rating");
-    ratings.forEach(rating => {
-        let movieId = rating.querySelector("input").value;
-
-        reviewAPI.calculateRating(movieId).then(response => {
-            rating.querySelector(".rating-num").innerText = (response.data).toFixed(1);
-        })
-    })
 
     //영화 이미지에 마우스 호버 동작 관련
     var movies = document.querySelectorAll(".movieLink");
