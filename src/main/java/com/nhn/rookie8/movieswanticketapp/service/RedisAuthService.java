@@ -47,6 +47,7 @@ public class RedisAuthService implements AuthService {
     @Override
     @Transactional
     public void updateSessionByAuthKey(String authKey) {
+		if (authKey == null) return;
         redisTemplateAuth.expire(authKey, Duration.ofMinutes(10));
         redisTemplateAuthCheck.expire(getMemberInfoByAuthKey(authKey).getMemberId(), Duration.ofMinutes(10));
 
@@ -56,6 +57,7 @@ public class RedisAuthService implements AuthService {
     @Override
     @Transactional
     public void expireSessionByAuthKey(String authKey) {
+		if (authKey == null) return;
         redisTemplateAuth.delete(authKey);
         redisTemplateAuthCheck.delete(getMemberInfoByAuthKey(authKey).getMemberId());
     }
@@ -63,6 +65,7 @@ public class RedisAuthService implements AuthService {
     @Override
     @Transactional
     public void expireSessionByMemberId(String memberId) {
+		if (memberId == null) return;
         redisTemplateAuth.delete(getAuthKeyByMemberId(memberId));
         redisTemplateAuthCheck.delete(memberId);
     }

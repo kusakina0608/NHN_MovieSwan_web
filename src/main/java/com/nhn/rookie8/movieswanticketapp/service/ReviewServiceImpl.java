@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -72,15 +71,6 @@ public class ReviewServiceImpl implements ReviewService{
         Page<Review> result = repository.findAll(booleanBuilder, pageable);
 
         return new PageResultDTO<>(result, this::entityToDTO);
-    }
-
-    @Override
-    public double getRatingByMovieId(String movieId) {
-        Pageable pageable = PageRequest.of(0, 1000);
-        BooleanBuilder booleanBuilder = getReviewsByMovieId(movieId);
-
-        List<Review> result = repository.findAll(booleanBuilder, pageable).toList();
-        return result.stream().mapToDouble(Review::getRating).average().orElse(0);
     }
 
     @Override

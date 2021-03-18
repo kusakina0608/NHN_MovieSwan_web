@@ -23,7 +23,6 @@ import org.springframework.shell.jline.ScriptShellApplicationRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -75,16 +74,6 @@ class MovieServiceTest {
     }
 
     @Test
-    void movieReadTest() {
-        String movieId = movie.getMovieId();
-        when(repository.findById(movieId)).thenReturn(Optional.of(movie));
-
-        MovieDTO returnMovie = service.getMovieDetail(movieId);
-
-        assertThat(returnMovie, is(service.entityToDTO(movie)));
-    }
-
-    @Test
     void movieListTest() {
         List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
         List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
@@ -107,24 +96,6 @@ class MovieServiceTest {
         List<MovieDTO> returnList = service.getCurrentMovieList();
 
         assertThat(returnList, is(movieDTOList));
-    }
-
-    @Test
-    void moviePageTest() {
-        List<MovieDTO> movieDTOList = generator.objects(MovieDTO.class, 10).collect(Collectors.toList());
-        List<Movie> movieList = movieDTOList.stream().map(dto -> service.dtoToEntity(dto)).collect(Collectors.toList());
-        Page<Movie> moviePage = mock(Page.class);
-
-        when(moviePage.getPageable()).thenReturn(PageRequest.of(0, 10));
-        when(moviePage.stream()).thenReturn(movieList.stream());
-        PageRequestDTO requestDTO = PageRequestDTO.builder().page(1).size(10).build();
-
-        when(repository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(moviePage);
-
-        PageResultDTO<MovieDTO, Movie> resultDTO = service.getMoviePage(requestDTO, false);
-        List<MovieDTO> returnDTOList = resultDTO.getDtoList();
-
-        assertThat(returnDTOList, is(movieDTOList));
     }
 
     @Test

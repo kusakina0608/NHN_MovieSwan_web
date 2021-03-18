@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>영화 예매는 MovieSwan 에서!!! :: 500 Internal Server Error...</title>
+    <link th:href="@{/css/page/common_error_page.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <th:block th:replace="~{/layout/error_page:: setContents(~{this:: #error_page} )}">
+        <error_page id="error_page">
+            <error_message id="error_message">
+                <img id="error_img" th:src="@{/asset/image/500.png}" />
+                <div>
+                    <p style="font-size: 70px;">INTERNAL</p>
+                    <p class="subject">SERVER ERROR</p>
+                    <p class="message">개발자들이 열심히</p>
+                    <p class="message">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;일하는 중이에요...</p>
+                </div>
+            </error_message>
+            <error_button id="error_button">
+                <button id="go_to_back" onclick="window.history.go(-1)">
+                    <span class="button_message">뒤로 가기</span>
+                </button>
+                <button id="go_to_home" onclick="location.href='/'">
+                    <img class="error_page_logo" th:src="@{/asset/image/logo1_light.png}" />
+                    <span class="button_message">홈으로 가기</span>
+                </button>
+            </error_button>
+        </error_page>
+    </th:block>
+</body>
+
+</html>

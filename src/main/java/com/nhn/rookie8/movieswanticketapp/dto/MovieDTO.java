@@ -19,6 +19,8 @@ public class MovieDTO {
     private String director;
     private String actor;
     private int runtime;
+    private float rating;
+    private boolean reservationAvailable;
     private String genre;
     private String story;
     private String poster;
