@@ -14,8 +14,6 @@ public interface ReviewService {
 
     PageResultDTO<ReviewDTO, Review> findMyReviews(PageRequestDTO pageRequestDTO, String memberId);
 
-    double getRatingByMovieId(String movieId);
-
     void editReview(ReviewDTO reviewDTO);
 
     void deleteReview(String reviewId);

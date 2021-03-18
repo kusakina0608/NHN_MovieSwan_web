@@ -23,15 +23,21 @@
             <span class="rating">
                 <input type="hidden" name="movieId" th:value="${dto.movieId}">
                 <span class="material-icons star">star_rate</span>
-                <span class="rating-num"></span>
+                <span class="rating-num">[[${#numbers.formatDecimal(dto.rating, 1, 1)}]]</span>
             </span>
         </div>
         <div>
             <span class="actor">주연 : [[${dto.actor}]]</span>
-            <button class="btn" th:onclick=" 'location.href = \'' + @{/reserve} + '\' '">
-                <span class="material-icons booking">local_activity</span>
-                <span>예매</span>
-            </button>
+            <th:block th:if="${dto.reservationAvailable}">
+                <button class="reservation-btn" th:onclick=" 'location.href = \'' + @{/reserve(movieId=${dto.movieId})} + '\' '">
+                    <span class="material-icons booking">local_activity</span>
+                    <span>예매</span>
+                </button>
+            </th:block>
+            <th:block th:unless="${dto.reservationAvailable}">
+                <button class="reservation-unable-btn" disabled>예매 불가</button>
+            </th:block>
+
         </div>
     </div>
 </div>

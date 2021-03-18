@@ -29,9 +29,10 @@ public class ReservationController {
 
 
     @GetMapping("")
-    public String reserve(Model model) {
+    public String reserve(@RequestParam(required = false) String movieId, Model model) {
         List<MovieDTO> movieList = movieService.getScheduledMovieList();
         model.addAttribute("movieList", movieList);
+        model.addAttribute("movieId", movieId);
         return "page/reservation";
     }
 
