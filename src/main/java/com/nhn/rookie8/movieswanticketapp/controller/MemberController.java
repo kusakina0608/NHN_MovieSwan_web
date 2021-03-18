@@ -1,7 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.controller;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MemberAuthDomainDTO;
-import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberRegisterDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.MemberResponseDTO;
 import com.nhn.rookie8.movieswanticketapp.service.AuthService;
@@ -72,14 +71,14 @@ public class MemberController {
         Cookie cookie = authService.setSession(memberService.responseToMemberIdNameMap(memberResponseDTO));
 
         response.addCookie(cookie);
-        redirectAttributes.addFlashAttribute("member", authService.getMemberInfo(cookie.getValue()));
+        redirectAttributes.addFlashAttribute("member", authService.getMemberInfoByAuthKey(cookie.getValue()));
 
         return "redirect:/main";
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
-        authService.expireSession(authService.getAuthKey(request.getCookies()));
+        authService.expireSessionByAuthKey(authService.getAuthKey(request.getCookies()));
 
         Cookie cookie = authService.getCookie(request.getCookies());
 

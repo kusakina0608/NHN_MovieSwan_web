@@ -1,52 +1,95 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.nhn.rookie8.movieswanticketapp.dto.MemberIdNameDTO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
+import javax.transaction.Transactional;
 import java.time.Duration;
 
 @Service
 @Log4j2
-@RequiredArgsConstructor
 @ConditionalOnProperty(name="auth", havingValue = "redis", matchIfMissing = true)
 public class RedisAuthService implements AuthService {
-    private final RedisTemplate<String, Object> redis;
+
+    @Autowired
+    private RedisTemplate<String, MemberIdNameDTO> redisTemplateAuth;
+
+    @Autowired
+    @Qualifier("redisTemplateAuthCheck")
+    private RedisTemplate<String, String> redisTemplateAuthCheck;
+
 
     @Override
+    @Transactional
     public Cookie setSession(MemberIdNameDTO member) {
-        Cookie cookie = this.createCookie();
-        if (isSessionExist(cookie.getValue()))
-            return null;
 
-        redis.opsForValue().set(cookie.getValue(), member, Duration.ofMinutes(10));
+        //중복로그인 방지
+        if(isAuthCheckSessionExist(member.getMemberId())){
+            expireSessionByMemberId(member.getMemberId());
+        }
+
+        //세션 생성
+        Cookie cookie = createCookie();
+        while(isAuthSessionExist(cookie.getValue())) cookie = createCookie();
+
+        redisTemplateAuth.opsForValue().set(cookie.getValue(), member, Duration.ofMinutes(10));
+        redisTemplateAuthCheck.opsForValue().set(member.getMemberId(), cookie.getValue(), Duration.ofMinutes(10));
+
         return cookie;
     }
 
     @Override
-    public void updateSession(String authKey) {
-        redis.expire(authKey, Duration.ofMinutes(10));
+    @Transactional
+    public void updateSessionByAuthKey(String authKey) {
+        redisTemplateAuth.expire(authKey, Duration.ofMinutes(10));
+        redisTemplateAuthCheck.expire(getMemberInfoByAuthKey(authKey).getMemberId(), Duration.ofMinutes(10));
+
+    }
+
+
+    @Override
+    @Transactional
+    public void expireSessionByAuthKey(String authKey) {
+        redisTemplateAuth.delete(authKey);
+        redisTemplateAuthCheck.delete(getMemberInfoByAuthKey(authKey).getMemberId());
     }
 
     @Override
-    public void expireSession(String authKey) {
-        redis.delete(authKey);
+    @Transactional
+    public void expireSessionByMemberId(String memberId) {
+        redisTemplateAuth.delete(getAuthKeyByMemberId(memberId));
+        redisTemplateAuthCheck.delete(memberId);
     }
 
     @Override
-    public boolean isSessionExist(String authKey) {
-        return redis.opsForValue().size(authKey) != 0;
+    public boolean isAuthSessionExist(String authKey) {
+        return redisTemplateAuth.opsForValue().size(authKey) != 0;
     }
 
     @Override
-    public MemberIdNameDTO getMemberInfo(String authKey) {
-        if (!isSessionExist(authKey))
+    public boolean isAuthCheckSessionExist(String memberId) {
+        return redisTemplateAuthCheck.opsForValue().size(memberId) != 0;
+    }
+
+    @Override
+    public MemberIdNameDTO getMemberInfoByAuthKey(String authKey) {
+        if (!isAuthSessionExist(authKey))
             return MemberIdNameDTO.builder().build();
 
-        return (MemberIdNameDTO) redis.opsForValue().get(authKey);
+        return redisTemplateAuth.opsForValue().get(authKey);
+    }
+
+    @Override
+    public String getAuthKeyByMemberId(String memberId){
+        if(!isAuthCheckSessionExist(memberId))
+            return null;
+
+        return redisTemplateAuthCheck.opsForValue().get(memberId);
     }
 }
