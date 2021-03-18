@@ -34,8 +34,6 @@ public class MovieController {
     @GetMapping("/list")
     public String currentMovieList(@ModelAttribute PageRequestDTO pageRequestDTO, @RequestParam boolean current, Model model) {
         PageResultDTO<MovieDTO, Movie> resultDTO = movieService.getMoviePage(pageRequestDTO, current);
-        for(MovieDTO dto : resultDTO.getDtoList())
-            log.info(dto);
 
         model.addAttribute("result", resultDTO);
         model.addAttribute("current", current);
