@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>영화 예매는 MovieSwan 에서!!! :: 관리자 페이지</title>
+</head>
+
+<body>
+    <th:block th:replace="~{/layout/common_page::setContents(~{this::admin_page})}">
+        <adminpage th:fragment="admin_page">
+            <th:block th:replace="~{/fragment/admin_question}"></th:block>
+        </adminpage>
+    </th:block>
+</body>
+
+</html>
+<style>
+</style>

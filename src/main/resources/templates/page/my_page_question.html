@@ -15,7 +15,7 @@
                     <tr>
                         <th class="tg-0lax">No.</th>
                         <th class="tg-baqh">제목</th>
-                        <th class="tg-baqh">작성자</th>
+                        <th class="tg-baqh">답변 상태</th>
                         <th class="tg-lqy6">등록일자</th>
                     </tr>
                 </thead>
@@ -24,7 +24,12 @@
                         th:onclick="'javascript:trClicked(\'' + ${dto.questionId} + '\');'">
                         <td class="tg-0lax" scope="row">[[${dto.questionId}]]</td>
                         <td class="tg-0lax1">[[${dto.title}]]</td>
-                        <td class="tg-baqh">[[${dto.memberId}]]</td>
+                        <td id="yes" class="tg-baqh">
+                            <div id="answer_complete">답변 완료</div>
+                        </td>
+                        <td id="no" class="tg-baqh">
+                            <div id="answer_wait">답변 대기</div>
+                        </td>
                         <td class="tg-lqy6">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
                     </tr>
                 </tbody>

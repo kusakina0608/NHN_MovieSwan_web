@@ -26,10 +26,4 @@ public class MainController {
     public String mainPage() {
         return "page/main_page";
     }
-
-    @GetMapping("/admin")
-    public String adminPage(Model model) {
-        model.addAttribute("movieList", movieService.getCurrentMovieList());
-        return "page/admin_page";
-    }
 }

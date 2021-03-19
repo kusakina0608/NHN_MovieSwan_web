@@ -55,7 +55,7 @@
 }
 
 .form_group_answered {
-    display: none;
+    display: flex;
     justify-content: center;
 
     width: 100%;
@@ -82,18 +82,12 @@
     padding: 0 10px;
 }
 
-.form_group_answered textarea {
+.form_group_answered #form_textarea {
+    outline: 3px solid red;
+    border-radius: 5px;
+
     min-height: 250px;
     padding: 10px 10px;
-}
-
-.form_group_wait {
-    display: none;
-
-    min-height: 200px;
-
-    justify-content: center;
-    align-items: center;
 }
 
 #button_control {
@@ -122,6 +116,11 @@
 
 #button_control .material-icons {
     margin-right: 10px;
+}
+
+#register_button {
+    background-color: green;
+    border: none;
 }
 
 #cancel_button {

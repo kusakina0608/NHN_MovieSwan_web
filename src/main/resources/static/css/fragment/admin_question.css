@@ -6,7 +6,7 @@
 }
 
 .tg {
-    width: calc(100vw - 650px);
+    width: calc(100% - 50px);
     margin: 20px;
     border-collapse: collapse;
     border-color: #ccc;
