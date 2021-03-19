@@ -1,6 +1,6 @@
 package com.nhn.rookie8.movieswanticketapp.configuration;
 
-import com.nhn.rookie8.movieswanticketapp.dto.SecretDataDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.SecretTicketDataDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -21,16 +21,15 @@ public class DataSourceConfiguration {
     @Value("${spring.datasource.url}")
     private String url;
 
-
-    private final SecretDataDTO secretDataDTO;
+    private final SecretTicketDataDTO secretTicketDataDTO;
 
     @Bean
     public DataSource getDataSource(){
         return DataSourceBuilder.create()
                 .driverClassName(driverClassName)
                 .url(url)
-                .username(secretDataDTO.getTicket().getDatabase().getUsername())
-                .password(secretDataDTO.getTicket().getDatabase().getPassword())
+                .username(secretTicketDataDTO.getDatabase().getUsername())
+                .password(secretTicketDataDTO.getDatabase().getPassword())
                 .build();
     }
 }

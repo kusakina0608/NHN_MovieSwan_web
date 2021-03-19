@@ -2,7 +2,7 @@ package com.nhn.rookie8.movieswanticketapp.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nhn.rookie8.movieswanticketapp.dto.SecretDataDTO;
+import com.nhn.rookie8.movieswanticketapp.dto.SecretTicketDataDTO;
 import com.nhn.rookie8.movieswanticketapp.dto.SecretKeyManagerDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,12 +12,23 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 @Configuration
 @Order(value=1)
 public class StringConfiguration {
 
-    @Value("${SKMUrl}")
-    private String url;
+    @Value("${SKM.Url}")
+    private String SKMurl;
+
+    @Value("${SKM.appkey}")
+    private String appKey;
+
+    @Value("${SKM.keyid}")
+    private String keyId;
+
+    @Value("#{${external.login.url}}")
+    private Map<String, String> externalLoginUrl;
 
     @Bean
     public RestTemplate restTemplate() {
@@ -33,14 +44,18 @@ public class StringConfiguration {
 
     @Bean
     @DependsOn({"restTemplate","objectMapper"})
-    public SecretDataDTO databaseInfoDTO() throws Exception{
+    public SecretTicketDataDTO databaseInfoDTO() throws Exception{
 
         RestTemplate restTemplate = restTemplate();
         ObjectMapper objectMapper = objectMapper();
 
-        SecretKeyManagerDTO secretKeyManagerDTO = restTemplate.getForObject(url, SecretKeyManagerDTO.class);
+        System.out.println(externalLoginUrl);
 
-        return objectMapper.readValue(secretKeyManagerDTO.getBody().getSecret(),SecretDataDTO.class);
+        SecretKeyManagerDTO secretKeyManagerDTO =
+                restTemplate.getForObject(SKMurl.replace("{appkey}",appKey).replace("{keyid}",keyId)
+                        , SecretKeyManagerDTO.class);
+
+        return objectMapper.readValue(secretKeyManagerDTO.getBody().getSecret(), SecretTicketDataDTO.class);
     }
 
 }

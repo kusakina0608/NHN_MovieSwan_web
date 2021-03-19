@@ -1,0 +1,22 @@
+# BaseURL
+baseURL: movieswan.nhn.com/
+
+# AccountURL
+accountURL: http://movieswan.nhn.com/account
+
+# Dev DB(Master)
+spring:
+  datasource:
+    url: jdbc:mariadb://10.161.106.87:13306/swan_ticket
+  # Dev Redis
+  redis:
+    host: 10.161.106.23
+  thymeleaf:
+    cache: true
+  jpa:
+    show-sql: false
+
+
+SKM:
+  appkey: qutrPjtMniNqfJCT
+  keyid: 1944ced8d58348ed8374c00168556b68

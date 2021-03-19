@@ -26,8 +26,6 @@ public class MemberServiceImpl implements MemberService {
     private final ObjectMapper objectMapper;
     private final RestTemplate template;
 
-    //FIXME : memberDTO를 쓰면 id제외 모두 null 이므로 계정서버에서 올바르지 않은 요으로 간주함
-    //FIXME : memberIdDTO를 써야함.
     @Override
     public MemberDTO getMemberInfoById(String memberId) {
 
