@@ -34,7 +34,7 @@
         </appender>
 
         <!-- 프로젝트의 로그 -->
-        <logger name="com.nhn.rookie8.movieswanticketapp" level="ERROR">
+        <logger name="com.nhn.rookie8.movieswanticketapp" level="INFO">
             <appender-ref ref="user-logger" />
             <appender-ref ref="console" />
         </logger>
