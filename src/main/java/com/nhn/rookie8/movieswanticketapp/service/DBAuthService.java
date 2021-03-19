@@ -58,8 +58,8 @@ public class DBAuthService implements AuthService {
     @Override
     @Transactional
     public void expireSessionByAuthKey(String authKey) {
-        authRepository.deleteById(authKey);
         authCheckRepository.deleteById(getMemberInfoByAuthKey(authKey).getMemberId());
+        authRepository.deleteById(authKey);
     }
 
     @Override

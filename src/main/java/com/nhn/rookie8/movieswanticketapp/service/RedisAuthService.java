@@ -58,8 +58,8 @@ public class RedisAuthService implements AuthService {
     @Transactional
     public void expireSessionByAuthKey(String authKey) {
 		if (authKey == null) return;
-        redisTemplateAuth.delete(authKey);
         redisTemplateAuthCheck.delete(getMemberInfoByAuthKey(authKey).getMemberId());
+        redisTemplateAuth.delete(authKey);
     }
 
     @Override
