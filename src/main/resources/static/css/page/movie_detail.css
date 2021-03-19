@@ -38,6 +38,7 @@ main {
 
 .info div .buttons {
     display: flex;
+    align-items: center;
     flex: 1;
 }
 
@@ -56,30 +57,25 @@ main {
     outline: 0;
 }
 
-.buttons .reserve {
+.buttons .reservation-btn {
+    height: 36px;
+    line-height: 36px;
+
     color: white;
     background-color: tomato;
     border: none;
     border-radius: 5px;
 }
 
-.navigation {
-    width: 50%;
-    margin: 20px 0 20px;
-    background-color: bisque;
-    display: flex;
-    justify-content: center;
-    list-style: none;
+.buttons .reservation-unable-btn {
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+
+    color: white;
+    background-color: grey;
+    border: none;
     border-radius: 5px;
-}
-
-.navigation li {
-    padding: 10px 40px 10px;
-}
-
-.navigation li a {
-    text-decoration: none;
-    color: black;
 }
 
 main > div {

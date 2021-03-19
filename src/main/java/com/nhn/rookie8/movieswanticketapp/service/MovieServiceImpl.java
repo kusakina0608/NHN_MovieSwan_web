@@ -8,7 +8,6 @@ import com.nhn.rookie8.movieswanticketapp.entity.QMovie;
 import com.nhn.rookie8.movieswanticketapp.repository.MovieRepository;
 import com.nhn.rookie8.movieswanticketapp.repository.TimetableRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,10 +16,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,7 +84,7 @@ public class MovieServiceImpl implements MovieService{
     public List<MovieDTO> getScheduledMovieList() {
         return getCurrentMovieList()
                 .stream()
-                .filter(e -> timetableRepository.existsByMovieId(e.getMovieId()))
+                .filter(e -> timetableRepository.existsByMovieId(e.getMovieId(), LocalDateTime.now()))
                 .collect(Collectors.toList());
     }
 
@@ -94,6 +92,27 @@ public class MovieServiceImpl implements MovieService{
     public MovieDTO getMovieDetail(String movieId) {
         Optional<Movie> result = movieRepository.findById(movieId);
         return result.isPresent() ? entityToDTO(result.get()) : null;
+    }
+
+    @Override
+    public MovieDTO entityToDTO(Movie entity) {
+        Float rating = movieRepository.getAverageRating(entity.getMovieId());
+        Integer timetableNum = movieRepository.getTimetableNum(entity.getMovieId(), LocalDateTime.now());
+
+        return MovieDTO.builder()
+                .movieId(entity.getMovieId())
+                .title(entity.getTitle())
+                .director(entity.getDirector())
+                .actor(entity.getActor())
+                .runtime(entity.getRuntime())
+                .rating(rating == null ? 0 : rating)
+                .reservationAvailable(timetableNum > 0)
+                .genre(entity.getGenre())
+                .story(entity.getStory())
+                .poster(entity.getPoster())
+                .startDate(entity.getStartDate())
+                .endDate(entity.getEndDate())
+                .build();
     }
 
     private BooleanBuilder moviesWithSameCodeBuilder(String movieId) {

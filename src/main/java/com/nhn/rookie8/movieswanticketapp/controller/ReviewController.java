@@ -40,12 +40,6 @@ public class ReviewController {
     }
 
     @ResponseBody
-    @GetMapping("/getRating")
-    public double calculateRating(@RequestParam String movieId) {
-        return service.getRatingByMovieId(movieId);
-    }
-
-    @ResponseBody
     @GetMapping("/getMyReview")
     public ReviewDTO getMyReview(@RequestParam String memberId, @RequestParam String movieId) {
         return service.findMyReviewByMovieId(movieId, memberId);

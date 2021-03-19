@@ -90,11 +90,12 @@
     flex: 2;
 }
 
-.movie .movieDescription div button {
+.movie .movieDescription div .reservation-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     flex: 2;
+    height: 24px;
 
     color: white;
     background-color: tomato;
@@ -102,8 +103,21 @@
     border-radius: 5px;
 }
 
-.movie .movieDescription div button * {
+.movie .movieDescription div .reservation-btn * {
     padding: 0;
+    line-height: 24px;
+}
+
+.movie .movieDescription div .reservation-unable-btn {
+    text-align: center;
+    flex: 2;
+    height: 24px;
+    line-height: 24px;
+
+    color: white;
+    background-color: grey;
+    border: none;
+    border-radius: 5px;
 }
 
 .movie .material-icons.star {

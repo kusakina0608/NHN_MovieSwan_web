@@ -22,6 +22,8 @@ public interface MovieService {
 
     MovieDTO getMovieDetail(String movieId);
 
+    MovieDTO entityToDTO(Movie movie);
+
     default Movie dtoToEntity(MovieDTO movieDTO) {
         return Movie.builder()
                 .movieId(movieDTO.getMovieId())
@@ -34,23 +36,6 @@ public interface MovieService {
                 .story(movieDTO.getStory())
                 .startDate(movieDTO.getStartDate())
                 .endDate(movieDTO.getEndDate())
-                .build();
-    }
-
-    default MovieDTO entityToDTO(Movie movie) {
-        return MovieDTO.builder()
-                .movieId(movie.getMovieId())
-                .title(movie.getTitle())
-                .poster(movie.getPoster())
-                .director(movie.getDirector())
-                .actor(movie.getActor())
-                .genre(movie.getGenre())
-                .runtime(movie.getRuntime())
-                .story(movie.getStory())
-                .startDate(movie.getStartDate())
-                .endDate(movie.getEndDate())
-                .regDate(movie.getRegDate())
-                .modDate(movie.getModDate())
                 .build();
     }
 }

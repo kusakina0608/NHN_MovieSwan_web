@@ -4,6 +4,8 @@ import com.nhn.rookie8.movieswanticketapp.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +31,5 @@ public class MainController {
     public String adminPage(Model model) {
         model.addAttribute("movieList", movieService.getCurrentMovieList());
         return "page/admin_page";
-    }
-
-    @GetMapping("/monitor/l7check")
-    public String l7check(){
-        return "page/l7check";
     }
 }

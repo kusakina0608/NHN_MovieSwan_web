@@ -59,7 +59,7 @@ public class WebHookImpl implements WebHook {
 
         String textMsg = memberDTO.getName() + "님 안녕하세요, 영화 " + reservationDetailDTO.getTitle()
                 + " 의 예매 취소가 완료되었습니다\n예매 번호 : " + reservationDetailDTO.getReservationId()
-                + "\n취소 시간 : " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                + "\n취소 시간 : " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         reservationAlarmDTO.getAttachments().add(
                 AttachmentDTO.builder()

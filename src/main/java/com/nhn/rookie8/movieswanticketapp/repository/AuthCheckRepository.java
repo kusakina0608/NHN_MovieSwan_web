@@ -1,0 +1,8 @@
+package com.nhn.rookie8.movieswanticketapp.repository;
+
+import com.nhn.rookie8.movieswanticketapp.entity.AuthCheck;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+
+public interface AuthCheckRepository extends JpaRepository<AuthCheck, String>, QuerydslPredicateExecutor<AuthCheck> {
+}
