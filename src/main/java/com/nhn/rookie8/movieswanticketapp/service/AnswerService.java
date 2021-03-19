@@ -6,6 +6,7 @@ import com.nhn.rookie8.movieswanticketapp.entity.Answer;
 public interface AnswerService {
     Integer registerAnswer(AnswerDTO dto);
     AnswerDTO readAnswer(Integer questionId);
+    boolean isAnswered(Integer questionId);
 
     default Answer dtoToEntity(AnswerDTO dto) {
         return Answer.builder()
