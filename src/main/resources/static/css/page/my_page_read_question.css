@@ -9,6 +9,16 @@
     height: 100%;
 
     padding: 30px;
+    margin-top: 20px;
+
+    border: 3px double black;
+}
+
+.question_subjects {
+    font-size: 30px;
+    font-weight: bold;
+
+    margin-bottom: 10px;
 }
 
 .form_group {
@@ -40,8 +50,50 @@
 }
 
 .form_group textarea {
-    height: 530px;
+    min-height: 250px;
     padding: 10px 10px;
+}
+
+.form_group_answered {
+    display: none;
+    justify-content: center;
+
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.form_group_answered .form_label {
+    width: 100px;
+    margin-top: 3px;
+
+    font-size: 20px;
+}
+
+.form_group_answered .form_control {
+    flex: 1;
+
+    font-size: 17px;
+    outline: none;
+    border: none;
+}
+
+.form_group_answered input[type='text'] {
+    height: 30px;
+    padding: 0 10px;
+}
+
+.form_group_answered textarea {
+    min-height: 250px;
+    padding: 10px 10px;
+}
+
+.form_group_wait {
+    display: none;
+
+    min-height: 200px;
+
+    justify-content: center;
+    align-items: center;
 }
 
 #button_control {
@@ -72,7 +124,7 @@
     margin-right: 10px;
 }
 
-#cancle_button {
+#cancel_button {
     background-color: red;
     border: none;
 }
@@ -87,4 +139,13 @@
     font-weight: bold;
 
     margin: 20px 0 0 20px;
+}
+
+#answer_icon {
+    margin-right: 30px;
+    font-size: 70px;
+}
+
+#answer_notice {
+    font-size: 50px;
 }

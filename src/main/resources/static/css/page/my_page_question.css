@@ -52,6 +52,7 @@
 }
 
 .tg .tg-lqy6 {
+    width: 150px;
     text-align: right;
     vertical-align: top;
 }
@@ -157,4 +158,26 @@
 #no_question .material-icons {
     margin-right: 20px;
     font-size: 70px;
+}
+
+#answer_complete {
+    background-color: green;
+    color: white;
+
+    margin: 0 10px;
+
+    border-radius: 5px;
+}
+
+#answer_wait {
+    background-color: red;
+    color: white;
+
+    margin: 0 10px;
+
+    border-radius: 5px;
+}
+
+#yes, #no {
+    display: none;
 }
