@@ -1,0 +1,33 @@
+# BaseURL
+baseURL: localhost:8082/
+
+# AccountURL
+accountURL: http://localhost:8081/account
+
+# Dev DB(Master)
+spring:
+  datasource:
+    url: jdbc:mariadb://10.161.106.72:13306/swan_ticket
+  # Dev Redis
+  redis:
+    host: 10.161.106.78
+  thymeleaf:
+    cache: false
+  jpa:
+    show-sql: true
+
+server:
+  port: 8082
+
+logging:
+  level:
+    com:
+      nhn:
+        rookie8:
+          movieswanticketapp:
+            controller: debug
+            service: debug
+
+SKM:
+  appkey: q3dSyEo2SwcTvzZg
+  keyid: 0e4147435bd045edac19b074a407875b
