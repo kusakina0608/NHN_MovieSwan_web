@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Configuration
 @Order(value=1)
-public class StringConfiguration {
+public class SpringConfiguration {
 
     @Value("${SKM.Url}")
     private String SKMurl;
@@ -26,9 +26,6 @@ public class StringConfiguration {
 
     @Value("${SKM.keyid}")
     private String keyId;
-
-    @Value("#{${external.login.url}}")
-    private Map<String, String> externalLoginUrl;
 
     @Bean
     public RestTemplate restTemplate() {
@@ -48,8 +45,6 @@ public class StringConfiguration {
 
         RestTemplate restTemplate = restTemplate();
         ObjectMapper objectMapper = objectMapper();
-
-        System.out.println(externalLoginUrl);
 
         SecretKeyManagerDTO secretKeyManagerDTO =
                 restTemplate.getForObject(SKMurl.replace("{appkey}",appKey).replace("{keyid}",keyId)
