@@ -1,15 +1,23 @@
 package com.nhn.rookie8.movieswanticketapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhn.rookie8.movieswanticketapp.configuration.ExternalLoginConfiguration;
 import com.nhn.rookie8.movieswanticketapp.dto.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 
 @Service
@@ -20,9 +28,7 @@ public class MemberServiceImpl implements MemberService {
     @Value("${accountURL}")
     private String accountUrl;
 
-    @Value("#{${external.login.url}}")
-    private Map<String, String> externalLoginUrl;
-
+    private final ExternalLoginConfiguration externalLoginConfiguration;
     private final ObjectMapper objectMapper;
     private final RestTemplate template;
 
@@ -50,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
                 new HttpEntity<ExternalLoginDTO>(domainToExternalLoginDTO(memberAuthDomainDTO));
 
         String loginUrl = memberAuthDomainDTO.getIdDomain().equals("swan") ?
-                accountUrl + "/api/auth" : externalLoginUrl.get(memberAuthDomainDTO.getIdDomain());
+                accountUrl + "/api/auth" : externalLoginConfiguration.getExternalUrl().get(memberAuthDomainDTO.getIdDomain());
 
         try {
             ResponseEntity<TokenResponseDTO> responseEntity = template.exchange(
