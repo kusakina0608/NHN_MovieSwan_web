@@ -56,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
                 new HttpEntity<ExternalLoginDTO>(domainToExternalLoginDTO(memberAuthDomainDTO));
 
         String loginUrl = memberAuthDomainDTO.getIdDomain().equals("swan") ?
-                accountUrl + "/api/auth" : externalLoginConfiguration.getExternalUrl().get(memberAuthDomainDTO.getIdDomain());
+                accountUrl + "/api/auth" : externalLoginConfiguration.getUrl().get(memberAuthDomainDTO.getIdDomain());
 
         try {
             ResponseEntity<TokenResponseDTO> responseEntity = template.exchange(
