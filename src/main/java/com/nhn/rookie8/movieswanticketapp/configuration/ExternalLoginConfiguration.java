@@ -15,5 +15,5 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "external.login")
 public class ExternalLoginConfiguration{
 
-    private Map<String, String> externalUrl;
+    private Map<String, String> url;
 }

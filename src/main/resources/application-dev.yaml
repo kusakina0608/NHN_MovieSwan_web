@@ -8,7 +8,7 @@ accountURL: http://dev-movieswan.nhn.com/account
 spring:
   datasource:
     url: jdbc:mariadb://10.161.106.72:13306/swan_ticket
-    # Dev Redis
+  # Dev Redis
   redis:
     host: 10.161.106.78
   thymeleaf:
