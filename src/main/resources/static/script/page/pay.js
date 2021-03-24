@@ -19,3 +19,9 @@
         form.submit();
     });
 }());
+
+history.pushState(null, null, location.href);  // push
+window.onpopstate = function(event) {    //  뒤로가기 이벤트 등록
+    // 특정 페이지로 가고싶다면 location.href = '';
+   history.go(-1);
+};
