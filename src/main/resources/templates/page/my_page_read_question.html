@@ -10,9 +10,11 @@
     <readquestion id="read_question" th:fragment="read_question">
         <p id="question_subject">상세 문의내역</p>
         <questionform id="question_contents">
+            <p class="question_subjects">문의 내용</p>
             <formgroup class="form_group">
                 <formlabel class="form_label">작성자 :</formlabel>
                 <input type="text" class="form_control" name="memberId" th:value="${dto.memberId}" disabled>
+                <input type="hidden" class="form_control" name="questionId" th:value="${dto.questionId}" disabled>
             </formgroup>
             <formgroup class="form_group">
                 <formlabel class="form_label">제목 :</formlabel>
@@ -26,13 +28,32 @@
                 <formlabel class="form_label">문의 내용 :</formlabel>
                 <textarea class="form_control" name="content" disabled>[[${dto.content}]]</textarea>
             </formgroup>
-            <buttoncontrol id="button_control">
-                <button id="cancle_button" onclick="window.history.back()">
-                    <span class="material-icons">reply</span>
-                    뒤로 가기
-                </button>
-            </buttoncontrol>
         </questionform>
+        <answerform id="question_contents">
+            <p class="question_subjects">답변 내용</p>
+            <formgroup class="form_group_wait">
+                <span id="answer_icon" class="material-icons">question_answer</span>
+                <span id="answer_notice">답변을 기다리는 중입니다...</span>
+            </formgroup>
+            <formgroup class="form_group_answered">
+                <formlabel class="form_label">제목 :</formlabel>
+                <input type="text" class="form_control" name="title" disabled>
+            </formgroup>
+            <formgroup class="form_group_answered">
+                <formlabel class="form_label">작성 시간 :</formlabel>
+                <input type="text" class="form_control" name="regDate" disabled>
+            </formgroup>
+            <formgroup class="form_group_answered">
+                <formlabel class="form_label">답변 내용 :</formlabel>
+                <textarea class="form_control" name="content" disabled></textarea>
+            </formgroup>
+        </answerform>
+        <buttoncontrol id="button_control">
+            <button id="cancel_button" onclick="window.history.back()">
+                <span class="material-icons">reply</span>
+                뒤로 가기
+            </button>
+        </buttoncontrol>
     </readquestion>
     </th:block>
 </body>

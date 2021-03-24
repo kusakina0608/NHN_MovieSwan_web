@@ -37,10 +37,15 @@ public class AnswerServiceImpl implements AnswerService {
 
             log.info("Search Result : {}", result.isPresent() ? result : "No Result");
 
-            return result.isPresent() ? entityToDto(result.get()) : null;
+            return result.isPresent() ? entityToDto(result.get()) : AnswerDTO.builder().build();
         } catch (Exception e) {
             log.error(e);
             return null;
         }
+    }
+
+    @Override
+    public boolean isAnswered(Integer questionId) {
+        return repository.findById(questionId).isPresent();
     }
 }
