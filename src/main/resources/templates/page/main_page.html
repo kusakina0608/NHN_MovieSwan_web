@@ -23,11 +23,10 @@
     </body>
     <script th:inline="javascript">
         (function () {
-            const member = [[${ member }]];
-            const memberId = member?.memberId;
-            const name = member?.name;
+            const memberId = [[${ id }]];
+            const name = [[${ name }]];
 
-            if (member) {
+            if (memberId) {
                 localStorage.setItem("memberId", memberId);
                 localStorage.setItem("name", name);
             }
