@@ -2,8 +2,8 @@
 
 (function() {
     
-
-
+    let submittable = false;
+    
 
     const enableSubmit = () =>{
         const check = val => val == 1;
@@ -16,9 +16,11 @@
         
         if(listValue.every(check)){
             document.querySelector("#submit").disabled = false;
+            submittable = true;
         }
         else{
             document.querySelector("#submit").disabled = true;
+            submittable = false;
         }
     };
 
@@ -465,4 +467,32 @@
 
         enableSubmit();
     },false)
+
+
+    const form = document.querySelector("#form");
+
+    form.addEventListener("submit",(event)=>{
+
+        if(password_check.value !== password.value){
+            ok_password_check.forEach(i=>{
+                i.style.display = "none";
+            });
+            no_password_check.forEach(i=>{
+                i.style.display = "inline";
+            });
+            document.querySelector("#div_password_check").value = 0;
+        }
+
+        enableSubmit();
+        
+        if(submittable){
+            alert("회원가입이 완료되었습니다.");
+        }
+        else{
+            alert("필수 정보를 정확히 입력하세요.");
+            event.preventDefault();
+        }
+        
+    },false)
+
 }());
