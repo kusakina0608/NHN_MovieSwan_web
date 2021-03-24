@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -42,7 +43,8 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(@RequestParam(required = false) String message, Model model) {
+        model.addAttribute("message", message);
         return "page/login_page";
     }
 
@@ -52,7 +54,7 @@ public class MemberController {
         String url = memberService.loginService(memberAuthDomainDTO).getUrl();
 
         if (url == null) {
-            redirectAttributes.addFlashAttribute("message", "ID 또는 Password가 잘못 입력 되었습니다.");
+            redirectAttributes.addAttribute("message", "ID 또는 Password가 잘못 입력 되었습니다.");
             return "redirect:/member/login";
         }
         return "redirect:" + url;
@@ -64,14 +66,15 @@ public class MemberController {
         MemberResponseDTO memberResponseDTO = memberService.verifyToken(token);
 
         if(!memberService.checkResponse(memberResponseDTO)){
-            redirectAttributes.addFlashAttribute("message","ID 또는 Password가 잘못 입력 되었습니다.");
+            redirectAttributes.addAttribute("message","ID 또는 Password가 잘못 입력 되었습니다.");
             return "redirect:/member/login";
         }
 
         Cookie cookie = authService.setSession(memberService.responseToMemberIdNameMap(memberResponseDTO));
 
         response.addCookie(cookie);
-        redirectAttributes.addFlashAttribute("member", authService.getMemberInfoByAuthKey(cookie.getValue()));
+        redirectAttributes.addAttribute("id", authService.getMemberInfoByAuthKey(cookie.getValue()).getMemberId());
+        redirectAttributes.addAttribute("name", authService.getMemberInfoByAuthKey(cookie.getValue()).getName());
 
         return "redirect:/main";
     }
