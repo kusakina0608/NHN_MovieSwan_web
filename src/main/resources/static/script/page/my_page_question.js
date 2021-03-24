@@ -28,8 +28,6 @@ function trClicked(value) {
         answerAPI.isAnswered(questionId).then(res => {
             const answered = res.data;
 
-            console.log(answered);
-
             if (answered) {
                 const complete = table[i].querySelector("#yes");
                 complete.style.display = "block";

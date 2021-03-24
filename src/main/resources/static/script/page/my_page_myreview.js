@@ -18,7 +18,6 @@
     reviews.forEach(review => {
         var movieId = review.querySelector("input").value;
         movieAPI.getTitle(movieId).then(response => {
-            console.log(response.data);
             review.querySelector(".title").innerText = response.data.title;
         })
     })

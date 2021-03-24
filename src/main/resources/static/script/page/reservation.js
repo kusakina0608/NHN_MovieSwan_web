@@ -110,11 +110,8 @@
             movieSchedule[item.date] = item.detail;
         });
         // API로부터 전달받은 영화의 상영시간표를 저장
-        console.log(res.data);
-        console.log(movieSchedule);
         // 일자를 추가
         for(var key in movieSchedule){
-            console.log(key);
             let newListElement = document.createElement("li");
             newListElement.classList.add("list-element");
             newListElement.innerHTML = key;

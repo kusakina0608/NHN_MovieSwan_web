@@ -52,7 +52,6 @@
             }
             else{ // 선택되어 있지 않은 좌석인 경우
                 if(selected < totalCount){
-                    console.log(`timetableId: ${timetableId}, seatId: ${seatId}`);
                     var res = await seatAPI.preemptSeat(timetableId, seatId);
                     if(res.data){
                         e.target.classList.add("selected");
@@ -87,7 +86,6 @@
     const adultPrice = parseInt(document.querySelector("#adultPrice").innerHTML);
     const childPrice = parseInt(document.querySelector("#youngPrice").innerHTML);
     const otherPrice = parseInt(document.querySelector("#elderPrice").innerHTML);
-    console.log(adultPrice);
 
     var refreshCount = function() {
         adultCount = parseInt(adultCountElement.value);
